@@ -1,0 +1,24 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "add": "Add",
+    "search": "Search",
+    "clear": "Clear",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All"
+  },
+  "homePage": {
+    "welcome": "Welcome to the Home Page",
+    "description": "This is the home page of our {application}. You can find various features and functionalities here.",
+    "learnMore": "Learn More",
+    "getStarted": "Get Started",
+    "contactUs": "Contact Us"
+  }
+}

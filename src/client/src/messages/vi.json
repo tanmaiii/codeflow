@@ -1,0 +1,24 @@
+{
+  "common": {
+    "ok": "Đồng ý",
+    "cancel": "Hủy",
+    "yes": "Có",
+    "no": "Không",
+    "close": "Đóng",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "save": "Lưu",
+    "add": "Thêm",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "selectAll": "Chọn tất cả",
+    "deselectAll": "Bỏ chọn tất cả"
+  },
+  "homePage": {
+    "welcome": "Chào mừng bạn đến với trang chủ",
+    "description": "Đây là trang chủ của {application}. Bạn có thể tìm thấy nhiều tính năng và chức năng khác nhau ở đây.",
+    "learnMore": "Tìm hiểu thêm",
+    "getStarted": "Bắt đầu",
+    "contactUs": "Liên hệ với chúng tôi"
+  }
+}
