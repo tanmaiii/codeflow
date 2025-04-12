@@ -20,5 +20,11 @@
     "learnMore": "Tìm hiểu thêm",
     "getStarted": "Bắt đầu",
     "contactUs": "Liên hệ với chúng tôi"
+  },
+  "settings": {
+    "switchLanguage": "Chuyển đổi ngôn ngữ",
+    "switchTheme": "Chuyển đổi giao diện",
+    "hiddenSidebar": "Ẩn thanh bên",
+    "showSidebar": "Hiện thanh bên"
   }
 }

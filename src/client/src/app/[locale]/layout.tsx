@@ -1,3 +1,4 @@
+import ThemeInitializer from "@/components/themeInitializer";
 import { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
@@ -22,8 +23,10 @@ type Props = {
 
 export default async function Layout({ children, params }: Props) {
   const messages = await getMessages();
+
   return (
     <html lang={(await params).locale} suppressHydrationWarning>
+      <ThemeInitializer />
       <body className={`${roboto.className}`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           {children}

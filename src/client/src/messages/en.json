@@ -12,7 +12,9 @@
     "search": "Search",
     "clear": "Clear",
     "selectAll": "Select All",
-    "deselectAll": "Deselect All"
+    "deselectAll": "Deselect All",
+    "loading": "Loading...",
+    "error": "An error occurred"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -20,5 +22,11 @@
     "learnMore": "Learn More",
     "getStarted": "Get Started",
     "contactUs": "Contact Us"
+  },
+  "settings": {
+    "switchLanguage": "Switch Language",
+    "switchTheme": "Switch Theme",
+    "hiddenSidebar": "Hidden Sidebar",
+    "showSidebar": "Show Sidebar"
   }
 }
