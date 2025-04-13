@@ -1,10 +1,10 @@
 "use client";
 import { useSidebarStore } from "@/stores/sidebar-store";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { PanelLeftClose, PanelRightClose } from "lucide-react";
+import { useTranslations } from "next-intl";
 import LocaleSwitcher from "../localeSwicher";
 import ThemeToggle from "../themeToggle";
 import { ButtonWithTooltip } from "../ui/button";
-import { useTranslations } from "next-intl";
 
 export default function Header() {
   const { collapsed, toggle } = useSidebarStore();
@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header
-      className="sticky top-0 z-30 bg-white dark:bg-zinc-900 border-b 
+      className="fixed top-0 z-30 bg-white dark:bg-zinc-900 border-b 
       px-4 py-2 flex items-center justify-between w-full h-14 md:16"
     >
       <div>
@@ -20,16 +20,16 @@ export default function Header() {
           tooltip={collapsed ? t("showSidebar") : t("hiddenSidebar")}
           variant="ghost"
           onClick={toggle}
-          className=""
+          className="p-3"
         >
           {collapsed ? (
-            <ChevronRight className="w-4 h-4" />
+            <PanelRightClose className="w-4 h-4" />
           ) : (
-            <ChevronLeft className="w-4 h-4" />
+            <PanelLeftClose className="w-4 h-4" />
           )}
         </ButtonWithTooltip>
       </div>
-      <div>
+      <div className="gap-2 flex">
         <LocaleSwitcher />
         <ThemeToggle />
       </div>

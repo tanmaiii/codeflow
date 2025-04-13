@@ -11,7 +11,7 @@ import {
 } from "@radix-ui/react-tooltip";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center gap-2 border-1 border-solid whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
@@ -76,7 +76,11 @@ function ButtonWithTooltip({
           <Button {...props} />
         </TooltipTrigger>
         <TooltipContent>
-          <p className="bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 text-sm py-1 px-2 rounded-md">
+          <p
+            className="dark:text-gray-700 text-gray-200 shadow-xs 
+                    dark:bg-white bg-zinc-900 border-b 
+                      text-sm py-1 px-2 rounded-md"
+          >
             {tooltip}
           </p>
         </TooltipContent>

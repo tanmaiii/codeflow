@@ -1,6 +1,6 @@
 import { ILinkItem } from "@/interfaces/common";
 
-export const menuAdmin: ILinkItem[] = [
+export const menuUser: ILinkItem[] = [
   {
     en: "Home",
     vi: "Trang chủ",
@@ -8,16 +8,16 @@ export const menuAdmin: ILinkItem[] = [
     href: "/",
   },
   {
-    en: "Dashboard",
-    vi: "Bảng điều khiển",
-    icon: "layout",
-    href: "/dashboard",
+    vi: "Môn học",
+    en: "Courses",
+    icon: "book",
+    href: "/courses",
   },
   {
-    en: "Users",
-    vi: "Người dùng",
-    icon: "users",
-    href: "/users",
+    vi: "Dự án",
+    en: "Projects",
+    icon: "project",
+    href: "/projects",
   },
   {
     en: "Settings",
