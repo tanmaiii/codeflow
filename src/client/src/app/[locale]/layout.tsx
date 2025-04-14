@@ -5,7 +5,6 @@ import { getMessages } from "next-intl/server";
 import { Nunito } from "next/font/google";
 
 const roboto = Nunito({
-  weight: ["500", "600", "700"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
@@ -27,7 +26,7 @@ export default async function Layout({ children, params }: Props) {
   return (
     <html lang={(await params).locale} suppressHydrationWarning>
       <ThemeInitializer />
-      <body className={`${roboto.className}`} suppressHydrationWarning>
+      <body className={`${roboto.className} bg-primay`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

@@ -3,7 +3,6 @@
 import { ILinkItem } from "@/interfaces/common";
 import { useSidebarStore } from "@/stores/sidebar-store";
 import clsx from "clsx";
-import { m } from "framer-motion";
 import {
   Book,
   FolderGit,
@@ -46,7 +45,7 @@ const RenderNavItem = ({
     >
       <Icon className="w-5 h-5" />
       {!collapsed && (
-        <m.span>{currentLocale === "vi" ? item.vi : item.en}</m.span>
+        <span className="font-medium">{currentLocale === "vi" ? item.vi : item.en}</span>
       )}
     </Link>
   );
@@ -64,7 +63,7 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
   return (
     <aside
       className={clsx(
-        `h-[calc(100vh-56px)] border-r bg-white dark:bg-zinc-900 flex flex-col transition-all duration-300 
+        `h-[calc(100vh-56px)] border-r bg-white dark:bg-zinc-950 flex flex-col transition-all duration-300 
         fixed left-0 top-14 bottom-0 md:sticky`,
         collapsed ? "hidden md:flex w-16" : "w-full md:w-64"
       )}

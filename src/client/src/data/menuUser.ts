@@ -1,28 +1,29 @@
 import { ILinkItem } from "@/interfaces/common";
+import { paths } from "./path";
 
 export const menuUser: ILinkItem[] = [
   {
     en: "Home",
     vi: "Trang chủ",
     icon: "home",
-    href: "/",
+    href: paths.HOME,
   },
   {
     vi: "Môn học",
     en: "Courses",
     icon: "book",
-    href: "/courses",
+    href: paths.COURSES,
   },
   {
     vi: "Dự án",
     en: "Projects",
     icon: "project",
-    href: "/projects",
+    href: paths.PROJECTS,
   },
   {
     en: "Settings",
     vi: "Cài đặt",
     icon: "settings",
-    href: "/settings",
+    href: paths.SETTINGS,
   },
 ];

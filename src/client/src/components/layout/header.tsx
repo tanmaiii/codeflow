@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header
-      className="fixed top-0 z-30 bg-white dark:bg-zinc-900 border-b 
+      className="fixed top-0 z-30 bg-white dark:bg-zinc-950 border-b 
       px-4 py-2 flex items-center justify-between w-full h-14 md:16"
     >
       <div>

@@ -13,10 +13,11 @@ export default function Layout({
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <div className="flex flex-1 mt-14">
+      <div className="flex flex-1 mt-14 bg-white dark:bg-zinc-950">
         <Sidebar menu={menuUser} />
-        <div className="w-full p-2">{children}</div>
+        <div className="w-full p-4">{children}</div>
       </div>
     </div>
   );
 }
+ 
