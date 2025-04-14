@@ -1,7 +1,6 @@
 "use client";
 
-import EnSVG from "@/assets/svgs/en.svg";
-import ViSVG from "@/assets/svgs/vi.svg";
+import { SVGS } from "@/data/images";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -26,7 +25,7 @@ export default function LocaleSwitcher() {
     >
       {currentLocale === "vi" ? (
         <Image
-          src={EnSVG}
+          src={SVGS.EN}
           className="w-4 h-4"
           width={16}
           height={16}
@@ -34,8 +33,8 @@ export default function LocaleSwitcher() {
         />
       ) : (
         <Image
-          src={ViSVG}
-          className="w-4 h-4"
+        src={SVGS.VI}
+        className="w-4 h-4"
           width={16}
           height={16}
           alt="vn.png"

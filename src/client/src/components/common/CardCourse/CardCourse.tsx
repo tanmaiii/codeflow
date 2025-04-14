@@ -19,16 +19,17 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import NameTag from "../NameTag/NameTag";
 import { paths } from "@/data/path";
+import { IMAGES } from "@/data/images";
 
 export default function CardCourse() {
   return (
     <Card className="w-full bg-white dark:bg-zinc-950 gap-4 pt-2 overflow-hidden">
       <CardHeader className="px-2">
         <Image
-          src="/images/en.png"
+          src={IMAGES.DEFAULT_COURSE}
           alt="Next.js"
-          width={100}
-          height={100}
+          width={200}
+          height={200}
           className="object-cover w-full h-24 rounded-md"
         />
       </CardHeader>

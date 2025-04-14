@@ -1,5 +1,6 @@
 "use client";
 
+import { IMAGES } from "@/data/images";
 import { ILinkItem } from "@/interfaces/common";
 import { useSidebarStore } from "@/stores/sidebar-store";
 import clsx from "clsx";
@@ -45,7 +46,9 @@ const RenderNavItem = ({
     >
       <Icon className="w-5 h-5" />
       {!collapsed && (
-        <span className="font-medium">{currentLocale === "vi" ? item.vi : item.en}</span>
+        <span className="font-medium">
+          {currentLocale === "vi" ? item.vi : item.en}
+        </span>
       )}
     </Link>
   );
@@ -72,12 +75,7 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
         href={`${prefix}/`}
         className="p-4 gap-2 flex items-center w-full justify-start"
       >
-        <Image
-          width={40}
-          height={40}
-          src={"/images/codeflow.png"}
-          alt="logo.png"
-        />
+        <Image width={40} height={40} src={IMAGES.LOGO} alt="logo.png" />
         {!collapsed && (
           <h4 className="text-2xl font-bold text-primary">CodeFlow</h4>
         )}
