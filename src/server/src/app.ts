@@ -45,7 +45,7 @@ export class App {
   }
 
   private async connectToDatabase() {
-    await DB.sequelize.sync({ force: false });
+    await DB.sequelize.sync({ force: false }); // true nếu muốn xóa bảng cũ và tạo bảng mới
   }
 
   private initializeMiddlewares() {

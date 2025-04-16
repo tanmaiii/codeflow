@@ -10,14 +10,28 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { auth, provider } from "@/config/Firebase";
 import { IMAGES } from "@/data/images";
 import { paths } from "@/data/path";
+import { signInWithPopup } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
   const navigator = useRouter();
+
+  const handleSubmitGitHub = async () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result);
+        navigator.push(paths.HOME);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Card className="w-[450px] h-fit bg-white dark:bg-dark-2 gap-4 px-2 py-6">
       <CardHeader>
@@ -71,7 +85,7 @@ export default function Login() {
         </div>
 
         <Button
-          onClick={() => navigator.push(paths.HOME)}
+          onClick={() => console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY)}
           className="w-full h-12 mt-8 bg-primary text-white hover:bg-primary/80"
         >
           Sign In
@@ -93,18 +107,10 @@ export default function Login() {
         </div>
 
         <div>
-          <Button className="w-full h-12 mt-4 bg-primary/10 text-primary hover:bg-primary/20">
-            <Image
-              src={IMAGES.GOOGLE}
-              alt="google"
-              width={30}
-              height={30}
-              className="object-cover w-6 h-6 mr-2"
-            />
-            Sign In with Google
-          </Button>
-
-          <Button className="w-full h-12 mt-4 bg-primary/10 text-primary hover:bg-primary/20">
+          <Button
+            onClick={() => handleSubmitGitHub()}
+            className="w-full h-12 mt-4 bg-primary/10 text-primary hover:bg-primary/20"
+          >
             <Image
               src={IMAGES.GITHUB}
               alt="google"
@@ -114,6 +120,17 @@ export default function Login() {
             />
             Sign In with GitHub
           </Button>
+
+          {/* <Button className="w-full h-12 mt-4 bg-primary/10 text-primary hover:bg-primary/20">
+            <Image
+              src={IMAGES.GOOGLE}
+              alt="google"
+              width={30}
+              height={30}
+              className="object-cover w-6 h-6 mr-2"
+            />
+            Sign In with Google
+          </Button> */}
         </div>
       </CardContent>
       <CardFooter className="flex justify-between"></CardFooter>

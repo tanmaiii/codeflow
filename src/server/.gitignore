@@ -17,6 +17,7 @@
 /.next/
 /out/
 /disc
+/src/logs
 
 # production
 /build
