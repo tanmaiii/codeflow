@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 30
+    },
+    "auditLog": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\error\\.67dd089e0df8fc64edf9bd57149ea3792da0eba1-audit.json",
+    "files": [
+        {
+            "date": 1744811208586,
+            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\error\\2025-04-16.log",
+            "hash": "61bb436e80deda2515c205b8a14416c4fbb00462c909dc2d248023c412db8374"
+        }
+    ],
+    "hashType": "sha256"
+}

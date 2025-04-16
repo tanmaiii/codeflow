@@ -1,0 +1,25 @@
+2025-04-16 20:46:49 error: uncaughtException: listen EADDRINUSE: address already in use :::3000
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (D:\Workspace\DoAnTotNghiep\codeflow\src\server\node_modules\express\lib\application.js:635:24)
+    at App.listen (D:\Workspace\DoAnTotNghiep\codeflow\src\server\src\app.ts:35:14)
+    at Object.<anonymous> (D:\Workspace\DoAnTotNghiep\codeflow\src\server\src\server.ts:9:5)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+    at Module.m._compile (D:\Workspace\DoAnTotNghiep\codeflow\src\server\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Workspace\DoAnTotNghiep\codeflow\src\server\node_modules\ts-node\src\index.ts:1621:12)
+2025-04-16 20:49:46 error: uncaughtException: listen EADDRINUSE: address already in use :::3000
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at Function.listen (D:\Workspace\DoAnTotNghiep\codeflow\src\server\node_modules\express\lib\application.js:635:24)
+    at App.listen (D:\Workspace\DoAnTotNghiep\codeflow\src\server\src\app.ts:35:14)
+    at Object.<anonymous> (D:\Workspace\DoAnTotNghiep\codeflow\src\server\src\server.ts:9:5)
+    at Module._compile (node:internal/modules/cjs/loader:1364:14)
+    at Module.m._compile (D:\Workspace\DoAnTotNghiep\codeflow\src\server\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Workspace\DoAnTotNghiep\codeflow\src\server\node_modules\ts-node\src\index.ts:1621:12)
+2025-04-16 20:52:40 error: [POST] /users >> StatusCode:: 400, Message:: email must be an email, password must be longer than or equal to 9 characters

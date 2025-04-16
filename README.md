@@ -11,3 +11,7 @@ Hệ thống hỗ trợ giảng viên và sinh viên trong việc quản lý, th
 - API: GitHub API, Webhook
 
 - Công cụ đánh giá mã nguồn: SonarQube, ESLint
+
+### Yêu cầu
+
+Hệ thống đăng ký đề tài, thành viên nhóm, cho phép SV nộp bài qua Github, sử dụng github Action để đánh giá chất lượng mã tĩnh, sử dụng GithubAPI để đếm số lần nộp bài của thành viên, đánh giá đóng góp của mỗi thành viên, xây đựng dashboard thể hiện đóng góp

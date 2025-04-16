@@ -26,5 +26,17 @@
     "switchTheme": "Chuyển đổi giao diện",
     "hiddenSidebar": "Ẩn thanh bên",
     "showSidebar": "Hiện thanh bên"
+  },
+  "auth":{
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất", 
+    "register": "Đăng ký",
+    "forgotPassword": "Quên mật khẩu",
+    "resetPassword": "Đặt lại mật khẩu",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "rememberMe": "Ghi nhớ tôi",
+    "forgotPasswordDescription": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu."
   }
 }

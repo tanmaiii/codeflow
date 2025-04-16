@@ -1,0 +1,26 @@
+2025-04-16 20:46:49 info: 2ms Executed (default): SELECT 1+1 AS result
+2025-04-16 20:46:49 info: 40ms Executed (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'users' AND TABLE_SCHEMA = 'dev'
+2025-04-16 20:46:49 info: 10ms Executed (default): SHOW INDEX FROM `users`
+2025-04-16 20:49:46 info: 1ms Executed (default): SELECT 1+1 AS result
+2025-04-16 20:49:46 info: 2ms Executed (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'users' AND TABLE_SCHEMA = 'dev'
+2025-04-16 20:49:46 info: 4ms Executed (default): SHOW INDEX FROM `users`
+2025-04-16 20:51:01 info: =================================
+2025-04-16 20:51:01 info: ======= ENV: development =======
+2025-04-16 20:51:01 info: 🚀 App listening on the port 3001
+2025-04-16 20:51:01 info: =================================
+2025-04-16 20:51:01 info: [0mGET / [33m404[0m 4.697 ms - 139[0m
+2025-04-16 20:51:01 info: 1ms Executed (default): SELECT 1+1 AS result
+2025-04-16 20:51:01 info: 2ms Executed (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'users' AND TABLE_SCHEMA = 'dev'
+2025-04-16 20:51:01 info: 2ms Executed (default): SHOW INDEX FROM `users`
+2025-04-16 20:51:07 info: [0mGET /api-d%C3%B3c [33m404[0m 0.844 ms - 151[0m
+2025-04-16 20:51:12 info: [0mGET /api-docs [36m301[0m 1.530 ms - 158[0m
+2025-04-16 20:51:12 info: [0mGET /api-docs/ [32m200[0m 3.924 ms - -[0m
+2025-04-16 20:51:12 info: [0mGET /api-docs/swagger-ui-init.js [32m200[0m 0.666 ms - -[0m
+2025-04-16 20:51:12 info: [0mGET /api-docs/swagger-ui.css [32m200[0m 9.435 ms - -[0m
+2025-04-16 20:51:12 info: [0mGET /api-docs/swagger-ui-standalone-preset.js [32m200[0m 4.961 ms - -[0m
+2025-04-16 20:51:12 info: [0mGET /api-docs/swagger-ui-bundle.js [32m200[0m 7.487 ms - -[0m
+2025-04-16 20:51:12 info: [0mGET /api-docs/favicon-32x32.png [32m200[0m 2.129 ms - 628[0m
+2025-04-16 20:52:34 info: 1ms Executed (default): SELECT `id`, `email`, `password`, `created_at` AS `createdAt`, `updated_at` AS `updatedAt` FROM `users` AS `UserModel`;
+2025-04-16 20:52:34 info: [0mGET /users [32m200[0m 15.226 ms - 31[0m
+2025-04-16 20:52:40 error: [POST] /users >> StatusCode:: 400, Message:: email must be an email, password must be longer than or equal to 9 characters
+2025-04-16 20:52:40 info: [0mPOST /users [33m400[0m 34.269 ms - 91[0m
