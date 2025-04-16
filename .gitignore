@@ -1,0 +1,89 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+server/node_modules
+server/.pnp
+server/.pnp.*
+server/.yarn/*
+server/!.yarn/patches
+server/!.yarn/plugins
+server/!.yarn/releases
+server/!.yarn/versions
+
+# testing
+server/coverage
+
+# next.js
+server/.next/
+server/out/
+server/disc
+server/src/logs
+
+# production
+server/build
+
+# misc
+server/.DS_Store
+server/*.pem
+
+# debug
+server/npm-debug.log*
+server/yarn-debug.log*
+server/yarn-error.log*
+
+server/# env files (can opt-in for committing if needed)
+server/.env*
+server/
+# vercel
+server/.vercel
+
+# typescript
+server/*.tsbuildinfo
+server/next-env.d.ts
+
+server/db.json
+
+# CLIENT
+
+
+client/node_modules
+client/.pnp
+client/.pnp.*
+client/.yarn/*
+client/!.yarn/patches
+client/!.yarn/plugins
+client/!.yarn/releases
+client/!.yarn/versions
+
+# testing
+client/coverage
+
+# next.js
+client/.next/
+client/out/
+client/disc
+client/src/logs
+
+# production
+client/build
+
+# misc
+client/.DS_Store
+client/*.pem
+
+# debug
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+
+client/# env files (can opt-in for committing if needed)
+client/.env*
+client/
+# vercel
+client/.vercel
+
+# typescript
+client/*.tsbuildinfo
+client/next-env.d.ts
+
+client/db.json
