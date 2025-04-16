@@ -42,7 +42,7 @@ const RenderNavItem = ({
     <Link
       key={item.href}
       href={`${prefix}${item.href}`}
-      className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800"
+      className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-dark-2"
     >
       <Icon className="w-5 h-5" />
       {!collapsed && (
@@ -66,7 +66,7 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
   return (
     <aside
       className={clsx(
-        `h-[calc(100vh-56px)] border-r bg-white dark:bg-zinc-950 flex flex-col transition-all duration-300 
+        `h-[calc(100vh-56px)] border-r bg-white dark:bg-dark-1 flex flex-col transition-all duration-300 
         fixed left-0 top-14 bottom-0 md:sticky`,
         collapsed ? "hidden md:flex w-16" : "w-full md:w-64"
       )}
@@ -90,7 +90,7 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
       <div className="p-2 border-t flex flex-col gap-2">
         <Link
           href="/logout"
-          className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-dark-2"
         >
           <LogOut className="w-5 h-5" />
           {!collapsed && (

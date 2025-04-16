@@ -28,5 +28,17 @@
     "switchTheme": "Switch Theme",
     "hiddenSidebar": "Hidden Sidebar",
     "showSidebar": "Show Sidebar"
+  },
+  "auth":{
+    "login": "Login",
+    "logout": "Logout", 
+    "register": "Register",
+    "forgotPassword": "Forgot Password",
+    "resetPassword": "Reset Password",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "rememberMe": "Remember Me",
+    "forgotPasswordDescription": "Enter your email address and we will send you a link to reset your password."
   }
 }

@@ -23,7 +23,7 @@ import { IMAGES } from "@/data/images";
 
 export default function CardCourse() {
   return (
-    <Card className="w-full bg-white dark:bg-zinc-950 gap-4 pt-2 overflow-hidden">
+    <Card className="w-full bg-white dark:bg-dark-2 gap-4 pt-2 overflow-hidden">
       <CardHeader className="px-2">
         <Image
           src={IMAGES.DEFAULT_COURSE}
@@ -37,7 +37,7 @@ export default function CardCourse() {
         <div className="flex flex-col gap-2">
           <Link href={"/"} className="flex items-center gap-2">
             <Image
-              src="/images/en.png"
+              src={IMAGES.LOGO}
               alt="Next.js"
               width={100}
               height={100}

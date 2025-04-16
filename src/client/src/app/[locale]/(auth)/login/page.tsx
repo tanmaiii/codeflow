@@ -1,9 +1,11 @@
 "use client";
 
+import Login from "@/components/pages/login/Login";
+
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Login page
-    </main>
+    <div>
+      <Login />
+    </div>
   );
 }

@@ -45,6 +45,14 @@
 
   /* --color-gray-950: oklch(0.129 0.042 264.695); */
   --font-weight-light: 300;
+  --color-black: oklch(0.029 0.012 10.695);
+
+  --color-dark-1: #0b0c14;
+  --color-dark-2: #141521;
+  --color-dark-3: #1e2037;
+
+  --color-primary-1: var(--primary);
+  --color-primary-2: #5a4bea;
 }
 
 :root {
