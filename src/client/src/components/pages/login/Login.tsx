@@ -85,7 +85,7 @@ export default function Login() {
         </div>
 
         <Button
-          onClick={() => console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY)}
+          onClick={() => navigator.push(paths.HOME)}
           className="w-full h-12 mt-8 bg-primary text-white hover:bg-primary/80"
         >
           Sign In
