@@ -1,5 +1,5 @@
 "use client";
-import { useThemeStore } from "@/stores/theme-store";
+import { useThemeStore } from "@/stores/theme_store";
 import { Moon, Sun } from "lucide-react";
 import { ButtonWithTooltip } from "./ui/button";
 import { useTranslations } from "next-intl";

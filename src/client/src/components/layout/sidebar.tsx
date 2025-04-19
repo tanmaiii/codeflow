@@ -2,7 +2,7 @@
 
 import { IMAGES } from "@/data/images";
 import { ILinkItem } from "@/interfaces/common";
-import { useSidebarStore } from "@/stores/sidebar-store";
+import { useSidebarStore } from "@/stores/sidebar_store";
 import clsx from "clsx";
 import {
   Book,

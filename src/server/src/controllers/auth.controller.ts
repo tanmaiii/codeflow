@@ -1,12 +1,49 @@
+import { logger } from '@/utils/logger';
+import { CreateUserDto, CreateUserGithubDto } from '@dtos/users.dto';
+import { RequestWithUser } from '@interfaces/auth.interface';
+import { User, UserGithub } from '@interfaces/users.interface';
+import { AuthService } from '@services/auth.service';
+import axios from 'axios';
+import CryptoJS from 'crypto-js';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
-import { CreateUserDto } from '@dtos/users.dto';
-import { User } from '@interfaces/users.interface';
-import { RequestWithUser } from '@interfaces/auth.interface';
-import { AuthService } from '@services/auth.service';
+import { HttpException } from '@exceptions/HttpException';
+import { DB } from '@/database';
+import { StatusCodes } from 'http-status-codes';
+import { UserService } from '@/services/users.service';
+
+const decodeToken = async (token: string, secret: string) => {
+  const bytes = CryptoJS.AES.decrypt(token, secret);
+  const originalToken = bytes.toString(CryptoJS.enc.Utf8);
+  return originalToken;
+};
 
 export class AuthController {
   public auth = Container.get(AuthService);
+  public user = Container.get(UserService);
+
+  public loginWithGithub = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { accessToken, uid, email }: CreateUserGithubDto = req.body;
+
+      const resDecode = await decodeToken(accessToken, process.env.SECRET_KEY);
+
+      const tokenRes = await axios.get('https://api.github.com/user', {
+        headers: { Authorization: `Bearer ${resDecode}` },
+      });
+
+      if (!tokenRes.data) {
+        return new HttpException(401, 'Unauthorized');
+      }
+
+      const { cookie, findUser } = await this.auth.loginWithGithub({ userBody: tokenRes.data, email });
+
+      res.setHeader('Set-Cookie', [cookie]);
+      res.status(200).json({ data: findUser, message: 'login' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   public signUp = async (req: Request, res: Response, next: NextFunction) => {
     try {

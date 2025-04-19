@@ -1,5 +1,5 @@
 "use client";
-import { useSidebarStore } from "@/stores/sidebar-store";
+import { useSidebarStore } from "@/stores/sidebar_store";
 import { PanelLeftClose, PanelRightClose } from "lucide-react";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "../localeSwicher";

@@ -4,9 +4,9 @@ import queryString from "query-string";
 
 const API = apiConfig.baseUrl;
 
-const createHttpClient = (baseurl: string = "") => {
+const createHttpClient = (path: string = "") => {
   const httpClient = axios.create({
-    baseURL: `${API}/${baseurl}`,
+    baseURL: `${API}/${path}`,
     timeout: 10000,
     paramsSerializer: (params) => queryString.stringify(params),
     headers: {

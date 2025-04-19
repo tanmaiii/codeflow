@@ -1,7 +1,7 @@
 "use client";
 import { IMAGES } from "@/data/images";
 import { cn } from "@/lib/utils";
-import { useThemeStore } from "@/stores/theme-store";
+import { useThemeStore } from "@/stores/theme_store";
 import Image from "next/image";
 import "./style.css";
 

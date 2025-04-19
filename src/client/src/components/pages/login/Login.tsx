@@ -13,19 +13,42 @@ import { Label } from "@/components/ui/label";
 import { auth, provider } from "@/config/Firebase";
 import { IMAGES } from "@/data/images";
 import { paths } from "@/data/path";
-import { signInWithPopup } from "firebase/auth";
+import authService from "@/services/auth.service";
+import {
+  GithubAuthProvider,
+  signInWithPopup,
+  UserCredential,
+} from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import CryptoJS from "crypto-js";
+
+const SECRET_KEY = process.env.NEXT_PUBLIC_SECRET_KEY;
 
 export default function Login() {
   const navigator = useRouter();
 
   const handleSubmitGitHub = async () => {
     signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log(result);
-        navigator.push(paths.HOME);
+      .then(async (result: UserCredential) => {
+        const credential = await GithubAuthProvider.credentialFromResult(
+          result
+        );
+        const encryptedToken = await CryptoJS.AES.encrypt(
+          credential?.accessToken ?? "",
+          SECRET_KEY ?? ""
+        ).toString();
+
+        const res = await authService.loginWithGithub({
+          accessToken: encryptedToken || "",
+          uid: result.user.uid,
+          email: result.user.email || "",
+        });
+
+        if (res.status === 200) {
+          navigator.push(paths.HOME);
+        }
       })
       .catch((error) => {
         console.log(error);

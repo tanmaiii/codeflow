@@ -15,7 +15,7 @@ export default function Courses() {
           <TextHeading>Đã hoàn thành</TextHeading>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 2xl:grid-cols-4 py-2">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-3 2xl:grid-cols-5 py-2">
         <CardCourse />
         <CardCourse />
         <CardCourse />

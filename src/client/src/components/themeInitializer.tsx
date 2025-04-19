@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useThemeStore } from '@/stores/theme-store';
+import { useThemeStore } from '@/stores/theme_store';
 
 // Load theme từ localStorage và set vào zustand store
 export default function ThemeInitializer() {
