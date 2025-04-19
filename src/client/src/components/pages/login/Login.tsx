@@ -23,11 +23,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import CryptoJS from "crypto-js";
+import tokenService from "@/services/token.service";
+import { useUserStore } from "@/stores/user_store";
 
 const SECRET_KEY = process.env.NEXT_PUBLIC_SECRET_KEY;
 
 export default function Login() {
   const navigator = useRouter();
+  const { setUser } = useUserStore();
 
   const handleSubmitGitHub = async () => {
     signInWithPopup(auth, provider)
@@ -46,6 +49,8 @@ export default function Login() {
           email: result.user.email || "",
         });
 
+        tokenService.accessToken = res.data.accessToken.token;
+        setUser(res.data);
         if (res.status === 200) {
           navigator.push(paths.HOME);
         }

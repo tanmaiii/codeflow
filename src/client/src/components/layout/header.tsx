@@ -7,11 +7,13 @@ import ThemeToggle from "../themeToggle";
 import { Button, ButtonWithTooltip } from "../ui/button";
 import Link from "next/link";
 import { paths } from "@/data/path";
+import { useUserStore } from "@/stores/user_store";
 
 export default function Header() {
   const { collapsed, toggle } = useSidebarStore();
   const t = useTranslations("settings");
   const tAuth = useTranslations("auth");
+  const { user } = useUserStore();
 
   return (
     <header
@@ -35,11 +37,13 @@ export default function Header() {
       <div className="gap-2 flex">
         <LocaleSwitcher />
         <ThemeToggle />
-        <Button>
-          <Link className="text-white" href={paths.LOGIN}>
-            {tAuth("login")}
-          </Link>
-        </Button>
+        {!user && (
+          <Button>
+            <Link className="text-white" href={paths.LOGIN}>
+              {tAuth("login")}
+            </Link>
+          </Button>
+        )}
       </div>
     </header>
   );

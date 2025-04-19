@@ -1,16 +1,13 @@
-import { logger } from '@/utils/logger';
+import { UserService } from '@/services/users.service';
 import { CreateUserDto, CreateUserGithubDto } from '@dtos/users.dto';
+import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
-import { User, UserGithub } from '@interfaces/users.interface';
+import { User } from '@interfaces/users.interface';
 import { AuthService } from '@services/auth.service';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
-import { HttpException } from '@exceptions/HttpException';
-import { DB } from '@/database';
-import { StatusCodes } from 'http-status-codes';
-import { UserService } from '@/services/users.service';
 
 const decodeToken = async (token: string, secret: string) => {
   const bytes = CryptoJS.AES.decrypt(token, secret);
@@ -36,10 +33,10 @@ export class AuthController {
         return new HttpException(401, 'Unauthorized');
       }
 
-      const { cookie, findUser } = await this.auth.loginWithGithub({ userBody: tokenRes.data, email });
+      const { tokenData, findUser } = await this.auth.loginWithGithub({ userBody: tokenRes.data, email, uid });
 
-      res.setHeader('Set-Cookie', [cookie]);
-      res.status(200).json({ data: findUser, message: 'login' });
+      // res.setHeader('Set-Cookie', [cookie]);
+      res.status(200).json({ data: findUser, accessToken: tokenData, message: 'login' });
     } catch (error) {
       next(error);
     }
