@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,21 +10,14 @@ import TextHeading, { TextDescription } from "@/components/ui/text";
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-import NameTag from "../NameTag/NameTag";
-import { paths } from "@/data/path";
 import { IMAGES } from "@/data/images";
+import { paths } from "@/data/path";
+import userService from "@/services/user.service";
+import NameTag from "../NameTag/NameTag";
 
 export default function CardCourse() {
   return (
-    <Card className="w-full bg-white dark:bg-dark-2 gap-4 pt-2 overflow-hidden">
+    <Card className="w-full bg-backgroud-2 gap-4 pt-2 overflow-hidden">
       <CardHeader className="px-2">
         <Image
           src={IMAGES.DEFAULT_COURSE}
@@ -55,30 +49,14 @@ export default function CardCourse() {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex flex-col w-full gap-2 items-start">
+        <Button
+          className="w-full"
+          onClick={() => userService.getUsers()}
+        >
+          Xem khóa học
+        </Button>
         <TextDescription>Edited 2h ago</TextDescription>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-10 h-10 p-0 rounded-full">
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </CardFooter>
     </Card>
   );

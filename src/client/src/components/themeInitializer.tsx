@@ -12,13 +12,10 @@ export default function ThemeInitializer() {
   useEffect(() => {
     const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
     const user = localStorage.getItem('user');
-    if (user) {
-      setUser(JSON.parse(user));
-    }
+
+    if (user) setUser(JSON.parse(user));
     if (saved) setTheme(saved);
-  }, [setTheme]);
-
-
+  }, [setTheme, setUser]);
 
   return null;
 }

@@ -12,7 +12,10 @@
     "search": "Tìm kiếm",
     "clear": "Xóa",
     "selectAll": "Chọn tất cả",
-    "deselectAll": "Bỏ chọn tất cả"
+    "deselectAll": "Bỏ chọn tất cả",
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "enter": "Nhập"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
@@ -28,15 +31,21 @@
     "showSidebar": "Hiện thanh bên"
   },
   "auth":{
-    "login": "Đăng nhập",
-    "logout": "Đăng xuất", 
-    "register": "Đăng ký",
-    "forgotPassword": "Quên mật khẩu",
+    "logout": "Đăng xuất",
+    "signUp": "Đăng ký",
+    "signIn": "Đăng nhập",
+    "or": "hoặc",
+    "name": "Tên",
+    "forgotPassword": "Quên mật khẩu?",
     "resetPassword": "Đặt lại mật khẩu",
     "email": "Email",
     "password": "Mật khẩu",
     "confirmPassword": "Xác nhận mật khẩu",
-    "rememberMe": "Ghi nhớ tôi",
-    "forgotPasswordDescription": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu."
+    "rememberMe": "Ghi nhớ đăng nhập",
+    "forgotPasswordDescription": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu.",
+    "welcome": "Chào mừng đến với CodeFlow 👋🏻",
+    "pleaseLogin": "Vui lòng đăng nhập vào tài khoản của bạn để bắt đầu hành trình",
+    "dontHaveAnAccount": "Bạn chưa có tài khoản?",
+    "signInWithGitHub": "Đăng nhập bằng GitHub (Đề xuất)"
   }
 }

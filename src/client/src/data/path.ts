@@ -1,3 +1,4 @@
+
 export const paths = {
 
   ADMIN: "/admin",
@@ -11,4 +12,8 @@ export const paths = {
 
 
   LOGIN: "/login",
+  REGISTER: "/register",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+  LOGOUT: "/logout",
 };

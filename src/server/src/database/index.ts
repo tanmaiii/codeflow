@@ -1,7 +1,14 @@
 import Sequelize from 'sequelize';
 import { NODE_ENV, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE } from '@config';
-import UserModel from '@models/users.model';
 import { logger } from '@utils/logger';
+import PostModel from '@/models/posts.model';
+import CourseModel from '@/models/courses.model';
+import UserModel from '@models/users.model';
+import TopicModel from '@/models/topics.model';
+import GroupModel from '@/models/groups.model';
+import GroupMemberModel from '@/models/groups_member.model';
+import SubmissionModel from '@/models/submissions.model';
+import CommentModel from '@/models/comments.model';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'mysql',
@@ -29,6 +36,13 @@ sequelize.authenticate();
 
 export const DB = {
   Users: UserModel(sequelize),
+  Posts: PostModel(sequelize),
+  Courses: CourseModel(sequelize),
+  Topics: TopicModel(sequelize),
+  Groups: GroupModel(sequelize),
+  GroupMembers: GroupMemberModel(sequelize),
+  Submission: SubmissionModel(sequelize),
+  Comment: CommentModel(sequelize),
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };

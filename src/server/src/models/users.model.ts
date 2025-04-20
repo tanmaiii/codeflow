@@ -35,7 +35,7 @@ export default function (sequelize: Sequelize): typeof UserModel {
         type: DataTypes.STRING(45),
       },
       uid: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.STRING(255),
       },
       name: {
@@ -63,6 +63,8 @@ export default function (sequelize: Sequelize): typeof UserModel {
     {
       tableName: 'users',
       sequelize,
+      timestamps: true,
+      paranoid: true, // bật xóa mềm
     },
   );
 

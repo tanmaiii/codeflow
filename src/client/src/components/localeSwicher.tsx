@@ -4,7 +4,7 @@ import { SVGS } from "@/data/images";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { ButtonWithTooltip } from "./ui/button";
+import ButtonTooltip from "./common/Button/ButtonWithTooltip/ButtonTooltip";
 
 export default function LocaleSwitcher() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function LocaleSwitcher() {
   };
 
   return (
-    <ButtonWithTooltip
+    <ButtonTooltip
       tooltip={currentLocale === "vi" ? "English" : "Tiếng Việt"}
       variant="ghost"
       className="p-3"
@@ -40,6 +40,6 @@ export default function LocaleSwitcher() {
           alt="vn.png"
         />
       )}
-    </ButtonWithTooltip>
+    </ButtonTooltip>
   );
 }

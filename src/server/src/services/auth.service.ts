@@ -1,7 +1,7 @@
 import { HttpException } from '@/exceptions/HttpException';
 import { SECRET_KEY } from '@config';
 import { DB } from '@database';
-import { CreateUserDto, CreateUserGithub } from '@dtos/users.dto';
+import { CreateUserDto, CreateUserGithub, LoginUserDto } from '@dtos/users.dto';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { compare, hash } from 'bcrypt';
@@ -66,24 +66,31 @@ export class AuthService {
   public async signup(userData: CreateUserDto): Promise<User> {
     const findUser: User = await DB.Users.findOne({ where: { email: userData.email } });
     if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
-
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: User = await DB.Users.create({ ...userData, password: hashedPassword });
+
+    const newUser: User = {
+      ...userData,
+      password: hashedPassword,
+      username: new Date().getTime().toString(),
+    };
+
+    const createUserData: User = await DB.Users.create(newUser);
 
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: LoginUserDto): Promise<{ tokenData: TokenData; findUser: User }> {
     const findUser: User = await DB.Users.findOne({ where: { email: userData.email } });
     if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
+    if(findUser.uid) throw new HttpException(409, `The account ${userData.email} is linked to Github. Please login with Github`);
 
     const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
     if (!isPasswordMatching) throw new HttpException(409, 'Password not matching');
 
     const tokenData = createToken(findUser);
-    const cookie = createCookie(tokenData);
+    // const cookie = createCookie(tokenData);
 
-    return { cookie, findUser };
+    return { tokenData, findUser };
   }
 
   public async logout(userData: User): Promise<User> {

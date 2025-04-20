@@ -1,5 +1,5 @@
 import { UserService } from '@/services/users.service';
-import { CreateUserDto, CreateUserGithubDto } from '@dtos/users.dto';
+import { CreateUserDto, CreateUserGithubDto, LoginUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
@@ -55,11 +55,11 @@ export class AuthController {
 
   public logIn = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userData: CreateUserDto = req.body;
-      const { cookie, findUser } = await this.auth.login(userData);
+      const userData: LoginUserDto = req.body;
+      const { tokenData, findUser } = await this.auth.login(userData);
 
-      res.setHeader('Set-Cookie', [cookie]);
-      res.status(200).json({ data: findUser, message: 'login' });
+      // res.setHeader('Set-Cookie', [cookie]);
+      res.status(200).json({ data: findUser, accessToken: tokenData, message: 'login' });
     } catch (error) {
       next(error);
     }
@@ -70,7 +70,7 @@ export class AuthController {
       const userData: User = req.user;
       const logOutUserData: User = await this.auth.logout(userData);
 
-      res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
+      // res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
       res.status(200).json({ data: logOutUserData, message: 'logout' });
     } catch (error) {
       next(error);

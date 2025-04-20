@@ -1,6 +1,7 @@
 "use client";
 
 import { IMAGES } from "@/data/images";
+import { paths } from "@/data/path";
 import { ILinkItem } from "@/interfaces/common";
 import { useSidebarStore } from "@/stores/sidebar_store";
 import clsx from "clsx";
@@ -14,7 +15,7 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,7 +43,7 @@ const RenderNavItem = ({
     <Link
       key={item.href}
       href={`${prefix}${item.href}`}
-      className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-dark-2"
+      className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-backgroud-2"
     >
       <Icon className="w-5 h-5" />
       {!collapsed && (
@@ -61,12 +62,16 @@ type SidebarProps = {
 
 export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
   const { collapsed } = useSidebarStore();
-  const currentLocale = useLocale();
+  const t = useTranslations("auth");
+
+  const handleLogout = () => {
+
+  }
 
   return (
     <aside
       className={clsx(
-        `h-[calc(100vh-56px)] border-r bg-white dark:bg-dark-1 flex flex-col transition-all duration-300 
+        `h-[calc(100vh-56px)] border-r bg-backgroud-1 flex flex-col transition-all duration-300 
         fixed left-0 top-14 bottom-0 md:sticky`,
         collapsed ? "hidden md:flex w-16" : "w-full md:w-64"
       )}
@@ -89,12 +94,13 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
 
       <div className="p-2 border-t flex flex-col gap-2">
         <Link
-          href="/logout"
-          className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-dark-2"
+          href={paths.LOGOUT}
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-backgroud-2"
         >
           <LogOut className="w-5 h-5" />
           {!collapsed && (
-            <span>{currentLocale === "vi" ? "Đăng xuất" : "Logout"}</span>
+            <span>{t('logout')}</span>
           )}
         </Link>
       </div>

@@ -1,5 +1,4 @@
-import { IsString, IsEmail, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
-import { Request } from 'express';
+import { IsEmail, IsEmpty, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsEmail()
@@ -14,11 +13,18 @@ export class CreateUserDto {
   @IsString()
   @MinLength(3)
   @MaxLength(32)
-  public username: string;
+  public name: string;
+}
+
+export class LoginUserDto {
+  @IsEmail()
+  public email: string;
 
   @IsString()
-  @MaxLength(255)
-  public avatar: string;
+  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(32)
+  public password: string;
 }
 
 export class UpdateUserDto {

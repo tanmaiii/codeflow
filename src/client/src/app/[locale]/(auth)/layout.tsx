@@ -1,7 +1,17 @@
 "use client";
+import HeaderAuth from "@/components/layout/header_auth";
+import LoginWithGitHub from "@/components/pages/auth/LoginWithGitHub/LoginWithGitHub";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import TextHeading, { TextDescription } from "@/components/ui/text";
 import { IMAGES } from "@/data/images";
-import { cn } from "@/lib/utils";
 import { useThemeStore } from "@/stores/theme_store";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import "./style.css";
 
@@ -13,9 +23,11 @@ export default function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const { theme } = useThemeStore();
+  const t = useTranslations("auth");
 
   return (
-    <div className="flex flex-col justify-center items-center w-screen h-screen relative bg-gray-100 dark:bg-dark-1">
+    <div className="flex flex-col justify-center items-center w-screen h-screen relative bg-backgroud-1">
+      <HeaderAuth />
       <div className="absolute top-0 w-full h-full left-1/2 -translate-x-1/2">
         {theme === "dark" && (
           <Image
@@ -27,12 +39,38 @@ export default function Layout({
           />
         )}
       </div>
-      <div className="z-20">{children}</div>
-      <div
-        className={cn(
+      <div className="z-20 w-full p-4 flex items-center justify-center">
+        <Card className="w-full md:w-[460px] h-fit bg-backgroud-2 gap-0 px-2 py-6">
+          <CardHeader>
+            <div className="flex items-center gap-2 justify-center ">
+              <Image width={40} height={40} src={IMAGES.LOGO} alt="logo.png" />
+              <TextHeading className="text-4xl font-bold text-primary">
+                CodeFlow
+              </TextHeading>
+            </div>
+            <CardTitle className="text-left text-xl font-bold mt-4">
+              {t("welcome")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>{children}</CardContent>
+          <CardFooter className="flex flex-col gap-2 mt-4 pb-4">
+            <div className="relative my-3 w-full text-center">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
+              </div>
+              <TextDescription className="relative bg-backgroud-2 dark:bg-backgroud-2 px-4">
+                {t("or")}
+              </TextDescription>
+            </div>
+            <LoginWithGitHub />
+          </CardFooter>
+        </Card>
+      </div>
+      {/* <div
+        className={
           "z-0 absolute bottom-0 right-0 w-full dark:bg-primary/5 bg-gray-200 bottom-login"
-        )}
-      ></div>
+        }
+      ></div> */}
     </div>
   );
 }

@@ -26,7 +26,7 @@ export default async function Layout({ children, params }: Props) {
   return (
     <html lang={(await params).locale} suppressHydrationWarning>
       <ThemeInitializer />
-      <body className={`${roboto.className} bg-dark-1`} suppressHydrationWarning>
+      <body className={`${roboto.className} bg-backgroud-1`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

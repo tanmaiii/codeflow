@@ -1,15 +1,15 @@
 "use client";
 import { useThemeStore } from "@/stores/theme_store";
 import { Moon, Sun } from "lucide-react";
-import { ButtonWithTooltip } from "./ui/button";
 import { useTranslations } from "next-intl";
+import ButtonTooltip from "./common/Button/ButtonWithTooltip/ButtonTooltip";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useThemeStore();
   const t = useTranslations("settings");
 
   return (
-    <ButtonWithTooltip
+    <ButtonTooltip
       tooltip={t('switchTheme')}
       variant="ghost"
       onClick={toggleTheme}
@@ -19,6 +19,6 @@ export default function ThemeToggle() {
       ) : (
         <Moon className="w-5 h-5" />
       )}
-    </ButtonWithTooltip>
+    </ButtonTooltip>
   );
 }

@@ -4,10 +4,11 @@ import { PanelLeftClose, PanelRightClose } from "lucide-react";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "../localeSwicher";
 import ThemeToggle from "../themeToggle";
-import { Button, ButtonWithTooltip } from "../ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
 import { paths } from "@/data/path";
 import { useUserStore } from "@/stores/user_store";
+import ButtonTooltip from "../common/Button/ButtonWithTooltip/ButtonTooltip";
 
 export default function Header() {
   const { collapsed, toggle } = useSidebarStore();
@@ -17,11 +18,11 @@ export default function Header() {
 
   return (
     <header
-      className="fixed top-0 z-30 bg-white dark:bg-dark-1 border-b 
+      className="fixed top-0 z-30 bg-backgroud-1 border-b 
       px-4 py-2 flex items-center justify-between w-full h-14 md:16"
     >
       <div>
-        <ButtonWithTooltip
+        <ButtonTooltip
           tooltip={collapsed ? t("showSidebar") : t("hiddenSidebar")}
           variant="ghost"
           onClick={toggle}
@@ -32,7 +33,7 @@ export default function Header() {
           ) : (
             <PanelLeftClose className="w-4 h-4" />
           )}
-        </ButtonWithTooltip>
+        </ButtonTooltip>
       </div>
       <div className="gap-2 flex">
         <LocaleSwitcher />
@@ -40,7 +41,7 @@ export default function Header() {
         {!user && (
           <Button>
             <Link className="text-white" href={paths.LOGIN}>
-              {tAuth("login")}
+              {tAuth("signIn")}
             </Link>
           </Button>
         )}

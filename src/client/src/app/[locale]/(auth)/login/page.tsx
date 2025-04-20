@@ -1,11 +1,10 @@
-"use client";
+import Login from "@/components/pages/auth/login/Login";
+import { Metadata } from "next";
 
-import Login from "@/components/pages/login/Login";
+export const metadata: Metadata = {
+  title: "Đăng nhập | CodeFlow",
+};
 
 export default function Page() {
-  return (
-    <div>
-      <Login />
-    </div>
-  );
+  return <Login />;
 }

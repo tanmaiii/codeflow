@@ -14,7 +14,8 @@
     "selectAll": "Select All",
     "deselectAll": "Deselect All",
     "loading": "Loading...",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "enter": "Enter"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -29,16 +30,42 @@
     "hiddenSidebar": "Hidden Sidebar",
     "showSidebar": "Show Sidebar"
   },
-  "auth":{
-    "login": "Login",
-    "logout": "Logout", 
-    "register": "Register",
-    "forgotPassword": "Forgot Password",
+  "auth": {
+    "logout": "Logout",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "or": "or",
+    "forgotPassword": "Forgot Password ?",
     "resetPassword": "Reset Password",
     "email": "Email",
     "password": "Password",
+    "name": "Name",
     "confirmPassword": "Confirm Password",
     "rememberMe": "Remember Me",
-    "forgotPasswordDescription": "Enter your email address and we will send you a link to reset your password."
+    "forgotPasswordDescription": "Enter your email address and we will send you a link to reset your password.",
+    "welcome": "Welcome to CodeFlow 👋🏻",
+    "pleaseLogin": "Please sign-in to your account and start the adventure",
+    "pleaseSignUp": "Please sign-up to your account and start the adventure",
+    "dontHaveAnAccount": "Don't have an account?",
+    "youHaveAnAccount": "Already have an account?",
+    "signInWithGitHub": "Sign in with GitHub (Recommended)",
+    "error": "An error occurred, please try again",
+    "loginSuccess": "Login successful!",
+    "loginFailed": "Login failed!"
+  },
+  "validate": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "short": "{field} is too short",
+    "required": "{field} is required",
+    "nameTooShort": "Name is too short",
+    "passwordTooShort": "Password is too short",
+    "emailInvalid": "Email is invalid",
+    "minLength": "{field} must be at least {length} characters long",
+    "maxLength": "{field} must be at most {length} characters long",
+    "passwordMatch": "Passwords do not match",
+    "passwordStrength": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
   }
 }

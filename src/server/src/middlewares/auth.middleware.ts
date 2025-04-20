@@ -4,6 +4,8 @@ import { SECRET_KEY } from '@config';
 import { DB } from '@database';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
+import { User } from '@/interfaces/users.interface';
+import { logger } from '@/utils/logger';
 
 const getAuthorization = (req: Request) => {
   const cookie = req.cookies['Authorization'];
@@ -20,8 +22,9 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
     const Authorization = getAuthorization(req);
 
     if (Authorization) {
-      const { id } = verify(Authorization, SECRET_KEY) as DataStoredInToken;
-      const findUser = await DB.Users.findByPk(id);
+      const decodedToken: DataStoredInToken = verify(Authorization, SECRET_KEY) as DataStoredInToken;
+      if(decodedToken === undefined) return next();
+      const findUser = await DB.Users.findByPk(decodedToken.user.id);
 
       if (findUser) {
         req.user = findUser;
