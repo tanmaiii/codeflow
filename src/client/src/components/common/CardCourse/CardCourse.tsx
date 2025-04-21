@@ -9,7 +9,6 @@ import {
 import TextHeading, { TextDescription } from "@/components/ui/text";
 import Image from "next/image";
 import Link from "next/link";
-
 import { IMAGES } from "@/data/images";
 import { paths } from "@/data/path";
 import userService from "@/services/user.service";
@@ -51,7 +50,7 @@ export default function CardCourse() {
       </CardContent>
       <CardFooter className="flex flex-col w-full gap-2 items-start">
         <Button
-          className="w-full"
+          className="w-full dark:text-white"
           onClick={() => userService.getUsers()}
         >
           Xem khóa học

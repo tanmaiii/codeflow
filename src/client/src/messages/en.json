@@ -51,7 +51,9 @@
     "signInWithGitHub": "Sign in with GitHub (Recommended)",
     "error": "An error occurred, please try again",
     "loginSuccess": "Login successful!",
-    "loginFailed": "Login failed!"
+    "loginFailed": "Login failed!",
+    "signUpSuccess": "Sign up successful!",
+    "signUpFailed": "Sign up failed!"
   },
   "validate": {
     "name": "Name",
