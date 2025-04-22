@@ -7,6 +7,7 @@ import err404 from "@/assets/images/5.png";
 import github from "@/assets/images/github.png";
 import gg from "@/assets/images/google.png";
 import bgLogin from "@/assets/images/bg-login.jpg";
+import bgLogin2 from "@/assets/images/bg-login-2.png";
 
 export const IMAGES = {
   LOGO: logo,
@@ -17,6 +18,7 @@ export const IMAGES = {
   GITHUB: github,
   GOOGLE: gg,
   BG_LOGIN: bgLogin,
+  BG_LOGIN_LIGHT: bgLogin2,
 };
 
 export const SVGS = {

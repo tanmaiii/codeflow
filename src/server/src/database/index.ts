@@ -9,6 +9,7 @@ import GroupModel from '@/models/groups.model';
 import GroupMemberModel from '@/models/groups_member.model';
 import SubmissionModel from '@/models/submissions.model';
 import CommentModel from '@/models/comments.model';
+import { initModels } from '@/models';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'mysql',
@@ -46,3 +47,5 @@ export const DB = {
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };
+
+initModels();

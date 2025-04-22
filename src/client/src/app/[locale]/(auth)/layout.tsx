@@ -29,15 +29,13 @@ export default function Layout({
     <div className="flex flex-col justify-center items-center w-screen h-screen relative bg-backgroud-1">
       <HeaderAuth />
       <div className="absolute top-0 w-full h-full left-1/2 -translate-x-1/2">
-        {theme === "dark" && (
-          <Image
-            src={IMAGES.BG_LOGIN}
-            alt="background"
-            width={1000}
-            height={1000}
-            className="w-full h-full object-cover"
-          />
-        )}
+        <Image
+          src={theme === "dark" ? IMAGES.BG_LOGIN : IMAGES.BG_LOGIN_LIGHT}
+          alt="background"
+          width={1000}
+          height={1000}
+          className="w-full h-full object-cover object-center"
+        />
       </div>
       <div className="z-20 w-full p-4 flex items-center justify-center">
         <Card className="w-full md:w-[460px] h-fit bg-backgroud-2 gap-0 px-2 py-6">

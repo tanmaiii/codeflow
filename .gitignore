@@ -21,6 +21,7 @@ server/src/logs
 
 # production
 server/build
+server/uploads
 
 # misc
 server/.DS_Store
