@@ -9,6 +9,7 @@ export const paths = {
   PROJECTS: "/projects",
   SETTINGS: "/settings",
   USERS: "/users",
+  ARTICLES: "/articles",
 
 
   LOGIN: "/login",

@@ -1,14 +1,14 @@
 "use client";
+import { paths } from "@/data/path";
 import { useSidebarStore } from "@/stores/sidebar_store";
+import { useUserStore } from "@/stores/user_store";
 import { PanelLeftClose, PanelRightClose } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import ButtonTooltip from "../common/Button/ButtonWithTooltip/ButtonTooltip";
 import LocaleSwitcher from "../localeSwicher";
 import ThemeToggle from "../themeToggle";
 import { Button } from "../ui/button";
-import Link from "next/link";
-import { paths } from "@/data/path";
-import { useUserStore } from "@/stores/user_store";
-import ButtonTooltip from "../common/Button/ButtonWithTooltip/ButtonTooltip";
 
 export default function Header() {
   const { collapsed, toggle } = useSidebarStore();

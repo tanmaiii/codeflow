@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/data/images";
 import Image from "next/image";
 import Link from "next/link";
-import "@/styles/globals.css";
+import "./globals.css";
 
 // Render the default Next.js 404 page when a route
 // is requested that doesn't match the middleware and

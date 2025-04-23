@@ -1,5 +1,6 @@
 import Provider from "@/providers/Provider";
-import "@/styles/globals.css";
+import "./globals.css";
+import './tiptap.scss'
 import { ReactNode } from "react";
 
 type Props = {

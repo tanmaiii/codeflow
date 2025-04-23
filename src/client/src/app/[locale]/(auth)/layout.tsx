@@ -38,7 +38,7 @@ export default function Layout({
         />
       </div>
       <div className="z-20 w-full p-4 flex items-center justify-center">
-        <Card className="w-full md:w-[460px] h-fit bg-backgroud-2 gap-0 px-2 py-6">
+        <Card className="w-full md:w-[460px] h-fit dark:bg-backgroud-2  bg-backgroud-1 gap-0 px-2 py-6">
           <CardHeader>
             <div className="flex items-center gap-2 justify-center ">
               <Image width={40} height={40} src={IMAGES.LOGO} alt="logo.png" />
@@ -56,7 +56,7 @@ export default function Layout({
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
               </div>
-              <TextDescription className="relative bg-backgroud-2 dark:bg-backgroud-2 px-4">
+              <TextDescription className="relative bg-backgroud-1 dark:bg-backgroud-2 px-4">
                 {t("or")}
               </TextDescription>
             </div>

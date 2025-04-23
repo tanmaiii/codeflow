@@ -21,6 +21,12 @@ export const menuUser: ILinkItem[] = [
     href: paths.PROJECTS,
   },
   {
+    vi: "Bài viết",
+    en: "Articles",
+    icon: "article",
+    href: paths.ARTICLES,
+  },
+  {
     en: "Settings",
     vi: "Cài đặt",
     icon: "settings",
