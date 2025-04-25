@@ -1,5 +1,5 @@
 "use client";
-import HeaderAuth from "@/components/layout/header_auth";
+import HeaderAuth from "@/components/layout/HeaderAuth";
 import LoginWithGitHub from "@/components/pages/auth/LoginWithGitHub/LoginWithGitHub";
 import {
   Card,
@@ -38,7 +38,13 @@ export default function Layout({
         />
       </div>
       <div className="z-20 w-full p-4 flex items-center justify-center">
-        <Card className="w-full md:w-[460px] h-fit dark:bg-backgroud-2  bg-backgroud-1 gap-0 px-2 py-6">
+        <Card
+          style={{
+            boxShadow:
+              "-64px -12px 100px 12px rgba(101,79,255, 0.07), -10px -10px 40px 1px rgba(89,34,203, 0.15)",
+          }}
+          className="w-full md:w-[460px] h-fit dark:bg-backgroud-2  bg-backgroud-1 gap-0 px-2 py-6"
+        >
           <CardHeader>
             <div className="flex items-center gap-2 justify-center ">
               <Image width={40} height={40} src={IMAGES.LOGO} alt="logo.png" />

@@ -13,6 +13,7 @@ import { DB } from '@database';
 import { Routes } from '@interfaces/routes.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import path from 'path';
 
 export class App {
   public app: express.Application;
@@ -49,14 +50,22 @@ export class App {
   }
 
   private initializeMiddlewares() {
+    this.app.use(
+      cors({
+        origin: (origin, callback) => callback(null, true),
+        credentials: true,
+      }),
+    );
     this.app.use(morgan(LOG_FORMAT, { stream }));
-    this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+
+    // Cho phép truy cập file ảnh tĩnh từ /public
+    this.app.use('/public/images', express.static(path.join(__dirname, '../uploads/images')));
   }
 
   private initializeRoutes(routes: Routes[]) {

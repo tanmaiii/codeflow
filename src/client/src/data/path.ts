@@ -10,6 +10,8 @@ export const paths = {
   SETTINGS: "/settings",
   USERS: "/users",
   ARTICLES: "/articles",
+  ARTICLES_CREATE: "/articles/create",
+  
 
 
   LOGIN: "/login",

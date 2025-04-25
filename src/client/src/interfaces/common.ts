@@ -5,8 +5,7 @@ export interface ILinkItem {
   href: string;
 }
 
-
-export interface ResponseDto<T> {
+export interface ResponseAPIDto<T> {
   data: T;
   message: string;
 }
@@ -18,3 +17,4 @@ export interface ApiError {
     };
   };
 }
+

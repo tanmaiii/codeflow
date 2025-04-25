@@ -34,6 +34,16 @@
             "date": 1745341205255,
             "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\error\\2025-04-23.log",
             "hash": "471a0934090f53d056a15497c019f749c40c912162de4e979e004174372f7b0e"
+        },
+        {
+            "date": 1745498740445,
+            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\error\\2025-04-24.log",
+            "hash": "73549c520615c317001dd9cabe661f7f85ef4d824521116ae4900fd525abfd8c"
+        },
+        {
+            "date": 1745580596377,
+            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\error\\2025-04-25.log",
+            "hash": "68001d85a3ee446827efad8ea501c0c8cf74fe9075c5c346fc80bf3d333c71bb"
         }
     ],
     "hashType": "sha256"
