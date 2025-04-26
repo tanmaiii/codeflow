@@ -4,8 +4,9 @@ import { UserRoute } from '@routes/users.route';
 import { ValidateEnv } from '@utils/validateEnv';
 import { CourseRoute } from './routes/courses.route';
 import { UploadRoute } from './routes/upload.route';
+import { PostRoute } from './routes/posts.route';
 ValidateEnv();
 
-const app = new App([new AuthRoute(), new UserRoute(), new CourseRoute(), new UploadRoute()]);
+const app = new App([new AuthRoute(), new UserRoute(), new CourseRoute(), new UploadRoute(), new PostRoute()]);
 
 app.listen();

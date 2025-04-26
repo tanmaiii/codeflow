@@ -12,7 +12,7 @@ import bgLogin2 from "@/assets/images/bg-login-2.png";
 export const IMAGES = {
   LOGO: logo,
   DEFAULT_COURSE: dfCourses,
-  DEFAULT_PROJECT: "/images/default-project.j",
+  DEFAULT_PROJECT: dfCourses,
   BG_AUTH: authbg,
   ERR_404: err404,
   GITHUB: github,

@@ -5,6 +5,8 @@ import { useLocale } from "next-intl";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import ButtonTooltip from "./common/Button/ButtonWithTooltip/ButtonTooltip";
+import { setCurrentLocale } from "@/lib/intl";
+import { useEffect } from "react";
 
 export default function LocaleSwitcher() {
   const router = useRouter();
@@ -13,8 +15,13 @@ export default function LocaleSwitcher() {
 
   const toggleLanguage = () => {
     const newLocale = currentLocale === "vi" ? "en" : "vi";
+    setCurrentLocale(newLocale);
     router.push(`/${newLocale}${pathname.replace(/^\/(en|vi)/, "")}`);
   };
+
+  useEffect(() => {
+    setCurrentLocale(currentLocale);
+  },[currentLocale])
 
   return (
     <ButtonTooltip

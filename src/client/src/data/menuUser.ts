@@ -22,9 +22,9 @@ export const menuUser: ILinkItem[] = [
   },
   {
     vi: "Bài viết",
-    en: "Articles",
+    en: "Posts",
     icon: "article",
-    href: paths.ARTICLES,
+    href: paths.POSTS,
   },
   {
     en: "Settings",

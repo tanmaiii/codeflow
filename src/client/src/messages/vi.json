@@ -30,7 +30,7 @@
     "hiddenSidebar": "Ẩn thanh bên",
     "showSidebar": "Hiện thanh bên"
   },
-  "auth":{
+  "auth": {
     "logout": "Đăng xuất",
     "signUp": "Đăng ký",
     "signIn": "Đăng nhập",
@@ -47,5 +47,32 @@
     "pleaseLogin": "Vui lòng đăng nhập vào tài khoản của bạn để bắt đầu hành trình",
     "dontHaveAnAccount": "Bạn chưa có tài khoản?",
     "signInWithGitHub": "Đăng nhập bằng GitHub (Đề xuất)"
+  },
+  "validate": {
+    "name": "Tên",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "short": "{field} quá ngắn",
+    "required": "{field} là bắt buộc",
+    "nameTooShort": "Tên quá ngắn",
+    "passwordTooShort": "Mật khẩu quá ngắn",
+    "emailInvalid": "Email không hợp lệ",
+    "minLength": "{field} phải có ít nhất {length} ký tự",
+    "maxLength": "{field} phải có nhiều nhất {length} ký tự",
+    "passwordMatch": "Mật khẩu không khớp",
+    "passwordStrength": "Mật khẩu phải chứa ít nhất một chữ cái in hoa, một chữ cái thường, một số và một ký tự đặc biệt"
+  },
+  "post": {
+    "title": "Tiêu đề",
+    "description": "Mô tả",
+    "content": "Nội dung",
+    "createPost": "Tạo bài viết",
+    "editPost": "Chỉnh sửa bài viết",
+    "deletePost": "Xóa bài viết",
+    "viewPost": "Xem bài viết",
+    "postCreated": "Bài viết đã được tạo thành công!",
+    "postUpdated": "Bài viết đã được cập nhật thành công!",
+    "postDeleted": "Bài viết đã được xóa thành công!"
   }
 }

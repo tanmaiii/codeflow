@@ -15,7 +15,7 @@ export default function Layout({
       <Header />
       <div className="flex flex-1 mt-14">
         <Sidebar menu={menuUser} />
-        <div className="w-full p-4">{children}</div>
+        <div className="w-full px-4 md:px-6 xl:px-10 py-2">{children}</div>
       </div>
     </div>
   );

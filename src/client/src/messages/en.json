@@ -69,5 +69,17 @@
     "maxLength": "{field} must be at most {length} characters long",
     "passwordMatch": "Passwords do not match",
     "passwordStrength": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+  },
+  "post": {
+    "title": "Title",
+    "description": "Description",
+    "content": "Content",
+    "createPost": "Create Post",
+    "editPost": "Edit Post",
+    "deletePost": "Delete Post",
+    "viewPost": "View Post",
+    "postCreated": "Post has been created successfully!",
+    "postUpdated": "Post has been updated successfully!",
+    "postDeleted": "Post has been deleted successfully!"
   }
 }

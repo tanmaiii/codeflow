@@ -16,8 +16,8 @@ import NameTag from "../NameTag/NameTag";
 
 export default function CardCourse() {
   return (
-    <Card className="w-full bg-backgroud-2 gap-4 pt-2 overflow-hidden">
-      <CardHeader className="px-2">
+    <Card className="w-full bg-backgroud-2 gap-4 pt-3 overflow-hidden">
+      <CardHeader className="px-3">
         <Image
           src={IMAGES.DEFAULT_COURSE}
           alt="Next.js"
@@ -26,7 +26,7 @@ export default function CardCourse() {
           className="object-cover w-full h-24 rounded-md"
         />
       </CardHeader>
-      <CardContent className="min-h-[60px] flex flex-col gap-2">
+      <CardContent className="min-h-[60px] px-4 flex flex-col gap-2">
         <div className="flex flex-col gap-2">
           <Link href={"/"} className="flex items-center gap-2">
             <Image
@@ -48,7 +48,7 @@ export default function CardCourse() {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col w-full gap-2 items-start">
+      <CardFooter className="flex flex-col px-4 w-full gap-2 items-start">
         <Button
           className="w-full dark:text-white"
           onClick={() => userService.getUsers()}

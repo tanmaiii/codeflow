@@ -11,21 +11,20 @@ import ThemeToggle from "../themeToggle";
 import { Button } from "../ui/button";
 
 export default function Header() {
-  const { collapsed, toggle } = useSidebarStore();
+  const { collapsed, toggleSidebar } = useSidebarStore();
   const t = useTranslations("settings");
   const tAuth = useTranslations("auth");
   const { user } = useUserStore();
 
   return (
     <header
-      className="fixed top-0 z-30 bg-backgroud-1 border-b 
-      px-4 py-2 flex items-center justify-between w-full h-14 md:16"
+      className="fixed top-0 z-30 bg-backgroud-1 border-b px-4 py-2 flex items-center justify-between w-full h-14 md:16"
     >
       <div>
         <ButtonTooltip
           tooltip={collapsed ? t("showSidebar") : t("hiddenSidebar")}
           variant="ghost"
-          onClick={toggle}
+          onClick={toggleSidebar}
           className="p-3"
         >
           {collapsed ? (

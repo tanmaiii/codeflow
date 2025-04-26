@@ -18,3 +18,8 @@ export interface ApiError {
   };
 }
 
+export interface IBaseEntity {
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+}

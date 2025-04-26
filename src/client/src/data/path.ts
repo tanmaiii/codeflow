@@ -9,8 +9,8 @@ export const paths = {
   PROJECTS: "/projects",
   SETTINGS: "/settings",
   USERS: "/users",
-  ARTICLES: "/articles",
-  ARTICLES_CREATE: "/articles/create",
+  POSTS: "/posts",
+  POST_CREATE: "/posts/create",
   
 
 

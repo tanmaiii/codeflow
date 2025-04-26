@@ -24,6 +24,11 @@ export default function Courses() {
         <CardCourse />
         <CardCourse />
         <CardCourse />
+        <CardCourse />
+        <CardCourse />
+        <CardCourse />
+        <CardCourse />
+        <CardCourse />
       </div>
     </div>
   );

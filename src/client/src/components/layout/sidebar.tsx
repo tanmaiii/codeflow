@@ -70,7 +70,7 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
     <aside
       className={clsx(
         `h-[calc(100vh-56px)] border-r bg-backgroud-1 flex flex-col transition-all duration-300 
-        fixed left-0 top-14 bottom-0 md:sticky z-20`,
+        fixed left-0 top-14 bottom-0 md:sticky z-20 xl:sticky`,
         collapsed ? "hidden md:flex w-16" : "w-full md:w-64"
       )}
     >
