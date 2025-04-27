@@ -6,13 +6,12 @@ export const paths = {
   HOME: "/",
   DASHBOARD: "/dashboard",
   COURSES: "/courses",
-  PROJECTS: "/projects",
+  TOPICS: "/topics",
   SETTINGS: "/settings",
   USERS: "/users",
   POSTS: "/posts",
   POST_CREATE: "/posts/create",
-  
-
+  SEARCH: "/search",
 
   LOGIN: "/login",
   REGISTER: "/register",

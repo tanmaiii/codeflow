@@ -1,4 +1,4 @@
-import Header from "@/components/layout/Header";
+import Header from "@/components/layout/Header/Header";
 import Sidebar from "@/components/layout/Sidebar";
 import { menuAdmin } from "@/data/menuAdmin";
 import { paths } from "@/data/path";
