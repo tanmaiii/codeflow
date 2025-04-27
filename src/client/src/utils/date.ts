@@ -65,20 +65,22 @@ export function utils_DateToDDMonth(
   date: Date
   // locale: "vi" | "en" = "vi"
 ): string {
-  const day = date.getDate().toString().padStart(2, "0");
+  const dateObj = new Date(date);
+  const day = dateObj.getDate().toString().padStart(2, "0");
   const locale = getCurrentLocale() || "vi";
 
   const month =
     locale === "vi"
-      ? monthNamesVi[date.getMonth()]
-      : monthNamesEn[date.getMonth()];
+      ? monthNamesVi[dateObj.getMonth()]
+      : monthNamesEn[dateObj.getMonth()];
   return `${day} ${month}`;
 }
 
 //trả về chuỗi thời gian đã trôi qua
 export const utils_TimeAgo = (date: Date): string => {
+  const dateObj = new Date(date);
   const now = new Date();
-  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const seconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
   const locale = getCurrentLocale() || "vi";
 
   const intervals = locale === "vi" ? intervalsVi : intervalsEn;
@@ -88,7 +90,7 @@ export const utils_TimeAgo = (date: Date): string => {
     const count = Math.floor(seconds / interval);
 
     if (count >= 1) {
-      return `${count} ${key}${count > 1 && locale !== "vi" ? "s" : ""}`;
+      return `${count} ${key}${count > 1 && locale !== "vi" ? "s" : " trước"}`;
     }
   }
 

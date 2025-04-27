@@ -65,6 +65,17 @@ export class AuthController {
     }
   };
 
+  public getInfoUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const userData: User = req.user;
+      const findUserData: User = await this.user.findUserById(userData.id);
+
+      res.status(200).json({ data: findUserData, message: 'get info user' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const userData: User = req.user;

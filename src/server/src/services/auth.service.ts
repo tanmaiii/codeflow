@@ -10,7 +10,7 @@ import { Service } from 'typedi';
 
 export const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { user: user };
-  const expiresIn: number = 60 * 60;
+  const expiresIn: number = 60 * 60 * 24;
 
   return { expiresIn, token: sign(dataStoredInToken, SECRET_KEY, { expiresIn }) };
 };
