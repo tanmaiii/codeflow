@@ -82,7 +82,7 @@ export class AuthService {
   public async login(userData: LoginUserDto): Promise<{ tokenData: TokenData; findUser: User }> {
     const findUser: User = await DB.Users.findOne({ where: { email: userData.email } });
     if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
-    if(findUser.uid) throw new HttpException(409, `The account ${userData.email} is linked to Github. Please login with Github`);
+    if (findUser.uid) throw new HttpException(409, `The account ${userData.email} is linked to Github. Please login with Github`);
 
     const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
     if (!isPasswordMatching) throw new HttpException(409, 'Password not matching');

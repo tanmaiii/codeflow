@@ -9,6 +9,9 @@ import GroupModel from '@/models/groups.model';
 import GroupMemberModel from '@/models/groups_member.model';
 import SubmissionModel from '@/models/submissions.model';
 import CommentModel from '@/models/comments.model';
+import TagModel from '@/models/tags.model';
+import CourseTagModel from '@/models/course_tag.model';
+import PostTagModel from '@/models/post_tag.model';
 import { initModels } from '@/models';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
@@ -43,7 +46,10 @@ export const DB = {
   Groups: GroupModel(sequelize),
   GroupMembers: GroupMemberModel(sequelize),
   Submission: SubmissionModel(sequelize),
-  Comment: CommentModel(sequelize),
+  Comments: CommentModel(sequelize),
+  Tags: TagModel(sequelize),
+  CourseTag: CourseTagModel(sequelize),
+  PostTag: PostTagModel(sequelize),
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };
