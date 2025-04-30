@@ -1,3 +1,4 @@
+import logoLight from "@/assets/images/logo_light.png";
 import logo from "@/assets/images/codeflow.png";
 import EnSVG from "@/assets/svgs/en.svg";
 import ViSVG from "@/assets/svgs/vi.svg";
@@ -11,6 +12,7 @@ import bgLogin2 from "@/assets/images/bg-login-2.png";
 
 export const IMAGES = {
   LOGO: logo,
+  LOGO_LIGHT: logoLight,
   DEFAULT_COURSE: dfCourses,
   DEFAULT_PROJECT: dfCourses,
   BG_AUTH: authbg,

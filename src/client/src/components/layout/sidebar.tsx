@@ -4,6 +4,7 @@ import { IMAGES } from "@/data/images";
 import { paths } from "@/data/path";
 import { ILinkItem } from "@/interfaces/common";
 import { useSidebarStore } from "@/stores/sidebar_store";
+import { useThemeStore } from "@/stores/theme_store";
 import clsx from "clsx";
 import {
   Book,
@@ -64,6 +65,7 @@ type SidebarProps = {
 
 export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
   const { collapsed } = useSidebarStore();
+  const { theme } = useThemeStore();
   const t = useTranslations("auth");
 
   return (
@@ -78,7 +80,12 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
         href={`${prefix}/`}
         className="p-4 gap-2 flex items-center w-full justify-start"
       >
-        <Image width={40} height={40} src={IMAGES.LOGO} alt="logo.png" />
+        <Image
+          width={40}
+          height={40}
+          src={theme === "dark" ? IMAGES.LOGO : IMAGES.LOGO_LIGHT}
+          alt="logo.png"
+        />
         {!collapsed && (
           <h4 className="text-2xl font-bold text-primary">CodeFlow</h4>
         )}
