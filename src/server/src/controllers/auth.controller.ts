@@ -1,4 +1,4 @@
-import { UserService } from '@/services/users.service';
+import { UserService } from '@services/users.service';
 import { CreateUserDto, CreateUserGithubDto, LoginUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
@@ -74,7 +74,7 @@ export class AuthController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {

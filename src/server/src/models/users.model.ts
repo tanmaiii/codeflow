@@ -1,18 +1,19 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import { User } from '@interfaces/users.interface';
+import { ENUM_USER_ROLE, ENUM_USER_STATUS } from '@/data/enum';
 
 export type UserCreationAttributes = Optional<User, 'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar'>;
 
 export class UserModel extends Model<User, UserCreationAttributes> implements User {
-  public id: string;
-  public uid: string;
-  public email: string;
-  public password: string;
-  public name: string;
-  public username: string;
-  public role: string;
-  public status: string;
-  public avatar: string;
+  public id!: string;
+  public uid!: string;
+  public email!: string;
+  public password!: string;
+  public name!: string;
+  public username!: string;
+  public role!: string;
+  public status!: string;
+  public avatar!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -48,11 +49,11 @@ export default function (sequelize: Sequelize): typeof UserModel {
       },
       role: {
         allowNull: true,
-        type: DataTypes.ENUM('admin', 'user', 'teacher'),
+        type: DataTypes.ENUM(...Object.values(ENUM_USER_ROLE)),
       },
       status: {
         allowNull: true,
-        type: DataTypes.ENUM('active', 'inactive', 'suspended'),
+        type: DataTypes.ENUM(...Object.values(ENUM_USER_STATUS)),
         defaultValue: 'active',
       },
       avatar: {

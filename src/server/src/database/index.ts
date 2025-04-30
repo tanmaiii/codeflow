@@ -12,7 +12,9 @@ import CommentModel from '@/models/comments.model';
 import TagModel from '@/models/tags.model';
 import CourseTagModel from '@/models/course_tag.model';
 import PostTagModel from '@/models/post_tag.model';
+import TopicTagModel from '@/models/topic_tag.model';
 import { initModels } from '@/models';
+import { TopicTag } from '../interfaces/tags.interface';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'mysql',
@@ -50,6 +52,7 @@ export const DB = {
   Tags: TagModel(sequelize),
   CourseTag: CourseTagModel(sequelize),
   PostTag: PostTagModel(sequelize),
+  TopicTag: TopicTagModel(sequelize),
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };

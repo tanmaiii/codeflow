@@ -6,8 +6,19 @@ import { CourseRoute } from './routes/courses.route';
 import { UploadRoute } from './routes/upload.route';
 import { PostRoute } from './routes/posts.route';
 import { TagRoute } from './routes/tags.route';
+import { CommentRoute } from './routes/comment.route';
+import { TopicRoute } from './routes/topic.route';
 ValidateEnv();
 
-const app = new App([new AuthRoute(), new UserRoute(), new CourseRoute(), new UploadRoute(), new PostRoute(), new TagRoute()]);
+const app = new App([
+  new AuthRoute(),
+  new UserRoute(),
+  new CourseRoute(),
+  new UploadRoute(),
+  new PostRoute(),
+  new TagRoute(),
+  new CommentRoute(),
+  new TopicRoute(),
+]);
 
 app.listen();

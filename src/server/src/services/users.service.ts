@@ -1,4 +1,4 @@
-import { HttpException } from '@/exceptions/HttpException';
+import { HttpException } from '@exceptions/HttpException';
 import { DB } from '@database';
 import { CreateUserDto } from '@dtos/users.dto';
 import { User } from '@interfaces/users.interface';

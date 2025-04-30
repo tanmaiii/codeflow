@@ -1,3 +1,4 @@
+import { ENUM_USER_ROLE, ENUM_USER_STATUS } from '@/data/enum';
 import { HttpException } from '@/exceptions/HttpException';
 import { SECRET_KEY } from '@config';
 import { DB } from '@database';
@@ -52,8 +53,8 @@ export class AuthService {
       name: userBody.name,
       username: userBody.login,
       uid: uid,
-      role: 'user',
-      status: 'active',
+      role: ENUM_USER_ROLE.USER,
+      status: ENUM_USER_STATUS.ACTIVE,
       avatar: userBody.avatar_url,
     });
 
