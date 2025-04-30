@@ -2,7 +2,7 @@
 
 ## 🔗 Yêu cầu đề tài
 
-Hệ thống đăng ký đề tài, thành viên nhóm, cho phép SV nộp bài qua GitHub, sử dụng GitHub Action để đánh giá chất lượng mã tĩnhm sử dụngg GitHub API để đếm số lần nộp bài của mỗi thành viên, đánh giá đóng góp của mỗi thành viên, xây dựng dashboard thể hiện đóng góp.
+Hệ thống đăng ký đề tài, thành viên nhóm, cho phép SV nộp bài qua GitHub, sử dụng GitHub Action để đánh giá chất lượng mã tĩnh sử dụng GitHub API để đếm số lần nộp bài của mỗi thành viên, đánh giá đóng góp của mỗi thành viên, xây dựng dashboard thể hiện đóng góp.
 
 ## 📖 Giới thiệu
 
