@@ -1,20 +1,20 @@
-import Sequelize from 'sequelize';
-import { NODE_ENV, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE } from '@config';
-import { logger } from '@utils/logger';
-import PostModel from '@/models/posts.model';
+import { initModels } from '@/models';
+import CommentModel from '@/models/comments.model';
+import CourseDocument from '@/models/course_documents.model';
+import CourseTagModel from '@/models/course_tag.model';
 import CourseModel from '@/models/courses.model';
-import UserModel from '@models/users.model';
-import TopicModel from '@/models/topics.model';
 import GroupModel from '@/models/groups.model';
 import GroupMemberModel from '@/models/groups_member.model';
-import SubmissionModel from '@/models/submissions.model';
-import CommentModel from '@/models/comments.model';
-import TagModel from '@/models/tags.model';
-import CourseTagModel from '@/models/course_tag.model';
 import PostTagModel from '@/models/post_tag.model';
+import PostModel from '@/models/posts.model';
+import SubmissionModel from '@/models/submissions.model';
+import TagModel from '@/models/tags.model';
 import TopicTagModel from '@/models/topic_tag.model';
-import { initModels } from '@/models';
-import { TopicTag } from '../interfaces/tags.interface';
+import TopicModel from '@/models/topics.model';
+import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER, NODE_ENV } from '@config';
+import UserModel from '@models/users.model';
+import { logger } from '@utils/logger';
+import Sequelize from 'sequelize';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'mysql',
@@ -53,6 +53,7 @@ export const DB = {
   CourseTag: CourseTagModel(sequelize),
   PostTag: PostTagModel(sequelize),
   TopicTag: TopicTagModel(sequelize),
+  CourseDocument: CourseDocument(sequelize),
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };

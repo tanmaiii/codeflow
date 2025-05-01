@@ -8,6 +8,7 @@ import { PostRoute } from './routes/posts.route';
 import { TagRoute } from './routes/tags.route';
 import { CommentRoute } from './routes/comment.route';
 import { TopicRoute } from './routes/topic.route';
+import { GroupRoute } from './routes/group.route';
 ValidateEnv();
 
 const app = new App([
@@ -19,6 +20,7 @@ const app = new App([
   new TagRoute(),
   new CommentRoute(),
   new TopicRoute(),
+  new GroupRoute(),
 ]);
 
 app.listen();

@@ -8,6 +8,7 @@ import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
+import { logger } from '@/utils/logger';
 
 const decodeToken = async (token: string, secret: string) => {
   const bytes = CryptoJS.AES.decrypt(token, secret);
@@ -28,6 +29,8 @@ export class AuthController {
       const tokenRes = await axios.get('https://api.github.com/user', {
         headers: { Authorization: `Bearer ${resDecode}` },
       });
+
+      logger.info(`[TOKEN GITHUB: ] ${resDecode}`);
 
       if (!tokenRes.data) {
         return new HttpException(401, 'Unauthorized');
