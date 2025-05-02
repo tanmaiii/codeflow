@@ -63,6 +63,7 @@ export default function (sequelize: Sequelize): typeof UserModel {
     },
     {
       tableName: 'users',
+      modelName: 'users',
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm

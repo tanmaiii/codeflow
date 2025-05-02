@@ -90,7 +90,7 @@ export const utils_TimeAgo = (date: Date): string => {
     const count = Math.floor(seconds / interval);
 
     if (count >= 1) {
-      return `${count} ${key}${count > 1 && locale !== "vi" ? "s" : " trước"}`;
+      return locale === "en" ? `${count} ${key}${count > 1 ? "s" : ""}` : `${count} ${key}`;
     }
   }
 

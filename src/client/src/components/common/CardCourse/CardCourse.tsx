@@ -13,8 +13,13 @@ import { IMAGES } from "@/data/images";
 import { paths } from "@/data/path";
 import userService from "@/services/user.service";
 import NameTag from "../NameTag/NameTag";
+import { ICourse } from "@/interfaces/course";
 
-export default function CardCourse() {
+interface CardCourseProps {
+  course: ICourse;
+}
+
+export default function CardCourse({ course }: CardCourseProps) {
   return (
     <Card className="w-full bg-backgroud-2 gap-4 pt-3 overflow-hidden">
       <CardHeader className="px-3">
@@ -39,16 +44,16 @@ export default function CardCourse() {
             <TextDescription className="text-primary">CodeFlow</TextDescription>
           </Link>
           <Link href={paths.COURSES + "/123"} className="text-lg">
-            <TextHeading>Học lập trình ReactJS</TextHeading>
+            <TextHeading>{course.title}</TextHeading>
           </Link>
-          <div>
-            <NameTag>ReactJS</NameTag>
-            <NameTag>HTML/CSS</NameTag>
-            <NameTag>Git</NameTag>
-          </div>
+          <p className=" line-clamp-1">
+            {course?.tags?.map((tag, index) => (
+              <NameTag key={index}>{tag.name}</NameTag>
+            ))}
+          </p>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col px-4 w-full gap-2 items-start">
+      <CardFooter className="flex flex-col px-4 w-full gap-2 items-start mt-auto">
         <Button
           className="w-full dark:text-white"
           onClick={() => userService.getUsers()}
