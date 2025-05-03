@@ -15,6 +15,7 @@ import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER, NODE_ENV } from '@
 import UserModel from '@models/users.model';
 import { logger } from '@utils/logger';
 import Sequelize from 'sequelize';
+import PostLikeModel from '@/models/post_like.model';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'mysql',
@@ -54,6 +55,7 @@ export const DB = {
   PostTag: PostTagModel(sequelize),
   TopicTag: TopicTagModel(sequelize),
   CourseDocument: CourseDocument(sequelize),
+  PostLike: PostLikeModel(sequelize),
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };

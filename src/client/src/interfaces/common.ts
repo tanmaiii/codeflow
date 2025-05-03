@@ -10,6 +10,24 @@ export interface ResponseAPIDto<T> {
   message: string;
 }
 
+export interface ResponseAPIDtoWithPagination<T> {
+  data: T;
+  pagination: {
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  };
+  message: string;
+}
+
+export interface IGetAllQuery {
+  page: number;
+  limit: number;
+  sortBy: string;
+  order: "ASC" | "DESC";
+}
+
 export interface ApiError {
   response?: {
     data?: {

@@ -12,8 +12,8 @@ import Link from "next/link";
 import { IMAGES } from "@/data/images";
 import { paths } from "@/data/path";
 import userService from "@/services/user.service";
-import NameTag from "../NameTag/NameTag";
 import { ICourse } from "@/interfaces/course";
+import NameTags from "../NameTags/NameTags";
 
 interface CardCourseProps {
   course: ICourse;
@@ -21,7 +21,7 @@ interface CardCourseProps {
 
 export default function CardCourse({ course }: CardCourseProps) {
   return (
-    <Card className="w-full bg-backgroud-2 gap-4 pt-3 overflow-hidden">
+    <Card className="w-full gap-4 pt-3 overflow-hidden">
       <CardHeader className="px-3">
         <Image
           src={IMAGES.DEFAULT_COURSE}
@@ -46,11 +46,7 @@ export default function CardCourse({ course }: CardCourseProps) {
           <Link href={paths.COURSES + "/123"} className="text-lg">
             <TextHeading>{course.title}</TextHeading>
           </Link>
-          <p className=" line-clamp-1">
-            {course?.tags?.map((tag, index) => (
-              <NameTag key={index}>{tag.name}</NameTag>
-            ))}
-          </p>
+          <NameTags tags={course?.tags} />
         </div>
       </CardContent>
       <CardFooter className="flex flex-col px-4 w-full gap-2 items-start mt-auto">
