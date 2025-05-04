@@ -1,0 +1,27 @@
+import { CourseController } from '@/controllers/courses.controller';
+import { CreateCourseDto } from '@/dtos/courses.dto';
+import { AuthMiddleware } from '@/middlewares/auth.middleware';
+import { ValidationMiddleware } from '@/middlewares/validation.middleware';
+import { Routes } from '@interfaces/routes.interface';
+import { Router } from 'express';
+
+export class CourseRoute implements Routes {
+  public path = '/courses';
+  public router = Router();
+  public course = new CourseController();
+
+  constructor() {
+    this.initializeRoutes();
+  }
+
+  private initializeRoutes() {
+    this.router.get(`${this.path}`, this.course.getCourses);
+    this.router.get(`${this.path}/:id`, this.course.getCourseById);
+    this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateCourseDto), this.course.createCourse);
+    this.router.put(`${this.path}/delete/:id`, AuthMiddleware, this.course.deleteCourse);
+    this.router.delete(`${this.path}/:id`, AuthMiddleware, this.course.destroyCourse);
+    this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(CreateCourseDto, "body", true), this.course.updateCourse);
+
+    this.router.get(`${this.path}/:id/comments`, AuthMiddleware, this.course.getCommentsByCourseId);
+  }
+}

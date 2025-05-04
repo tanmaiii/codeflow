@@ -1,0 +1,100 @@
+import { HttpException } from '@/exceptions/HttpException';
+import { Course, CourseCreate } from '@/interfaces/courses.interface';
+import { DB } from '@database';
+import Container, { Service } from 'typedi';
+import { TagService } from './tag.service';
+import { CourseDocumentService } from './course_document.service';
+
+@Service()
+export class CourseService {
+  public Tag = Container.get(TagService);
+  public CourseDocument = Container.get(CourseDocumentService);
+
+  public async findAll(): Promise<Course[]> {
+    const allCourse: Course[] = await DB.Courses.findAll();
+    return allCourse;
+  }
+
+  public async findAndCountAllWithPagination(limit: number, offset: number): Promise<{ count: number; rows: Course[] }> {
+    const { count, rows }: { count: number; rows: Course[] } = await DB.Courses.findAndCountAll({
+      limit,
+      offset,
+    });
+    return { count, rows };
+  }
+
+  public async findCourseById(courseId: string): Promise<Course> {
+    const findCourse: Course = await DB.Courses.findByPk(courseId);
+    if (!findCourse) throw new HttpException(409, "Course doesn't exist");
+
+    return findCourse;
+  }
+
+  public async createCourse(courseData: Partial<CourseCreate>): Promise<Course> {
+    const { tags, documents, ...dataWithoutTags } = courseData;
+    const createCourseData: Course = await DB.Courses.create(dataWithoutTags);
+
+    if (tags?.length) {
+      await Promise.all(tags.map(tagId => this.Tag.createCourseTag(createCourseData.id, tagId)));
+    }
+
+    if (documents?.length) {
+      await Promise.all(
+        documents.map(url =>
+          this.CourseDocument.createDocument({
+            courseId: createCourseData.id,
+            url: url,
+            title: url,
+          }),
+        ),
+      );
+    }
+
+    return createCourseData;
+  }
+
+  public async updateCourse(courseId: string, courseData: Partial<CourseCreate>): Promise<Course> {
+    const findCourse: Course = await DB.Courses.findByPk(courseId);
+    if (!findCourse) throw new HttpException(409, "Course doesn't exist");
+
+    const { tags, documents, ...dataWithoutTags } = courseData;
+    await DB.Courses.update(dataWithoutTags, { where: { id: courseId } });
+
+    if (tags?.length) {
+      await Promise.all(tags.map(tagId => this.Tag.createCourseTag(courseId, tagId)));
+    }
+
+    if (documents?.length) {
+      await Promise.all(
+        documents.map(url =>
+          this.CourseDocument.createDocument({
+            courseId: courseId,
+            url: url,
+            title: url,
+          }),
+        ),
+      );
+    }
+
+    return DB.Courses.findByPk(courseId);
+  }
+
+  public async deleteCourse(courseId: string): Promise<Course> {
+    const findCourse: Course = await DB.Courses.findByPk(courseId);
+    if (!findCourse) throw new HttpException(409, "Course doesn't exist");
+
+    await DB.Courses.destroy({ where: { id: courseId } });
+
+    const softDeletedCourse: Course = await DB.Courses.findByPk(courseId);
+    return softDeletedCourse;
+  }
+
+  public async destroyCourse(courseId: string): Promise<Course> {
+    const findCourse: Course = await DB.Courses.findByPk(courseId, { paranoid: false });
+    if (!findCourse) throw new HttpException(409, "Course doesn't exist");
+
+    await DB.Courses.destroy({ force: true, where: { id: courseId } });
+
+    return findCourse;
+  }
+}

@@ -1,90 +1,89 @@
 # See https://help.github.com/posts/ignoring-files/ for more about ignoring files.
 
 # dependencies
-server/node_modules
-server/.pnp
-server/.pnp.*
-server/.yarn/*
-server/!.yarn/patches
-server/!.yarn/plugins
-server/!.yarn/releases
-server/!.yarn/versions
+src/server/node_modules
+src/server/.pnp
+src/server/.pnp.*
+src/server/.yarn/*
+src/server/!.yarn/patches
+src/server/!.yarn/plugins
+src/server/!.yarn/releases
+src/server/!.yarn/versions
 
 # testing
-server/coverage
+src/server/coverage
 
 # next.js
-server/.next/
-server/out/
-server/disc
-server/src/logs
+src/server/.next/
+src/server/out/
+src/server/disc
+src/server/src/logs
 
 # production
-server/build
-server/uploads
+src/server/build
+src/server/uploads
 
 # misc
-server/.DS_Store
-server/*.pem
+src/server/.DS_Store
+src/server/*.pem
 
 # debug
-server/npm-debug.log*
-server/yarn-debug.log*
-server/yarn-error.log*
+src/server/npm-debug.log*
+src/server/yarn-debug.log*
+src/server/yarn-error.log*
 
-server/# env files (can opt-in for committing if needed)
-server/.env*
-server/
+src/server/# env files (can opt-in for committing if needed)
+src/server/.env*
 # vercel
-server/.vercel
+src/server/.vercel
 
 # typescript
-server/*.tsbuildinfo
-server/next-env.d.ts
+src/server/*.tsbuildinfo
+src/server/next-env.d.ts
 
-server/db.json
+src/server/db.json
 
 # CLIENT
 
-
-client/node_modules
-client/.pnp
-client/.pnp.*
-client/.yarn/*
-client/!.yarn/patches
-client/!.yarn/plugins
-client/!.yarn/releases
-client/!.yarn/versions
+src/client/node_modules
+src/client/.pnp
+src/client/.pnp.*
+src/client/.yarn/*
+src/client/!.yarn/patches
+src/client/!.yarn/plugins
+src/client/!.yarn/releases
+src/client/!.yarn/versions
 
 # testing
-client/coverage
+src/client/coverage
 
 # next.js
-client/.next/
-client/out/
-client/disc
-client/src/logs
+src/client/.next/
+src/client/out/
+src/client/disc
+src/client/src/logs
 
 # production
-client/build
+src/client/build
 
 # misc
-client/.DS_Store
-client/*.pem
+src/client/.DS_Store
+src/client/*.pem
 
 # debug
-client/npm-debug.log*
-client/yarn-debug.log*
-client/yarn-error.log*
+src/client/npm-debug.log*
+src/client/yarn-debug.log*
+src/client/yarn-error.log*
+# src/client
 
-client/# env files (can opt-in for committing if needed)
-client/.env*
-client/
+src/client/# env files (can opt-in for committing if needed)
+src/client/.env*
+src/client/.next
 # vercel
-client/.vercel
+src/client/.vercel
 
 # typescript
-client/*.tsbuildinfo
-client/next-env.d.ts
+src/client/*.tsbuildinfo
+src/client/next-env.d.ts
 
-client/db.json
+src/client/db.json
