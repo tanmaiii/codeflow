@@ -37,7 +37,7 @@ export interface ApiError {
 }
 
 export interface IBaseEntity {
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+  deletedAt?: Date | null;
 }

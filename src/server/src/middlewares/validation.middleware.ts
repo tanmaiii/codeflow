@@ -28,9 +28,9 @@ import { HttpException } from '@/exceptions/HttpException';
 export const ValidationMiddleware = (
   type: any,
   source: 'body' | 'query' | 'params' = 'body',
-  skipMissingProperties = false,
-  whitelist = false,
-  forbidNonWhitelisted = false,
+  skipMissingProperties = false, // Bỏ qua các thuộc tính không có trong DTO
+  whitelist = false, // Bỏ qua các thuộc tính không có trong DTO
+  forbidNonWhitelisted = false, // Nếu true, sẽ trả về lỗi nếu có thuộc tính không có trong DTO
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const data = req[source]; // Lấy đúng phần cần validate
