@@ -5,6 +5,7 @@ import CommnetInputDefault from "./CommnetInputDefault";
 import { util_length_comment } from "@/utils/common";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface ICommentsProps {
   comments?: IComment[];
@@ -15,6 +16,7 @@ const MAX_VISIBLE_COMMENTS = 2;
 
 export default function Comments({ comments, onSubmit }: ICommentsProps) {
   const [visibleCount, setVisibleCount] = useState(MAX_VISIBLE_COMMENTS);
+  const t = useTranslations("comment");
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + MAX_VISIBLE_COMMENTS);
@@ -36,7 +38,7 @@ export default function Comments({ comments, onSubmit }: ICommentsProps) {
 
       {comments && visibleCount < comments.length && (
         <Button variant="text" onClick={handleLoadMore}>
-          Tải thêm
+          {t("loadMore")}
         </Button>
       )}
     </div>

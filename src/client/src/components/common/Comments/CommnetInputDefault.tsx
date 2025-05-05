@@ -2,7 +2,8 @@ import { TextDescription } from "@/components/ui/text";
 import { IMAGES } from "@/data/images";
 import Image from "next/image";
 import { useState } from "react";
-import CommentInput from "./CommentInput";
+import CommentInput from "./Comment_Input";
+import { useTranslations } from "next-intl";
 
 export default function CommnetInputDefault({
   onSubmit,
@@ -10,6 +11,7 @@ export default function CommnetInputDefault({
   onSubmit: (value: string) => void;
 }) {
   const [active, setActive] = useState<boolean>(false);
+  const t = useTranslations("comment");
 
   return (
     <div className="mt-4">
@@ -30,12 +32,12 @@ export default function CommnetInputDefault({
             </div>
             <div className="flex items-center gap-2">
               <TextDescription className="text-md">
-                Write a comment...
+                {t("placeholder")}
               </TextDescription>
             </div>
           </div>
         </div>
-      ) : ( 
+      ) : (
         <CommentInput
           onSubmit={(value) => {
             if (value.length > 0) {

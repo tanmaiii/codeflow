@@ -8,16 +8,24 @@ import SectionDivider from "../SectionDivider/SectionDivider";
 import MyEmojiPicker from "./MyEmojiPicker";
 import TextHeading, { TextDescription } from "@/components/ui/text";
 import { IComment } from "@/interfaces/comment";
+import { useTranslations } from "next-intl";
 
 interface CommentInputProps {
   onSubmit: (comment: string) => void;
   turnOff: () => void;
   commentReply?: IComment;
+  value?: string;
 }
 
-export default function CommentInput({ onSubmit, turnOff, commentReply }: CommentInputProps) {
-  const [keyword, setKeyword] = useState<string>("");
+export default function Comment_Input({
+  onSubmit,
+  turnOff,
+  commentReply,
+  value
+}: CommentInputProps) {
+  const [keyword, setKeyword] = useState<string>(value ?? "");
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const t = useTranslations("comment");
 
   function handleEmojiClick(emoji: string) {
     const input = inputRef.current;
@@ -40,11 +48,18 @@ export default function CommentInput({ onSubmit, turnOff, commentReply }: Commen
   return (
     <div className="flex flex-col w-full bg-input/20 border rounded-lg">
       <div className="flex items-center justify-between px-4 py-2">
-        {commentReply && <div className="flex flex-row items-center gap-2">
-          <TextDescription>Reply to</TextDescription>
-          <TextHeading>{commentReply?.author?.name}</TextHeading>
-        </div>}
-        <Button variant="rounded" className="ml-auto" size="icon" onClick={() => turnOff()}>
+        {commentReply && (
+          <div className="flex flex-row items-center gap-2">
+            <TextDescription>{t("replyTo")}</TextDescription>
+            <TextHeading>{commentReply?.author?.name}</TextHeading>
+          </div>
+        )}
+        <Button
+          variant="rounded"
+          className="ml-auto"
+          size="icon"
+          onClick={() => turnOff()}
+        >
           <IconX size={26} className="size-5 text-muted-foreground" />
         </Button>
       </div>
@@ -65,7 +80,7 @@ export default function CommentInput({ onSubmit, turnOff, commentReply }: Commen
           ref={inputRef}
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          placeholder="Type your message here."
+          placeholder={t("placeholder")}
           className="border-none focus-visible:ring-0 shadow-none min-h-[100px]"
         />
       </div>
@@ -79,7 +94,7 @@ export default function CommentInput({ onSubmit, turnOff, commentReply }: Commen
           </div>
         </div>
         <Button variant={"default"} onClick={() => onSubmit(keyword)}>
-          Post Comment
+          {t("postComment")}
         </Button>
       </div>
     </div>

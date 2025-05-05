@@ -3,7 +3,7 @@ import { IMAGES } from "@/data/images";
 import { IconMessage2, IconPointFilled } from "@tabler/icons-react";
 import Image from "next/image";
 import CardPost_Button from "../CardPost/CardPost_Button";
-import CommentInput from "./CommentInput";
+import CommentInput from "./Comment_Input";
 import { useState } from "react";
 import { IComment } from "@/interfaces/comment";
 import { cx } from "class-variance-authority";
@@ -11,6 +11,9 @@ import { utils_TimeAgo } from "../../../utils/date";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import commentService from "@/services/comment.service";
 import { util_length_comment } from "@/utils/common";
+import { useTranslations } from "next-intl";
+import Comment_More from "./Comment_More";
+import { useUserStore } from "@/stores/user_store";
 
 interface CommentItemProps {
   comment?: IComment;
@@ -35,21 +38,35 @@ function flattenComments(comments: IComment[]) {
   return flat;
 }
 
+const MAX_VISIBLE_COMMENTS = 1;
+
 export default function CommentItem({ comment }: CommentItemProps) {
   const [reply, setReply] = useState<boolean>(false);
-  const [visibleReplies, setVisibleReplies] = useState<number>(2); // hiển thị 3 reply đầu tiên
+  const t = useTranslations("comment");
+  const [update, setUpdate] = useState<boolean>(false);
+  const [visibleReplies, setVisibleReplies] =
+    useState<number>(MAX_VISIBLE_COMMENTS);
+  const { user } = useUserStore();
   const queryClient = useQueryClient();
 
   const mutionSubmit = useMutation({
     mutationFn: (value: string) => {
-      return commentService.create({
-        content: value,
-        postId: comment?.postId,
-        parentId: comment?.id,
-      });
+      if (!update) {
+        return commentService.create({
+          content: value,
+          postId: comment?.postId,
+          parentId: comment?.id,
+        });
+      } else if (comment?.id) {
+        return commentService.update(comment.id, {
+          content: value,
+        });
+      }
+      throw new Error("Cannot update comment: missing comment ID");
     },
     onSuccess: () => {
       setReply(false);
+      setUpdate(false);
       queryClient.invalidateQueries({
         queryKey: ["post", "comments", comment?.postId],
       });
@@ -57,12 +74,8 @@ export default function CommentItem({ comment }: CommentItemProps) {
   });
 
   const handleLoadMoreReplies = () => {
-    setVisibleReplies((prev) => prev + 2);
+    setVisibleReplies((prev) => prev + MAX_VISIBLE_COMMENTS);
   };
-
-  // const visibleRepliesList = comment?.replies
-  //   ? comment.replies.slice(0, visibleReplies)
-  //   : [];
 
   const visibleRepliesList = comment?.replies
     ? flattenComments(comment.replies || [])
@@ -78,54 +91,68 @@ export default function CommentItem({ comment }: CommentItemProps) {
         border: !comment?.parentId,
       })}
     >
-      <div
-        className={cx("p-3 relative rounded-lg hover:bg-input/20", {
-          "border-b":
-            !comment?.parentId &&
-            comment?.replies &&
-            comment?.replies.length > 0,
-        })}
-      >
-        <header className="flex z-3 flex-row justify-start items-center gap-2">
-          <div className="w-10 h-10 min-h-10 min-w-10 z-2 relative">
-            <Image
-              src={IMAGES.DEFAULT_COURSE}
-              alt="logo"
-              width={40}
-              height={40}
-              className="w-full h-full object-cover rounded-lg"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <TextHeading>{comment?.author?.name}</TextHeading>
-            <IconPointFilled size={12} />
-            <TextDescription>
-              {utils_TimeAgo(new Date(comment?.createdAt ?? ""))}
-            </TextDescription>
-          </div>
-        </header>
+      {!update ? (
+        <div
+          className={cx("p-3 relative rounded-lg hover:bg-input/20", {
+            "border-b":
+              !comment?.parentId &&
+              comment?.replies &&
+              comment?.replies.length > 0,
+          })}
+        >
+          <header className="flex z-3 flex-row justify-start items-center gap-2">
+            <div className="w-10 h-10 min-h-10 min-w-10 z-2 relative">
+              <Image
+                src={IMAGES.DEFAULT_COURSE}
+                alt="logo"
+                width={40}
+                height={40}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <TextHeading>{comment?.author?.name}</TextHeading>
+              <IconPointFilled size={12} />
+              <TextDescription>
+                {utils_TimeAgo(new Date(comment?.createdAt ?? ""))}
+              </TextDescription>
+            </div>
+          </header>
 
-        <div className={cx("mt-1 " + (comment?.parentId ? "ml-12" : ""))}>
-          <TextHeading className="text-md font-normal">
-            {comment?.content}
-          </TextHeading>
-          <div>
-            <CardPost_Button
-              onClick={() => setReply(!reply)}
-              icon={<IconMessage2 size={24} />}
-              value={
-                comment?.replies
-                  ? util_length_comment(comment?.replies).toString()
-                  : "0"
-              }
-            />
+          <div className={cx("mt-1 " + (comment?.parentId ? "ml-12" : ""))}>
+            <TextHeading className="text-md font-normal">
+              {comment?.content}
+            </TextHeading>
+
+            <div className="flex flex-row items-center gap-2 mt-2">
+              <CardPost_Button
+                onClick={() => setReply(!reply)}
+                icon={<IconMessage2 size={24} />}
+                value={
+                  comment?.replies && comment?.replies.length > 0
+                    ? util_length_comment(comment?.replies).toString()
+                    : ""
+                }
+              />
+              <Comment_More
+                 onUpdate={user?.id === comment?.author?.id ? () => setUpdate(true) : undefined}
+              />
+            </div>
           </div>
+
+          {comment?.parentId && (
+            <div className="absolute bottom-0 left-8 top-0 z-1 -ml-px w-0.5 bg-border"></div>
+          )}
         </div>
-
-        {comment?.parentId && (
-          <div className="absolute bottom-0 left-8 top-0 z-1 -ml-px w-0.5 bg-border"></div>
-        )}
-      </div>
+      ) : (
+        <CommentInput
+          onSubmit={(value) => mutionSubmit.mutate(value)}
+          turnOff={() => {
+            setUpdate(false);
+          }}
+          value={comment?.content}
+        />
+      )}
 
       {reply && (
         <CommentInput
@@ -148,7 +175,9 @@ export default function CommentItem({ comment }: CommentItemProps) {
               onClick={handleLoadMoreReplies}
               className="self-start text-sm text-primary hover:underline mt-2 ml-12"
             >
-              Tải thêm trả lời
+              {t("seeMoreReplys", {
+                length: visibleRepliesList.length - visibleReplies,
+              })}
             </button>
           )}
         </div>

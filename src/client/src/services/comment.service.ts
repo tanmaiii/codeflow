@@ -1,6 +1,5 @@
 import { IComment, ICreatoeCmmentDto } from "@/interfaces/comment";
 import { ResponseAPIDto } from "@/interfaces/common";
-import { ICourse } from "@/interfaces/course";
 import createHttpClient from "@/lib/createHttpClient";
 import { AxiosInstance } from "axios";
 
@@ -19,7 +18,7 @@ class CommentService {
   async update(
     id: string,
     data: ICreatoeCmmentDto
-  ): Promise<ResponseAPIDto<ICourse>> {
+  ): Promise<ResponseAPIDto<IComment>> {
     const response = await this.client.put(`/${id}`, data);
     return response.data;
   }

@@ -81,5 +81,21 @@
     "postCreated": "Post has been created successfully!",
     "postUpdated": "Post has been updated successfully!",
     "postDeleted": "Post has been deleted successfully!"
+  },
+  "comment": {
+    "editComment": "Edit Comment",
+    "deleteComment": "Delete Comment",
+    "commentCreated": "Comment has been created successfully!",
+    "commentUpdated": "Comment has been updated successfully!",
+    "commentDeleted": "Comment has been deleted successfully!",
+    "reply": "Reply",
+    "replys": "Replys",
+    "noReplys": "No replys yet",
+    "placeholder": "Write a comment...",
+    "noComments": "No comments yet",
+    "loadMore": "See more",
+    "seeMoreReplys": "See more {length} replys",
+    "replyTo": "Reply to",
+    "postComment": "Post Comment"
   }
 }
