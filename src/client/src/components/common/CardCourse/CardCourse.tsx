@@ -14,6 +14,8 @@ import { paths } from "@/data/path";
 import userService from "@/services/user.service";
 import { ICourse } from "@/interfaces/course";
 import NameTags from "../NameTags/NameTags";
+import apiConfig from "@/lib/api";
+import { utils_TimeAgo } from "@/utils/date";
 
 interface CardCourseProps {
   course: ICourse;
@@ -24,7 +26,7 @@ export default function CardCourse({ course }: CardCourseProps) {
     <Card className="w-full gap-4 pt-3 overflow-hidden">
       <CardHeader className="px-3">
         <Image
-          src={IMAGES.DEFAULT_COURSE}
+          src={course?.thumbnail ?? IMAGES.DEFAULT_COURSE}
           alt="Next.js"
           width={200}
           height={200}
@@ -35,13 +37,18 @@ export default function CardCourse({ course }: CardCourseProps) {
         <div className="flex flex-col gap-2">
           <Link href={"/"} className="flex items-center gap-2">
             <Image
-              src={IMAGES.LOGO}
+              src={
+                course?.author?.avatar ??
+                apiConfig.avatar(course?.author?.name ?? "c")
+              }
               alt="Next.js"
               width={100}
               height={100}
               className="object-cover w-6 h-6 circle rounded-full"
             />
-            <TextDescription className="text-primary">CodeFlow</TextDescription>
+            <TextDescription className="text-primary">
+              {course?.author?.name}
+            </TextDescription>
           </Link>
           <Link href={paths.COURSES + "/123"} className="text-lg">
             <TextHeading>{course.title}</TextHeading>
@@ -56,7 +63,9 @@ export default function CardCourse({ course }: CardCourseProps) {
         >
           Xem khóa học
         </Button>
-        <TextDescription>Edited 2h ago</TextDescription>
+        <TextDescription>
+          Cập nhật {utils_TimeAgo(new Date(course.updatedAt ?? ""))}
+        </TextDescription>
       </CardFooter>
     </Card>
   );

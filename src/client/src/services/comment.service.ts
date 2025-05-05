@@ -22,6 +22,11 @@ class CommentService {
     const response = await this.client.put(`/${id}`, data);
     return response.data;
   }
+
+  async delete(id: string) {
+    const response = await this.client.delete(`/${id}`);
+    return response.data;
+  }
 }
 
 export default new CommentService() as CommentService;

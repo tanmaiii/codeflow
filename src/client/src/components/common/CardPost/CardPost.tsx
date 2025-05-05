@@ -23,6 +23,9 @@ import NameTags from "../NameTags/NameTags";
 import Tooltip from "../Tooltip/Tooltip";
 import CardPost_Button from "./CardPost_Button";
 import CardPost_More from "./CardPost_More";
+import apiConfig from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface CardPostProps {
   post: IPost;
@@ -34,6 +37,7 @@ export default function CardPost({ post }: CardPostProps) {
   const uesQ_Post_Like = useQ_Post_CheckLike({
     id: post.id ?? "",
   });
+  const route = useRouter();
 
   const mutationLike = useMutation({
     mutationFn: async () => {
@@ -50,22 +54,29 @@ export default function CardPost({ post }: CardPostProps) {
     },
   });
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(
+      window.location.origin + localPath(paths.POSTS + "/" + post.id)
+    );
+    toast.success("Copied to clipboard");
+  };
+
   return (
     <Card className="p-2 hover:border-white/30 cursor-pointer bg-backgroud-1">
       <CardContent className="px-2 h-full flex flex-col justify-between">
         <div className="pt-2 mb-auto">
-          <div className="flex items-center justify-between gap-2 cursor-pointer">
+          <div className="flex items-center justify-between gap-2 cursor-pointer rounded-full">
             <Tooltip tooltip={post?.author?.name ?? ""}>
               <Image
-                className="w-8 h-8"
-                src={IMAGES.LOGO}
+                className="w-8 h-8 rounded-full"
+                src={
+                  post?.author?.avatar ??
+                  apiConfig.avatar(post?.author?.name ?? "c")
+                }
                 alt="Google"
                 width={100}
                 height={100}
               />
-              {/* <TextHeading className="text-color-2">
-                {post?.author?.name}
-              </TextHeading> */}
             </Tooltip>
             <CardPost_More />
           </div>
@@ -115,9 +126,12 @@ export default function CardPost({ post }: CardPostProps) {
           <CardPost_Button
             icon={<IconMessage2 size={24} />}
             value={post?.commentCount.toString() ?? "0"}
+            onClick={() => route.push(localPath(paths.POSTS + "/" + post.id))}
           />
-          {/* <CardPost_Button icon={<Bookmark size={24} />} /> */}
-          <CardPost_Button icon={<IconLink size={24} />} />
+          <CardPost_Button
+            icon={<IconLink size={24} />}
+            onClick={handleCopyLink}
+          />
         </div>
       </CardContent>
     </Card>

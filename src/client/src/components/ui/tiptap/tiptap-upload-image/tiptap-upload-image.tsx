@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import uploadService from "@/services/upload.service";
+import uploadService from "@/services/file.service";
 import { ImageIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

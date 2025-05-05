@@ -1,7 +1,7 @@
 import TextHeading from "@/components/ui/text";
 import { IComment } from "@/interfaces/comment";
-import CommentItem from "./CommentItem";
-import CommnetInputDefault from "./CommnetInputDefault";
+import CommentItem from "./Comment_Item";
+import CommnetInputDefault from "./Commnet_Input_Default";
 import { util_length_comment } from "@/utils/common";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";

@@ -8,7 +8,9 @@ export default function Post_Detail_Layout() {
         <Post_Detail />
       </div>
       <div className="hidden md:block col-span-1 md:col-span-4 xl:col-span-3">
-        <Post_Detail_More />
+        <div className="sticky top-20">
+          <Post_Detail_More />
+        </div>
       </div>
     </div>
   );

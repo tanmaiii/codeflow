@@ -1,17 +1,19 @@
 import { TextDescription } from "@/components/ui/text";
-import { IMAGES } from "@/data/images";
 import Image from "next/image";
 import { useState } from "react";
 import CommentInput from "./Comment_Input";
 import { useTranslations } from "next-intl";
+import { useUserStore } from "@/stores/user_store";
+import apiConfig from "@/lib/api";
 
-export default function CommnetInputDefault({
+export default function Commnet_Input_Default({
   onSubmit,
 }: {
   onSubmit: (value: string) => void;
 }) {
   const [active, setActive] = useState<boolean>(false);
   const t = useTranslations("comment");
+  const { user } = useUserStore();
 
   return (
     <div className="mt-4">
@@ -23,7 +25,7 @@ export default function CommnetInputDefault({
           <div className="flex items-center gap-2 p-3 cursor-pointer">
             <div className="w-10 h-10 min-h-10 min-w-10 ">
               <Image
-                src={IMAGES.DEFAULT_COURSE}
+                src={user?.avatar ?? apiConfig.avatar(user?.name ?? "c")} 
                 alt="logo"
                 width={40}
                 height={40}

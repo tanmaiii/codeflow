@@ -6,7 +6,7 @@ interface UploadResponseDto {
   name: string;
 }
 
-class UploadService {
+class FileService {
   private client;
 
   constructor() {
@@ -23,6 +23,11 @@ class UploadService {
     );
     return res.data;
   }
+
+  async getAvatar(name: string): Promise<ResponseAPIDto<string>> {
+    const res = await this.client.get<ResponseAPIDto<string>>(`/avatar/${name}`);
+    return res.data;
+  }
 }
 
-export default new UploadService() as UploadService;
+export default new FileService() as FileService;

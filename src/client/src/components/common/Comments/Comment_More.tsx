@@ -7,6 +7,7 @@ import {
 import { IconTrash } from "@tabler/icons-react";
 import { EllipsisVertical, PenIcon } from "lucide-react";
 import CardPost_Button from "../CardPost/CardPost_Button";
+import { useTranslations } from "next-intl";
 
 interface Comment_MoreProps {
   onUpdate?: () => void;
@@ -17,6 +18,8 @@ export default function Comment_More({
   onUpdate,
   onDelete,
 }: Comment_MoreProps) {
+  const t = useTranslations("comment");
+
   if (!onUpdate && !onDelete) return null;
   return (
     <DropdownMenu>
@@ -31,13 +34,13 @@ export default function Comment_More({
         {onUpdate && (
           <DropdownMenuItem className="cursor-pointer" onClick={onUpdate}>
             <PenIcon size={16} className="mr-2" />
-            Update Comment
+            {t("editComment")}
           </DropdownMenuItem>
         )}
         {onDelete && (
           <DropdownMenuItem className="cursor-pointer" onClick={onDelete}>
             <IconTrash size={16} className="mr-2" />
-            Delete Comment
+            {t("deleteComment")}
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
+import TextHeading, { TextDescription } from "@/components/ui/text";
 import { Textarea } from "@/components/ui/textarea";
-import { IMAGES } from "@/data/images";
+import { IComment } from "@/interfaces/comment";
+import apiConfig from "@/lib/api";
+import { useUserStore } from "@/stores/user_store";
 import { IconX } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import SectionDivider from "../SectionDivider/SectionDivider";
 import MyEmojiPicker from "./MyEmojiPicker";
-import TextHeading, { TextDescription } from "@/components/ui/text";
-import { IComment } from "@/interfaces/comment";
-import { useTranslations } from "next-intl";
 
 interface CommentInputProps {
   onSubmit: (comment: string) => void;
@@ -21,11 +22,12 @@ export default function Comment_Input({
   onSubmit,
   turnOff,
   commentReply,
-  value
+  value,
 }: CommentInputProps) {
   const [keyword, setKeyword] = useState<string>(value ?? "");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const t = useTranslations("comment");
+  const { user } = useUserStore();
 
   function handleEmojiClick(emoji: string) {
     const input = inputRef.current;
@@ -69,7 +71,7 @@ export default function Comment_Input({
       <div className="flex items-start gap-2 mb-4 p-4">
         <div className="w-10 h-10 min-h-10 min-w-10 ">
           <Image
-            src={IMAGES.DEFAULT_COURSE}
+            src={user?.avatar ?? apiConfig.avatar(user?.name ?? "c")}
             alt="logo"
             width={40}
             height={40}

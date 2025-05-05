@@ -1,5 +1,4 @@
 import TextHeading, { TextDescription } from "@/components/ui/text";
-import { IMAGES } from "@/data/images";
 import { IconMessage2, IconPointFilled } from "@tabler/icons-react";
 import Image from "next/image";
 import CardPost_Button from "../CardPost/CardPost_Button";
@@ -14,6 +13,7 @@ import { util_length_comment } from "@/utils/common";
 import { useTranslations } from "next-intl";
 import Comment_More from "./Comment_More";
 import { useUserStore } from "@/stores/user_store";
+import apiConfig from "@/lib/api";
 
 interface CommentItemProps {
   comment?: IComment;
@@ -40,7 +40,7 @@ function flattenComments(comments: IComment[]) {
 
 const MAX_VISIBLE_COMMENTS = 1;
 
-export default function CommentItem({ comment }: CommentItemProps) {
+export default function Comment_Item({ comment }: CommentItemProps) {
   const [reply, setReply] = useState<boolean>(false);
   const t = useTranslations("comment");
   const [update, setUpdate] = useState<boolean>(false);
@@ -67,6 +67,19 @@ export default function CommentItem({ comment }: CommentItemProps) {
     onSuccess: () => {
       setReply(false);
       setUpdate(false);
+      queryClient.invalidateQueries({
+        queryKey: ["post", "comments", comment?.postId],
+      });
+    },
+  });
+
+  const mutionDelete = useMutation({
+    mutationFn: async () => {
+      if (!comment?.id)
+        throw new Error("Cannot delete comment: missing comment ID");
+      return commentService.delete(comment.id);
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["post", "comments", comment?.postId],
       });
@@ -103,7 +116,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
           <header className="flex z-3 flex-row justify-start items-center gap-2">
             <div className="w-10 h-10 min-h-10 min-w-10 z-2 relative">
               <Image
-                src={IMAGES.DEFAULT_COURSE}
+                src={comment?.author?.avatar ?? apiConfig.avatar(comment?.author?.name ?? 'c')}
                 alt="logo"
                 width={40}
                 height={40}
@@ -135,7 +148,16 @@ export default function CommentItem({ comment }: CommentItemProps) {
                 }
               />
               <Comment_More
-                 onUpdate={user?.id === comment?.author?.id ? () => setUpdate(true) : undefined}
+                onUpdate={
+                  user?.id === comment?.author?.id
+                    ? () => setUpdate(true)
+                    : undefined
+                }
+                onDelete={
+                  user?.id === comment?.author?.id
+                    ? () => mutionDelete.mutate()
+                    : undefined
+                }
               />
             </div>
           </div>
@@ -167,7 +189,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
       {comment?.replies && (
         <div className="flex flex-col">
           {flatComments.map((reply) => (
-            <CommentItem key={reply.id} comment={reply} />
+            <Comment_Item key={reply.id} comment={reply} />
           ))}
 
           {visibleReplies < visibleRepliesList.length && (

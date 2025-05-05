@@ -13,7 +13,7 @@ import useQ_Tag_GetAll from "@/hooks/query-hooks/Tag/useQ_Tag_GetAll";
 import useH_LocalPath from "@/hooks/useH_LocalPath";
 import { postSchemaType, usePostSchema } from "@/lib/validations/postSchema";
 import postService from "@/services/post.service";
-import uploadService from "@/services/upload.service";
+import uploadService from "@/services/file.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
