@@ -94,6 +94,11 @@
             "date": 1746416538136,
             "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\error\\2025-05-05.log",
             "hash": "1e93f99034b267a8e3c68452e32f12340848823223f3f8e493015064a87f1749"
+        },
+        {
+            "date": 1746540249475,
+            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\error\\2025-05-06.log",
+            "hash": "883e38d937a8a61b511a71da5b18f0ad5f116c33106923e8717d5e96faaa1467"
         }
     ],
     "hashType": "sha256"

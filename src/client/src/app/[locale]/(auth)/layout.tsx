@@ -60,7 +60,7 @@ export default function Layout({
             <CardTitle className="text-left text-xl font-bold mt-4">
               {t("welcome")}
             </CardTitle>
-          </CardHeader>
+          </CardHeader> 
           <CardContent>{children}</CardContent>
           <CardFooter className="flex flex-col gap-2 mt-4 pb-4">
             <div className="relative my-3 w-full text-center">

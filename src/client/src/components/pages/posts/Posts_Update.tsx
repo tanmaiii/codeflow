@@ -5,27 +5,37 @@ import TextInput from "@/components/common/Input/TextInput/TextInput";
 import MultiSelect from "@/components/common/MultiSelect/MultiSelect";
 import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import TextHeading, { TextDescription } from "@/components/ui/text";
 import { paths } from "@/data/path";
+import useQ_Post_GetDetail from "@/hooks/query-hooks/Post/useQ_Post_GetDetail";
 import useQ_Tag_GetAll from "@/hooks/query-hooks/Tag/useQ_Tag_GetAll";
 import useH_LocalPath from "@/hooks/useH_LocalPath";
 import { postSchemaType, usePostSchema } from "@/lib/validations/postSchema";
-import postService from "@/services/post.service";
 import uploadService from "@/services/file.service";
+import postService from "@/services/post.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useRouter, useParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function Posts_Update() {
   const [file, setFile] = useState<File | null>(null);
+  const [updateThumbnail, setUpdateThumbnail] = useState(false);
+
   const schema = usePostSchema();
   const router = useRouter();
   const { localPath } = useH_LocalPath();
-
+  const { id } = useParams();
+  const t = useTranslations("post");
   const Q_Tag = useQ_Tag_GetAll();
+  const Q_Post = useQ_Post_GetDetail({
+    id: id?.toString() || "",
+  });
 
   const {
     register,
@@ -37,6 +47,16 @@ export default function Posts_Update() {
     resolver: zodResolver(schema),
   });
 
+  useEffect(() => {
+    if (Q_Post.data?.data) {
+      reset({
+        title: Q_Post.data.data.title,
+        content: Q_Post.data.data.content,
+        tags: Q_Post.data.data.tags.map((tag) => tag.id),
+      });
+    }
+  }, [Q_Post.data, reset]);
+
   const handleUpload = async (file: File) => {
     const formData = new FormData();
     formData.append("image", file);
@@ -47,10 +67,10 @@ export default function Posts_Update() {
   const mutation = useMutation({
     mutationFn: async (body: postSchemaType) => {
       const thumbnail = file ? await handleUpload(file) : null;
-      // if (!thumbnail) throw new Error("Thumbnail is required");
-      await postService.create({
+      if (!id) return;
+      await postService.update(id.toString(), {
         ...body,
-        thumbnail: thumbnail || undefined,
+        ...(updateThumbnail && { thumbnail: thumbnail ?? '' }),
       });
     },
     onError: (err: unknown) => {
@@ -66,71 +86,82 @@ export default function Posts_Update() {
     },
   });
 
+  if (Q_Post.isLoading) return <TextDescription>Loading...</TextDescription>;
+  if (Q_Post.error) return <TextDescription>Error...</TextDescription>;
+
   return (
-    <div className="flex flex-col gap-4 max-w-5xl mx-auto p-4">
-      <Label className="text-color-2">Thumbnail</Label>
+    <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-backgroud-2">
+      <Card className="bg-backgroud-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
+        <TextHeading>{t("updatePost")}</TextHeading>
 
-      <div className="h-[300px] w-full">
-        <DragDropImage
-          file={file}
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-          className="w-full h-full"
-          accept="image/*"
-        />
-      </div>
-      <form
-        onSubmit={handleSubmit((value) => mutation.mutate(value))}
-        className="flex flex-col gap-3"
-      >
-        <TextInput
-          label="Title"
-          placeholder="Enter title"
-          className="w-full"
-          registration={register("title")}
-          error={errors.title?.message ? errors.title : undefined}
-        />
-
-        {Q_Tag.data && (
-          <Controller
-            name="tags"
-            control={control}
-            render={({ field }) => (
-              <MultiSelect
-                label="Select tags"
-                id="tags"
-                options={Q_Tag.data?.data?.map((tag) => ({
-                  label: tag.name,
-                  value: tag.id,
-                }))}
-                defaultValue={field.value}
-                onValueChange={field.onChange}
-              />
-            )}
-          />
-        )}
-
-        <div className="flex flex-col gap-2">
-          <Label className="text-color-2">Content</Label>
-          <Controller
-            control={control}
-            name="content"
-            render={({ field }) => (
-              <RichTextEditor
-                content={field.value}
-                onChange={field.onChange}
-                error={errors.content}
-                className="min-h-[400px]"
-              />
-            )}
+        <div className="h-[300px] w-full">
+          <Label className="text-color-2">Thumbnail</Label>
+          <DragDropImage
+            image_default={Q_Post.data?.data?.thumbnail ?? ""}
+            file={file}
+            onChange={(e) => {
+              setFile(e.target.files?.[0] || null);
+              setUpdateThumbnail(true);
+            }}
+            className="w-full h-full"
+            accept="image/*"
           />
         </div>
-        <div className="flex items-center justify-end gap-2 mt-4">
-          <Button variant={"outline"}>Cancel</Button>
-          <Button disabled={isSubmitting} type="submit">
-            Create
-          </Button>
-        </div>
-      </form>
+        <form
+          onSubmit={handleSubmit((value) => mutation.mutate(value))}
+          className="flex flex-col gap-3"
+        >
+          <TextInput
+            label="Title"
+            placeholder="Enter title"
+            className="w-full"
+            registration={register("title")}
+            error={errors.title?.message ? errors.title : undefined}
+            {...register("title")}
+          />
+
+          {Q_Tag.data && (
+            <Controller
+              name="tags"
+              control={control}
+              render={({ field }) => (
+                <MultiSelect
+                  label="Select tags"
+                  id="tags"
+                  options={Q_Tag.data?.data?.map((tag) => ({
+                    label: tag.name,
+                    value: tag.id,
+                  }))}
+                  defaultValue={Q_Post.data?.data?.tags.map((tag) => tag.id)}
+                  onValueChange={field.onChange}
+                />
+              )}
+            />
+          )}
+
+          <div className="flex flex-col gap-2">
+            <Label className="text-color-2">Content</Label>
+            <Controller
+              name="content"
+              control={control}
+              render={({ field }) => (
+                <RichTextEditor
+                  content={Q_Post.data?.data?.content || ""}
+                  onChange={field.onChange}
+                  error={errors.content}
+                  className="min-h-[400px]"
+                />
+              )}
+            />
+          </div>
+          <div className="flex items-center justify-end gap-2 mt-4">
+            <Button variant={"outline"}>Cancel</Button>
+            <Button disabled={isSubmitting} type="submit">
+              Create
+            </Button>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }

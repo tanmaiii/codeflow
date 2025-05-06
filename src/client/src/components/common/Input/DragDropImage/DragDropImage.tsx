@@ -1,26 +1,25 @@
 import { Button } from "@/components/ui/button";
 import TextHeading from "@/components/ui/text";
+import { utils_ApiImageToLocalImage } from "@/utils/image";
 import { cx } from "class-variance-authority";
+import { motion } from "framer-motion";
 import { ImageUp, Trash } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 interface DragDropImageProps extends React.HTMLProps<HTMLInputElement> {
   file: File | null;
+  image_default?: string;
   onChange: (_: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
-  error?: string | boolean;
-  disabled?: boolean;
-  required?: boolean;
-  accept?: string;
 }
 
 export default function DragDropImage(props: DragDropImageProps) {
-  const { file, onChange } = props;
-  // const [file, setFile] = useState<File | null>(null);
+  const { file, onChange, image_default } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [openDrop, setOpenDrop] = useState(false);
+  const [imageDefault, setImageDefault] = useState<string | null>(null);
+
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       if (onChange) {
@@ -31,14 +30,24 @@ export default function DragDropImage(props: DragDropImageProps) {
   };
 
   const onRemove = () => {
-    console.log("remove file");
     onChange({
       target: { files: null },
     } as unknown as React.ChangeEvent<HTMLInputElement>);
     if (inputRef.current) {
       inputRef.current.value = "";
+      setImageDefault(null);
     }
   };
+
+  useEffect(() => {
+    if (file) {
+      setImageDefault(URL.createObjectURL(file));
+    } else if (image_default) {
+      setImageDefault(image_default);
+    } else {
+      setImageDefault(null);
+    }
+  }, [file, image_default]);
 
   return (
     <div
@@ -47,11 +56,15 @@ export default function DragDropImage(props: DragDropImageProps) {
       onDragLeave={() => setOpenDrop(false)}
     >
       <div className="relative flex flex-col gap-2 w-full h-full min-h-[200px]">
-        {file && (
+        {(file || imageDefault) && (
           <>
             <div className="absolute top-0 left-0 w-full h-full rounded-lg flex justify-center items-center">
               <Image
-                src={URL.createObjectURL(file)}
+                src={
+                  file
+                    ? URL.createObjectURL(file)
+                    : utils_ApiImageToLocalImage(imageDefault)
+                }
                 alt="preview"
                 className="w-full h-full object-cover rounded-lg"
                 width={200}
@@ -71,7 +84,10 @@ export default function DragDropImage(props: DragDropImageProps) {
           htmlFor="file-image"
           className={cx(
             "flex flex-col absolute gap-4 w-full h-full border-2 border-dashed rounded-lg justify-center items-center cursor-pointer z-10",
-            { "opacity-0 bg-backgroud-1/80 hover:opacity-100": file },
+            {
+              "opacity-0 bg-backgroud-1/80 hover:opacity-100":
+                file || imageDefault,
+            },
             { "opacity-100 ": openDrop }
           )}
         >

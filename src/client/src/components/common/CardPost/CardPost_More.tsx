@@ -3,17 +3,22 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import useH_LocalPath from "@/hooks/useH_LocalPath";
 import { IconShare3, IconTrash } from "@tabler/icons-react";
-import { EllipsisIcon, EyeIcon, PenIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { EllipsisIcon, PenIcon } from "lucide-react";
 
-export default function CardPost_More() {
-  const { localPath } = useH_LocalPath()
-  const route = useRouter()
+interface CardPost_MoreProps {
+  onUpdate?: () => void;
+  onDelete?: () => void;
+  onView?: () => void;
+}
 
+export default function CardPost_More({
+  onUpdate,
+  onDelete,
+  onView,
+}: CardPost_MoreProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,27 +27,39 @@ export default function CardPost_More() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuItem>
-          <IconShare3 size={16} className="mr-2" />
-          Share
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <EyeIcon size={16} className="mr-2" />
-          View Post
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => {
-            route.push(localPath(`/posts/update/${'123123123'}`))
-          }}
-        >
-          <PenIcon size={16} className="mr-2" />
-          Update Post
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <IconTrash size={16} className="mr-2" />
-          Delete Post
-        </DropdownMenuItem>
+        {onView && (
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => {
+              onView?.();
+            }}
+          >
+            <IconShare3 size={16} className="mr-2" />
+            Share
+          </DropdownMenuItem>
+        )}
+        {onUpdate && (
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => {
+              onUpdate?.();
+            }}
+          >
+            <PenIcon size={16} className="mr-2" />
+            Update Post
+          </DropdownMenuItem>
+        )}
+        {onDelete && (
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => {
+              onDelete?.();
+            }}
+          >
+            <IconTrash size={16} className="mr-2" />
+            Delete Post
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

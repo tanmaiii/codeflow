@@ -11,6 +11,7 @@ export const paths = {
   USERS: "/users",
   POSTS: "/posts",
   POST_CREATE: "/posts/create",
+  POST_UPDATE: "/posts/update",
   SEARCH: "/search",
 
   LOGIN: "/login",

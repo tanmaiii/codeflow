@@ -7,7 +7,6 @@ import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-// import { MultiSelect } from "@/components/ui/multi-select";
 import { paths } from "@/data/path";
 import useQ_Tag_GetAll from "@/hooks/query-hooks/Tag/useQ_Tag_GetAll";
 import useH_LocalPath from "@/hooks/useH_LocalPath";
@@ -20,12 +19,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
+import TextHeading from "@/components/ui/text";
 
 export default function Posts_Create() {
   const [file, setFile] = useState<File | null>(null);
   const schema = usePostSchema();
   const router = useRouter();
   const { localPath } = useH_LocalPath();
+  const t = useTranslations("post");
 
   const Q_Tag = useQ_Tag_GetAll();
 
@@ -49,7 +51,6 @@ export default function Posts_Create() {
   const mutation = useMutation({
     mutationFn: async (body: postSchemaType) => {
       const thumbnail = file ? await handleUpload(file) : null;
-      // if (!thumbnail) throw new Error("Thumbnail is required");
       await postService.create({
         ...body,
         thumbnail: thumbnail || undefined,
@@ -70,9 +71,10 @@ export default function Posts_Create() {
 
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-backgroud-2">
-      <Card className="bg-backgroud-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-10">
-        <Label className="text-color-2">Thumbnail</Label>
+      <Card className="bg-backgroud-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
+        <TextHeading>{t("createPost")}</TextHeading>
         <div className="h-[300px] w-full">
+          <Label className="text-color-2">{t("thumbnail")}</Label>
           <DragDropImage
             file={file}
             onChange={(e) => setFile(e.target.files?.[0] || null)}
@@ -86,8 +88,7 @@ export default function Posts_Create() {
           className="flex flex-col gap-3"
         >
           <TextInput
-            label="Title"
-            placeholder="Enter title"
+            label={t("title")}
             className="w-full"
             registration={register("title")}
             error={errors.title?.message ? errors.title : undefined}
@@ -99,7 +100,7 @@ export default function Posts_Create() {
               control={control}
               render={({ field }) => (
                 <MultiSelect
-                  label="Select tags"
+                  label={t("tags")}
                   id="tags"
                   options={Q_Tag.data?.data?.map((tag) => ({
                     label: tag.name,
@@ -113,7 +114,7 @@ export default function Posts_Create() {
           )}
 
           <div className="flex flex-col gap-2">
-            <Label className="text-color-2">Content</Label>
+            <Label className="text-color-2">{t("description")}</Label>
             <Controller
               control={control}
               name="content"
@@ -128,9 +129,15 @@ export default function Posts_Create() {
             />
           </div>
           <div className="flex items-center justify-end gap-2 mt-4">
-            <Button variant={"outline"}>Cancel</Button>
+            <Button
+              variant={"outline"}
+              type="button"
+              onClick={() => router.push(localPath(paths.POSTS))}
+            >
+              {t("cancel")}
+            </Button>
             <Button disabled={isSubmitting} type="submit">
-              Create
+              {t("save")}
             </Button>
           </div>
         </form>

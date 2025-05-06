@@ -71,18 +71,26 @@
     "passwordStrength": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
   },
   "post": {
+    "post": "Post",
     "title": "Title",
     "description": "Description",
     "content": "Content",
     "createPost": "Create Post",
+    "updatePost": "Update Post",
     "editPost": "Edit Post",
     "deletePost": "Delete Post",
     "viewPost": "View Post",
     "postCreated": "Post has been created successfully!",
     "postUpdated": "Post has been updated successfully!",
-    "postDeleted": "Post has been deleted successfully!"
+    "postDeleted": "Post has been deleted successfully!",
+    "morePosts": "See more posts",
+    "thumbnail": "Thumbnail",
+    "tags": "Tags",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "comment": {
+    "comments": "Comments",
     "editComment": "Edit Comment",
     "deleteComment": "Delete Comment",
     "commentCreated": "Comment has been created successfully!",

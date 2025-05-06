@@ -1,7 +1,5 @@
+import Posts_Update from "@/components/pages/posts/Posts_Update";
+
 export default function Page() {
-    return (
-        <div>
-            Enter
-        </div>
-    );
+  return <Posts_Update />;
 }

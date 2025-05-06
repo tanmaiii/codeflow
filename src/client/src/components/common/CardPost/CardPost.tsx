@@ -78,7 +78,13 @@ export default function CardPost({ post }: CardPostProps) {
                 height={100}
               />
             </Tooltip>
-            <CardPost_More />
+            <CardPost_More
+              onUpdate={() =>
+                route.push(localPath(paths.POST_UPDATE + "/" + post.id))
+              }
+              onDelete={() => {}}
+              onView={() => {}}
+            />
           </div>
           <Link href={`${localPath(paths.POSTS + "/" + post.id)}`} className="">
             <TextHeading className="text-color-1 align-left font-bold text-lg mt-2 line-clamp-2 hover:underline ">

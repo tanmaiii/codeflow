@@ -32,6 +32,11 @@ class PostService {
     return response.data;
   }
 
+  async update(id: string, data: ICreatePostDto): Promise<ResponseAPIDto<IPost>> {
+    const response = await this.client.put(`/${id}`, data);
+    return response.data;
+  }
+
   // like post
 
   async checkLike(id: string): Promise<ResponseAPIDto<{ isLike: boolean }>> {

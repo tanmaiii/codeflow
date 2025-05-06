@@ -26,10 +26,10 @@ export default function Comments({ comments, onSubmit }: ICommentsProps) {
 
   return (
     <div className="w-full mt-4 mb-4 flex flex-col gap-4">
-      <TextHeading className="text-lg">{`Comments(${
+      <TextHeading className="text-lg">{`${t("comments")} (${
         comments && util_length_comment(comments)
       })`}</TextHeading>
-      
+
       <CommnetInputDefault onSubmit={onSubmit} />
 
       {visibleComments.map((comment) => (

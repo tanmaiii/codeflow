@@ -64,15 +64,39 @@
     "passwordStrength": "Mật khẩu phải chứa ít nhất một chữ cái in hoa, một chữ cái thường, một số và một ký tự đặc biệt"
   },
   "post": {
+    "post": "Bài viết",
     "title": "Tiêu đề",
     "description": "Mô tả",
     "content": "Nội dung",
     "createPost": "Tạo bài viết",
+    "updatePost": "Cập nhật bài viết",
     "editPost": "Chỉnh sửa bài viết",
     "deletePost": "Xóa bài viết",
     "viewPost": "Xem bài viết",
     "postCreated": "Bài viết đã được tạo thành công!",
     "postUpdated": "Bài viết đã được cập nhật thành công!",
-    "postDeleted": "Bài viết đã được xóa thành công!"
+    "postDeleted": "Bài viết đã được xóa thành công!",
+    "morePosts": "Xem thêm bài viết",
+    "thumbnail": "Hình thu nhỏ",
+    "tags": "Thẻ",
+    "cancel": "Thoát",
+    "save": "Lưu"
+  },
+  "comment": {
+    "comments": "Bình luận",
+    "editComment": "Chỉnh sửa bình luận",
+    "deleteComment": "Xóa bình luận",
+    "commentCreated": "Bình luận đã được tạo thành công!",
+    "commentUpdated": "Bình luận đã được cập nhật thành công!",
+    "commentDeleted": "Bình luận đã được xóa thành công!",
+    "reply": "Trả lời",
+    "replys": "Các trả lời",
+    "noReplys": "Chưa có trả lời nào",
+    "placeholder": "Viết bình luận...",
+    "noComments": "Chưa có bình luận nào",
+    "loadMore": "Xem thêm",
+    "seeMoreReplys": "Xem thêm {length} trả lời",
+    "replyTo": "Trả lời cho",
+    "postComment": "Đăng bình luận"
   }
 }

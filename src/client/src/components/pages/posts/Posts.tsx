@@ -7,6 +7,7 @@ import { paths } from "@/data/path";
 import useQ_Post_GetAll from "@/hooks/query-hooks/Post/useQ_Post_GetAll";
 import useH_LocalPath from "@/hooks/useH_LocalPath";
 import { IPost } from "@/interfaces/post";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -14,6 +15,7 @@ export default function Posts() {
   const route = useRouter();
   const [page, setPage] = useState(1);
   const { localPath } = useH_LocalPath();
+  const t = useTranslations("post");
 
   const Q_Post = useQ_Post_GetAll({
     params: {
@@ -31,7 +33,7 @@ export default function Posts() {
     <div className="flex flex-col h-full w-full">
       <div className="border-b py-2 flex items-center justify-between flex-row gap-4">
         <div className="flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md text-primary">
-          <TextHeading>Bài viết</TextHeading>
+          <TextHeading>{t('post')}</TextHeading>
         </div>
         <Button
           onClick={() => route.push(localPath(paths.POST_CREATE))}
@@ -39,7 +41,7 @@ export default function Posts() {
           className="bg-backgroud-1"
           size="sm"
         >
-          Tạo bài viết
+          {t("createPost")}
         </Button>
       </div>
       <div className="min-h-[600px]">
