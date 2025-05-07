@@ -15,10 +15,18 @@ export class CourseService {
     return allCourse;
   }
 
-  public async findAndCountAllWithPagination(limit: number, offset: number): Promise<{ count: number; rows: Course[] }> {
+  public async findAndCountAllWithPagination(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+  ): Promise<{ count: number; rows: Course[] }> {
     const { count, rows }: { count: number; rows: Course[] } = await DB.Courses.findAndCountAll({
-      limit,
-      offset,
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+      distinct: true,
+      col: 'courses.id',
     });
     return { count, rows };
   }

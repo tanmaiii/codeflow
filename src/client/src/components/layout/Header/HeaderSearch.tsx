@@ -14,7 +14,7 @@ export default function HeaderSearch() {
     <div className="relative w-full ">
       <div
         className={cx(
-          "flex items-center bg-backgroud-2 dark:bg-backgroud-1  p-2 h-11",
+          "flex items-center bg-background-2 dark:bg-background-1  p-2 h-11",
           focusInput[0] ? "border rounded-t-lg" : "rounded-lg"
         )}
       >
@@ -35,7 +35,7 @@ export default function HeaderSearch() {
       </div>
       <div
         className={cx(
-          "absolute top-[100%] left-0 w-full bg-backgroud-1 shadow-lg rounded-b-lg p-2 border",
+          "absolute top-[100%] left-0 w-full bg-background-1 shadow-lg rounded-b-lg p-2 border",
           focusInput[0] ? "block" : "hidden"
         )}
       >
@@ -45,12 +45,12 @@ export default function HeaderSearch() {
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t text-color-2"></div>
               </div>
-              <TextDescription className="relative font-medium bg-backgroud-1 dark:bg-backgroud-1 px-2 ml-2">
+              <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
                 Course
               </TextDescription>
             </div>
             <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-backgroud-1 rounded-md">
+              <div className="w-10 h-10 bg-background-1 rounded-md">
                 <Image
                   src={IMAGES.DEFAULT_COURSE}
                   alt="logo"
@@ -67,7 +67,7 @@ export default function HeaderSearch() {
               </div>
             </div>
             <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-backgroud-1 rounded-md">
+              <div className="w-10 h-10 bg-background-1 rounded-md">
                 <Image
                   src={IMAGES.DEFAULT_COURSE}
                   alt="logo"
@@ -84,7 +84,7 @@ export default function HeaderSearch() {
               </div>
             </div>
             <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-backgroud-1 rounded-md">
+              <div className="w-10 h-10 bg-background-1 rounded-md">
                 <Image
                   src={IMAGES.DEFAULT_COURSE}
                   alt="logo"
@@ -106,12 +106,12 @@ export default function HeaderSearch() {
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t text-color-2"></div>
               </div>
-              <TextDescription className="relative font-medium bg-backgroud-1 dark:bg-backgroud-1 px-2 ml-2">
+              <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
                 Posts
               </TextDescription>
             </div>
             <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-backgroud-1 rounded-md">
+              <div className="w-10 h-10 bg-background-1 rounded-md">
                 <Image
                   src={IMAGES.DEFAULT_COURSE}
                   alt="logo"
@@ -128,7 +128,7 @@ export default function HeaderSearch() {
               </div>
             </div>
             <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-backgroud-1 rounded-md">
+              <div className="w-10 h-10 bg-background-1 rounded-md">
                 <Image
                   src={IMAGES.DEFAULT_COURSE}
                   alt="logo"
@@ -145,7 +145,7 @@ export default function HeaderSearch() {
               </div>
             </div>
             <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-backgroud-1 rounded-md">
+              <div className="w-10 h-10 bg-background-1 rounded-md">
                 <Image
                   src={IMAGES.DEFAULT_COURSE}
                   alt="logo"

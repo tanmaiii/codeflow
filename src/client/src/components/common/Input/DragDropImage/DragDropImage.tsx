@@ -85,7 +85,7 @@ export default function DragDropImage(props: DragDropImageProps) {
           className={cx(
             "flex flex-col absolute gap-4 w-full h-full border-2 border-dashed rounded-lg justify-center items-center cursor-pointer z-10",
             {
-              "opacity-0 bg-backgroud-1/80 hover:opacity-100":
+              "opacity-0 bg-background-1/80 hover:opacity-100":
                 file || imageDefault,
             },
             { "opacity-100 ": openDrop }

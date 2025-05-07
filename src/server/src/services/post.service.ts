@@ -37,7 +37,7 @@ export class PostService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
   ): Promise<{ count: number; rows: Post[] }> {
     const offset = (page - 1) * pageSize;
-    
+
     const result = await DB.Posts.findAndCountAll({
       attributes: {
         include: [
@@ -109,7 +109,7 @@ export class PostService {
 
     await DB.Posts.destroy({ where: { id: id } });
 
-    const softDeletedPost = await DB.Posts.findByPk(id);
+    const softDeletedPost = await DB.Posts.findByPk(id, { paranoid: false });
     if (!softDeletedPost) throw new HttpException(409, "Post doesn't exist after deletion");
     return softDeletedPost;
   }

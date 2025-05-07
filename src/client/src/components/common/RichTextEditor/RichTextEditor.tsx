@@ -139,11 +139,13 @@ export default function RichTextEditor({
     <>
       <div
         className={cx(
-          "min-h-[156px] border rounded-xl dark:bg-input/30 ",
+          "min-h-[156px] border rounded-xl dark:bg-input/30",
           className
         )}
       >
-        <RichTextEditorToolBar editor={editor} />
+        <div className="sticky top-14 z-40">
+          <RichTextEditorToolBar editor={editor} />
+        </div>
         <EditorContent editor={editor} {...registration} />
       </div>
       {error && <p className="text-red-500 text-sm">{error.message}</p>}

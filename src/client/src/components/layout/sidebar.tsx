@@ -71,7 +71,7 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
   return (
     <aside
       className={clsx(
-        `h-[calc(100vh-56px)] border-r bg-backgroud-1 dark:bg-backgroud-3 flex flex-col transition-all duration-300 
+        `h-[calc(100vh-56px)] border-r bg-background-1 dark:bg-background-3 flex flex-col transition-all duration-300 
         fixed left-0 top-14 bottom-0 md:sticky z-20 xl:sticky`,
         collapsed ? "hidden md:flex w-16" : "w-full md:w-64"
       )}
@@ -100,7 +100,7 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
       <div className="p-2 border-t flex flex-col gap-2">
         <Link
           href={paths.LOGOUT}
-          className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-backgroud-2"
+          className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
         >
           <LogOut className="w-5 h-5" />
           {!collapsed && <span>{t("logout")}</span>}

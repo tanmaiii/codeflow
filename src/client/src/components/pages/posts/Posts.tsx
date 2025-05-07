@@ -20,7 +20,7 @@ export default function Posts() {
   const Q_Post = useQ_Post_GetAll({
     params: {
       page: page,
-      limit: 10,
+      limit: 8,
       sortBy: "createdAt",
       order: "DESC",
     },
@@ -33,12 +33,12 @@ export default function Posts() {
     <div className="flex flex-col h-full w-full">
       <div className="border-b py-2 flex items-center justify-between flex-row gap-4">
         <div className="flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md text-primary">
-          <TextHeading>{t('post')}</TextHeading>
+          <TextHeading>{t("post")}</TextHeading>
         </div>
         <Button
           onClick={() => route.push(localPath(paths.POST_CREATE))}
           variant="outline"
-          className="bg-backgroud-1"
+          className="bg-background-1"
           size="sm"
         >
           {t("createPost")}

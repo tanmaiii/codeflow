@@ -50,7 +50,7 @@ export default function Post_Detail() {
   return (
     <Card className="p-0 gap-0 rounded-lg overflow-hidden min-h-[100vh]">
       <Image
-        className="w-full object-cover rounded-md bg-backgroud-1"
+        className="w-full object-cover rounded-md bg-background-1"
         src={
           data.data.thumbnail
             ? utils_ApiImageToLocalImage(data.data.thumbnail)
@@ -69,7 +69,7 @@ export default function Post_Detail() {
         />
         <div className="flex items-center gap-2 mt-4 mb-2">
           <Image
-            className="w-12 h-12 object-cover rounded-full bg-backgroud-1"
+            className="w-12 h-12 object-cover rounded-full bg-background-1"
             src={
               data.data.author?.avatar
                 ? utils_ApiImageToLocalImage(data.data.author?.avatar)

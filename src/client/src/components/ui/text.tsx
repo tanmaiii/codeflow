@@ -7,7 +7,7 @@ export default function TextHeading({
   return (
     <h4
       className={cn(
-        "flex items-left gap-2 text-m text-left leading-none font-bold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        "flex items-left gap-2 text-base text-left leading-none font-bold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
         className
       )}
       {...props}
@@ -20,7 +20,7 @@ export default function TextHeading({
 export function TextDescription({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"h4">) {
+}: React.ComponentPropsWithoutRef<"span">) {
   return (
     <span
       className={cn(

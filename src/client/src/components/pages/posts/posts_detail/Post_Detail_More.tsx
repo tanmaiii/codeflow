@@ -40,9 +40,9 @@ export default function Post_Detail_More() {
                   router.push(paths.POSTS + "/" + post.id);
                 }}
               >
-                <div className="w-12 h-12 min-w-12 min-h-12 object-cover rounded-md bg-backgroud-1">
+                <div className="w-12 h-12 min-w-12 min-h-12 object-cover rounded-md bg-background-1">
                   <Image
-                    className="w-full h-full object-cover rounded-md bg-backgroud-1"
+                    className="w-full h-full object-cover rounded-md bg-background-1"
                     src={
                       post?.thumbnail
                         ? apiConfig.imageUrl(post.thumbnail)

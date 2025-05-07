@@ -18,7 +18,7 @@ export default function Header() {
   const { user } = useUserStore();
 
   return (
-    <header className="fixed top-0 z-30 bg-backgroud-1 dark:bg-backgroud-3 border-b px-4 py-2 flex items-center justify-between w-full h-14 md:16">
+    <header className="fixed top-0 z-30 bg-background-1 dark:bg-background-3 border-b px-4 py-2 flex items-center justify-between w-full h-14 md:16">
       <div>
         <ButtonTooltip
           tooltip={collapsed ? t("showSidebar") : t("hiddenSidebar")}

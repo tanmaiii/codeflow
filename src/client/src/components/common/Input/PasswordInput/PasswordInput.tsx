@@ -38,7 +38,7 @@ export default function PasswordInput({
           autoComplete="off"
           id={id}
           type={isOff ? "text" : "password"}
-          className={cx("bg-backgroud-1", error && "border-1 border-red-500")}
+          className={cx("bg-background-1", error && "border-1 border-red-500")}
           placeholder={t("enter") + " " + label}
           {...registration}
           {...props}

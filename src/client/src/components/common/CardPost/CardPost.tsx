@@ -37,7 +37,7 @@ export default function CardPost({ post }: CardPostProps) {
   const uesQ_Post_Like = useQ_Post_CheckLike({
     id: post.id ?? "",
   });
-  const route = useRouter();
+  const router = useRouter();
 
   const mutationLike = useMutation({
     mutationFn: async () => {
@@ -62,7 +62,7 @@ export default function CardPost({ post }: CardPostProps) {
   };
 
   return (
-    <Card className="p-2 hover:border-white/30 cursor-pointer bg-backgroud-1">
+    <Card className="p-2 hover:border-white/30 cursor-pointer bg-background-1">
       <CardContent className="px-2 h-full flex flex-col justify-between">
         <div className="pt-2 mb-auto">
           <div className="flex items-center justify-between gap-2 cursor-pointer rounded-full">
@@ -78,13 +78,7 @@ export default function CardPost({ post }: CardPostProps) {
                 height={100}
               />
             </Tooltip>
-            <CardPost_More
-              onUpdate={() =>
-                route.push(localPath(paths.POST_UPDATE + "/" + post.id))
-              }
-              onDelete={() => {}}
-              onView={() => {}}
-            />
+            <CardPost_More post={post} />
           </div>
           <Link href={`${localPath(paths.POSTS + "/" + post.id)}`} className="">
             <TextHeading className="text-color-1 align-left font-bold text-lg mt-2 line-clamp-2 hover:underline ">
@@ -106,7 +100,7 @@ export default function CardPost({ post }: CardPostProps) {
         </div>
         <div className="flex items-center gap-2 mt-2">
           <Image
-            className="w-full h-[160px] object-cover rounded-md bg-backgroud-1"
+            className="w-full h-[160px] object-cover rounded-md bg-background-1"
             src={
               post?.thumbnail
                 ? utils_ApiImageToLocalImage(post.thumbnail)
@@ -132,7 +126,7 @@ export default function CardPost({ post }: CardPostProps) {
           <CardPost_Button
             icon={<IconMessage2 size={24} />}
             value={post?.commentCount.toString() ?? "0"}
-            onClick={() => route.push(localPath(paths.POSTS + "/" + post.id))}
+            onClick={() => router.push(localPath(paths.POSTS + "/" + post.id))}
           />
           <CardPost_Button
             icon={<IconLink size={24} />}

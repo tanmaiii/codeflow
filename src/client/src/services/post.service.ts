@@ -37,6 +37,11 @@ class PostService {
     return response.data;
   }
 
+  async delete(id: string): Promise<ResponseAPIDto<IPost>> {
+    const response = await this.client.put(`/${id}/delete`);
+    return response.data;
+  }
+
   // like post
 
   async checkLike(id: string): Promise<ResponseAPIDto<{ isLike: boolean }>> {

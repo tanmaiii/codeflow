@@ -17,7 +17,7 @@ export default function SectionDivider({
         <div className="w-full border-t text-color-2"></div>
       </div>
       {label && (
-        <TextDescription className="relative font-medium bg-backgroud-1 dark:bg-backgroud-2 px-2 ml-2">
+        <TextDescription className="relative font-medium bg-background-1 dark:bg-background-2 px-2 ml-2">
           {label}
         </TextDescription>
       )}

@@ -27,7 +27,7 @@ export default function Layout({
   const t = useTranslations("auth");
 
   return (
-    <div className="flex flex-col justify-center items-center w-screen h-screen relative bg-backgroud-1">
+    <div className="flex flex-col justify-center items-center w-screen h-screen relative bg-background-1">
       <HeaderAuth />
       <div className="absolute top-0 w-full h-full left-1/2 -translate-x-1/2">
         <Image
@@ -45,7 +45,7 @@ export default function Layout({
           //     "-64px -12px 100px 12px rgba(101,79,255, 0.07), -10px -10px 40px 1px rgba(89,34,203, 0.15)",
           // }}
           className={cx(
-            "w-full md:w-[460px] h-fit dark:bg-backgroud-2 bg-backgroud-1 gap-0 px-2 py-6 shadow-[-2px_-2px_52px_-16px_rgba(0,0,255,0.6)]",
+            "w-full md:w-[460px] h-fit dark:bg-background-2 bg-background-1 gap-0 px-2 py-6 shadow-[-2px_-2px_52px_-16px_rgba(0,0,255,0.6)]",
             theme === "dark" && "shadow-[-8px_-27px_59px_-50px_rgba(0,0,255,0.41)]",
             theme === "light" && "shadow-[2px_2px_52px_-16px_rgba(0,0,255,0.6)]"
           )}
@@ -67,7 +67,7 @@ export default function Layout({
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
               </div>
-              <TextDescription className="relative bg-backgroud-1 dark:bg-backgroud-2 px-4">
+              <TextDescription className="relative bg-background-1 dark:bg-background-2 px-4">
                 {t("or")}
               </TextDescription>
             </div>

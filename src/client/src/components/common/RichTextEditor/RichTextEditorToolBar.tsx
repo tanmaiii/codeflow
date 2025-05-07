@@ -1,5 +1,4 @@
 "use client";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import HighlightColorPicker from "@/components/ui/tiptap/tiptap-highlight/tiptap-highlight";
 import TiptapLinkPopover from "@/components/ui/tiptap/tiptap-link-popover/tiptap-link-popover";
 import ImageUploader from "@/components/ui/tiptap/tiptap-upload-image/tiptap-upload-image";
@@ -103,85 +102,83 @@ export default function RichTextEditorToolBar({
   ];
 
   return (
-    <ScrollArea>
-      <div className="border-b p-1.5 mb-1 flex items-center space-x-1 sticky top-[56px] z-40 rounded-tr-xl rounded-tl-xl bg-background-1">
-        {/* Nhóm tiêu đề */}
-        {Options.slice(0, 3).map((option, i) => (
-          <Toggle
-            key={`heading-${i}`}
-            size="sm"
-            pressed={option.preesed}
-            onPressedChange={option.onClick}
-          >
-            {option.icon}
-          </Toggle>
-        ))}
-
-        <div className="w-px h-5 bg-muted" />
-
-        {/* Nhóm định dạng chữ */}
-        {Options.slice(3, 7).map((option, i) => (
-          <Toggle
-            key={`format-${i}`}
-            size="sm"
-            pressed={option.preesed}
-            onPressedChange={option.onClick}
-          >
-            {option.icon}
-          </Toggle>
-        ))}
-
-        <TiptapLinkPopover editor={editor} />
-
-        <HighlightColorPicker editor={editor} />
-
+    <div className="border-b p-1.5 mb-1 flex flex-wrap items-center space-x-1 z-4 rounded-tr-xl rounded-tl-xl sticky top-14 bg-background-1">
+      {/* Nhóm tiêu đề */}
+      {Options.slice(0, 3).map((option, i) => (
         <Toggle
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`p-1 rounded ${
-            editor.isActive("blockquote") ? "bg-gray-200" : ""
-          }`}
-          title="Blockquote"
+          key={`heading-${i}`}
+          size="sm"
+          pressed={option.preesed}
+          onPressedChange={option.onClick}
         >
-          <TextQuote size={16} />
+          {option.icon}
         </Toggle>
+      ))}
 
-        <div className="w-px h-5 bg-muted" />
+      <div className="w-px h-5 bg-muted" />
 
-        {/* Danh sách */}
-        {Options.slice(11, 14).map((option, i) => (
-          <Toggle
-            key={`list-${i}`}
-            size="sm"
-            pressed={option.preesed}
-            onPressedChange={option.onClick}
-          >
-            {option.icon}
-          </Toggle>
-        ))}
+      {/* Nhóm định dạng chữ */}
+      {Options.slice(3, 7).map((option, i) => (
+        <Toggle
+          key={`format-${i}`}
+          size="sm"
+          pressed={option.preesed}
+          onPressedChange={option.onClick}
+        >
+          {option.icon}
+        </Toggle>
+      ))}
 
-        <div className="w-px h-5 bg-muted" />
-        {/* Nhóm căn lề */}
-        {Options.slice(7, 11).map((option, i) => (
-          <Toggle
-            key={`align-${i}`}
-            size="sm"
-            pressed={option.preesed}
-            onPressedChange={option.onClick}
-          >
-            {option.icon}
-          </Toggle>
-        ))}
-        <div className="w-px h-5 bg-muted" />
+      <TiptapLinkPopover editor={editor} />
 
-        {/* Upload ảnh - video*/}
-        <ImageUploader
-          onSubmit={(url) => {
-            console.log(url);
-            editor.chain().focus().setImage({ src: url }).run();
-          }}
-        />
-        <TiptapYoutube editor={editor} />
-      </div>
-    </ScrollArea>
+      <HighlightColorPicker editor={editor} />
+
+      <Toggle
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        className={`p-1 rounded ${
+          editor.isActive("blockquote") ? "bg-gray-200" : ""
+        }`}
+        title="Blockquote"
+      >
+        <TextQuote size={16} />
+      </Toggle>
+
+      <div className="w-px h-5 bg-muted" />
+
+      {/* Danh sách */}
+      {Options.slice(11, 14).map((option, i) => (
+        <Toggle
+          key={`list-${i}`}
+          size="sm"
+          pressed={option.preesed}
+          onPressedChange={option.onClick}
+        >
+          {option.icon}
+        </Toggle>
+      ))}
+
+      <div className="w-px h-5 bg-muted" />
+      {/* Nhóm căn lề */}
+      {Options.slice(7, 11).map((option, i) => (
+        <Toggle
+          key={`align-${i}`}
+          size="sm"
+          pressed={option.preesed}
+          onPressedChange={option.onClick}
+        >
+          {option.icon}
+        </Toggle>
+      ))}
+      <div className="w-px h-5 bg-muted" />
+
+      {/* Upload ảnh - video*/}
+      <ImageUploader
+        onSubmit={(url) => {
+          console.log(url);
+          editor.chain().focus().setImage({ src: url }).run();
+        }}
+      />
+      <TiptapYoutube editor={editor} />
+    </div>
   );
 }

@@ -70,17 +70,19 @@ export default function Posts_Create() {
   });
 
   return (
-    <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-backgroud-2">
-      <Card className="bg-backgroud-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
+    <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
+      <Card className="bg-background-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
         <TextHeading>{t("createPost")}</TextHeading>
-        <div className="h-[300px] w-full">
+        <div className="flex flex-col gap-4">
           <Label className="text-color-2">{t("thumbnail")}</Label>
-          <DragDropImage
-            file={file}
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="w-full h-full"
-            accept="image/*"
-          />
+          <div className="h-[300px] w-full">
+            <DragDropImage
+              file={file}
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              className="w-full h-full"
+              accept="image/*"
+            />
+          </div>
         </div>
 
         <form

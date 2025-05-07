@@ -1,4 +1,4 @@
-import { ResponseAPIDto } from "@/interfaces/common";
+import { IGetAllQuery, ResponseAPIDto, ResponseAPIDtoWithPagination } from "@/interfaces/common";
 import { ICourse } from "@/interfaces/course";
 import { ICreatePostDto } from "@/interfaces/post";
 import createHttpClient from "@/lib/createHttpClient";
@@ -11,8 +11,8 @@ class CourseService {
     this.client = createHttpClient("courses");
   }
 
-  async getAll(): Promise<ResponseAPIDto<ICourse[]>> {
-    const response = await this.client.get("/");
+  async getAll(params: IGetAllQuery): Promise<ResponseAPIDtoWithPagination<ICourse[]>> {
+    const response = await this.client.get("/", { params });
     return response.data;
   }
 

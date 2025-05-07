@@ -15,8 +15,9 @@ import useH_LocalPath from "@/hooks/useH_LocalPath";
 import { postSchemaType, usePostSchema } from "@/lib/validations/postSchema";
 import uploadService from "@/services/file.service";
 import postService from "@/services/post.service";
+import { useUserStore } from "@/stores/user_store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -26,12 +27,13 @@ import { toast } from "sonner";
 export default function Posts_Update() {
   const [file, setFile] = useState<File | null>(null);
   const [updateThumbnail, setUpdateThumbnail] = useState(false);
-
+  const user = useUserStore();
   const schema = usePostSchema();
   const router = useRouter();
   const { localPath } = useH_LocalPath();
   const { id } = useParams();
   const t = useTranslations("post");
+  const queryClient = useQueryClient();
   const Q_Tag = useQ_Tag_GetAll();
   const Q_Post = useQ_Post_GetDetail({
     id: id?.toString() || "",
@@ -70,7 +72,7 @@ export default function Posts_Update() {
       if (!id) return;
       await postService.update(id.toString(), {
         ...body,
-        ...(updateThumbnail && { thumbnail: thumbnail ?? '' }),
+        ...(updateThumbnail && { thumbnail: thumbnail ?? "" }),
       });
     },
     onError: (err: unknown) => {
@@ -80,32 +82,41 @@ export default function Posts_Update() {
       );
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts", "detail", id] });
       reset();
       router.push(localPath(paths.POSTS));
       toast.success("Post created successfully");
     },
   });
 
+  useEffect(() => {
+    if ((user && Q_Post.data) && user?.user?.id !== Q_Post.data?.data?.author?.id) {
+      toast.error("You are not authorized to update this post");
+      router.push(localPath(paths.POSTS));
+    }
+  }, [user?.user?.id, Q_Post.data?.data?.author?.id, localPath, router]);
+
   if (Q_Post.isLoading) return <TextDescription>Loading...</TextDescription>;
   if (Q_Post.error) return <TextDescription>Error...</TextDescription>;
 
   return (
-    <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-backgroud-2">
-      <Card className="bg-backgroud-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
+    <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
+      <Card className="bg-background-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
         <TextHeading>{t("updatePost")}</TextHeading>
-
-        <div className="h-[300px] w-full">
+        <div className="flex flex-col gap-4">
           <Label className="text-color-2">Thumbnail</Label>
-          <DragDropImage
-            image_default={Q_Post.data?.data?.thumbnail ?? ""}
-            file={file}
-            onChange={(e) => {
-              setFile(e.target.files?.[0] || null);
-              setUpdateThumbnail(true);
-            }}
-            className="w-full h-full"
-            accept="image/*"
-          />
+          <div className="h-[300px] w-full">
+            <DragDropImage
+              image_default={Q_Post.data?.data?.thumbnail ?? ""}
+              file={file}
+              onChange={(e) => {
+                setFile(e.target.files?.[0] || null);
+                setUpdateThumbnail(true);
+              }}
+              className="w-full h-full"
+              accept="image/*"
+            />
+          </div>
         </div>
         <form
           onSubmit={handleSubmit((value) => mutation.mutate(value))}

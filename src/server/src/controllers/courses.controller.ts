@@ -13,13 +13,28 @@ export class CourseController {
 
   public getCourses = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllCoursesData: Course[] = await this.course.findAll();
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const { count, rows }: { count: number; rows: Course[] } = await this.course.findAndCountAllWithPagination(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+      );
 
-      res.status(200).json({ data: findAllCoursesData, message: 'findAll' });
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
     } catch (error) {
       next(error);
-    }
-  };
+    };
+  }
 
   public getCourseById = async (req: Request, res: Response, next: NextFunction) => {
     try {
