@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { TextDescription } from "@/components/ui/text";
-
+import { useTranslations } from "next-intl";
 interface ActionDeleteProps {
   trigger: React.ReactNode;
   title?: string;
@@ -22,22 +22,22 @@ export default function ActionDelete({
   title = "this item",
   onSubmit,
 }: ActionDeleteProps) {
+  const t = useTranslations("common");
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Confirm delete</AlertDialogTitle>
+          <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
           <AlertDialogDescription>
             <TextDescription className="text-base">
-              Are you sure you want to delete &quot;{title}&quot;? This action
-              cannot be undone.
+              {t("deleteConfirm", { title })}
             </TextDescription>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit}>Delete</AlertDialogAction>
+          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+          <AlertDialogAction onClick={onSubmit}>{t("delete")}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

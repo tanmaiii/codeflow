@@ -8,18 +8,18 @@ import useQ_Post_GetAll from "@/hooks/query-hooks/Post/useQ_Post_GetAll";
 import useH_LocalPath from "@/hooks/useH_LocalPath";
 import { IPost } from "@/interfaces/post";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Posts() {
   const route = useRouter();
-  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") || 1;
   const { localPath } = useH_LocalPath();
   const t = useTranslations("post");
 
   const Q_Post = useQ_Post_GetAll({
     params: {
-      page: page,
+      page: Number(page),
       limit: 8,
       sortBy: "createdAt",
       order: "DESC",
@@ -54,11 +54,10 @@ export default function Posts() {
       </div>
       <div className="my-6">
         <MyPagination
-          currentPage={page}
+          currentPage={Number(page)}
           totalPages={Q_Post.data?.pagination.totalPages ?? 1}
           onPageChange={(page: number) => {
-            setPage(page);
-            Q_Post.refetch();
+            route.push(`${localPath(paths.POSTS)}?page=${page}`);
           }}
         />
       </div>

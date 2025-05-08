@@ -19,7 +19,7 @@ export class CourseRoute implements Routes {
     this.router.get(`${this.path}`, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getCourses);
     this.router.get(`${this.path}/:id`, this.course.getCourseById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateCourseDto), this.course.createCourse);
-    this.router.put(`${this.path}/delete/:id`, AuthMiddleware, this.course.deleteCourse);
+    this.router.put(`${this.path}/:id/delete`, AuthMiddleware, this.course.deleteCourse);
     this.router.delete(`${this.path}/:id`, AuthMiddleware, this.course.destroyCourse);
     this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(CreateCourseDto, "body", true), this.course.updateCourse);
 

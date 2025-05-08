@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { utils_DateToDDMMYYYY } from "@/utils/date";
 import { CalendarIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
@@ -33,6 +34,7 @@ export function DateInput({
   onChange,
 }: FormFieldProps) {
   const [date, setDate] = React.useState<Date>();
+  const t = useTranslations("common");
 
   React.useEffect(() => {
     if (defaultValue) {
@@ -57,7 +59,7 @@ export function DateInput({
             {date ? (
               utils_DateToDDMMYYYY(date)
             ) : (
-              <span>{`Pick a ${label}`}</span>
+              <span>{t("pick", { field: label })}</span>
             )}
           </div>
         </PopoverTrigger>

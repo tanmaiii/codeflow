@@ -9,10 +9,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useH_LocalPath from "@/hooks/useH_LocalPath";
 import { useTranslations } from "next-intl";
 
+const tabs = [
+  { id: "all", label: "All Courses" },
+  { id: "registered", label: "Registered Courses" },
+  { id: "completed", label: "Completed Courses" },
+];
+
 export default function Courses() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = searchParams.get("page") || 1;
+  const tab = searchParams.get("tab") || "all";
   const { localPath } = useH_LocalPath();
   const t = useTranslations("course");
 
@@ -32,15 +39,16 @@ export default function Courses() {
     <div className="w-full h-full">
       <div className="border-b py-2 flex items-center justify-between flex-row gap-4">
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md text-primary">
-            <TextHeading>{t("allCourses")}</TextHeading>
-          </div>
-          <div className="flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md">
-            <TextHeading>{t("registeredCourses")}</TextHeading>
-          </div>
-          <div className="flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md">
-            <TextHeading>{t("completedCourses")}</TextHeading>
-          </div>
+          {tabs.map(({ id, label }) => (
+            <div
+              key={id}
+              onClick={() => router.push(`${localPath(paths.COURSES)}?page=${page}&tab=${id}`)}
+              className={`flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md ${tab === id ? "text-primary" : "text-gray-500"
+                }`}
+            >
+              <TextHeading>{label}</TextHeading>
+            </div>
+          ))}
         </div>
         <Button
           onClick={() => router.push(localPath(paths.COURSE_CREATE))}
@@ -63,7 +71,7 @@ export default function Courses() {
         <MyPagination
           currentPage={Q_Courses.data?.pagination.currentPage || 1}
           totalPages={Q_Courses.data?.pagination.totalPages || 1}
-          onPageChange={(page) => router.push(`${paths.COURSES}?page=${page}`)}
+          onPageChange={(page) => router.push(`${localPath(paths.COURSES)}?page=${page}&tab=${tab}`)}
         />
       </div>
     </div>

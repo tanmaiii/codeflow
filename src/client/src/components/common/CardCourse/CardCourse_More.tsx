@@ -15,22 +15,28 @@ import { EllipsisIcon, PenIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ActionDelete from "../Action/ActionDelete";
 import { ICourse } from "@/interfaces/course";
+import { useTranslations } from "next-intl";
 interface CardCourse_MoreProps {
   course: ICourse;
+  className?: string;
 }
 
-export default function CardCourse_More({ course }: CardCourse_MoreProps) {
+export default function CardCourse_More({
+  course,
+  className,
+}: CardCourse_MoreProps) {
   const user = useUserStore();
   const router = useRouter();
   const { localPath } = useH_LocalPath();
   const queryClient = useQueryClient();
+  const t = useTranslations("course");
 
   const onView = () => {
-    router.push(localPath(paths.POSTS + "/" + course.id));
+    router.push(localPath(paths.COURSES + "/" + course.id));
   };
 
   const onUpdate = () => {
-    router.push(localPath(paths.POST_UPDATE + "/" + course.id));
+    router.push(localPath(paths.COURSE_UPDATE + "/" + course.id));
   };
 
   const mutationDelete = useMutation({
@@ -43,39 +49,41 @@ export default function CardCourse_More({ course }: CardCourse_MoreProps) {
   });
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="rounded" className="p-x-0" size={"icon"}>
-          <EllipsisIcon size={26} />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuItem className="cursor-pointer" onClick={onView}>
-          <IconEye size={16} className="mr-2" />
-          View Course
-        </DropdownMenuItem>
-        {user?.user?.id === course?.author?.id && (
-          <DropdownMenuItem className="cursor-pointer" onClick={onUpdate}>
-            <PenIcon size={16} className="mr-2" />
-            Update Course
+    <div className={className}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="rounded" size={"icon"} className="bg-white/30">
+            <EllipsisIcon size={26} className="text-color-1" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuItem className="cursor-pointer" onClick={onView}>
+            <IconEye size={16} className="mr-2" />
+            {t("viewCourse")}
           </DropdownMenuItem>
-        )}
-        {user?.user?.id === course?.author?.id && (
-          <ActionDelete
-            trigger={
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onSelect={(e) => e.preventDefault()}
-              >
-                <IconTrash size={16} className="mr-2" />
-                Delete Course
-              </DropdownMenuItem>
-            }
-            title={course.title}
-            onSubmit={() => mutationDelete.mutate()}
-          />
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+          {user?.user?.id === course?.author?.id && (
+            <DropdownMenuItem className="cursor-pointer" onClick={onUpdate}>
+              <PenIcon size={16} className="mr-2" />
+              {t("updateCourse")}
+            </DropdownMenuItem>
+          )}
+          {user?.user?.id === course?.author?.id && (
+            <ActionDelete
+              trigger={
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onSelect={(e) => e.preventDefault()}
+                >
+                  <IconTrash size={16} className="mr-2" />
+                  {t("deleteCourse")}
+                </DropdownMenuItem>
+              }
+              title={course.title}
+              onSubmit={() => mutationDelete.mutate()}
+            />
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }

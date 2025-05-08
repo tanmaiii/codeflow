@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { ImageUp, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
+
 
 interface DragDropImageProps extends React.HTMLProps<HTMLInputElement> {
   file: File | null;
@@ -19,6 +21,7 @@ export default function DragDropImage(props: DragDropImageProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [openDrop, setOpenDrop] = useState(false);
   const [imageDefault, setImageDefault] = useState<string | null>(null);
+  const t = useTranslations("common");
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -74,9 +77,9 @@ export default function DragDropImage(props: DragDropImageProps) {
             <Button
               variant={"outline"}
               onClick={onRemove}
-              className="absolute top-2 right-2 z-20"
+              className="absolute top-2 right-2 z-20 bg-background-1/40"
             >
-              <Trash size={12} width={12} height={12} />
+              <Trash size={12} width={12} height={12} className="text-color-1" />
             </Button>
           </>
         )}
@@ -101,10 +104,10 @@ export default function DragDropImage(props: DragDropImageProps) {
             <ImageUp size={60} className={cx("text-color-2")} />
           </motion.div>
           <TextHeading className="text-color-2">
-            Drag and drop your images anywhere or
+            {t("dragDrop", { field: t("image") })}
           </TextHeading>
           <Button id={"file-image"} variant={"outline"} className="w-fit">
-            Upload a file
+            {t("upload", { field: t("image") })}
           </Button>
           <input
             ref={inputRef}

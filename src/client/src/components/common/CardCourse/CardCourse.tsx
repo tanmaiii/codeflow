@@ -6,7 +6,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import TextHeading, { TextDescription } from "@/components/ui/text";
 import Image from "next/image";
 import Link from "next/link";
 import { IMAGES } from "@/data/images";
@@ -19,6 +18,8 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import useH_LocalPath from "@/hooks/useH_LocalPath";
 import CardCourse_More from "./CardCourse_More";
+import { utils_ApiImageToLocalImage } from "@/utils/image";
+import TextHeading, { TextDescription } from "@/components/ui/text";
 
 interface CardCourseProps {
   course: ICourse;
@@ -29,17 +30,31 @@ export default function CardCourse({ course }: CardCourseProps) {
   const router = useRouter();
   const { localPath } = useH_LocalPath();
 
+  const onShowCourse = () => {
+    router.push(`${localPath(paths.COURSES)}/${course.id}`);
+  };
+
   return (
-    <Card className="w-full gap-4 pt-3 overflow-hidden">
+    <Card className="w-full gap-4 pt-3 overflow-hidden group">
       <CardHeader className="px-3">
-        <Image
-          src={course?.thumbnail ?? IMAGES.DEFAULT_COURSE}
-          alt="Next.js"
-          width={200}
-          height={200}
-          className="object-cover w-full h-24 rounded-md"
-        />
-        <CardCourse_More course={course} />
+        <div className="relative">
+          <Image
+            src={
+              course?.thumbnail
+                ? utils_ApiImageToLocalImage(course.thumbnail)
+                : IMAGES.DEFAULT_COURSE
+            }
+            alt={course?.thumbnail ?? ''}
+            width={200}
+            height={160}
+            className="object-cover w-full h-[120px] rounded-md cursor-pointer"
+            onClick={onShowCourse}
+          />
+          <CardCourse_More
+            course={course}
+            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          />
+        </div>
       </CardHeader>
       <CardContent className="min-h-[60px] px-4 flex flex-col gap-2">
         <div className="flex flex-col gap-2">
@@ -49,17 +64,17 @@ export default function CardCourse({ course }: CardCourseProps) {
                 course?.author?.avatar ??
                 apiConfig.avatar(course?.author?.name ?? "c")
               }
-              alt="Next.js"
+              alt={course?.author?.avatar ?? ''}
               width={100}
               height={100}
               className="object-cover w-6 h-6 circle rounded-full"
             />
-            <TextDescription className="text-primary">
+            <TextDescription className="text-primary line-clamp-1">
               {course?.author?.name}
             </TextDescription>
           </Link>
           <Link href={paths.COURSES + "/123"} className="text-lg">
-            <TextHeading>{course.title}</TextHeading>
+            <TextHeading className="line-clamp-2">{course.title}</TextHeading>
           </Link>
           <NameTags tags={course?.tags} />
         </div>
@@ -67,9 +82,7 @@ export default function CardCourse({ course }: CardCourseProps) {
       <CardFooter className="flex flex-col px-4 w-full gap-2 items-start mt-auto">
         <Button
           className="w-full dark:text-white"
-          onClick={() =>
-            router.push(`${localPath(paths.COURSES)}/${course.id}`)
-          }
+          onClick={onShowCourse}
         >
           {t("view")}
         </Button>

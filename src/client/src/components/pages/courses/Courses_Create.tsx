@@ -75,149 +75,155 @@ export default function Courses_Create() {
 
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
-      <Card className="bg-background-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
+      <div className={'max-w-4xl flex flex-col gap-6'}>
         <TextHeading>{t("createCourse")}</TextHeading>
-        <div className="flex flex-col gap-4">
-          <Label className="text-color-2">{t("thumbnail")}</Label>
-          <div className="h-[300px] w-full">
-            <DragDropImage
-              file={file}
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="w-full h-full"
-              accept="image/*"
-            />
+        <Card className="w-full py-4 px-4 lg:px-6 lg:py-6">
+          <div className="flex flex-col gap-4">
+            <Label className="text-color-2">{t("thumbnail")}</Label>
+            <div className="h-[300px] w-full">
+              <DragDropImage
+                file={file}
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                className="w-full h-full"
+                accept="image/*"
+              />
+            </div>
           </div>
-        </div>
-
+        </Card>
         <form
           onSubmit={handleSubmit((value) => mutation.mutate(value))}
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-6"
         >
-          <TextInput
-            label={t("title")}
-            className="w-full"
-            registration={register("title")}
-            error={errors.title?.message ? errors.title : undefined}
-          />
+          <Card className="w-full py-4 px-4 lg:px-6 lg:py-8 gap-4">
 
-          <div className="flex flex-row gap-2 w-full">
-            <Controller
-              name="startDate"
-              control={control}
-              render={({ field }) => (
-                <DateInput
-                  label={t("startDate")}
-                  id="startDate"
-                  registration={register("startDate")}
-                  error={
-                    errors.startDate?.message ? errors.startDate : undefined
-                  }
-                  defaultValue={field.value}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-            <Controller
-              name="endDate"
-              control={control}
-              render={({ field }) => (
-                <DateInput
-                  label={t("endDate")}
-                  id="endDate"
-                  registration={register("endDate")}
-                  error={errors.endDate?.message ? errors.endDate : undefined}
-                  defaultValue={field.value}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-          </div>
+            <div className="flex flex-row gap-2 w-full">
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field }) => (
+                  <DateInput
+                    label={t("startDate")}
+                    id="startDate"
+                    registration={register("startDate")}
+                    error={
+                      errors.startDate?.message ? errors.startDate : undefined
+                    }
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field }) => (
+                  <DateInput
+                    label={t("endDate")}
+                    id="endDate"
+                    registration={register("endDate")}
+                    error={errors.endDate?.message ? errors.endDate : undefined}
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
 
-          <div className="flex flex-row gap-2 w-full">
-            <Controller
-              name="topicDeadline"
-              control={control}
-              render={({ field }) => (
-                <DateInput
-                  label={t("topicDeadline")}
-                  id="topicDeadline"
-                  registration={register("topicDeadline")}
-                  error={
-                    errors.topicDeadline?.message
-                      ? errors.topicDeadline
-                      : undefined
-                  }
-                  defaultValue={field.value}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-            <NumberInput
-              label={t("maxGroupMembers")}
+            <div className="flex flex-row gap-2 w-full">
+              <Controller
+                name="topicDeadline"
+                control={control}
+                render={({ field }) => (
+                  <DateInput
+                    label={t("topicDeadline")}
+                    id="topicDeadline"
+                    registration={register("topicDeadline")}
+                    error={
+                      errors.topicDeadline?.message
+                        ? errors.topicDeadline
+                        : undefined
+                    }
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              <NumberInput
+                label={t("maxGroupMembers")}
+                className="w-full"
+                id="maxGroupMembers"
+                registration={register("maxGroupMembers", {
+                  setValueAs: (value) => Number(value),
+                })}
+                min={1}
+                max={100}
+                error={
+                  errors.maxGroupMembers?.message
+                    ? errors.maxGroupMembers
+                    : undefined
+                }
+              />
+            </div>
+
+            {Q_Tag.data && (
+              <Controller
+                name="tags"
+                control={control}
+                render={({ field }) => (
+                  <MultiSelect
+                    label={t("tags")}
+                    id="tags"
+                    options={Q_Tag.data?.data?.map((tag) => ({
+                      label: tag.name,
+                      value: tag.id,
+                    }))}
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                  />
+                )}
+              />
+            )}
+          </Card>
+
+          <Card className="w-full py-4 px-4 lg:px-6 lg:py-8 gap-4">
+            <TextInput
+              label={t("title")}
               className="w-full"
-              id="maxGroupMembers"
-              registration={register("maxGroupMembers", {
-                setValueAs: (value) => Number(value),
-              })}
-              min={1}
-              max={100}
-              error={
-                errors.maxGroupMembers?.message
-                  ? errors.maxGroupMembers
-                  : undefined
-              }
+              registration={register("title")}
+              error={errors.title?.message ? errors.title : undefined}
             />
-          </div>
 
-          {Q_Tag.data && (
-            <Controller
-              name="tags"
-              control={control}
-              render={({ field }) => (
-                <MultiSelect
-                  label={t("tags")}
-                  id="tags"
-                  options={Q_Tag.data?.data?.map((tag) => ({
-                    label: tag.name,
-                    value: tag.id,
-                  }))}
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                />
-              )}
-            />
-          )}
+            <div className="flex flex-col gap-2">
+              <Label className="text-color-2">{t("description")}</Label>
+              <Controller
+                control={control}
+                name="description"
+                render={({ field }) => (
+                  <RichTextEditor
+                    content={field.value}
+                    onChange={field.onChange}
+                    error={errors.description}
+                    className="min-h-[400px]"
+                  />
+                )}
+              />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <Label className="text-color-2">{t("description")}</Label>
-            <Controller
-              control={control}
-              name="description"
-              render={({ field }) => (
-                <RichTextEditor
-                  content={field.value}
-                  onChange={field.onChange}
-                  error={errors.description}
-                  className="min-h-[400px]"
-                />
-              )}
-            />
-          </div>
-
-          <div className="flex items-center justify-end gap-2 mt-4">
-            <Button
-              variant={"outline"}
-              type="button"
-              onClick={() => router.push(localPath(paths.COURSES))}
-            >
-              {t("cancel")}
-            </Button>
-            <Button disabled={isSubmitting} type="submit">
-              {t("save")}
-            </Button>
-          </div>
+            <div className="flex items-center justify-end gap-2 mt-4">
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={() => router.push(localPath(paths.COURSES))}
+              >
+                {t("cancel")}
+              </Button>
+              <Button disabled={isSubmitting} type="submit">
+                {t("save")}
+              </Button>
+            </div>
+          </Card>
         </form>
-      </Card>
+      </div>
     </div>
   );
 }

@@ -15,7 +15,14 @@
     "deselectAll": "Bỏ chọn tất cả",
     "loading": "Đang tải...",
     "error": "Đã xảy ra lỗi",
-    "enter": "Nhập"
+    "enter": "Nhập",
+    "deleteConfirmTitle": "Xác nhận xóa",
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa \"{title}\" không? Hành động này không thể hoàn tác.",
+    "pick": "Chọn {field}",
+    "dragDrop": "Kéo và thả {field} vào đây",
+    "upload": "Tải lên {field}",
+    "image": "hình ảnh",
+    "file": "tập tin"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
