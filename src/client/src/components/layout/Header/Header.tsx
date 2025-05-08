@@ -22,7 +22,7 @@ export default function Header() {
       <div>
         <ButtonTooltip
           tooltip={collapsed ? t("showSidebar") : t("hiddenSidebar")}
-          variant="ghost"
+          variant="outline"
           onClick={toggleSidebar}
           className="p-3"
         >

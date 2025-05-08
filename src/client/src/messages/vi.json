@@ -80,7 +80,8 @@
     "thumbnail": "Hình thu nhỏ",
     "tags": "Thẻ",
     "cancel": "Thoát",
-    "save": "Lưu"
+    "save": "Lưu",
+    "update": "Cập nhật"
   },
   "comment": {
     "comments": "Bình luận",
@@ -98,5 +99,34 @@
     "seeMoreReplys": "Xem thêm {length} trả lời",
     "replyTo": "Trả lời cho",
     "postComment": "Đăng bình luận"
+  },
+  "course": {
+    "course": "Khóa học",
+    "view": "Xem khóa học",
+    "updated": "Đã cập nhật",
+    "allCourses": "Tất cả",
+    "registeredCourses": "Đã đăng ký",
+    "completedCourses": "Đã hoàn thành",
+    "createCourse": "Tạo khóa học",
+    "updateCourse": "Cập nhật khóa học",
+    "editCourse": "Chỉnh sửa khóa học",
+    "deleteCourse": "Xóa khóa học",
+    "viewCourse": "Xem khóa học",
+    "courseCreated": "Khóa học đã được tạo thành công!",
+    "courseUpdated": "Khóa học đã được cập nhật thành công!",
+    "courseDeleted": "Khóa học đã được xóa thành công!",
+    "moreCourses": "Xem thêm khóa học",
+    "thumbnail": "Hình thu nhỏ",
+    "title": "Tiêu đề",
+    "description": "Mô tả",
+    "content": "Nội dung",
+    "startDate": "Ngày bắt đầu",
+    "endDate": "Ngày kết thúc",
+    "topicDeadline": "Ngày hạn nộp bài",
+    "tags": "Thẻ",
+    "cancel": "Thoát",
+    "save": "Lưu",
+    "update": "Cập nhật",
+    "maxGroupMembers": "Số lượng thành viên tối đa"
   }
 }

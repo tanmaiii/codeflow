@@ -104,7 +104,7 @@ export default function Posts_Update() {
       <Card className="bg-background-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
         <TextHeading>{t("updatePost")}</TextHeading>
         <div className="flex flex-col gap-4">
-          <Label className="text-color-2">Thumbnail</Label>
+          <Label className="text-color-2">{t("thumbnail")}</Label>
           <div className="h-[300px] w-full">
             <DragDropImage
               image_default={Q_Post.data?.data?.thumbnail ?? ""}
@@ -123,8 +123,8 @@ export default function Posts_Update() {
           className="flex flex-col gap-3"
         >
           <TextInput
-            label="Title"
-            placeholder="Enter title"
+            label={t("title")}
+            placeholder={t("title")}
             className="w-full"
             registration={register("title")}
             error={errors.title?.message ? errors.title : undefined}
@@ -137,7 +137,7 @@ export default function Posts_Update() {
               control={control}
               render={({ field }) => (
                 <MultiSelect
-                  label="Select tags"
+                  label={t("tags")}
                   id="tags"
                   options={Q_Tag.data?.data?.map((tag) => ({
                     label: tag.name,
@@ -151,7 +151,7 @@ export default function Posts_Update() {
           )}
 
           <div className="flex flex-col gap-2">
-            <Label className="text-color-2">Content</Label>
+            <Label className="text-color-2">{t("content")}</Label>
             <Controller
               name="content"
               control={control}
@@ -166,9 +166,9 @@ export default function Posts_Update() {
             />
           </div>
           <div className="flex items-center justify-end gap-2 mt-4">
-            <Button variant={"outline"}>Cancel</Button>
+            <Button variant={"outline"} type="button" onClick={() => router.push(localPath(paths.POSTS))}>{t("cancel")}</Button>
             <Button disabled={isSubmitting} type="submit">
-              Create
+              {t("update")}
             </Button>
           </div>
         </form>

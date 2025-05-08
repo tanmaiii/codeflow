@@ -2,10 +2,9 @@
 export const paths = {
 
   ADMIN: "/admin",
-  
+
   HOME: "/",
   DASHBOARD: "/dashboard",
-  COURSES: "/courses",
   TOPICS: "/topics",
   SETTINGS: "/settings",
   USERS: "/users",
@@ -13,6 +12,10 @@ export const paths = {
   POST_CREATE: "/posts/create",
   POST_UPDATE: "/posts/update",
   SEARCH: "/search",
+
+  COURSES: "/courses",
+  COURSE_CREATE: "/courses/create",
+  COURSE_UPDATE: "/courses/update",
 
   LOGIN: "/login",
   REGISTER: "/register",

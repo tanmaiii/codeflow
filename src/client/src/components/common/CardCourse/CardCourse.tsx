@@ -11,17 +11,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { IMAGES } from "@/data/images";
 import { paths } from "@/data/path";
-import userService from "@/services/user.service";
 import { ICourse } from "@/interfaces/course";
 import NameTags from "../NameTags/NameTags";
 import apiConfig from "@/lib/api";
 import { utils_TimeAgo } from "@/utils/date";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import useH_LocalPath from "@/hooks/useH_LocalPath";
+import CardCourse_More from "./CardCourse_More";
 
 interface CardCourseProps {
   course: ICourse;
 }
 
 export default function CardCourse({ course }: CardCourseProps) {
+  const t = useTranslations("course");
+  const router = useRouter();
+  const { localPath } = useH_LocalPath();
+
   return (
     <Card className="w-full gap-4 pt-3 overflow-hidden">
       <CardHeader className="px-3">
@@ -32,6 +39,7 @@ export default function CardCourse({ course }: CardCourseProps) {
           height={200}
           className="object-cover w-full h-24 rounded-md"
         />
+        <CardCourse_More course={course} />
       </CardHeader>
       <CardContent className="min-h-[60px] px-4 flex flex-col gap-2">
         <div className="flex flex-col gap-2">
@@ -59,12 +67,14 @@ export default function CardCourse({ course }: CardCourseProps) {
       <CardFooter className="flex flex-col px-4 w-full gap-2 items-start mt-auto">
         <Button
           className="w-full dark:text-white"
-          onClick={() => userService.getUsers()}
+          onClick={() =>
+            router.push(`${localPath(paths.COURSES)}/${course.id}`)
+          }
         >
-          Xem khóa học
+          {t("view")}
         </Button>
         <TextDescription>
-          Cập nhật {utils_TimeAgo(new Date(course.updatedAt ?? ""))}
+          {t("updated")} {utils_TimeAgo(new Date(course.updatedAt ?? ""))}
         </TextDescription>
       </CardFooter>
     </Card>

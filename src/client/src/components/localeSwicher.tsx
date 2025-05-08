@@ -26,7 +26,7 @@ export default function LocaleSwitcher() {
   return (
     <ButtonTooltip
       tooltip={currentLocale === "vi" ? "English" : "Tiếng Việt"}
-      variant="ghost"
+      variant="outline"
       className="p-3"
       onClick={toggleLanguage}
     >

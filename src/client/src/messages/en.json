@@ -87,7 +87,8 @@
     "thumbnail": "Thumbnail",
     "tags": "Tags",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "update": "Update"
   },
   "comment": {
     "comments": "Comments",
@@ -105,5 +106,34 @@
     "seeMoreReplys": "See more {length} replys",
     "replyTo": "Reply to",
     "postComment": "Post Comment"
+  },
+  "course": {
+    "course": "Course",
+    "view": "View",
+    "updated": "Updated",
+    "allCourses": "All",
+    "registeredCourses": "Registered",
+    "completedCourses": "Completed",
+    "createCourse": "Create Course",
+    "updateCourse": "Update Course",
+    "editCourse": "Edit Course",
+    "deleteCourse": "Delete Course",
+    "viewCourse": "View Course",
+    "courseCreated": "Course has been created successfully!",
+    "courseUpdated": "Course has been updated successfully!",
+    "courseDeleted": "Course has been deleted successfully!",
+    "moreCourses": "See more courses",
+    "thumbnail": "Thumbnail",
+    "title": "Title",
+    "description": "Description",
+    "content": "Content",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "topicDeadline": "Topic Deadline",
+    "tags": "Tags",
+    "cancel": "Cancel",
+    "save": "Save",
+    "update": "Update",
+    "maxGroupMembers": "Max Group Members"
   }
 }

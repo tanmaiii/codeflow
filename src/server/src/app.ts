@@ -3,9 +3,9 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
-import helmet from 'helmet';
-import hpp from 'hpp';
-import morgan from 'morgan';
+import helmet from 'helmet'; // bảo vệ header
+import hpp from 'hpp'; // bảo vệ header
+import morgan from 'morgan'; // log request
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
@@ -50,6 +50,15 @@ export class App {
   }
 
   private initializeMiddlewares() {
+    // Rate limiting
+    // const limiter = rateLimit({
+    //   windowMs: 15 * 60 * 1000, // 15 minutes
+    //   max: 100, // Limit each IP to 100 requests per windowMs
+    // });
+
+    // // Apply rate limiting to all requests
+    // this.app.use(limiter);
+
     this.app.use(
       cors({
         origin: (origin, callback) => callback(null, true),

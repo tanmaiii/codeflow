@@ -25,7 +25,7 @@ export interface ICourse extends IBaseEntity {
   author?: IUser;
 }
 
-export interface ICreatePostDto {
+export interface ICreateCourseDto {
   title: string;
   description: string;
   thumbnail?: string;
@@ -34,4 +34,5 @@ export interface ICreatePostDto {
   topicDeadline?: Date;
   documents?: Array<string>;
   tags?: Array<string>;
+  maxGroupMembers?: number;
 }

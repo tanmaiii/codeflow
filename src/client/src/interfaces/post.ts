@@ -23,4 +23,5 @@ export interface ICreatePostDto {
   title: string;
   content: string;
   thumbnail?: string;
+  tags: string[];
 }
