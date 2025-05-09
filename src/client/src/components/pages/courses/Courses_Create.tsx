@@ -1,28 +1,33 @@
 "use client";
 
 import { DateInput } from "@/components/common/Input/DateInput/DateInput";
-import { Card } from "@/components/ui/card";
-import {
-  courseSchemaType,
-  useCourseSchema
-} from "@/lib/validations/courseSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { useTranslations } from "next-intl";
+import DragDropFile from "@/components/common/Input/DragDropFile/DragDropFile";
+import DragDropImage from "@/components/common/Input/DragDropImage/DragDropImage";
 import NumberInput from "@/components/common/Input/NumberInput/NumberInput";
-import TextHeading from "@/components/ui/text";
-import useQ_Tag_GetAll from "@/hooks/query-hooks/Tag/useQ_Tag_GetAll";
+import TextInput from "@/components/common/Input/TextInput/TextInput";
 import MyMultiSelect from "@/components/common/MyMultiSelect/MyMultiSelect";
 import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
-import { Label } from "@/components/ui/label";
-import TextInput from "@/components/common/Input/TextInput/TextInput";
-import { useState } from "react";
-import DragDropImage from "@/components/common/Input/DragDropImage/DragDropImage";
-import DragDropFile from "@/components/common/Input/DragDropFile/DragDropFile";
-import { paths } from "@/data/path";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import TextHeading from "@/components/ui/text";
+import { paths } from "@/data/path";
+import useQ_Tag_GetAll from "@/hooks/query-hooks/Tag/useQ_Tag_GetAll";
 import useH_LocalPath from "@/hooks/useH_LocalPath";
+import {
+  courseSchemaType,
+  useCourseSchema,
+} from "@/lib/validations/courseSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import fileService from "@/services/file.service";
+import { useMutation } from "@tanstack/react-query";
+import courseService from "@/services/course.service";
+import { ICreateCourseDto } from "@/interfaces/course";
+import { toast } from "sonner";
 
 export default function Courses_Create() {
   const t = useTranslations("course");
@@ -30,8 +35,7 @@ export default function Courses_Create() {
   const [files, setFiles] = useState<File[] | []>([]);
   const schema = useCourseSchema();
   const router = useRouter();
-  const { localPath } = useH_LocalPath()
-
+  const { localPath } = useH_LocalPath();
   const Q_Tag = useQ_Tag_GetAll();
 
   const {
@@ -39,18 +43,54 @@ export default function Courses_Create() {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-    // reset,
+    reset,
   } = useForm<courseSchemaType>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: courseSchemaType) => {
-    console.log(data);
-  }
+  const handleUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    const image = await fileService.upload(formData);
+    return image.data.files[0].path;
+  };
+
+  const handleUploadFile = async (files: File[]) => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+    const file = await fileService.upload(formData);
+    return file.data.files.map((file) => file.path);
+  };
+
+  const mutation = useMutation({
+    mutationFn: async (data: courseSchemaType) => {
+      const imagePath = image ? await handleUpload(image as File) : null;
+      const filesPath = files.length > 0 ? await handleUploadFile(files) : [];
+      const courseData: ICreateCourseDto = {
+        ...data,
+        thumbnail: imagePath || undefined,
+        documents: filesPath || [],
+      };
+      const res = await courseService.create(courseData);
+      return res.data;
+    },
+    onSuccess: () => {
+      reset();
+      router.push(localPath(paths.COURSES));
+      toast.success(t("createCourseSuccess"));
+    },
+    onError: () => {
+      toast.error(t("createCourseFailed"));
+    },
+  });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="py-6">
-      <TextHeading className="pb-4 text-2xl font-bold">{t("createCourse")}</TextHeading>
+    <form onSubmit={handleSubmit((data) => mutation.mutate(data))} className="py-6">
+      <TextHeading className="pb-4 text-2xl font-bold">
+        {t("createCourse")}
+      </TextHeading>
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-12 md:col-span-7 lg:col-span-9 flex flex-col gap-6 order-2 mdmd:order-1">
           <Card className="p-4">
@@ -133,7 +173,7 @@ export default function Courses_Create() {
                       label: tag.name,
                       value: tag.id,
                     }))}
-                    defaultValue={field.value}
+                    // defaultValue={field.value}
                     onValueChange={field.onChange}
                   />
                 )}
@@ -178,29 +218,23 @@ export default function Courses_Create() {
             </div>
           </Card>
         </div>
-        <div className="col-span-12 md:col-span-5 lg:col-span-3 flex flex-col gap-6 order-1 md:order-2">
+        <div className="col-span-12 md:col-span-5 lg:col-span-3 flex flex-col gap-6 order-1 md:order-2 lg:sticky top-16 h-fit">
           <Card className="w-full p-4">
             <Label className="text-color-2">{t("thumbnail")}</Label>
-            <div className="h-[240px] w-full">
-              <DragDropImage
-                file={image}
-                onChange={(e) => setImage(e.target.files?.[0] || null)}
-                className="w-full h-full"
-                accept="image/*"
-              />
-            </div>
+            <DragDropImage
+              file={image}
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
+              className="h-[240px] w-full"
+              accept="image/*"
+            />
           </Card>
 
           <Card className="w-full p-4">
             <Label className="text-color-2">PDF file</Label>
             <DragDropFile
               files={files}
-              onChange={(e) => {
-                if (e.target.files) {
-                  setFiles(Array.from(e.target.files));
-                }
-              }}
-              className="h-[240px] w-full"
+              onChange={(e) => setFiles(Array.from(e.target.files || []))}
+              className="h-[220px] w-full"
               accept="application/pdf"
             />
           </Card>

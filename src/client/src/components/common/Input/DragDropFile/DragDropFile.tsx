@@ -44,21 +44,22 @@ export default function DragDropFile(props: DragDropFileProps) {
   };
 
   const onRemove = (file: File) => {
+    const newFiles = filesDefault.filter((f) => f !== file);
+    const dataTransfer = new DataTransfer();
+    newFiles.forEach(file => dataTransfer.items.add(file));
+    
     onChange({
-      target: { files: null },
+      target: { files: dataTransfer.files }
     } as unknown as React.ChangeEvent<HTMLInputElement>);
+    
     if (inputRef.current) {
       inputRef.current.value = "";
-      setFilesDefault(filesDefault.filter((f) => f !== file));
+      setFilesDefault(newFiles);
     }
   };
 
   useEffect(() => {
-    if (files) {
-      setFilesDefault(files);
-    } else {
-      setFilesDefault([]);
-    }
+    setFilesDefault(files || []);
   }, [files]);
 
   return (
@@ -95,6 +96,7 @@ export default function DragDropFile(props: DragDropFileProps) {
               ref={inputRef}
               type="file"
               multiple
+              name="files"
               className="w-full h-full absolute opacity-0 cursor-pointer"
               onChange={onChangeInput}
             />

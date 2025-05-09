@@ -11,21 +11,24 @@ export class FileController {
     try {
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-      const name = Object.keys(req.files)[0];
-
       if (!files) {
         return res.status(400).json({ message: 'No files uploaded' });
-      } else {
-        const pathname = getFilePath(files, name);
-
-        return res.status(200).json({
-          data: {
-            path: pathname,
-            name: name,
-          },
-          message: 'upload',
-        });
       }
+
+      const filePaths = Object.entries(files).map(([fieldname, fileArray]) => ({
+        fieldname,
+        files: fileArray.map(file => ({
+          path: file.filename,
+          originalname: file.originalname,
+          mimetype: file.mimetype,
+          size: file.size
+        }))
+      }));
+
+      return res.status(200).json({
+        data: filePaths[0],
+        message: 'upload',
+      });
     } catch (error) {
       next(error);
     }

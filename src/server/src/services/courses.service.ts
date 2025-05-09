@@ -4,6 +4,7 @@ import { DB } from '@database';
 import Container, { Service } from 'typedi';
 import { TagService } from './tag.service';
 import { CourseDocumentService } from './course_document.service';
+import { Sequelize } from 'sequelize';
 
 @Service()
 export class CourseService {
@@ -22,6 +23,18 @@ export class CourseService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
   ): Promise<{ count: number; rows: Course[] }> {
     const { count, rows }: { count: number; rows: Course[] } = await DB.Courses.findAndCountAll({
+      attributes: {
+        include: [
+          [
+            Sequelize.literal(`(
+                  SELECT COUNT(*)
+                  FROM comments AS c
+                  WHERE c.course_id = courses.id
+                )`),
+            'commentCount',
+          ],
+        ],
+      },
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],

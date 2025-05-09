@@ -130,7 +130,6 @@ export default function RichTextEditor({
     },
     onUpdate: ({ editor }) => {
       const htmlContent = editor.getHTML(); // Lấy HTML trực tiếp từ editor
-      console.log("Editor content:", htmlContent);
       onChange(htmlContent); // Gửi nội dung đã được lưu lại
     },
   });

@@ -45,7 +45,7 @@ export default function Posts_Create() {
     const formData = new FormData();
     formData.append("image", file);
     const image = await uploadService.upload(formData);
-    return image.data.path;
+    return image.data.files[0].path;
   };
 
   const mutation = useMutation({

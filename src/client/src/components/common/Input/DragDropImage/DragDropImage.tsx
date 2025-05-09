@@ -17,7 +17,7 @@ interface DragDropImageProps extends React.HTMLProps<HTMLInputElement> {
 }
 
 export default function DragDropImage(props: DragDropImageProps) {
-  const { file, onChange, image_default } = props;
+  const { file, onChange, image_default, className } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [openDrop, setOpenDrop] = useState(false);
   const [imageDefault, setImageDefault] = useState<string | null>(null);
@@ -54,7 +54,7 @@ export default function DragDropImage(props: DragDropImageProps) {
 
   return (
     <div
-      className="flex flex-col gap-2 w-full h-full"
+      className={cx("flex flex-col gap-2 ", className)}
       onDragEnter={() => setOpenDrop(true)}
       onDragLeave={() => setOpenDrop(false)}
     >

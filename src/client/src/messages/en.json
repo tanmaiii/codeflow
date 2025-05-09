@@ -75,7 +75,9 @@
     "minLength": "{field} must be at least {length} characters long",
     "maxLength": "{field} must be at most {length} characters long",
     "passwordMatch": "Passwords do not match",
-    "passwordStrength": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    "passwordStrength": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    "min": "{field} must be at least {length}",
+    "max": "{field} must be at most {length}"
   },
   "post": {
     "post": "Post",
@@ -141,6 +143,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "update": "Update",
-    "maxGroupMembers": "Max Group Members"
+    "maxGroupMembers": "Max Group Members",
+    "createCourseSuccess": "Course has been created successfully!",
+    "createCourseFailed": "Course has been created failed!"
   }
 }

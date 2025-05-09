@@ -2,8 +2,13 @@ import { ResponseAPIDto } from "@/interfaces/common";
 import createHttpClient from "@/lib/createHttpClient";
 
 interface UploadResponseDto {
-  path: string;
-  name: string;
+  fieldname: string;
+  files: {
+    path: string;
+    originalname: string;
+    mimetype: string;
+    size: number;
+  }[];
 }
 
 class FileService {

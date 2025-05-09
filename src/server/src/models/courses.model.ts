@@ -95,11 +95,6 @@ export default function (sequelize: Sequelize): typeof CourseModel {
             through: { attributes: [] },
           },
           {
-            model: CommentModel,
-            as: 'comments',
-            attributes: ['id', 'content'], // Replace with actual attribute names of UserModel
-          },
-          {
             model: CourseDocumentModel,
             as: 'documents',
             attributes: ['id', 'title', 'url'], // Replace with actual attribute names of UserModel

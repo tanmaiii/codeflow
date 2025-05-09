@@ -63,9 +63,9 @@ export default function Posts_Update() {
     const formData = new FormData();
     formData.append("image", file);
     const image = await uploadService.upload(formData);
-    return image.data.path;
+    return image.data.files[0].path;
   };
-
+            
   const mutation = useMutation({
     mutationFn: async (body: postSchemaType) => {
       const thumbnail = file ? await handleUpload(file) : null;
@@ -73,6 +73,7 @@ export default function Posts_Update() {
       await postService.update(id.toString(), {
         ...body,
         ...(updateThumbnail && { thumbnail: thumbnail ?? "" }),
+        tags: body.tags ?? [],
       });
     },
     onError: (err: unknown) => {

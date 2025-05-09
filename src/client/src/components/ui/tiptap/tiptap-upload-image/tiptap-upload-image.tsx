@@ -38,13 +38,14 @@ export default function ImageUploader({
 
     try {
       const res = await uploadService.upload(formData);
-
-      const data = await res.data.path;
-      if (data) {
-        const path = `/images/${data}`;
-        onSubmit(path);
-        setOpen(false);
-        setFile(null);
+      if (res?.data?.files?.length > 0) {
+        const data = await res.data.files[0].path;
+        if (data) {
+          const path = `/images/${data}`;
+          onSubmit(path);
+          setOpen(false);
+          setFile(null);
+        }
       } else {
         toast.error("Upload failed");
       }

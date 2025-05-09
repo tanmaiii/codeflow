@@ -174,7 +174,6 @@ export default function RichTextEditorToolBar({
       {/* Upload ảnh - video*/}
       <ImageUploader
         onSubmit={(url) => {
-          console.log(url);
           editor.chain().focus().setImage({ src: url }).run();
         }}
       />
