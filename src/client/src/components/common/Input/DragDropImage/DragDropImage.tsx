@@ -103,7 +103,7 @@ export default function DragDropImage(props: DragDropImageProps) {
           >
             <ImageUp size={60} className={cx("text-color-2")} />
           </motion.div>
-          <TextHeading className="text-color-2">
+          <TextHeading className="text-color-2 text-center">
             {t("dragDrop", { field: t("image") })}
           </TextHeading>
           <Button id={"file-image"} variant={"outline"} className="w-fit">

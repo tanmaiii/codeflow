@@ -2,7 +2,7 @@
 
 import DragDropImage from "@/components/common/Input/DragDropImage/DragDropImage";
 import TextInput from "@/components/common/Input/TextInput/TextInput";
-import MultiSelect from "@/components/common/MultiSelect/MultiSelect";
+import MultiSelect from "@/components/common/MyMultiSelect/MyMultiSelect";
 import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -54,6 +54,7 @@ export default function Posts_Create() {
       await postService.create({
         ...body,
         thumbnail: thumbnail || undefined,
+        tags: body.tags || [],
       });
     },
     onError: (err: unknown) => {
@@ -71,7 +72,7 @@ export default function Posts_Create() {
 
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
-      <Card className="bg-background-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
+      <Card className="w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
         <TextHeading>{t("createPost")}</TextHeading>
         <div className="flex flex-col gap-4">
           <Label className="text-color-2">{t("thumbnail")}</Label>

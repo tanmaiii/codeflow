@@ -1,0 +1,129 @@
+import { Button } from "@/components/ui/button";
+import TextHeading, { TextDescription } from "@/components/ui/text";
+import { IconFile, IconFolder, IconX } from "@tabler/icons-react";
+import { cx } from "class-variance-authority";
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
+
+interface DragDropFileProps extends React.HTMLProps<HTMLInputElement> {
+  files: File[] | [];
+  onChange: (_: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+}
+
+export default function DragDropFile(props: DragDropFileProps) {
+  const { files, onChange, className } = props;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [openDrop, setOpenDrop] = useState(false);
+  const [filesDefault, setFilesDefault] = useState<File[] | []>([]);
+  const t = useTranslations("common");
+
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      if (onChange) {
+        // Create a new event with combined files
+        const newFiles = Array.from(e.target.files);
+        const combinedFiles = [...filesDefault, ...newFiles];
+        
+        // Create a new FileList-like object
+        const dataTransfer = new DataTransfer();
+        combinedFiles.forEach(file => dataTransfer.items.add(file));
+        
+        // Create a new event with the combined files
+        const newEvent = {
+          target: {
+            files: dataTransfer.files
+          }
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+        
+        onChange(newEvent);
+      }
+    }
+    setOpenDrop(false);
+  };
+
+  const onRemove = (file: File) => {
+    onChange({
+      target: { files: null },
+    } as unknown as React.ChangeEvent<HTMLInputElement>);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+      setFilesDefault(filesDefault.filter((f) => f !== file));
+    }
+  };
+
+  useEffect(() => {
+    if (files) {
+      setFilesDefault(files);
+    } else {
+      setFilesDefault([]);
+    }
+  }, [files]);
+
+  return (
+    <div>
+      <div
+        className={cx("flex flex-col gap-2 mb-4", className)}
+        onDragEnter={() => setOpenDrop(true)}
+        onDragLeave={() => setOpenDrop(false)}
+      >
+        <div className="relative flex flex-col gap-2 w-full h-full min-h-[200px]">
+          <label
+            htmlFor="file-pdf"
+            className={cx(
+              "flex flex-col absolute gap-4 w-full h-full border-2 border-dashed rounded-lg justify-center items-center cursor-pointer z-10",
+              { "opacity-100 ": openDrop }
+            )}
+          >
+            <motion.div
+              animate={{
+                y: openDrop ? -10 : 0,
+                opacity: openDrop ? 1 : 0.4,
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <IconFolder size={60} className={cx("text-color-2")} />
+            </motion.div>
+            <TextHeading className="text-color-2">
+              {t("dragDrop", { field: t("file") })}
+            </TextHeading>
+            <Button id={"file-pdf"} variant={"outline"} className="w-fit">
+              {t("upload", { field: t("file") })}
+            </Button>
+            <input
+              ref={inputRef}
+              type="file"
+              multiple
+              className="w-full h-full absolute opacity-0 cursor-pointer"
+              onChange={onChangeInput}
+            />
+          </label>
+        </div>
+      </div>
+      {
+        filesDefault.map((file) => (
+          <FileItem key={file.name} file={file} onRemove={onRemove} />
+        ))
+      }
+    </div>
+  );
+}
+
+
+const FileItem = ({ file, onRemove }: { file: File, onRemove: (file: File) => void }) => {
+  return (
+    <div className="flex flex-row gap-2 mb-3 items-center p-2 hover:bg-input/50 rounded-sm border">
+      <div className="p-2">
+        <IconFile size={26} className={cx("text-color-2")} />
+      </div>
+      <div className="flex flex-1 flex-col gap-1">
+        <TextHeading className="line-clamp-1">{file.name}</TextHeading>
+        <TextDescription>{file.size}kb</TextDescription>
+      </div>
+      <Button type="button" variant={"none"} className="w-fit" onClick={() => onRemove(file)}>
+        <IconX size={20} className={cx("text-color-2")} />
+      </Button>
+    </div>
+  )
+}

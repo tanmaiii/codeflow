@@ -11,7 +11,7 @@ interface Props extends MultiSelectProps {
   error?: FieldError;
 }
 
-export default function MultiSelect({
+export default function MyMultiSelect({
   label,
   id,
   registration,

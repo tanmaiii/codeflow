@@ -1,38 +1,37 @@
 "use client";
 
-import DragDropImage from "@/components/common/Input/DragDropImage/DragDropImage";
-import TextInput from "@/components/common/Input/TextInput/TextInput";
-import MultiSelect from "@/components/common/MultiSelect/MultiSelect";
-import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
-import { Button } from "@/components/ui/button";
+import { DateInput } from "@/components/common/Input/DateInput/DateInput";
 import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import TextHeading from "@/components/ui/text";
-import { paths } from "@/data/path";
-import useQ_Tag_GetAll from "@/hooks/query-hooks/Tag/useQ_Tag_GetAll";
-import useH_LocalPath from "@/hooks/useH_LocalPath";
 import {
   courseSchemaType,
-  useCourseSchema,
+  useCourseSchema
 } from "@/lib/validations/courseSchema";
-import uploadService from "@/services/file.service";
-import courseService from "@/services/course.service";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import NumberInput from "@/components/common/Input/NumberInput/NumberInput";
-import { DateInput } from "@/components/common/Input/DateInput/DateInput";
-import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import TextHeading from "@/components/ui/text";
+import useQ_Tag_GetAll from "@/hooks/query-hooks/Tag/useQ_Tag_GetAll";
+import MyMultiSelect from "@/components/common/MyMultiSelect/MyMultiSelect";
+import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
+import { Label } from "@/components/ui/label";
+import TextInput from "@/components/common/Input/TextInput/TextInput";
+import { useState } from "react";
+import DragDropImage from "@/components/common/Input/DragDropImage/DragDropImage";
+import DragDropFile from "@/components/common/Input/DragDropFile/DragDropFile";
+import { paths } from "@/data/path";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import useH_LocalPath from "@/hooks/useH_LocalPath";
 
 export default function Courses_Create() {
-  const [file, setFile] = useState<File | null>(null);
+  const t = useTranslations("course");
+  const [image, setImage] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[] | []>([]);
   const schema = useCourseSchema();
   const router = useRouter();
-  const { localPath } = useH_LocalPath();
-  const t = useTranslations("course");
+  const { localPath } = useH_LocalPath()
+
   const Q_Tag = useQ_Tag_GetAll();
 
   const {
@@ -40,63 +39,22 @@ export default function Courses_Create() {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-    reset,
+    // reset,
   } = useForm<courseSchemaType>({
     resolver: zodResolver(schema),
   });
 
-  const handleUpload = async (file: File) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    const image = await uploadService.upload(formData); // TODO: Implement upload service
-    return image.data.path;
-  };
-
-  const mutation = useMutation({
-    mutationFn: async (body: courseSchemaType) => {
-      const thumbnail = file ? await handleUpload(file) : null;
-      await courseService.create({
-        ...body,
-        thumbnail: thumbnail || undefined,
-      });
-    },
-    onError: (err: unknown) => {
-      console.error(err);
-      toast.error(
-        (err as Error)?.message || "An error occurred while creating the course"
-      );
-    },
-    onSuccess: () => {
-      reset();
-      router.push(localPath(paths.COURSES));
-      toast.success("Course created successfully");
-    },
-  });
+  const onSubmit = (data: courseSchemaType) => {
+    console.log(data);
+  }
 
   return (
-    <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
-      <div className={'max-w-4xl flex flex-col gap-6'}>
-        <TextHeading>{t("createCourse")}</TextHeading>
-        <Card className="w-full py-4 px-4 lg:px-6 lg:py-6">
-          <div className="flex flex-col gap-4">
-            <Label className="text-color-2">{t("thumbnail")}</Label>
-            <div className="h-[300px] w-full">
-              <DragDropImage
-                file={file}
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="w-full h-full"
-                accept="image/*"
-              />
-            </div>
-          </div>
-        </Card>
-        <form
-          onSubmit={handleSubmit((value) => mutation.mutate(value))}
-          className="flex flex-col gap-6"
-        >
-          <Card className="w-full py-4 px-4 lg:px-6 lg:py-8 gap-4">
-
-            <div className="flex flex-row gap-2 w-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="py-6">
+      <TextHeading className="pb-4 text-2xl font-bold">{t("createCourse")}</TextHeading>
+      <div className="grid grid-cols-12 gap-6">
+        <div className="col-span-12 md:col-span-7 lg:col-span-9 flex flex-col gap-6 order-2 mdmd:order-1">
+          <Card className="p-4">
+            <div className="flex flex-row gap-4 w-full">
               <Controller
                 name="startDate"
                 control={control}
@@ -128,8 +86,7 @@ export default function Courses_Create() {
                 )}
               />
             </div>
-
-            <div className="flex flex-row gap-2 w-full">
+            <div className="flex flex-row gap-4 w-full">
               <Controller
                 name="topicDeadline"
                 control={control}
@@ -164,13 +121,12 @@ export default function Courses_Create() {
                 }
               />
             </div>
-
             {Q_Tag.data && (
               <Controller
                 name="tags"
                 control={control}
                 render={({ field }) => (
-                  <MultiSelect
+                  <MyMultiSelect
                     label={t("tags")}
                     id="tags"
                     options={Q_Tag.data?.data?.map((tag) => ({
@@ -185,7 +141,7 @@ export default function Courses_Create() {
             )}
           </Card>
 
-          <Card className="w-full py-4 px-4 lg:px-6 lg:py-8 gap-4">
+          <Card className="p-4">
             <TextInput
               label={t("title")}
               className="w-full"
@@ -208,7 +164,6 @@ export default function Courses_Create() {
                 )}
               />
             </div>
-
             <div className="flex items-center justify-end gap-2 mt-4">
               <Button
                 variant={"outline"}
@@ -222,8 +177,35 @@ export default function Courses_Create() {
               </Button>
             </div>
           </Card>
-        </form>
+        </div>
+        <div className="col-span-12 md:col-span-5 lg:col-span-3 flex flex-col gap-6 order-1 md:order-2">
+          <Card className="w-full p-4">
+            <Label className="text-color-2">{t("thumbnail")}</Label>
+            <div className="h-[240px] w-full">
+              <DragDropImage
+                file={image}
+                onChange={(e) => setImage(e.target.files?.[0] || null)}
+                className="w-full h-full"
+                accept="image/*"
+              />
+            </div>
+          </Card>
+
+          <Card className="w-full p-4">
+            <Label className="text-color-2">PDF file</Label>
+            <DragDropFile
+              files={files}
+              onChange={(e) => {
+                if (e.target.files) {
+                  setFiles(Array.from(e.target.files));
+                }
+              }}
+              className="h-[240px] w-full"
+              accept="application/pdf"
+            />
+          </Card>
+        </div>
       </div>
-    </div>
+    </form>
   );
 }

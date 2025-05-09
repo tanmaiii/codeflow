@@ -33,7 +33,7 @@ export class FileController {
 
   public avatar = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const name = req.params.name ?? "CodeFlow";
+      const name = req.params.name ?? 'CodeFlow';
       const firstLetter = name.charAt(0).toUpperCase();
 
       const width = 400;
@@ -63,5 +63,5 @@ export class FileController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }

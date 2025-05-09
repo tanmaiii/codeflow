@@ -2,7 +2,7 @@
 
 import DragDropImage from "@/components/common/Input/DragDropImage/DragDropImage";
 import TextInput from "@/components/common/Input/TextInput/TextInput";
-import MultiSelect from "@/components/common/MultiSelect/MultiSelect";
+import MultiSelect from "@/components/common/MyMultiSelect/MyMultiSelect";
 import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
