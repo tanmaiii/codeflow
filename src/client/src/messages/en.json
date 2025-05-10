@@ -77,7 +77,10 @@
     "passwordMatch": "Passwords do not match",
     "passwordStrength": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
     "min": "{field} must be at least {length}",
-    "max": "{field} must be at most {length}"
+    "max": "{field} must be at most {length}",
+    "endDateMustBeAfterStartDate": "End date must be after start date",
+    "startDateMustBeBeforeEndDate": "Start date must be before end date",
+    "fileMaxSize": "File size must be less than {length}"
   },
   "post": {
     "post": "Post",

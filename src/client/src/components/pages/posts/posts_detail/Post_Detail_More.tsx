@@ -53,7 +53,7 @@ export default function Post_Detail_More() {
                     height={100}
                   />
                 </div>
-                <TextHeading className="text-lg font-medium leading-none text-color-2 line-clamp-2">
+                <TextHeading className="text-lg font-medium leading-none line-clamp-2">
                   {post.title}
                 </TextHeading>
               </button>

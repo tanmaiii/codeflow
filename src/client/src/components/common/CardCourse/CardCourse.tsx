@@ -56,28 +56,26 @@ export default function CardCourse({ course }: CardCourseProps) {
           />
         </div>
       </CardHeader>
-      <CardContent className="min-h-[60px] px-4 flex flex-col gap-2">
-        <div className="flex flex-col gap-2">
-          <Link href={"/"} className="flex items-center gap-2">
-            <Image
-              src={
-                course?.author?.avatar ??
-                apiConfig.avatar(course?.author?.name ?? "c")
-              }
-              alt={course?.author?.avatar ?? ''}
-              width={100}
-              height={100}
-              className="object-cover w-6 h-6 circle rounded-full"
-            />
-            <TextDescription className="text-primary line-clamp-1">
-              {course?.author?.name}
-            </TextDescription>
-          </Link>
-          <Link href={paths.COURSES + "/123"} className="text-lg">
-            <TextHeading className="line-clamp-2">{course.title}</TextHeading>
-          </Link>
-          <NameTags tags={course?.tags} />
-        </div>
+      <CardContent className="min-h-[60px] px-4 flex flex-1 flex-col gap-2">
+        <Link href={"/"} className="flex items-center gap-2">
+          <Image
+            src={
+              course?.author?.avatar ??
+              apiConfig.avatar(course?.author?.name ?? "c")
+            }
+            alt={course?.author?.avatar ?? ''}
+            width={100}
+            height={100}
+            className="object-cover w-6 h-6 circle rounded-full"
+          />
+          <TextDescription className="text-primary line-clamp-1 ">
+            {course?.author?.name}
+          </TextDescription>
+        </Link>
+        <Link href={`${localPath(paths.COURSES)}/${course.id}`} className="text-lg">
+          <TextHeading className="line-clamp-2 hover:underline">{course.title}</TextHeading>
+        </Link>
+        <NameTags className="mt-auto" tags={course?.tags} />
       </CardContent>
       <CardFooter className="flex flex-col px-4 w-full gap-2 items-start mt-auto">
         <Button

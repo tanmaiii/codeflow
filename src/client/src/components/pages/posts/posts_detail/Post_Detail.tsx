@@ -50,7 +50,7 @@ export default function Post_Detail() {
   return (
     <Card className="p-0 gap-0 rounded-lg overflow-hidden min-h-[100vh]">
       <Image
-        className="w-full object-cover rounded-md bg-background-1"
+        className="w-full max-h-[600px] object-cover rounded-md bg-background-1"
         src={
           data.data.thumbnail
             ? utils_ApiImageToLocalImage(data.data.thumbnail)

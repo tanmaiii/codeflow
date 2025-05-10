@@ -66,9 +66,14 @@
     "passwordTooShort": "Mật khẩu quá ngắn",
     "emailInvalid": "Email không hợp lệ",
     "minLength": "{field} phải có ít nhất {length} ký tự",
-    "maxLength": "{field} phải có nhiều nhất {length} ký tự",
+    "maxLength": "{field} phải có tối đa {length} ký tự",
     "passwordMatch": "Mật khẩu không khớp",
-    "passwordStrength": "Mật khẩu phải chứa ít nhất một chữ cái in hoa, một chữ cái thường, một số và một ký tự đặc biệt"
+    "passwordStrength": "Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt",
+    "min": "{field} phải lớn hơn hoặc bằng {length}",
+    "max": "{field} phải nhỏ hơn hoặc bằng {length}",
+    "endDateMustBeAfterStartDate": "Ngày kết thúc phải sau ngày bắt đầu",
+    "startDateMustBeBeforeEndDate": "Ngày bắt đầu phải trước ngày kết thúc",
+    "fileMaxSize": "Kích thước tập tin phải nhỏ hơn {length}"
   },
   "post": {
     "post": "Bài viết",

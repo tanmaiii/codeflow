@@ -36,6 +36,6 @@ const courseSchema = ({
         topicDeadline: z.date({ message: t("required", { field: tCourse("topicDeadline") }) }),
         maxGroupMembers: z.number({ message: t("required", { field: tCourse("maxGroupMembers") }) }).min(1, { message: t("min", { field: tCourse("maxGroupMembers"), length: 1 }) }).max(100, { message: t("max", { field: tCourse("maxGroupMembers"), length: 100 }) }),
         documents: z.array(z.string()).optional(),
-    });
+    })
 
 export type courseSchemaType = z.infer<ReturnType<typeof courseSchema>>;

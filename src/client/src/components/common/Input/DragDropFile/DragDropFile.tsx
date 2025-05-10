@@ -5,6 +5,8 @@ import { cx } from "class-variance-authority";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import ActionViewPDF from "@/components/common/Action/ActionViewPDF";
 
 interface DragDropFileProps extends React.HTMLProps<HTMLInputElement> {
   files: File[] | [];
@@ -17,26 +19,35 @@ export default function DragDropFile(props: DragDropFileProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [openDrop, setOpenDrop] = useState(false);
   const [filesDefault, setFilesDefault] = useState<File[] | []>([]);
-  const t = useTranslations("common");
+  const t = useTranslations("validate");
+  const tCommon = useTranslations("common");
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       if (onChange) {
         // Create a new event with combined files
         const newFiles = Array.from(e.target.files);
+
+        // Check file size
+        const invalidFiles = newFiles.filter(file => file.size > 5 * 1024 * 1024);
+        if (invalidFiles.length > 0) {
+          toast.error(t("fileMaxSize", { length: `${5} MB` }));
+          return;
+        }
+
         const combinedFiles = [...filesDefault, ...newFiles];
-        
+
         // Create a new FileList-like object
         const dataTransfer = new DataTransfer();
         combinedFiles.forEach(file => dataTransfer.items.add(file));
-        
+
         // Create a new event with the combined files
         const newEvent = {
           target: {
             files: dataTransfer.files
           }
         } as unknown as React.ChangeEvent<HTMLInputElement>;
-        
+
         onChange(newEvent);
       }
     }
@@ -47,11 +58,11 @@ export default function DragDropFile(props: DragDropFileProps) {
     const newFiles = filesDefault.filter((f) => f !== file);
     const dataTransfer = new DataTransfer();
     newFiles.forEach(file => dataTransfer.items.add(file));
-    
+
     onChange({
       target: { files: dataTransfer.files }
     } as unknown as React.ChangeEvent<HTMLInputElement>);
-    
+
     if (inputRef.current) {
       inputRef.current.value = "";
       setFilesDefault(newFiles);
@@ -87,10 +98,10 @@ export default function DragDropFile(props: DragDropFileProps) {
               <IconFolder size={60} className={cx("text-color-2")} />
             </motion.div>
             <TextHeading className="text-color-2">
-              {t("dragDrop", { field: t("file") })}
+              {tCommon("dragDrop", { field: tCommon("file") })}
             </TextHeading>
             <Button id={"file-pdf"} variant={"outline"} className="w-fit">
-              {t("upload", { field: t("file") })}
+              {tCommon("upload", { field: tCommon("file") })}
             </Button>
             <input
               ref={inputRef}
@@ -115,17 +126,20 @@ export default function DragDropFile(props: DragDropFileProps) {
 
 const FileItem = ({ file, onRemove }: { file: File, onRemove: (file: File) => void }) => {
   return (
-    <div className="flex flex-row gap-2 mb-3 items-center p-2 hover:bg-input/50 rounded-sm border">
-      <div className="p-2">
-        <IconFile size={26} className={cx("text-color-2")} />
+
+    <ActionViewPDF file={file} trigger={
+      <div className="flex flex-row gap-2 mb-3 items-center p-2 hover:bg-input/50 rounded-sm border cursor-pointer">
+        <div className="p-2">
+          <IconFile size={26} className={cx("text-color-2")} />
+        </div>
+        <div className="flex flex-1 flex-col gap-1">
+          <TextHeading className="line-clamp-1">{file.name}</TextHeading>
+          <TextDescription>{file.size}kb</TextDescription>
+        </div>
+        <Button type="button" variant={"none"} className="w-fit" onClick={() => onRemove(file)}>
+          <IconX size={20} className={cx("text-color-2 ")} />
+        </Button>
       </div>
-      <div className="flex flex-1 flex-col gap-1">
-        <TextHeading className="line-clamp-1">{file.name}</TextHeading>
-        <TextDescription>{file.size}kb</TextDescription>
-      </div>
-      <Button type="button" variant={"none"} className="w-fit" onClick={() => onRemove(file)}>
-        <IconX size={20} className={cx("text-color-2")} />
-      </Button>
-    </div>
+    } title={file.name} />
   )
 }

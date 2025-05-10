@@ -21,7 +21,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import fileService from "@/services/file.service";
 import { useMutation } from "@tanstack/react-query";
@@ -47,6 +47,12 @@ export default function Courses_Create() {
   } = useForm<courseSchemaType>({
     resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    if (errors) {
+      console.log(errors);
+    }
+  }, [errors]);
 
   const handleUpload = async (file: File) => {
     const formData = new FormData();
