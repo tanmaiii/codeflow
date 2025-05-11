@@ -10,7 +10,8 @@ import avatar from "@/assets/images/github.png";
 import gg from "@/assets/images/google.png";
 import bgLogin from "@/assets/images/bg-login.jpg";
 import bgLogin2 from "@/assets/images/bg-login-2.png";
-
+import FolderSVG from "@/assets/svgs/folder.svg";
+import NoDataSVG from "@/assets/svgs/no-data.svg";
 export const IMAGES = {
   LOGO: logo,
   LOGO_LIGHT: logoLight,
@@ -28,4 +29,6 @@ export const IMAGES = {
 export const SVGS = {
   EN: EnSVG,
   VI: ViSVG,
+  FOLDER: FolderSVG,
+  NO_DATA: NoDataSVG
 };

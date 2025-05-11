@@ -15,9 +15,9 @@ export interface ICourse extends IBaseEntity {
   thumbnail?: string;
   description: string;
   authorId: string;
-  startDate: Date;
-  endDate: Date;
-  topicDeadline: Date;
+  startDate: string;
+  endDate: string;
+  topicDeadline: string;
   status: boolean;
   maxGroupMembers: number;
   documents: IDocument[];

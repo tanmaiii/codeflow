@@ -7,7 +7,7 @@ export function utils_file_size(size: number): string {
     size /= 1024;
     index++;
   }
-  return `${size.toFixed(2)} ${units[index]}`;
+  return `${size.toFixed(0)} ${units[index]}`;
 }
 
 

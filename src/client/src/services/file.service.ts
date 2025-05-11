@@ -28,6 +28,7 @@ class FileService {
     );
     return res.data;
   }
+  
 
   async getAvatar(name: string): Promise<ResponseAPIDto<string>> {
     const res = await this.client.get<ResponseAPIDto<string>>(`/avatar/${name}`);

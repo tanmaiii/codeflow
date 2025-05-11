@@ -96,3 +96,70 @@ export const utils_TimeAgo = (date: Date): string => {
 
   return "just now";
 };
+
+
+export function utils_CalculateWeeks(startDate: string, endDate: string): number {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+  // Calculate the difference in milliseconds
+  const diffTime = Math.abs(end.getTime() - start.getTime());
+  
+  // Convert to days and round up to nearest week
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const weeks = Math.ceil(diffDays / 7);
+  
+  return weeks;
+}
+
+export function utils_TimeRemaining(endDate: string): string {
+  const end = new Date(endDate);
+  const now = new Date();
+  const diffTime = end.getTime() - now.getTime();
+  const locale = getCurrentLocale() || "vi";
+
+  // If the end date has passed
+  if (diffTime <= 0) {
+    return locale === "vi" ? "Đã kết thúc" : "Ended";
+  }
+
+  // Calculate remaining time
+  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (days > 0) {
+    return locale === "vi" 
+      ? `Còn ${days} ngày ${hours} giờ`
+      : `${days} days ${hours} hours remaining`;
+  } else if (hours > 0) {
+    return locale === "vi"
+      ? `Còn ${hours} giờ ${minutes} phút`
+      : `${hours} hours ${minutes} minutes remaining`;
+  } else {
+    return locale === "vi"
+      ? `Còn ${minutes} phút`
+      : `${minutes} minutes remaining`;
+  }
+}
+
+
+export function utils_CalculateProgress(startDate: string, endDate: string): number {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const now = new Date();
+
+  // Calculate total duration in milliseconds
+  const totalDuration = end.getTime() - start.getTime();
+  
+  // Calculate elapsed time in milliseconds
+  const elapsedTime = now.getTime() - start.getTime();
+
+  // Calculate progress percentage
+  let progress = (elapsedTime / totalDuration) * 100;
+
+  // Ensure progress is between 0 and 100
+  progress = Math.max(0, Math.min(100, progress));
+
+  return Math.round(progress);
+}

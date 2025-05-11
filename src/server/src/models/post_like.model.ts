@@ -1,6 +1,5 @@
-import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { UserModel } from './users.model';
 import { PostLike } from '@/interfaces/posts.interface';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 export type PostLikeCreationAttributes = Optional<PostLike, 'id' | 'userId' | 'postId'>;
 

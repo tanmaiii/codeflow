@@ -134,11 +134,12 @@
     "content": "Nội dung",
     "startDate": "Ngày bắt đầu",
     "endDate": "Ngày kết thúc",
-    "topicDeadline": "Ngày hạn nộp bài",
+    "topicDeadline": "Hạn nộp bài",
     "tags": "Thẻ",
     "cancel": "Thoát",
     "save": "Lưu",
     "update": "Cập nhật",
-    "maxGroupMembers": "Số lượng thành viên tối đa"
+    "maxGroupMembers": "Số lượng thành viên tối đa",
+    "documents": "Tài liệu"
   }
 }

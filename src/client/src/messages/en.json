@@ -148,6 +148,7 @@
     "update": "Update",
     "maxGroupMembers": "Max Group Members",
     "createCourseSuccess": "Course has been created successfully!",
-    "createCourseFailed": "Course has been created failed!"
+    "createCourseFailed": "Course has been created failed!",
+    "documents": "Documents"
   }
 }

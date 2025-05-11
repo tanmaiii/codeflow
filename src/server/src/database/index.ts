@@ -5,6 +5,7 @@ import CourseTagModel from '@/models/course_tag.model';
 import CourseModel from '@/models/courses.model';
 import GroupModel from '@/models/groups.model';
 import GroupMemberModel from '@/models/groups_member.model';
+import PostLikeModel from '@/models/post_like.model';
 import PostTagModel from '@/models/post_tag.model';
 import PostModel from '@/models/posts.model';
 import SubmissionModel from '@/models/submissions.model';
@@ -15,7 +16,6 @@ import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER, NODE_ENV } from '@
 import UserModel from '@models/users.model';
 import { logger } from '@utils/logger';
 import Sequelize from 'sequelize';
-import PostLikeModel from '@/models/post_like.model';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'mysql',

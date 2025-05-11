@@ -75,6 +75,7 @@ export class App {
 
     // Cho phép truy cập file ảnh tĩnh từ /public
     this.app.use('/public/images', express.static(path.join(__dirname, '../uploads/images')));
+    this.app.use('/public/files', express.static(path.join(__dirname, '../uploads/files')));
   }
 
   private initializeRoutes(routes: Routes[]) {

@@ -1,34 +1,122 @@
-'use client'
-import { Card } from '@/components/ui/card';
-import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
-import { useParams } from 'next/navigation';
-import Courses_Summary from './Courses_Summary';
+'use client';
 import SwapperHTML from '@/components/common/SwapperHTML/SwapperHTML';
-import TextHeading from '@/components/ui/text';
+import { Card } from '@/components/ui/card';
+import TextHeading, { TextDescription } from '@/components/ui/text';
+import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
+import { useParams, useRouter } from 'next/navigation';
+import Courses_Summary from './Courses_Summary';
+import CardFile from '@/components/common/CardFile/CardFile';
+import { useTranslations } from 'next-intl';
+import NoData from '@/components/common/NoData/NoData';
+import { utils_CalculateProgress, utils_DateToDDMMYYYY, utils_TimeAgo, utils_DateToDDMonth, utils_TimeRemaining } from '@/utils/date';
+import { IconClockHour1, IconPencil } from '@tabler/icons-react';
+import { cx } from 'class-variance-authority';
+import { Button } from '@/components/ui/button';
+import { paths } from '@/data/path';
+import useH_LocalPath from '@/hooks/useH_LocalPath';
+import { useUserStore } from '@/stores/user_store';
+import NameTags from '@/components/common/NameTags/NameTags';
+import { utils_ApiImageToLocalImage } from '@/utils/image';
+import apiConfig from '@/lib/api';
+import Image from 'next/image';
 
 export default function Courses_Detail() {
   const params = useParams();
   const id = params.id as string;
+  const t = useTranslations('course');
+  const router = useRouter();
+  const { localPath } = useH_LocalPath();
+  const { user } = useUserStore();
 
   const Q_data = useQ_Course_GetDetail({
     id: id,
-  })
+  });
 
-  if (Q_data.isLoading) return <div>Loading...</div>
-  if (Q_data.isError) return <div>Error</div>
+  if (Q_data.isLoading) return <div>Loading...</div>;
+  if (!Q_data.data?.data) return <NoData />;
+  if (Q_data.isError) return <div>Error</div>;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mx-auto my-4">
       <div className="col-span-12 md:col-span-8 xl:col-span-9">
-        <Card className="flex flex-col gap-4 p-4 min-h-[90vh]">
+        <Card className="flex flex-col gap-4 p-4 lg:p-6 min-h-[90vh]">
+          <div className="flex flex-col  gap-4">
+            <div className="flex flex-row items-center justify-between gap-2">
+              <TextHeading className="text-3xl font-bold">{Q_data.data?.data?.title}</TextHeading>
+              {user?.id === Q_data.data?.data?.author?.id && (
+                <Button
+                  variant="none"
+                  size="sm"
+                  onClick={() => router.push(localPath(paths.COURSE_UPDATE + '/' + id))}
+                >
+                  <IconPencil className="size-6" />
+                </Button>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-4 mb-2">
+              <Image
+                className="w-12 h-12 object-cover rounded-full bg-background-1"
+                src={
+                  Q_data.data?.data?.author?.avatar
+                    ? utils_ApiImageToLocalImage(Q_data.data?.data?.author?.avatar)
+                    : apiConfig.avatar(Q_data.data?.data?.author?.name ?? 'c')
+                }
+                alt={Q_data.data?.data?.title}
+                width={40}
+                height={40}
+              />
+              <div>
+                <TextHeading>{Q_data.data?.data?.author?.name}</TextHeading>
+                {Q_data.data?.data?.createdAt && (
+                  <TextDescription>
+                    {utils_DateToDDMonth(Q_data.data?.data?.createdAt ?? '')} -{' '}
+                    {utils_TimeAgo(Q_data.data?.data?.createdAt ?? '')}
+                  </TextDescription>
+                )}
+              </div>
+            </div>
+            <NameTags
+              tags={Q_data.data?.data?.tags}
+              className="mt-2 mb-4"
+              max={Q_data.data?.data?.tags.length}
+            />
+            <div className="">
+              <div className="flex flex-row items-center rounded-md gap-2  bg-primary/40  p-4 relative overflow-hidden">
+                <IconClockHour1 className="text-color-1 size-5" />
+                <TextHeading className="font-bold">{t('topicDeadline') + ': '}</TextHeading>
+                <TextDescription className="text-color-1">
+                  {utils_DateToDDMMYYYY(new Date(Q_data.data?.data?.topicDeadline ?? ''))} (
+                  {utils_TimeRemaining(Q_data.data?.data?.topicDeadline ?? '')})
+                </TextDescription>
+                <div className={cx('h-1 bg-input/60 w-full absolute right-0 bottom-0 rounded-md')}>
+                  <div
+                    className={cx('h-1 bg-green-500 w-full absolute left-0 bottom-0 rounded-md')}
+                    style={{
+                      width: `${utils_CalculateProgress(
+                        Q_data.data?.data?.startDate ?? '',
+                        Q_data.data?.data?.topicDeadline ?? '',
+                      )}%`,
+                    }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <SwapperHTML content={Q_data.data?.data?.description ?? ''} />
+          </div>
           <div className="flex flex-col gap-4">
-            <TextHeading className="text-3xl font-bold">{Q_data.data?.data?.title}</TextHeading>
-            <SwapperHTML content={Q_data.data?.data?.description ?? ""} />
+            <TextHeading className="font-bold">{t('documents')}</TextHeading>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {Q_data.data?.data?.documents?.map(file => (
+                <CardFile key={file.id} file={file} />
+              ))}
+            </div>
           </div>
         </Card>
       </div>
-      <div className="col-span-12 md:col-span-4 xl:col-span-3">
-        {Q_data.data?.data && <Courses_Summary course={Q_data.data?.data} />}
+      <div className="col-span-12 md:col-span-4 xl:col-span-3 sticky top-20">
+        <div className="sticky top-20">
+          {Q_data.data?.data && <Courses_Summary course={Q_data.data?.data} />}
+        </div>
       </div>
     </div>
   );

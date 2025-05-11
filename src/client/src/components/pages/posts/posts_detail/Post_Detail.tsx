@@ -15,7 +15,7 @@ import "highlight.js/styles/github.css"; // Import theme
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import SwapperHTML from "../../../common/SwapperHTML/SwapperHTML";
-
+import apiConfig from "@/lib/api";
 export default function Post_Detail() {
   const params = useParams();
   const id = params.id;
@@ -73,7 +73,7 @@ export default function Post_Detail() {
             src={
               data.data.author?.avatar
                 ? utils_ApiImageToLocalImage(data.data.author?.avatar)
-                : IMAGES.LOGO
+                : apiConfig.avatar(data.data.author?.name ?? "c")
             }
             alt={data.data.title}
             width={40}

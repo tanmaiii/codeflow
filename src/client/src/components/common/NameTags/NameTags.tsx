@@ -14,6 +14,8 @@ export default function NameTags({
   className,
   ...rest
 }: NameTagsProps) {
+  if (tags.length === 0) return null;
+
   return (
     <p
       className={cx("flex flex-wrap gap-2 mt-2", className)}

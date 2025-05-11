@@ -51,4 +51,4 @@ export const initModels = () => {
   CourseDocumentModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
 };
 
-export { CourseModel, UserModel, PostModel, TagModel };
+export { CourseModel, UserModel, PostModel, TagModel, PostLikeModel };

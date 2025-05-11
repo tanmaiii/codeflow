@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        none: "bg-transparent rounded-0 border-0 text-foreground shadow-none hover:bg-transparent",
+        none: "bg-transparent rounded-0 border-0 text-foreground shadow-none hover:bg-transparent hover:text-primary",
         text: "text-foreground border-none underline-offset-4 hover:bg-accent dark:hover:bg-input/50",
         rounded:
           "rounded-full border-0 bg-transparent text-foreground shadow-none hover:bg-accent dark:hover:bg-input/50",
@@ -29,6 +29,7 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-3",
         lg: "h-10 rounded-md px-3 has-[>svg]:px-4",
         icon: "size-9",
+        none: "p-0",
       },
     },
     defaultVariants: {
