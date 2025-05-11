@@ -105,6 +105,62 @@ Hệ thống hỗ trợ giảng viên và sinh viên theo dõi tiến độ dự
 
 ---
 
+
+# 🧭 Quy trình hoạt động của hệ thống
+
+## 1. Tạo và quản lý môn học
+- Giảng viên đăng nhập hệ thống
+- Tạo môn học và thêm các đề tài (có thể gợi ý hoặc để sinh viên đề xuất)
+
+## 2. Đăng ký đề tài và tạo nhóm
+- Sinh viên đăng nhập bằng tài khoản GitHub (qua OAuth hoặc Firebase)
+- Sinh viên chọn đề tài giảng viên tạo hoặc đề xuất đề tài mới
+- Sinh viên mời bạn cùng nhóm, hệ thống ghi nhận thành viên nhóm
+
+## 3. Kết nối với GitHub
+- Nhóm sinh viên kết nối repo GitHub dự án của mình với hệ thống
+- Hệ thống yêu cầu quyền truy cập repo và tạo webhook
+
+## 4. Nộp bài và theo dõi tự động
+- Khi sinh viên push code hoặc tạo pull request, GitHub gửi webhook về hệ thống
+- Hệ thống ghi nhận thời gian nộp bài, commit, người thực hiện
+
+## 5. Đánh giá tự động qua GitHub Action
+GitHub Actions được kích hoạt để:
+- Kiểm thử (unit test)
+- Kiểm tra coding convention (ESLint)
+- Phân tích chất lượng code (SonarCloud)
+- Kết quả được gửi lại cho hệ thống để lưu trữ và hiển thị
+### C1: Xinh quyền OAuth + Repository access
+- Khi sinh viên đăng nhập bằng GitHub, yêu cầu quyền:
+
+`repo, workflow, read:org, admin:repo_hook`
+
+👉 Phải khai báo trong OAuth App (hoặc Firebase Auth + Custom OAuth Scopes).
+
+### C2: Yêu cầu Sinh viên cài webhook thủ công
+- Bạn cung cấp 1 file .github/workflows/evaluate.yml với sẵn các bước đánh giá code.
+
+- Sinh viên thêm file đó vào repo của nhóm.
+
+- Khi họ push code, GitHub Action tự chạy đánh giá và gửi kết quả về server qua webhook.
+
+## 6. Thống kê và hiển thị kết quả
+Hệ thống sử dụng GitHub API để:
+- Đếm số commit, pull request của từng thành viên
+- Hiển thị ai đóng góp nhiều/lần cuối cùng
+
+Dashboard giảng viên cho phép:
+- Xem thống kê theo đề tài, nhóm, sinh viên
+- Tải báo cáo tổng hợp nếu cần
+
+## 7. Đánh giá và nghiệm thu
+Dựa vào kết quả thống kê và chất lượng code tự động, giảng viên đánh giá:
+- Đóng góp từng thành viên
+- Tình trạng hoàn thành đề tài
+- Chất lượng kỹ thuật
+
+
 ## 📌 License
 
 © 2025 by Đinh Tấn Mãi. Dự án phục vụ mục đích học tập và nghiên cứu.
