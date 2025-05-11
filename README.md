@@ -29,6 +29,7 @@ Hệ thống hỗ trợ giảng viên và sinh viên theo dõi tiến độ dự
 - **Realtime dữ liệu**: Webhook GitHub
 - **API**: RESTful API
 - **Triển khai**: Railway / Vercel / Render
+- **Đánh giá chất lượng mã tĩnh** : SonarCloud 
 
 ---
 
