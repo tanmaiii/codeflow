@@ -73,7 +73,9 @@
     "max": "{field} phải nhỏ hơn hoặc bằng {length}",
     "endDateMustBeAfterStartDate": "Ngày kết thúc phải sau ngày bắt đầu",
     "startDateMustBeBeforeEndDate": "Ngày bắt đầu phải trước ngày kết thúc",
-    "fileMaxSize": "Kích thước tập tin phải nhỏ hơn {length}"
+    "fileMaxSize": "Kích thước tập tin phải nhỏ hơn {length}",
+    "fileMaxFiles": "Bạn chỉ có thể tải lên {length} tập tin",
+    "fileNotAccepted": "Định dạng tập tin không được chấp nhận, chỉ chấp nhận {field}"
   },
   "post": {
     "post": "Bài viết",
@@ -140,6 +142,8 @@
     "save": "Lưu",
     "update": "Cập nhật",
     "maxGroupMembers": "Số lượng thành viên tối đa",
-    "documents": "Tài liệu"
+    "documents": "Tài liệu",
+    "topics": "Đề tài",
+    "suggestedTopics": "Đề tài đề xuất"
   }
 }

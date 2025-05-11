@@ -8,14 +8,25 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import ActionViewPDF from '@/components/common/Action/ActionViewPDF';
 import { utils_file_size } from '@/utils/file';
+
 interface DragDropFileProps extends React.HTMLProps<HTMLInputElement> {
   files: File[] | [];
   onChange: (_: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
+  maxSize?: number;
+  maxFiles?: number;
+  accept?: string;
 }
 
 export default function DragDropFile(props: DragDropFileProps) {
-  const { files, onChange, className } = props;
+  const {
+    files,
+    onChange,
+    className,
+    maxSize = 5,
+    maxFiles = 2,
+    accept = 'application/pdf',
+  } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [openDrop, setOpenDrop] = useState(false);
   const [filesDefault, setFilesDefault] = useState<File[] | []>([]);
@@ -29,13 +40,23 @@ export default function DragDropFile(props: DragDropFileProps) {
         const newFiles = Array.from(e.target.files);
 
         // Check file size
-        const invalidFiles = newFiles.filter(file => file.size > 5 * 1024 * 1024);
+        const invalidFiles = newFiles.filter(file => file.size > maxSize * 1024 * 1024);
         if (invalidFiles.length > 0) {
-          toast.error(t('fileMaxSize', { length: `${5} MB` }));
+          toast.error(t('fileMaxSize', { length: `${maxSize} MB` }));
           return;
         }
 
         const combinedFiles = [...filesDefault, ...newFiles];
+
+        if (maxFiles && combinedFiles.length > maxFiles) {
+          toast.error(t('fileMaxFiles', { length: `${maxFiles}` }));
+          return;
+        }
+
+        if (accept && !accept.includes(newFiles[0].type)) {
+          toast.error(t('fileNotAccepted', { field: `${accept}` }));
+          return;
+        }
 
         // Create a new FileList-like object
         const dataTransfer = new DataTransfer();
@@ -75,7 +96,11 @@ export default function DragDropFile(props: DragDropFileProps) {
 
   return (
     <div>
-      <div className={cx('flex flex-col gap-2 mb-4', className)} onDragEnter={() => setOpenDrop(true)} onDragLeave={() => setOpenDrop(false)}>
+      <div
+        className={cx('flex flex-col gap-2 mb-4', className)}
+        onDragEnter={() => setOpenDrop(true)}
+        onDragLeave={() => setOpenDrop(false)}
+      >
         <div className="relative flex flex-col gap-2 w-full h-full min-h-[200px]">
           <label
             htmlFor="file-pdf"
@@ -93,16 +118,21 @@ export default function DragDropFile(props: DragDropFileProps) {
             >
               <IconFolder size={60} className={cx('text-color-2')} />
             </motion.div>
-            <TextHeading className="text-color-2">{tCommon('dragDrop', { field: tCommon('file') })}</TextHeading>
-            <Button id={'file-pdf'} variant={'outline'} className="w-fit">
+            <TextHeading className="text-color-2">
+              {tCommon('dragDrop', { field: tCommon('file') })}
+            </TextHeading>
+            <Button type="button" onClick={() => inputRef.current?.click()} variant={'outline'} className="w-fit">
               {tCommon('upload', { field: tCommon('file') })}
             </Button>
             <input
               ref={inputRef}
               type="file"
+              id="file-pdf"
               multiple
               name="files"
               className="w-full h-full absolute opacity-0 cursor-pointer"
+              hidden
+              {...props}
               onChange={onChangeInput}
             />
           </label>

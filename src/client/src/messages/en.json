@@ -80,7 +80,9 @@
     "max": "{field} must be at most {length}",
     "endDateMustBeAfterStartDate": "End date must be after start date",
     "startDateMustBeBeforeEndDate": "Start date must be before end date",
-    "fileMaxSize": "File size must be less than {length}"
+    "fileMaxSize": "File size must be less than {length}",
+    "fileMaxFiles": "You can only upload {length} files",
+    "fileNotAccepted": "File type is not accepted, only accept {field}"
   },
   "post": {
     "post": "Post",
@@ -149,6 +151,8 @@
     "maxGroupMembers": "Max Group Members",
     "createCourseSuccess": "Course has been created successfully!",
     "createCourseFailed": "Course has been created failed!",
-    "documents": "Documents"
+    "documents": "Documents",
+    "topics": "Topics",
+    "suggestedTopics": "Suggested Topics"
   }
 }

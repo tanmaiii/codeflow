@@ -1,24 +1,31 @@
 'use client';
+import CardFile from '@/components/common/CardFile/CardFile';
+import NameTags from '@/components/common/NameTags/NameTags';
+import NoData from '@/components/common/NoData/NoData';
 import SwapperHTML from '@/components/common/SwapperHTML/SwapperHTML';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
-import { useParams, useRouter } from 'next/navigation';
-import Courses_Summary from './Courses_Summary';
-import CardFile from '@/components/common/CardFile/CardFile';
-import { useTranslations } from 'next-intl';
-import NoData from '@/components/common/NoData/NoData';
-import { utils_CalculateProgress, utils_DateToDDMMYYYY, utils_TimeAgo, utils_DateToDDMonth, utils_TimeRemaining } from '@/utils/date';
-import { IconClockHour1, IconPencil } from '@tabler/icons-react';
-import { cx } from 'class-variance-authority';
-import { Button } from '@/components/ui/button';
 import { paths } from '@/data/path';
+import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
-import { useUserStore } from '@/stores/user_store';
-import NameTags from '@/components/common/NameTags/NameTags';
-import { utils_ApiImageToLocalImage } from '@/utils/image';
 import apiConfig from '@/lib/api';
+import { useUserStore } from '@/stores/user_store';
+import {
+  utils_CalculateProgress,
+  utils_DateToDDMMYYYY,
+  utils_DateToDDMonth,
+  utils_TimeAgo,
+  utils_TimeRemaining,
+} from '@/utils/date';
+import { utils_ApiImageToLocalImage } from '@/utils/image';
+import { IconCalendar, IconClockHour1, IconPencil, IconUsers } from '@tabler/icons-react';
+import { cx } from 'class-variance-authority';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+import Courses_Detail_Topics from './Courses_Detail_Topics';
+import Courses_Summary from './Courses_Summary';
 
 export default function Courses_Detail() {
   const params = useParams();
@@ -81,7 +88,7 @@ export default function Courses_Detail() {
               max={Q_data.data?.data?.tags.length}
             />
             <div className="">
-              <div className="flex flex-row items-center rounded-md gap-2  bg-primary/40  p-4 relative overflow-hidden">
+              <div className="flex flex-row items-center rounded-md gap-2  bg-primary/30  p-4 relative overflow-hidden">
                 <IconClockHour1 className="text-color-1 size-5" />
                 <TextHeading className="font-bold">{t('topicDeadline') + ': '}</TextHeading>
                 <TextDescription className="text-color-1">
@@ -97,7 +104,37 @@ export default function Courses_Detail() {
                         Q_data.data?.data?.topicDeadline ?? '',
                       )}%`,
                     }}
-                  ></div>
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div className="flex flex-row items-center gap-2">
+                  <IconCalendar className="text-color-2 size-5" />
+                  <TextDescription className="text-md">{t('startDate') + ': '}</TextDescription>
+                  <TextHeading>
+                    {utils_DateToDDMMYYYY(new Date(Q_data.data?.data?.startDate ?? ''))}
+                  </TextHeading>
+                </div>
+                <div className="flex flex-row items-center gap-2">
+                  <IconCalendar className="text-color-2 size-5" />
+                  <TextDescription className="text-md">{t('endDate') + ': '}</TextDescription>
+                  <TextHeading>
+                    {utils_DateToDDMMYYYY(new Date(Q_data.data?.data?.endDate ?? ''))}
+                  </TextHeading>
+                </div>
+                <div className="flex flex-row items-center gap-2">
+                  <IconClockHour1 className="text-color-2 size-5" />
+                  <TextDescription className="text-md">{t('topicDeadline') + ': '}</TextDescription>
+                  <TextHeading>
+                    {utils_DateToDDMMYYYY(new Date(Q_data.data?.data?.topicDeadline ?? ''))}
+                  </TextHeading>
+                </div>
+                <div className="flex flex-row items-center gap-2">
+                  <IconUsers className="text-color-2 size-5" />
+                  <TextDescription className="text-md">
+                    {t('maxGroupMembers') + ': '}
+                  </TextDescription>
+                  <TextHeading>{Q_data.data?.data?.maxGroupMembers}</TextHeading>
                 </div>
               </div>
             </div>
@@ -110,6 +147,10 @@ export default function Courses_Detail() {
                 <CardFile key={file.id} file={file} />
               ))}
             </div>
+          </div>
+          <div className="flex flex-col gap-4">
+            <TextHeading className="font-bold">{t('suggestedTopics')}</TextHeading>
+            <Courses_Detail_Topics />
           </div>
         </Card>
       </div>
