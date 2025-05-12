@@ -22,7 +22,13 @@
     "dragDrop": "Kéo và thả {field} vào đây",
     "upload": "Tải lên {field}",
     "image": "hình ảnh",
-    "file": "tập tin"
+    "file": "tập tin",
+    "deleteSuccess": "Đã xóa thành công",
+    "deleteError": "Xóa thất bại",
+    "updateSuccess": "Đã cập nhật thành công",
+    "updateError": "Cập nhật thất bại",
+    "createSuccess": "Đã tạo thành công",
+    "createError": "Tạo thất bại"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",

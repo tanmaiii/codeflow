@@ -22,7 +22,13 @@
     "dragDrop": "Drag and drop {field} here",
     "upload": "Upload {field}",
     "image": "Image",
-    "file": "File"
+    "file": "File",
+    "deleteSuccess": "Deleted successfully",
+    "deleteError": "Failed to delete",
+    "updateSuccess": "Updated successfully",
+    "updateError": "Failed to update",
+    "createSuccess": "Created successfully",
+    "createError": "Failed to create"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",

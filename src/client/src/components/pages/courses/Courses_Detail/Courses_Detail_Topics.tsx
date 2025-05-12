@@ -1,12 +1,13 @@
+import ActionDelete from '@/components/common/Action/ActionDelete';
 import { DataTable } from '@/components/common/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
-import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { z } from 'zod';
+import Courses_Detail_Topics_Update from './Courses_Detail_Topics_Update';
 
 export const TopicSchema = z.object({
   id: z.string(),
-  title: z.string(),
+  title: z.string().min(1, { message: 'Title is required' }),
   status: z.enum(['pending', 'completed']),
 });
 
@@ -25,11 +26,13 @@ function Courses_Detail_Topics() {
       size: 100,
     },
     {
+      header: () => <div className="text-center">Actions</div>,
       id: 'actions',
-      cell: ({}) => {
+      cell: ({ row }) => {
         return (
           <div className="flex justify-center">
-            <Button variant="outline">Xem</Button>
+            <Courses_Detail_Topics_Update topic={row.original} />
+            <ActionDelete deleteKey={row.original.title} handleSubmit={() => {}} />
           </div>
         );
       },

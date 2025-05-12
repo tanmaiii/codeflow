@@ -161,6 +161,9 @@ Dựa vào kết quả thống kê và chất lượng code tự động, giản
 - Chất lượng kỹ thuật
 
 
+### Thêm
+Tìm hiểu sử dụng Github origin
+
 ## 📌 License
 
 © 2025 by Đinh Tấn Mãi. Dự án phục vụ mục đích học tập và nghiên cứu.

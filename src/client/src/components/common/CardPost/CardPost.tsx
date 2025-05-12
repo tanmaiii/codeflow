@@ -1,31 +1,31 @@
-import { Card, CardContent } from "@/components/ui/card";
-import TextHeading, { TextDescription } from "@/components/ui/text";
-import { IMAGES } from "@/data/images";
-import { paths } from "@/data/path";
-import useQ_Post_CheckLike from "@/hooks/query-hooks/Post/useQ_Post_CheckLike";
-import useH_LocalPath from "@/hooks/useH_LocalPath";
-import { IPost } from "@/interfaces/post";
-import postService from "@/services/post.service";
-import { utils_DateToDDMonth, utils_TimeAgo } from "@/utils/date";
+import { Card, CardContent } from '@/components/ui/card';
+import TextHeading, { TextDescription } from '@/components/ui/text';
+import { IMAGES } from '@/data/images';
+import { paths } from '@/data/path';
+import useQ_Post_CheckLike from '@/hooks/query-hooks/Post/useQ_Post_CheckLike';
+import useH_LocalPath from '@/hooks/useH_LocalPath';
+import { IPost } from '@/interfaces/post';
+import postService from '@/services/post.service';
+import { utils_DateToDDMonth, utils_TimeAgo } from '@/utils/date';
 import {
   IconArrowBigUpLine,
   IconArrowBigUpLineFilled,
   IconLink,
   IconMessage2,
-} from "@tabler/icons-react";
-import { useMutation } from "@tanstack/react-query";
-import { Dot } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { utils_ApiImageToLocalImage } from "../../../utils/image";
-import NameTags from "../NameTags/NameTags";
-import Tooltip from "../Tooltip/Tooltip";
-import CardPost_Button from "./CardPost_Button";
-import CardPost_More from "./CardPost_More";
-import apiConfig from "@/lib/api";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+} from '@tabler/icons-react';
+import { useMutation } from '@tanstack/react-query';
+import { Dot } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { utils_ApiImageToLocalImage } from '../../../utils/image';
+import NameTags from '../NameTags/NameTags';
+import Tooltip from '../Tooltip/Tooltip';
+import CardPost_Button from './CardPost_Button';
+import CardPost_More from './CardPost_More';
+import apiConfig from '@/lib/api';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface CardPostProps {
   post: IPost;
@@ -35,17 +35,17 @@ export default function CardPost({ post }: CardPostProps) {
   const { localPath } = useH_LocalPath();
   const [likeCount, setLikeCount] = useState(post?.likeCount ?? 0);
   const uesQ_Post_Like = useQ_Post_CheckLike({
-    id: post.id ?? "",
+    id: post.id ?? '',
   });
   const router = useRouter();
 
   const mutationLike = useMutation({
     mutationFn: async () => {
       if (uesQ_Post_Like?.data?.data?.isLike) {
-        await postService.unlike(post.id ?? "");
+        await postService.unlike(post.id ?? '');
         setLikeCount(likeCount - 1);
       } else {
-        await postService.like(post.id ?? "");
+        await postService.like(post.id ?? '');
         setLikeCount(likeCount + 1);
       }
     },
@@ -55,32 +55,27 @@ export default function CardPost({ post }: CardPostProps) {
   });
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(
-      window.location.origin + localPath(paths.POSTS + "/" + post.id)
-    );
-    toast.success("Copied to clipboard");
+    navigator.clipboard.writeText(window.location.origin + localPath(paths.POSTS + '/' + post.id));
+    toast.success('Copied to clipboard');
   };
 
   return (
-    <Card className="p-2 hover:border-white/30 cursor-pointer bg-background-1">
+    <Card className="p-2 hover:border-white/30 cursor-pointer bg-background-1 group/item">
       <CardContent className="px-2 h-full flex flex-col justify-between">
         <div className="pt-2 mb-auto">
-          <div className="flex items-center justify-between gap-2 cursor-pointer rounded-full">
-            <Tooltip tooltip={post?.author?.name ?? ""}>
+          <div className="flex items-center justify-between gap-2 cursor-pointer rounded-full ">
+            <Tooltip tooltip={post?.author?.name ?? ''}>
               <Image
                 className="w-8 h-8 rounded-full"
-                src={
-                  post?.author?.avatar ??
-                  apiConfig.avatar(post?.author?.name ?? "c")
-                }
+                src={post?.author?.avatar ?? apiConfig.avatar(post?.author?.name ?? 'c')}
                 alt="Google"
                 width={100}
                 height={100}
               />
             </Tooltip>
-            <CardPost_More post={post} />
+            <CardPost_More className="group-hover/item:opacity-100 opacity-0" post={post} />
           </div>
-          <Link href={`${localPath(paths.POSTS + "/" + post.id)}`} className="">
+          <Link href={`${localPath(paths.POSTS + '/' + post.id)}`} className="">
             <TextHeading className="text-color-1 align-left font-bold text-lg mt-2 line-clamp-2 hover:underline ">
               {post.title}
             </TextHeading>
@@ -90,11 +85,11 @@ export default function CardPost({ post }: CardPostProps) {
           <NameTags tags={post?.tags} />
           <div className="flex items-center gap-1">
             <TextDescription className="text-color-2 text-sm">
-              {utils_DateToDDMonth(new Date(post.createdAt ?? ""))}
+              {utils_DateToDDMonth(new Date(post.createdAt ?? ''))}
             </TextDescription>
             <Dot className="text-color-2" />
             <TextDescription className="text-color-2 text-sm">
-              {utils_TimeAgo(new Date(post.createdAt ?? ""))}
+              {utils_TimeAgo(new Date(post.createdAt ?? ''))}
             </TextDescription>
           </div>
         </div>
@@ -102,9 +97,7 @@ export default function CardPost({ post }: CardPostProps) {
           <Image
             className="w-full h-[160px] object-cover rounded-md bg-background-1"
             src={
-              post?.thumbnail
-                ? utils_ApiImageToLocalImage(post.thumbnail)
-                : IMAGES.DEFAULT_COURSE
+              post?.thumbnail ? utils_ApiImageToLocalImage(post.thumbnail) : IMAGES.DEFAULT_COURSE
             }
             alt="Google"
             width={140}
@@ -121,17 +114,14 @@ export default function CardPost({ post }: CardPostProps) {
               )
             }
             onClick={mutationLike.mutate}
-            value={likeCount.toString() ?? "0"}
+            value={likeCount.toString() ?? '0'}
           />
           <CardPost_Button
             icon={<IconMessage2 size={24} />}
-            value={post?.commentCount.toString() ?? "0"}
-            onClick={() => router.push(localPath(paths.POSTS + "/" + post.id))}
+            value={post?.commentCount.toString() ?? '0'}
+            onClick={() => router.push(localPath(paths.POSTS + '/' + post.id))}
           />
-          <CardPost_Button
-            icon={<IconLink size={24} />}
-            onClick={handleCopyLink}
-          />
+          <CardPost_Button icon={<IconLink size={24} />} onClick={handleCopyLink} />
         </div>
       </CardContent>
     </Card>
