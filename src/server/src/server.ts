@@ -9,6 +9,7 @@ import { TagRoute } from './routes/tags.route';
 import { CommentRoute } from './routes/comment.route';
 import { TopicRoute } from './routes/topic.route';
 import { GroupRoute } from './routes/group.route';
+import { GitHubRoute } from './routes/github.route';
 ValidateEnv();
 
 const app = new App([
@@ -21,6 +22,7 @@ const app = new App([
   new CommentRoute(),
   new TopicRoute(),
   new GroupRoute(),
+  new GitHubRoute(),
 ]);
 
 app.listen();

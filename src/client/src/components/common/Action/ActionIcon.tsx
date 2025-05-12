@@ -1,46 +1,64 @@
 import { Button } from '@/components/ui/button';
 import { Pencil, Trash, Eye, Plus } from 'lucide-react';
+import { MyTooltip } from '@/components/common/MyTooltip';
+
 type ActionIconType = 'update' | 'delete' | 'view' | 'create' | 'default';
 
 export interface ActionIconProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  actionType: ActionIconType;
+  actionType?: ActionIconType;
   children?: React.ReactNode;
 }
 
-export default function ActionIcon({ actionType, children, ...props }: ActionIconProps) {
+export default function ActionIcon({
+  actionType = 'default',
+  children,
+  ...props
+}: ActionIconProps) {
   if (actionType === 'default') {
     return (
-      <button {...props} className="w-full">
-        {children}
-      </button>
+      <div>
+        <MyTooltip content={'Action'}>
+          <Button variant="outline" size="sm" className="w-fit" {...props}>
+            {children}
+          </Button>
+        </MyTooltip>
+      </div>
     );
   }
   if (actionType === 'update') {
     return (
-      <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
-        <Pencil />
-      </Button>
+      <MyTooltip content="Update">
+        <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
+          <Pencil />
+        </Button>
+      </MyTooltip>
     );
   }
   if (actionType === 'delete') {
     return (
-      <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
-        <Trash />
-      </Button>
+      <MyTooltip content="Delete">
+        <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
+          <Trash />
+        </Button>
+      </MyTooltip>
     );
   }
   if (actionType === 'view') {
     return (
-      <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
-        <Eye />
-      </Button>
+      <MyTooltip content="View">
+        <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
+          <Eye />
+        </Button>
+      </MyTooltip>
     );
   }
   if (actionType === 'create') {
     return (
-      <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
-        <Plus />
-      </Button>
+      <MyTooltip content="Create">
+        <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
+          <Plus />
+        </Button>
+      </MyTooltip>
     );
   }
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,7 +13,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  Table as TableInstance,
 } from '@tanstack/react-table';
+import * as React from 'react';
 
 import {
   Table,
@@ -26,36 +27,29 @@ import {
 } from '@/components/ui/table';
 
 import { DataTableToolbar } from './data-table-toolbar';
+import { DataTableViewOptions } from './data-table-view-options';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  toolbar?: boolean;
+  search?: boolean;
+  toolbarCustom?: ((props: { table: TableInstance<TData> }) => React.ReactNode) | React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  toolbar = false,
+  search = false,
+  toolbarCustom,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  // Add STT column as the first column
-  const sttColumn: ColumnDef<TData, TValue> = {
-    id: 'stt',
-    header: () => <div className="text-center w-10">STT</div>,
-    cell: ({ row }) => <div className="text-center w-10">{row.index + 1}</div>,
-    size: 10,
-  };
-
-  const allColumns = [sttColumn, ...columns];
-
   const table = useReactTable({
     data,
-    columns: allColumns,
+    columns: columns,
     state: {
       sorting,
       columnVisibility,
@@ -77,7 +71,13 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      {toolbar && <DataTableToolbar table={table} />}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          {search && <DataTableToolbar table={table} />}
+          {toolbarCustom && (typeof toolbarCustom === 'function' ? toolbarCustom({ table }) : toolbarCustom)}
+        </div>
+        <DataTableViewOptions table={table} />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -108,7 +108,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={allColumns.length} className="h-24 text-center">
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

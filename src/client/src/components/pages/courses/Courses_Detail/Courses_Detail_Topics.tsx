@@ -4,6 +4,7 @@ import { DataTableColumnHeader } from '@/components/common/data-table/data-table
 import { ColumnDef } from '@tanstack/react-table';
 import { z } from 'zod';
 import Courses_Detail_Topics_Update from './Courses_Detail_Topics_Update';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export const TopicSchema = z.object({
   id: z.string(),
@@ -15,6 +16,34 @@ export type TopicType = z.infer<typeof TopicSchema>;
 
 function Courses_Detail_Topics() {
   const columns: ColumnDef<TopicType>[] = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value: boolean) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+          className="translate-y-[2px]"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+          className="translate-y-[2px]"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+      size: 10,
+    },
+    {
+      id: 'stt',
+      header: () => <div className="text-center">STT</div>,
+      cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
+      size: 10,
+    },
     {
       header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
       accessorKey: 'title',
@@ -62,7 +91,7 @@ function Courses_Detail_Topics() {
     },
   ];
 
-  return <DataTable columns={columns} data={data} />;
+  return <DataTable columns={columns} data={data} search={true} />;
 }
 
 export default Courses_Detail_Topics;

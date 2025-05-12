@@ -9,7 +9,7 @@ import CryptoJS from 'crypto-js';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { logger } from '@/utils/logger';
-
+import { GitHubService } from '@services/github.service';
 const decodeToken = async (token: string, secret: string) => {
   const bytes = CryptoJS.AES.decrypt(token, secret);
   const originalToken = bytes.toString(CryptoJS.enc.Utf8);
@@ -19,6 +19,7 @@ const decodeToken = async (token: string, secret: string) => {
 export class AuthController {
   public auth = Container.get(AuthService);
   public user = Container.get(UserService);
+  public github = Container.get(GitHubService);
 
   public loginWithGithub = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -26,17 +27,15 @@ export class AuthController {
 
       const resDecode = await decodeToken(accessToken, process.env.SECRET_KEY);
 
-      const tokenRes = await axios.get('https://api.github.com/user', {
-        headers: { Authorization: `Bearer ${resDecode}` },
-      });
+      const tokenRes = await this.github.getUserInfo(resDecode);
 
       logger.info(`[TOKEN GITHUB: ] ${resDecode}`);
 
-      if (!tokenRes.data) {
+      if (!tokenRes) {
         return new HttpException(401, 'Unauthorized');
       }
 
-      const { tokenData, findUser } = await this.auth.loginWithGithub({ userBody: tokenRes.data, email, uid });
+      const { tokenData, findUser } = await this.auth.loginWithGithub({ userBody: tokenRes, email, uid });
 
       // res.setHeader('Set-Cookie', [cookie]);
       res.status(200).json({ data: findUser, accessToken: tokenData, message: 'login' });

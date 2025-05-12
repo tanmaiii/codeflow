@@ -25,6 +25,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import Courses_Detail_Topics from './Courses_Detail_Topics';
+import Courses_Detail_Topics_Create from './Courses_Detail_Topics_Create';
 import Courses_Summary from './Courses_Summary';
 
 export default function Courses_Detail() {
@@ -149,7 +150,10 @@ export default function Courses_Detail() {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <TextHeading className="font-bold">{t('suggestedTopics')}</TextHeading>
+            <div className="flex flex-row items-center">
+              <TextHeading className="font-bold">{t('suggestedTopics')}</TextHeading>
+              <Courses_Detail_Topics_Create />
+            </div>
             <Courses_Detail_Topics />
           </div>
         </Card>

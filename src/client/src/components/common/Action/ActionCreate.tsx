@@ -5,7 +5,7 @@ import { FieldValues, UseFormReturn } from 'react-hook-form';
 import { toast } from 'sonner';
 import ActionModal, { ActionModalProps } from './ActionModal';
 
-interface ActionUpdateProps<T extends FieldValues> extends Omit<ActionModalProps, 'onSubmit'> {
+interface ActionCreateProps<T extends FieldValues> extends Omit<ActionModalProps, 'onSubmit'> {
   title?: string;
   description?: string;
   children: React.ReactNode;
@@ -15,7 +15,7 @@ interface ActionUpdateProps<T extends FieldValues> extends Omit<ActionModalProps
   reactHookForm?: UseFormReturn<T>;
 }
 
-export default function ActionUpdate<T extends FieldValues>({
+export default function ActionCreate<T extends FieldValues>({
   title,
   description,
   children,
@@ -25,24 +25,30 @@ export default function ActionUpdate<T extends FieldValues>({
   icon,
   reactHookForm,
   ...props
-}: ActionUpdateProps<T>) {
+}: ActionCreateProps<T>) {
   const mutation = useMutation({
     mutationFn: async (values: T) => {
       console.log(values);
       await handleSubmit(values);
     },
     onSuccess: () => {
-      toast.success('Updated successfully');
+      toast.success('Created successfully');
       onSuccess?.();
     },
     onError: () => {
-      toast.error('Failed to update');
+      toast.error('Failed to create');
       onError?.();
     },
   });
 
   return (
-    <ActionModal title={title} description={description} icon={icon} {...props} actionType="update">
+    <ActionModal
+      title={title}
+      description={description}
+      icon={icon}
+      {...props}
+      actionType={props.actionType ?? 'create'}
+    >
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -62,7 +68,7 @@ export default function ActionUpdate<T extends FieldValues>({
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <Button type="submit" disabled={mutation.isPending}>
-            {mutation.isPending ? 'Updating...' : 'Update'}
+            {mutation.isPending ? 'Creating...' : 'Save'}
           </Button>
         </DialogFooter>
       </form>
