@@ -8,8 +8,10 @@ import { utils_ApiImageToLocalImage } from '@/utils/image';
 import Image from 'next/image';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { utils_CalculateWeeks } from '@/utils/date';
+import { useRouter } from 'next/navigation';
 
 export default function Courses_Summary({ course }: { course: ICourse }) {
+  const router = useRouter();
   return (
     <Card className="flex flex-col justify-center gap-4 p-4">
       <div className="w-full h-48 relative rounded-md overflow-hidden border">
@@ -24,7 +26,7 @@ export default function Courses_Summary({ course }: { course: ICourse }) {
       </div>
       <div className="flex flex-col justify-center items-center gap-4">
         <TextHeading className="text-2xl font-bold text-center">{course.title}</TextHeading>
-        <Button variant="default" className="w-fit px-10">
+        <Button variant="default" className="w-fit px-10" onClick={() => router.push(`/courses/${course.id}/topics`)}>
           Tham gia
         </Button>
         <div className="flex flex-col flex-1 items-center w-full gap-2">

@@ -171,6 +171,8 @@
     "moreTopics": "Xem thêm đề tài",
     "cancel": "Thoát",
     "save": "Lưu",
-    "update": "Cập nhật"  
+    "update": "Cập nhật",
+    "deleteSuccess": "Đã xóa thành công",
+    "deleteError": "Xóa thất bại"
   }
 }

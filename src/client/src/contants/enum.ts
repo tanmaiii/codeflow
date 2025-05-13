@@ -1,6 +1,7 @@
 export enum ENUM_STATUS_TOPIC {
   PENDING = 'pending',
-  COMPLETED = 'completed',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
 }
 
 export enum ENUM_STATUS_COURSE {

@@ -24,8 +24,8 @@ export interface ResponseAPIDtoWithPagination<T> {
 export interface IGetAllQuery {
   page: number;
   limit: number;
-  sortBy: string;
-  order: "ASC" | "DESC";
+  sortBy?: string;
+  order?: "ASC" | "DESC";
 }
 
 export interface ApiError {

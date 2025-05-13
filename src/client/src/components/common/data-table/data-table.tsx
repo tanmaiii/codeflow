@@ -14,6 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
   Table as TableInstance,
+  Row,
 } from '@tanstack/react-table';
 import * as React from 'react';
 
@@ -36,6 +37,7 @@ interface DataTableProps<TData, TValue> {
   fieldFilter?: string;
   pagination?: boolean;
   toolbarCustom?: ((props: { table: TableInstance<TData> }) => React.ReactNode) | React.ReactNode;
+  renderActions?: (props: { row: Row<TData> }) => React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -44,6 +46,7 @@ export function DataTable<TData, TValue>({
   fieldFilter = 'title',
   pagination = true,
   toolbarCustom,
+  renderActions,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -74,14 +77,15 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between ">
         <div className="flex items-center space-x-2">
           {fieldFilter && <DataTableToolbar fieldFilter={fieldFilter} table={table} />}
-          {toolbarCustom && (typeof toolbarCustom === 'function' ? toolbarCustom({ table }) : toolbarCustom)}
+          {toolbarCustom &&
+            (typeof toolbarCustom === 'function' ? toolbarCustom({ table }) : toolbarCustom)}
         </div>
         <DataTableViewOptions table={table} />
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
@@ -95,10 +99,11 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                   );
                 })}
+                {renderActions && <TableHead className="text-center w-[100px]">Actions</TableHead>}
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="h-full">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
@@ -107,11 +112,19 @@ export function DataTable<TData, TValue>({
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
+                  {renderActions && (
+                    <TableCell className="p-2 text-center w-[100px] ">
+                      {renderActions({ row })}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={renderActions ? columns.length + 1 : columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -119,12 +132,13 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {pagination && (
-        <DataTablePagination table={table} />
-      )}
+      {pagination && <DataTablePagination table={table} />}
       {table.getFilteredSelectedRowModel().rows.length > 0 && (
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <span>Đã chọn {table.getFilteredSelectedRowModel().rows.length} trên {table.getFilteredRowModel().rows.length} hàng</span>
+          <span>
+            Đã chọn {table.getFilteredSelectedRowModel().rows.length} trên{' '}
+            {table.getFilteredRowModel().rows.length} hàng
+          </span>
         </div>
       )}
     </div>

@@ -181,6 +181,8 @@
     "thumbnail": "Thumbnail",
     "cancel": "Cancel",
     "save": "Save",
-    "update": "Update"  
+    "update": "Update",
+    "deleteSuccess": "Deleted successfully",
+    "deleteError": "Failed to delete"
   }
 }

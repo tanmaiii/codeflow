@@ -12,7 +12,7 @@ export function DataTableToolbar<TData>({ table, fieldFilter }: DataTableToolbar
   return (
     <div className="flex flex-1 items-center space-x-2">
       <Input
-        placeholder="Filter tasks..."
+        placeholder={`Search ${fieldFilter}`}
         value={(table.getColumn(fieldFilter ?? 'title')?.getFilterValue() as string) ?? ''}
         onChange={event => table.getColumn(fieldFilter ?? 'title')?.setFilterValue(event.target.value)}
         className="h-8 w-[150px] lg:w-[250px] rounded-md"

@@ -24,7 +24,6 @@ import { cx } from 'class-variance-authority';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import Courses_Detail_Topics from './Courses_Detail_Topics';
 import Courses_Summary from './Courses_Summary';
 
 export default function Courses_Detail() {
@@ -147,12 +146,6 @@ export default function Courses_Detail() {
                 <CardFile key={file.id} file={file} />
               ))}
             </div>
-          </div>
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-row items-center">
-              <TextHeading className="font-bold">{t('suggestedTopics')}</TextHeading>
-            </div>
-            <Courses_Detail_Topics courseId={id} />
           </div>
         </Card>
       </div>

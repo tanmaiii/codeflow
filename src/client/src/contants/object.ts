@@ -1,14 +1,42 @@
 import { ENUM_STATUS_TOPIC } from './enum';
 
-export const STATUS_TOPIC = [
+// ENUM('pending', 'approved', 'rejected')
+
+export interface IStatusObj {
+  value: string;
+  label: string;
+  labelEn?: string;
+}
+
+export const STATUS_TOPIC: IStatusObj[] = [
   {
-    value: ENUM_STATUS_TOPIC.PENDING,
-    label: 'Chưa hoàn thành',
-    valueEn: 'Pending',
+    value: ENUM_STATUS_TOPIC.PENDING, // Chưa hoàn thành
+    label: 'Chưa duyệt',
+    labelEn: 'Pending',
   },
   {
-    value: ENUM_STATUS_TOPIC.COMPLETED,
-    label: 'Đã hoàn thành',
-    valueEn: 'Completed',
+    value: ENUM_STATUS_TOPIC.APPROVED, // Đã hoàn thành
+    label: 'Chấp nhận',
+    labelEn: 'Approved',
+  },
+  {
+    value: ENUM_STATUS_TOPIC.REJECTED, // Từ chối
+    label: 'Từ chối',
+    labelEn: 'Rejected',
   },
 ];
+
+
+export const STATUS_TOPIC_CUSTOM: IStatusObj[] = [
+  {
+    value: 'custom',
+    label: 'Đề xuất',
+    labelEn: 'Custom',
+  },
+  {
+    value: 'suggest',
+    label: 'Gợi ý',
+    labelEn: 'Suggest',
+  },
+];
+
