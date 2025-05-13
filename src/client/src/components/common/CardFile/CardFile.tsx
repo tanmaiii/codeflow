@@ -51,7 +51,7 @@ export default function CardFile({ file }: { file: IDocument }) {
       <div className="flex flex-row items-center justify-between gap-1 mt-2">
         <div className="flex flex-col items-start justify-between gap-1 mt-2 overflow-hidden">
           <TextHeading lineClamp={1}>{file.title}</TextHeading>
-          <TextDescription className="text-xs">{utils_file_size(1000)}</TextDescription>
+          <TextDescription className="text-xs">{pdfUrl ? utils_file_size(pdfUrl.size) : '0 KB'}</TextDescription>
         </div>
         <Button
           variant="ghost"

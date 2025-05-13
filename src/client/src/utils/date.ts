@@ -1,4 +1,4 @@
-import { getCurrentLocale } from "@/lib/intl";
+import { getCurrentLocale } from "@/lib/utils";
 
 const monthNamesVi = [
   "Tháng 1",

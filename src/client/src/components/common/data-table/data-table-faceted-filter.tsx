@@ -24,6 +24,7 @@ import { CheckIcon, PlusCircle } from "lucide-react"
 export type FilterOption = {
   label: string
   value: string
+  labelEn?: string
   icon?: React.ComponentType<{ className?: string }>
 }
 
@@ -40,6 +41,7 @@ export function DataTableFacetedFilter<TData, TValue>({
 }: DataTableFacetedFilter<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues()
   const selectedValues = new Set(column?.getFilterValue() as string[])
+  const locale = getCurrentLocale()
 
   return (
     <Popover>
@@ -73,7 +75,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         key={option.value}
                         className="rounded-sm px-1 font-normal"
                       >
-                        {option.label}
+                        {locale === 'vi' ? option.label : option.labelEn}
                       </Badge>
                     ))
                 )}

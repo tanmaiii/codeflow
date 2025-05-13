@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { IStatusObj } from '@/contants/object';
+import { getCurrentLocale } from '@/lib/utils';
 /**
  * Generates a consistent color code from a string
  * @param str The input string
@@ -63,11 +64,12 @@ const stringToColor = (status: IStatusObj) => {
 
 export default function MyBadge({ status }: { status: IStatusObj }) {
   const colors = stringToColor(status);
+  const locale = getCurrentLocale();
 
   return (
     <Badge className={`${colors.bg} ${colors.bgHover} ${colors.text} shadow-none rounded-full`}>
       <div className={`h-1.5 w-1.5 rounded-full ${colors.dot} mr-2`} />
-      {status.label}
+      {locale === 'vi' ? status.label : status.labelEn}
     </Badge>
   );
 }

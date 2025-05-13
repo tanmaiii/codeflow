@@ -5,7 +5,7 @@ import { useLocale } from "next-intl";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import ButtonTooltip from "./common/Button/ButtonWithTooltip/ButtonTooltip";
-import { setCurrentLocale } from "@/lib/intl";
+import { setCurrentLocale } from "@/lib/utils";
 import { useEffect } from "react";
 
 export default function LocaleSwitcher() {

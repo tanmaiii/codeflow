@@ -4,10 +4,10 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { paths } from '@/data/path';
-import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { useTranslations } from 'next-intl';
+import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import NoData from '@/components/common/NoData/NoData';
 const tabs = [
   { id: 'all', label: 'All Courses' },

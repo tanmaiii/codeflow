@@ -27,7 +27,7 @@ export default function TextareaInput({
       </Label>
       <Textarea
         id={id}
-        className={cx('bg-background-1', error && 'border-1 border-red-500')}
+        className={cx('!bg-background-2', error && 'border-1 border-red-500')}
         placeholder={t('enter') + ' ' + label}
         {...registration}
         {...(Object.fromEntries(

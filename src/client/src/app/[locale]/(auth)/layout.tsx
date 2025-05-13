@@ -40,10 +40,7 @@ export default function Layout({
       </div>
       <div className="z-20 w-full p-4 flex items-center justify-center">
         <Card
-          // style={{
-          //   boxShadow:
-          //     "-64px -12px 100px 12px rgba(101,79,255, 0.07), -10px -10px 40px 1px rgba(89,34,203, 0.15)",
-          // }}
+ 
           className={cx(
             "w-full md:w-[460px] h-fit dark:bg-background-2 bg-background-1 gap-0 px-2 py-6 shadow-[-2px_-2px_52px_-16px_rgba(0,0,255,0.6)]",
             theme === "dark" && "shadow-[-8px_-27px_59px_-50px_rgba(0,0,255,0.41)]",
@@ -75,11 +72,6 @@ export default function Layout({
           </CardFooter>
         </Card>
       </div>
-      {/* <div
-        className={
-          "z-0 absolute bottom-0 right-0 w-full dark:bg-primary/5 bg-gray-200 bottom-login"
-        }
-      ></div> */}
     </div>
   );
 }

@@ -69,7 +69,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
       },
       {
         accessorKey: 'teacher',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Teacher" />,
+        header: "Teacher",
         size: 100,
         cell: ({ row }) => {
           const teacher = row.original.teacher;
@@ -93,7 +93,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
       },
       {
         accessorKey: 'group',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Group" />,
+        header: "Group",
         size: 100,
         cell: ({ row }) => {
           const authorName = row.original.author?.name ?? 'c';

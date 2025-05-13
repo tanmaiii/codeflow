@@ -6,12 +6,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { useTopicSchema, TopicSchemaType } from '@/lib/validations/topicSchema';
-import { useMutation, useQueryClient   } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import topicService from '@/services/topic.service';
 import { toast } from 'sonner';
 import { useRef } from 'react';
 import { DialogClose } from '@/components/ui/dialog';
 import { ITopic } from '@/interfaces/topic';
+import MySelect from '@/components/common/MySelect';
+import { STATUS_TOPIC } from '@/contants/object';
 
 export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic }) {
   const t = useTranslations('common');
@@ -25,6 +27,7 @@ export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic 
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    control,
   } = useForm<TopicSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: topic,
@@ -49,10 +52,7 @@ export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic 
   });
 
   return (
-    <ActionModal
-      title={tTopic('createTopic')}
-      actionType={'update'}
-    >
+    <ActionModal title={tTopic('createTopic')} actionType={'update'}>
       <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
         <TextInput label={tTopic('title')} error={errors.title} {...register('title')} />
         <TextareaInput
@@ -61,7 +61,15 @@ export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic 
           error={errors.description}
           {...register('description')}
         />
-  
+        <MySelect
+          label={tTopic('status')}
+          name="status"
+          control={control}
+          options={STATUS_TOPIC}
+          placeholder={tTopic('status')}
+          error={errors.status}
+          required={true}
+        />
         <div className="flex justify-end gap-2">
           <DialogClose asChild ref={closeRef}>
             <Button type="button" variant="outline">
