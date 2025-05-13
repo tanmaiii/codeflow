@@ -1,34 +1,34 @@
-"use client";
-import PasswordInput from "@/components/common/Input/PasswordInput/PasswordInput";
-import TextInput from "@/components/common/Input/TextInput/TextInput";
-import { Button } from "@/components/ui/button";
-import { TextDescription } from "@/components/ui/text";
-import { paths } from "@/data/path";
-import useH_LocalPath from "@/hooks/useH_LocalPath";
-import {} from "@/hooks/ussH_Toast";
-import { loginSchemaType, useLoginSchema } from "@/lib/validations/loginSchema";
-import authService from "@/services/auth.service";
-import tokenService from "@/services/token.service";
-import { useUserStore } from "@/stores/user_store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { CircleAlert } from "lucide-react";
-import IconLoading from "@/components/common/IconLoading/IconLoading";
+'use client';
+import PasswordInput from '@/components/common/Input/PasswordInput/PasswordInput';
+import TextInput from '@/components/common/Input/TextInput/TextInput';
+import { Button } from '@/components/ui/button';
+import { TextDescription } from '@/components/ui/text';
+import { paths } from '@/data/path';
+import useH_LocalPath from '@/hooks/useH_LocalPath';
+import {} from '@/hooks/ussH_Toast';
+import { loginSchemaType, useLoginSchema } from '@/lib/validations/loginSchema';
+import authService from '@/services/auth.service';
+import tokenService from '@/services/token.service';
+import { useUserStore } from '@/stores/user_store';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { CircleAlert } from 'lucide-react';
+import IconLoading from '@/components/common/IconLoading/IconLoading';
 // import IconAlertCircleFilled
 // import { toast } from "sonner";
 
 export default function Login() {
-  const t = useTranslations("auth");
+  const t = useTranslations('auth');
   const { localPath } = useH_LocalPath();
   const schema = useLoginSchema();
   const { setUser } = useUserStore();
   const router = useRouter();
-  const error = useState<string>("");
+  const error = useState<string>('');
   const isLoading = useState<boolean>(false);
 
   const {
@@ -43,16 +43,21 @@ export default function Login() {
     mutationFn: async (body: loginSchemaType) => {
       isLoading[1](true);
       const res = await authService.login(body);
+      console.log(res);
       return res;
     },
     onError: (err: unknown) => {
-      error[1]((err as Error)?.message || t("error"));
+      error[1]((err as Error)?.message || t('error'));
       isLoading[1](false);
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       tokenService.accessToken = data.accessToken.token;
       setUser(data.data);
-      router.push(paths.HOME);
+      if (data.data.role === 'admin') {
+        router.push(localPath(paths.ADMIN));
+      } else {
+        router.push(localPath(paths.HOME));
+      }
       isLoading[1](false);
     },
   });
@@ -60,39 +65,36 @@ export default function Login() {
   return (
     <div className="flex flex-col w-full h-fit gap-0">
       <TextDescription className="text-left text-base font-light mb-4">
-        {t("pleaseLogin")}
+        {t('pleaseLogin')}
       </TextDescription>
       {error[0] && (
         <div className="flex flex-row items-center gap-2 text-white text-sm bg-red-400 py-2 px-3 border rounded-md mb-4">
-          <CircleAlert style={{ width: "26px", height: "26px" }} />
+          <CircleAlert style={{ width: '26px', height: '26px' }} />
           <span>{error[0]}</span>
         </div>
       )}
       <form
-        onSubmit={handleSubmit((value) => mutation.mutate(value))}
+        onSubmit={handleSubmit(value => mutation.mutate(value))}
         className="flex flex-col gap-3"
       >
         <TextInput
           id="email"
-          label={t("email")}
-          registration={register("email")}
+          label={t('email')}
+          registration={register('email')}
           error={errors.email}
         />
 
         <PasswordInput
           id="password"
-          label={t("password")}
-          registration={register("password")}
+          label={t('password')}
+          registration={register('password')}
           error={errors.password}
         />
 
         <div className="flex items-center justify-end mt-2">
-          <Link
-            className="flex items-center justify-end"
-            href={localPath(paths.FORGOT_PASSWORD)}
-          >
+          <Link className="flex items-center justify-end" href={localPath(paths.FORGOT_PASSWORD)}>
             <TextDescription className="text-sm text-primary hover:text-primary/80 cursor-pointer">
-              {t("forgotPassword")}
+              {t('forgotPassword')}
             </TextDescription>
           </Link>
         </div>
@@ -102,17 +104,17 @@ export default function Login() {
           onClick={() => localPath(paths.REGISTER)}
           className="w-full h-12  bg-primary text-white hover:bg-primary/80"
         >
-          {isLoading[0] ? <IconLoading className="bg-white" /> : t("signIn")}
+          {isLoading[0] ? <IconLoading className="bg-white" /> : t('signIn')}
         </Button>
       </form>
 
       <div className="flex items-center justify-center mt-2">
         <TextDescription className=" text-gray-500 dark:text-gray-400">
-          {t("dontHaveAnAccount")}
+          {t('dontHaveAnAccount')}
         </TextDescription>
         <Link href={localPath(paths.REGISTER)}>
           <TextDescription className="text-primary hover:text-primary/80 cursor-pointer ml-1">
-            {t("signUp")}
+            {t('signUp')}
           </TextDescription>
         </Link>
       </div>

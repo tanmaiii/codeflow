@@ -10,6 +10,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { logger } from '@/utils/logger';
 import { GitHubService } from '@services/github.service';
+
 const decodeToken = async (token: string, secret: string) => {
   const bytes = CryptoJS.AES.decrypt(token, secret);
   const originalToken = bytes.toString(CryptoJS.enc.Utf8);
