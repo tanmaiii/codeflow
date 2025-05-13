@@ -10,8 +10,51 @@ export class TopicController {
 
   public getTopics = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const allTopicsData: Topic[] = await this.topic.findAll();
-      res.status(200).json({ data: allTopicsData, message: 'findAll' });
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getTopicsByCourseId = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const courseId = req.params.id;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        courseId,
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
     } catch (error) {
       next(error);
     }

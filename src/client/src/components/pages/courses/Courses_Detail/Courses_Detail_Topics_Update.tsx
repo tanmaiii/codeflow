@@ -1,25 +1,78 @@
-import ActionUpdate from '@/components/common/Action/ActionUpdate';
+import ActionModal from '@/components/common/Action/ActionModal';
 import TextInput from '@/components/common/Input/TextInput/TextInput';
+import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
+import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { TopicSchema, TopicType } from './Courses_Detail_Topics';
+import { useTopicSchema, TopicSchemaType } from '@/lib/validations/topicSchema';
+import { useMutation, useQueryClient   } from '@tanstack/react-query';
+import topicService from '@/services/topic.service';
+import { toast } from 'sonner';
+import { useRef } from 'react';
+import { DialogClose } from '@/components/ui/dialog';
+import { ITopic } from '@/interfaces/topic';
 
-export default function Courses_Detail_Topics_Update({ topic }: { topic: TopicType }) {
-  const form = useForm<TopicType>({
-    resolver: zodResolver(TopicSchema),
+export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic }) {
+  const t = useTranslations('common');
+  const tTopic = useTranslations('topic');
+  const schema = useTopicSchema();
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const queryClient = useQueryClient();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<TopicSchemaType>({
+    resolver: zodResolver(schema),
     defaultValues: topic,
   });
-  const { register } = form;
+
+  const mutation = useMutation({
+    mutationFn: (data: TopicSchemaType) => {
+      return topicService.update(topic.id, {
+        ...data,
+        courseId: topic.courseId,
+      });
+    },
+    onSuccess: () => {
+      toast.success(t('updateSuccess'));
+      reset();
+      closeRef.current?.click();
+      queryClient.invalidateQueries({ queryKey: ['topics'] });
+    },
+    onError: () => {
+      toast.error(t('updateError'));
+    },
+  });
 
   return (
-    <ActionUpdate
-      title="Update Topic"
-      handleSubmit={values => {
-        return console.log(values);
-      }}
-      reactHookForm={form}
+    <ActionModal
+      title={tTopic('createTopic')}
+      actionType={'update'}
     >
-      <TextInput label="Title" {...register('title')} />
-    </ActionUpdate>
+      <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
+        <TextInput label={tTopic('title')} error={errors.title} {...register('title')} />
+        <TextareaInput
+          label={tTopic('description')}
+          className="min-h-[200px]"
+          error={errors.description}
+          {...register('description')}
+        />
+  
+        <div className="flex justify-end gap-2">
+          <DialogClose asChild ref={closeRef}>
+            <Button type="button" variant="outline">
+              {t('cancel')}
+            </Button>
+          </DialogClose>
+          <Button type="submit" disabled={isSubmitting}>
+            {t('create')}
+          </Button>
+        </div>
+      </form>
+    </ActionModal>
   );
 }

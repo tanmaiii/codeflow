@@ -15,8 +15,8 @@ export class CreateTopicDto {
   @IsNotEmpty()
   public courseId: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   public teacherId: string;
 
   @IsBoolean()
@@ -26,6 +26,10 @@ export class CreateTopicDto {
   @IsOptional()
   @IsArray()
   public tags?: Array<string> | null;
+
+  @IsOptional()
+  @IsString()
+  public status: string;
 }
 
 //   export interface TopicCreate {

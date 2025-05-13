@@ -16,13 +16,11 @@ export default function ActionIcon({
 }: ActionIconProps) {
   if (actionType === 'default') {
     return (
-      <div>
-        <MyTooltip content={'Action'}>
-          <Button variant="outline" size="sm" className="w-fit" {...props}>
-            {children}
-          </Button>
-        </MyTooltip>
-      </div>
+      <MyTooltip content={'Action'}>
+        <Button variant="outline" size="sm" className="w-fit" {...props}>
+          {children}
+        </Button>
+      </MyTooltip>
     );
   }
   if (actionType === 'update') {

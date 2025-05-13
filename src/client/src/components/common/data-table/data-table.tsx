@@ -28,18 +28,21 @@ import {
 
 import { DataTableToolbar } from './data-table-toolbar';
 import { DataTableViewOptions } from './data-table-view-options';
+import { DataTablePagination } from './data-table-pagination';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  search?: boolean;
+  fieldFilter?: string;
+  pagination?: boolean;
   toolbarCustom?: ((props: { table: TableInstance<TData> }) => React.ReactNode) | React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  search = false,
+  fieldFilter = 'title',
+  pagination = true,
   toolbarCustom,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -73,7 +76,7 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          {search && <DataTableToolbar table={table} />}
+          {fieldFilter && <DataTableToolbar fieldFilter={fieldFilter} table={table} />}
           {toolbarCustom && (typeof toolbarCustom === 'function' ? toolbarCustom({ table }) : toolbarCustom)}
         </div>
         <DataTableViewOptions table={table} />
@@ -116,6 +119,14 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+      {pagination && (
+        <DataTablePagination table={table} />
+      )}
+      {table.getFilteredSelectedRowModel().rows.length > 0 && (
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <span>Đã chọn {table.getFilteredSelectedRowModel().rows.length} trên {table.getFilteredRowModel().rows.length} hàng</span>
+        </div>
+      )}
     </div>
   );
 }

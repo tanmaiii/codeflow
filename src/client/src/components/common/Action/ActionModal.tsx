@@ -7,12 +7,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import ActionIcon, { ActionIconProps } from './ActionIcon';
-
+import { cn } from '@/lib/utils';
 export interface ActionModalProps extends ActionIconProps {
   title?: string;
   description?: string;
   children: React.ReactNode;
   icon?: React.ReactNode;
+  className?: string;
 }
 
 export default function ActionModal({
@@ -20,6 +21,7 @@ export default function ActionModal({
   description,
   children,
   icon,
+  className,
   ...props
 }: ActionModalProps) {
   if (props.actionType === 'default') {
@@ -28,12 +30,12 @@ export default function ActionModal({
         <DialogTrigger asChild>
           <ActionIcon {...props}>{icon}</ActionIcon>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className={cn('px-4', className)}>
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className="px-2">{title}</DialogTitle>
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
-          {children}
+          <div className="max-h-[80vh] overflow-y-auto px-2">{children}</div>
         </DialogContent>
       </Dialog>
     );
@@ -44,12 +46,12 @@ export default function ActionModal({
       <DialogTrigger asChild>
         <ActionIcon {...props} />
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className={cn('px-4', className)}>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className="px-2">{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        {children}
+        <div className="max-h-[80vh] overflow-y-auto px-2">{children}</div>
       </DialogContent>
     </Dialog>
   );

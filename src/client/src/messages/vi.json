@@ -6,6 +6,7 @@
     "no": "Không",
     "close": "Đóng",
     "delete": "Xóa",
+    "create": "Tạo",
     "edit": "Chỉnh sửa",
     "save": "Lưu",
     "add": "Thêm",
@@ -151,5 +152,25 @@
     "documents": "Tài liệu",
     "topics": "Đề tài",
     "suggestedTopics": "Đề tài đề xuất"
+  },
+ "topic": {
+    "title": "Tiêu đề",
+    "description": "Mô tả",
+    "courseId": "Khóa học",
+    "tags": "Thẻ",
+    "status": "Trạng thái",
+    "isCustom": "Tự đề xuất",
+    "createTopic": "Tạo đề tài",
+    "updateTopic": "Cập nhật đề tài",
+    "editTopic": "Chỉnh sửa đề tài",
+    "deleteTopic": "Xóa đề tài",
+    "viewTopic": "Xem đề tài",
+    "topicCreated": "Đề tài đã được tạo thành công!",
+    "topicUpdated": "Đề tài đã được cập nhật thành công!",
+    "topicDeleted": "Đề tài đã được xóa thành công!",
+    "moreTopics": "Xem thêm đề tài",
+    "cancel": "Thoát",
+    "save": "Lưu",
+    "update": "Cập nhật"  
   }
 }

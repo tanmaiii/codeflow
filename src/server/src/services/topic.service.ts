@@ -4,6 +4,7 @@ import { DB } from '../database';
 import Container, { Service } from 'typedi';
 import { TagService } from './tag.service';
 import { isEmpty } from '@/utils/util';
+import { Sequelize } from 'sequelize';
 
 @Service()
 export class TopicService {
@@ -14,10 +15,20 @@ export class TopicService {
     return allData;
   }
 
-  public async findAndCountAllWithPagination(limit: number, offset: number): Promise<{ count: number; rows: Topic[] }> {
+  public async findAndCountAllWithPagination(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    courseId?: string,
+  ): Promise<{ count: number; rows: Topic[] }> {
     const { count, rows }: { count: number; rows: Topic[] } = await DB.Topics.findAndCountAll({
-      limit,
-      offset,
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+      distinct: true,
+      col: 'topics.id',
+      where: courseId ? { courseId } : undefined,
     });
     return { count, rows };
   }
@@ -56,14 +67,13 @@ export class TopicService {
     return findTopic;
   }
 
-  public async deleteTopic(id: string): Promise<Topic> {
-    const findTopic = await DB.Topics.findByPk(id);
+  public async deleteTopic(topicId: string): Promise<Topic> {
+    const findTopic: Topic = await DB.Topics.findByPk(topicId);
     if (!findTopic) throw new HttpException(409, "Topic doesn't exist");
 
-    await DB.Topics.destroy({ where: { id: id } });
+    await DB.Topics.destroy({ where: { id: topicId } });
 
-    const softDeletedTopic = await DB.Topics.findByPk(id);
-    if (!softDeletedTopic) throw new HttpException(409, "Topic doesn't exist after deletion");
+    const softDeletedTopic: Topic = await DB.Topics.findByPk(topicId);
     return softDeletedTopic;
   }
 

@@ -27,28 +27,46 @@ export const taskSchema = z.object({
 
 export type TaskType = z.infer<typeof taskSchema>;
 
-export const columns: ColumnDef<TaskType>[] = [
-  {
+// Helper function tạo column checkbox select
+export function createSelectColumn<TData>(): ColumnDef<TData> {
+  return {
     id: 'select',
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value: boolean) => table.toggleAllPageRowsSelected(!!value)}
+        checked={
+          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
-        className="translate-y-[2px]"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+        onCheckedChange={value => row.toggleSelected(!!value)}
         aria-label="Select row"
-        className="translate-y-[2px]"
       />
     ),
     enableSorting: false,
     enableHiding: false,
-  },
+    size: 20,
+  };
+}
+
+// Helper function tạo ra column action cho bảng
+export function createActionColumn<TData>(
+  renderCell: (props: { row: { original: TData } }) => React.ReactNode,
+): ColumnDef<TData> {
+  return {
+    id: 'actions',
+    cell: renderCell,
+    enableSorting: false,
+    enableHiding: false,
+    size: 80,
+  };
+}
+
+export const columns: ColumnDef<TaskType>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,

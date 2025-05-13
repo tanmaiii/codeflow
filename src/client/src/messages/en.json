@@ -6,6 +6,7 @@
     "no": "No",
     "close": "Close",
     "delete": "Delete",
+    "create": "Create",
     "edit": "Edit",
     "save": "Save",
     "add": "Add",
@@ -160,5 +161,26 @@
     "documents": "Documents",
     "topics": "Topics",
     "suggestedTopics": "Suggested Topics"
+  },
+  "topic": {
+    "title": "Title",
+    "description": "Description",
+    "courseId": "Course ID",
+    "tags": "Tags",
+    "status": "Status",
+    "isCustom": "Is Custom",
+    "createTopic": "Create Topic",
+    "updateTopic": "Update Topic",
+    "editTopic": "Edit Topic",
+    "deleteTopic": "Delete Topic",
+    "viewTopic": "View Topic",
+    "topicCreated": "Topic has been created successfully!",
+    "topicUpdated": "Topic has been updated successfully!",
+    "topicDeleted": "Topic has been deleted successfully!",
+    "moreTopics": "See more topics",
+    "thumbnail": "Thumbnail",
+    "cancel": "Cancel",
+    "save": "Save",
+    "update": "Update"  
   }
 }
