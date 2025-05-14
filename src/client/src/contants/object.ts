@@ -26,7 +26,6 @@ export const STATUS_TOPIC: IStatusObj[] = [
   },
 ];
 
-
 export const STATUS_TOPIC_CUSTOM: IStatusObj[] = [
   {
     value: 'custom',
@@ -40,3 +39,33 @@ export const STATUS_TOPIC_CUSTOM: IStatusObj[] = [
   },
 ];
 
+export const STATUS_HIDDEN: IStatusObj[] = [
+  {
+    value: 'hidden',
+    label: 'Ẩn',
+    labelEn: 'Hidden',
+  },
+  {
+    value: 'visible',
+    label: 'Hiện',
+    labelEn: 'Visible',
+  },
+];
+
+export const STATUS_COURSE: IStatusObj[] = [
+  {
+    value: 'not_started',
+    label: 'Chưa bắt đầu',
+    labelEn: 'Not Started',
+  },
+  {
+    value: 'started',
+    label: 'Đang diễn ra',
+    labelEn: 'Started',
+  },
+  {
+    value: 'finished',
+    label: 'Đã hoàn thành',
+    labelEn: 'Finished',
+  },
+];

@@ -6,6 +6,8 @@ export const paths = {
   HOME: "/",
   DASHBOARD: "/dashboard",
   TOPICS: "/topics",
+  TOPICS_DETAIL: (id: string) => `/topics/${id}`,
+  
   SETTINGS: "/settings",
   USERS: "/users",
   POSTS: "/posts",
@@ -14,6 +16,7 @@ export const paths = {
   SEARCH: "/search",
 
   COURSES: "/courses",
+  COURSES_DETAIL: (id: string) => `/courses/${id}`,
   COURSE_CREATE: "/courses/create",
   COURSE_UPDATE: "/courses/update",
 

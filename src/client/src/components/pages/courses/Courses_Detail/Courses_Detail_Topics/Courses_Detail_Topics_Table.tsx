@@ -1,5 +1,4 @@
 import ActionDelete from '@/components/common/Action/ActionDelete';
-import { createSelectColumn } from '@/components/common/data-table/columns';
 import { DataTable } from '@/components/common/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,6 @@ import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
-
 import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/contants/object';
 import useQ_Topic_GetAllByCourseId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByCourseId';
 import { ITopic } from '@/interfaces/topic';
@@ -22,6 +20,7 @@ import MyBadge from '@/components/common/MyBadge';
 import { useRouter } from 'next/navigation';
 import Courses_Detail_Topics_Create from './Courses_Detail_Topics_Create';
 import Courses_Detail_Topics_Update from './Courses_Detail_Topics_Update';
+import { paths } from '@/data/path';
 function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
   const t = useTranslations('topic');
   const tCommon = useTranslations('common');
@@ -50,13 +49,6 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
 
   const columns = useMemo<ColumnDef<ITopic>[]>(
     () => [
-      createSelectColumn<ITopic>(),
-      {
-        id: 'stt',
-        header: () => <div className="text-center">STT</div>,
-        cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
-        size: 10,
-      },
       {
         header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
         accessorKey: 'title',
@@ -69,7 +61,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
       },
       {
         accessorKey: 'teacher',
-        header: "Teacher",
+        header: 'Teacher',
         size: 100,
         cell: ({ row }) => {
           const teacher = row.original.teacher;
@@ -93,7 +85,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
       },
       {
         accessorKey: 'group',
-        header: "Group",
+        header: 'Group',
         size: 100,
         cell: ({ row }) => {
           const authorName = row.original.author?.name ?? 'c';
@@ -167,12 +159,14 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
         data={topicsData?.data || []}
         fieldFilter="title"
         pagination={false}
+        showSelectionColumn={true}
+        showIndexColumn={true}
         toolbarCustom={customToolbar}
         renderActions={({ row }) => (
           <div className="flex justify-center">
             <ActionIcon
               actionType={'view'}
-              onClick={() => router.push(`/topics/${row.original.id}`)}
+              onClick={() => router.push(`${paths.TOPICS_DETAIL(row.original.id)}`)}
               type="button"
             />
             <Courses_Detail_Topics_Update topic={row.original} />

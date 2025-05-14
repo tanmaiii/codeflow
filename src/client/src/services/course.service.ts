@@ -1,17 +1,17 @@
-import { IGetAllQuery, ResponseAPIDto, ResponseAPIDtoWithPagination } from "@/interfaces/common";
-import { ICourse, ICreateCourseDto } from "@/interfaces/course";
-import createHttpClient from "@/lib/createHttpClient";
-import { AxiosInstance } from "axios";
+import { IGetAllQuery, ResponseAPIDto, ResponseAPIDtoWithPagination } from '@/interfaces/common';
+import { ICourse, ICreateCourseDto } from '@/interfaces/course';
+import createHttpClient from '@/lib/createHttpClient';
+import { AxiosInstance } from 'axios';
 
 class CourseService {
   private client: AxiosInstance;
 
   constructor() {
-    this.client = createHttpClient("courses");
+    this.client = createHttpClient('courses');
   }
 
   async getAll(params: IGetAllQuery): Promise<ResponseAPIDtoWithPagination<ICourse[]>> {
-    const response = await this.client.get("/", { params });
+    const response = await this.client.get('/', { params });
     return response.data;
   }
 
@@ -21,20 +21,22 @@ class CourseService {
   }
 
   async create(data: ICreateCourseDto): Promise<ResponseAPIDto<ICourse>> {
-    const response = await this.client.post("/", data);
+    const response = await this.client.post('/', data);
     return response.data;
   }
 
-  async update(
-    id: string,
-    data: ICreateCourseDto
-  ): Promise<ResponseAPIDto<ICourse>> {
+  async update(id: string, data: ICreateCourseDto): Promise<ResponseAPIDto<ICourse>> {
     const response = await this.client.put(`/${id}`, data);
     return response.data;
   }
 
   async delete(id: string): Promise<ResponseAPIDto<ICourse>> {
     const response = await this.client.put(`/${id}/delete`);
+    return response.data;
+  }
+
+  async destroy(id: string): Promise<ResponseAPIDto<ICourse>> {
+    const response = await this.client.delete(`/${id}`);
     return response.data;
   }
 }

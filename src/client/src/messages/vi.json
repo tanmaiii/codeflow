@@ -151,9 +151,13 @@
     "maxGroupMembers": "Số lượng thành viên tối đa",
     "documents": "Tài liệu",
     "topics": "Đề tài",
-    "suggestedTopics": "Đề tài đề xuất"
+    "suggestedTopics": "Đề tài đề xuất",
+    "author": "Tác giả",
+    "teacher": "Giáo viên",
+    "status": "Trạng thái",
+    "hidden": "Ẩn"
   },
- "topic": {
+  "topic": {
     "title": "Tiêu đề",
     "description": "Mô tả",
     "courseId": "Khóa học",

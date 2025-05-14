@@ -10,19 +10,27 @@ import {
 import { Input } from "@/components/ui/input"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
 import { useState, useEffect } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
   pageSizeOptions?: number[]
+  onPageChange?: (page: number) => void
+  appendToUrl?: boolean
 }
 
 export function DataTablePagination<TData>({
   table,
   pageSizeOptions = [10, 20, 30, 40, 50],
+  onPageChange,
+  appendToUrl = false,
 }: DataTablePaginationProps<TData>) {
   const [pageInputValue, setPageInputValue] = useState<string>(
     (table.getState().pagination.pageIndex + 1).toString()
   )
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPageInputValue(e.target.value)
@@ -33,6 +41,7 @@ export function DataTablePagination<TData>({
       const page = parseInt(pageInputValue, 10)
       if (!isNaN(page) && page > 0 && page <= table.getPageCount()) {
         table.setPageIndex(page - 1)
+        handlePageNavigation(page)
       } else {
         setPageInputValue((table.getState().pagination.pageIndex + 1).toString())
       }
@@ -43,6 +52,23 @@ export function DataTablePagination<TData>({
   useEffect(() => {
     setPageInputValue((table.getState().pagination.pageIndex + 1).toString())
   }, [table.getState().pagination.pageIndex])
+
+  const handlePageChange = (newPageIndex: number) => {
+    table.setPageIndex(newPageIndex)
+    handlePageNavigation(newPageIndex + 1)
+  }
+
+  const handlePageNavigation = (page: number) => {
+    if (onPageChange) {
+      onPageChange(page)
+    }
+    
+    if (appendToUrl) {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set("page", page.toString())
+      router.push(`${pathname}?${params.toString()}`)
+    }
+  }
 
   return (
     <div className="flex items-center justify-between px-2">
@@ -65,6 +91,7 @@ export function DataTablePagination<TData>({
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value))
+              handlePageNavigation(table.getState().pagination.pageIndex + 1)
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -95,7 +122,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
+            onClick={() => handlePageChange(0)}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Đi đến trang đầu</span>
@@ -106,6 +133,7 @@ export function DataTablePagination<TData>({
             className="h-8 w-8 p-0"
             onClick={() => {
               table.previousPage()
+              handlePageNavigation(table.getState().pagination.pageIndex)
             }}
             disabled={!table.getCanPreviousPage()}
           >
@@ -117,6 +145,7 @@ export function DataTablePagination<TData>({
             className="h-8 w-8 p-0"
             onClick={() => {
               table.nextPage()
+              handlePageNavigation(table.getState().pagination.pageIndex + 2)
             }}
             disabled={!table.getCanNextPage()}
           >
@@ -126,9 +155,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => {
-              table.setPageIndex(table.getPageCount() - 1)
-            }}
+            onClick={() => handlePageChange(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Đi đến trang cuối</span>

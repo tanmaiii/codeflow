@@ -12,7 +12,7 @@ export default function TextHeading({
   return (
     <h4
       className={cn(
-        'flex items-left gap-2 text-base text-left leading-none font-bold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
+        'flex items-left gap-2 text-base text-left leading-none font-bold group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
         lineClamp && `line-clamp-${lineClamp} break-all overflow-hidden text-ellipsis`,
         className,
       )}
@@ -31,7 +31,7 @@ export function TextDescription({
   return (
     <span
       className={cn(
-        'text-sm font-normal text-muted-foreground leading-none select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-20',
+        'text-sm font-normal text-muted-foreground leading-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-20',
         lineClamp && `line-clamp-${lineClamp} break-all overflow-hidden text-ellipsis`,
         className,
       )}

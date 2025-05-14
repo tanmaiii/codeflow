@@ -160,7 +160,11 @@
     "createCourseFailed": "Course has been created failed!",
     "documents": "Documents",
     "topics": "Topics",
-    "suggestedTopics": "Suggested Topics"
+    "suggestedTopics": "Suggested Topics",
+    "author": "Author",
+    "teacher": "Teacher",
+    "status": "Status",
+    "hidden": "Ẩn"
   },
   "topic": {
     "title": "Title",

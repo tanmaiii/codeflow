@@ -1,7 +1,9 @@
 'use client';
 import { paths } from '@/data/path';
+import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { useSidebarStore } from '@/stores/sidebar_store';
 import { useUserStore } from '@/stores/user_store';
+import { IconDashboard } from '@tabler/icons-react';
 import { PanelLeftClose, PanelRightClose } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -10,11 +12,6 @@ import LocaleSwitcher from '../../localeSwicher';
 import ThemeToggle from '../../themeToggle';
 import { Button } from '../../ui/button';
 import HeaderSearch from './HeaderSearch';
-import { IconDashboard } from '@tabler/icons-react';
-import useH_LocalPath from '@/hooks/useH_LocalPath';
-import tokenService from '@/services/token.service';
-import { IUser } from '@/interfaces/user';
-import { jwtDecode } from 'jwt-decode';
 
 
 export default function Header() {
@@ -23,7 +20,6 @@ export default function Header() {
   const tAuth = useTranslations('auth');
   const { user } = useUserStore();
   const { localPath } = useH_LocalPath();
-  const token = tokenService.accessToken;
 
   return (
     <header className="fixed top-0 z-30 bg-background-1 dark:bg-background-3 border-b px-4 py-2 flex items-center justify-between w-full h-14 md:16">
@@ -50,16 +46,8 @@ export default function Header() {
             tooltip={'Admin'}
             variant="outline"
             className="p-3"
-            onClick={() => {
-              try {
-                const decodedToken = jwtDecode<IUser>(token);
-                console.log(decodedToken);
-              } catch (error) {
-                console.error('Invalid token', error);
-              }
-            }}
           >
-            <Link className="text-white" href={localPath(paths.ADMIN)}>
+            <Link href={localPath(paths.ADMIN)}>
               <IconDashboard />
             </Link>
           </ButtonTooltip>

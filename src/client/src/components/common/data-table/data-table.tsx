@@ -30,6 +30,7 @@ import {
 import { DataTableToolbar } from './data-table-toolbar';
 import { DataTableViewOptions } from './data-table-view-options';
 import { DataTablePagination } from './data-table-pagination';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +39,10 @@ interface DataTableProps<TData, TValue> {
   pagination?: boolean;
   toolbarCustom?: ((props: { table: TableInstance<TData> }) => React.ReactNode) | React.ReactNode;
   renderActions?: (props: { row: Row<TData> }) => React.ReactNode;
+  showIndexColumn?: boolean;
+  showSelectionColumn?: boolean;
+  onPageChange?: (page: number) => void;
+  appendToUrl?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -47,6 +52,10 @@ export function DataTable<TData, TValue>({
   pagination = true,
   toolbarCustom,
   renderActions,
+  showIndexColumn = false,
+  showSelectionColumn = false,
+  onPageChange,
+  appendToUrl = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -62,7 +71,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
-    enableRowSelection: true,
+    enableRowSelection: showSelectionColumn,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -90,6 +99,20 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
+                {showSelectionColumn && (
+                  <TableHead className="w-[30px]">
+                    <Checkbox
+                      checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && 'indeterminate')
+                      }
+                      onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+                      aria-label="Select all"
+                      className="translate-y-[2px]"
+                    />
+                  </TableHead>
+                )}
+                {showIndexColumn && <TableHead className="w-[30px] text-center">STT</TableHead>}
                 {headerGroup.headers.map(header => {
                   return (
                     <TableHead key={header.id} style={{ width: header.column.getSize() }}>
@@ -105,10 +128,30 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody className="h-full">
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map(row => (
+              table.getRowModel().rows.map((row, rowIndex) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                  {showSelectionColumn && (
+                    <TableCell className="w-[30px]">
+                      <Checkbox
+                        checked={row.getIsSelected()}
+                        onCheckedChange={value => row.toggleSelected(!!value)}
+                        aria-label="Select row"
+                        className="translate-y-[2px]"
+                      />
+                    </TableCell>
+                  )}
+                  {showIndexColumn && (
+                    <TableCell className="text-center w-[30px]">
+                      {pagination
+                        ? table.getState().pagination.pageIndex *
+                            table.getState().pagination.pageSize +
+                          rowIndex +
+                          1
+                        : rowIndex + 1}
+                    </TableCell>
+                  )}
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-sm">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -122,7 +165,11 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={renderActions ? columns.length + 1 : columns.length}
+                  colSpan={
+                    (showSelectionColumn ? 1 : 0) +
+                    (showIndexColumn ? 1 : 0) +
+                    (renderActions ? columns.length + 1 : columns.length)
+                  }
                   className="h-24 text-center"
                 >
                   No results.
@@ -132,7 +179,13 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {pagination && <DataTablePagination table={table} />}
+      {pagination && (
+        <DataTablePagination 
+          table={table} 
+          onPageChange={onPageChange}
+          appendToUrl={appendToUrl}
+        />
+      )}
       {table.getFilteredSelectedRowModel().rows.length > 0 && (
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <span>

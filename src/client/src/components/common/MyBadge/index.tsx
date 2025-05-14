@@ -50,6 +50,36 @@ const stringToColor = (status: IStatusObj) => {
       text: 'text-orange-500',
       dot: 'bg-orange-500',
     },
+    hidden: {
+      bg: 'bg-red-600/10 dark:bg-red-600/20',
+      bgHover: 'hover:bg-red-600/10',
+      text: 'text-red-500',
+      dot: 'bg-red-500',
+    },
+    visible: {
+      bg: 'bg-green-600/10 dark:bg-green-600/20',
+      bgHover: 'hover:bg-green-600/10',
+      text: 'text-green-500',
+      dot: 'bg-green-500',
+    },
+    not_started: {
+      bg: 'bg-yellow-600/10 dark:bg-yellow-600/20',
+      bgHover: 'hover:bg-yellow-600/10',
+      text: 'text-yellow-500',
+      dot: 'bg-yellow-500',
+    },
+    started: {
+      bg: 'bg-blue-600/10 dark:bg-blue-600/20',
+      bgHover: 'hover:bg-blue-600/10',
+      text: 'text-blue-500',
+      dot: 'bg-blue-500',
+    },
+    finished: {
+      bg: 'bg-green-600/10 dark:bg-green-600/20',
+      bgHover: 'hover:bg-green-600/10',
+      text: 'text-green-500',
+      dot: 'bg-green-500',
+    },
     default: {
       bg: 'bg-slate-600/10 dark:bg-slate-600/20',
       bgHover: 'hover:bg-slate-600/10',
