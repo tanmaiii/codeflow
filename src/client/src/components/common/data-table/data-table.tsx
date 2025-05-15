@@ -31,7 +31,7 @@ import { DataTableToolbar } from './data-table-toolbar';
 import { DataTableViewOptions } from './data-table-view-options';
 import { DataTablePagination } from './data-table-pagination';
 import { Checkbox } from '@/components/ui/checkbox';
-
+import { useTranslations } from 'next-intl';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -61,6 +61,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const tTable = useTranslations('table');
 
   const table = useReactTable({
     data,
@@ -180,17 +181,17 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       {pagination && (
-        <DataTablePagination 
-          table={table} 
-          onPageChange={onPageChange}
-          appendToUrl={appendToUrl}
-        />
+        <DataTablePagination table={table} onPageChange={onPageChange} appendToUrl={appendToUrl} />
       )}
       {table.getFilteredSelectedRowModel().rows.length > 0 && (
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <span>
-            Đã chọn {table.getFilteredSelectedRowModel().rows.length} trên{' '}
-            {table.getFilteredRowModel().rows.length} hàng
+            {/* Đã chọn {table.getFilteredSelectedRowModel().rows.length} trên{' '}
+            {table.getFilteredRowModel().rows.length} hàng */}
+            {tTable('selectedRows', {
+              length: table.getFilteredSelectedRowModel().rows.length,
+              total: table.getFilteredRowModel().rows.length,
+            })}
           </span>
         </div>
       )}

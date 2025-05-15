@@ -2,19 +2,19 @@
 import ActionDelete from '@/components/common/Action/ActionDelete';
 import ActionIcon from '@/components/common/Action/ActionIcon';
 import { DataTable } from '@/components/common/data-table/data-table';
+import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { TextDescription } from '@/components/ui/text';
-import { STATUS_COURSE, STATUS_HIDDEN } from '@/contants/object';
+import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/contants/object';
 import { paths } from '@/data/path';
-import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
+import useQ_Topic_GetAll from '@/hooks/query-hooks/Topic/useQ_Topic_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
-import { ICourse } from '@/interfaces/course';
+import { ITopic } from '@/interfaces/topic';
 import apiConfig from '@/lib/api';
-import courseService from '@/services/course.service';
-import { utils_DateToDDMMYYYY } from '@/utils/date';
+import topicService from '@/services/topic.service';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
@@ -23,14 +23,14 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 
-export default function Courses_Table() {
+export default function Topics_Table() {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') || 1;
   const t = useTranslations('course');
   const { localPath } = useH_LocalPath();
   const router = useRouter();
 
-  const Q_Courses = useQ_Course_GetAll({
+  const Q_Topics = useQ_Topic_GetAll({
     params: {
       page: Number(page),
       limit: 10,
@@ -39,16 +39,14 @@ export default function Courses_Table() {
     },
   });
 
-  const columns = useMemo<ColumnDef<ICourse>[]>(
+  const columns = useMemo<ColumnDef<ITopic>[]>(
     () => [
       {
         header: t('title'),
         accessorKey: 'title',
         cell: ({ row }) => {
           return (
-            <Link href={localPath(paths.COURSES_DETAIL(row.original.id))}>
-              {row.original.title}
-            </Link>
+            <Link href={localPath(paths.TOPICS_DETAIL(row.original.id))}>{row.original.title}</Link>
           );
         },
         size: 200,
@@ -83,37 +81,22 @@ export default function Courses_Table() {
         },
       },
       {
-        header: t('startDate'),
-        accessorKey: 'startDate',
-        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.startDate!),
-      },
-      {
-        header: t('endDate'),
-        accessorKey: 'endDate',
-        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.endDate!),
-      },
-      {
-        header: t('topicDeadline'),
-        accessorKey: 'topicDeadline',
-        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.topicDeadline!),
-      },
-      {
-        header: t('status'),
-        accessorKey: 'status',
+        accessorKey: 'isCustom',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Is Custom" />,
+        size: 100,
         cell: ({ row }) => {
-          const startDate = new Date(row.original.startDate);
-          const endDate = new Date(row.original.endDate);
-          const statusType =
-            startDate > new Date() ? 'not_started' : endDate < new Date() ? 'finished' : 'started';
-          return <MyBadge status={STATUS_COURSE.find(item => item.value === statusType)!} />;
+          const isCustom = row.original.isCustom;
+          const statusType = isCustom ? 'custom' : 'suggest';
+          return <MyBadge status={STATUS_TOPIC_CUSTOM.find(item => item.value === statusType)!} />;
         },
       },
       {
-        header: t('hidden'),
-        accessorKey: 'hidden',
+        accessorKey: 'status',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+        size: 100,
         cell: ({ row }) => {
-          const statusType = row.original.status ? 'hidden' : 'visible';
-          return <MyBadge status={STATUS_HIDDEN.find(item => item.value === statusType)!} />;
+          const status = row.original.status;
+          return <MyBadge status={STATUS_TOPIC.find(item => item.value === status)!} />;
         },
       },
     ],
@@ -122,17 +105,17 @@ export default function Courses_Table() {
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Courses" description="Manage your courses" />
+      <TitleHeader title="Topics" description="Manage your topics" />
       <DataTable
         showIndexColumn={true}
         columns={columns}
-        data={Q_Courses.data?.data || []}
+        data={Q_Topics.data?.data || []}
         fieldFilter="title"
         pagination={false}
         showSelectionColumn={true}
         toolbarCustom={() => (
           <Button
-            onClick={() => router.push(`${paths.COURSE_CREATE}`)}
+            onClick={() => router.push(`${paths.TOPIC_CREATE}`)}
             variant="outline"
             size="sm"
             className="w-fit"
@@ -144,13 +127,13 @@ export default function Courses_Table() {
           <div className="flex justify-center">
             <ActionIcon
               actionType={'view'}
-              onClick={() => router.push(`${paths.COURSES_DETAIL(row.original.id)}`)}
+              onClick={() => router.push(`${paths.TOPICS_DETAIL(row.original.id)}`)}
               type="button"
             />
             <ActionDelete
               deleteKey={row.original.title}
               handleSubmit={async () => {
-                await courseService.delete(row.original.id);
+                await topicService.delete(row.original.id);
               }}
             />
           </div>
@@ -158,9 +141,9 @@ export default function Courses_Table() {
       />
       <div className="my-6">
         <MyPagination
-          currentPage={Q_Courses.data?.pagination.currentPage || 1}
-          totalPages={Q_Courses.data?.pagination.totalPages || 1}
-          onPageChange={page => router.push(`/admin/${paths.COURSES}?page=${page}`)}
+          currentPage={Q_Topics.data?.pagination.currentPage || 1}
+          totalPages={Q_Topics.data?.pagination.totalPages || 1}
+          onPageChange={page => router.push(`/admin/${paths.TOPICS}?page=${page}`)}
         />
       </div>
     </div>

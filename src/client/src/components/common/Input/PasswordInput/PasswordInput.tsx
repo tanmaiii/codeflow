@@ -9,7 +9,8 @@ import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
 interface FormFieldProps extends React.ComponentProps<'input'> {
   label?: string;
-  id: string;
+  description?: string;
+  id?: string;
   type?: string;
   placeholder?: string;
   registration: UseFormRegisterReturn;
@@ -18,6 +19,7 @@ interface FormFieldProps extends React.ComponentProps<'input'> {
 
 export default function PasswordInput({
   label,
+  description,
   id,
   registration,
   error,
@@ -56,6 +58,7 @@ export default function PasswordInput({
           )}
         </Button>
       </div>
+      {description && <p className="text-xs text-gray-500">{description}</p>}
       {error && <p className="text-red-500 text-sm">{error.message}</p>}
     </div>
   );

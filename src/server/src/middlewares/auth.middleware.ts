@@ -55,7 +55,9 @@ export const isAdmin = async (req: RequestWithUser, res: Response, next: NextFun
     } else {
       next(new HttpException(404, 'Authentication token missing'));
     }
-  } catch (error) {}
+  } catch (error) {
+    next(new HttpException(401, 'Wrong authentication token'));
+  }
 };
 
 export const isUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
@@ -75,5 +77,7 @@ export const isUser = async (req: RequestWithUser, res: Response, next: NextFunc
     } else {
       next(new HttpException(404, 'Authentication token missing'));
     }
-  } catch (error) {}
+  } catch (error) {
+    next(new HttpException(401, 'Wrong authentication token'));
+  }
 };

@@ -69,3 +69,21 @@ export const STATUS_COURSE: IStatusObj[] = [
     labelEn: 'Finished',
   },
 ];
+
+export const ROLE_USER: IStatusObj[] = [
+  {
+    value: 'user',
+    label: 'User',
+    labelEn: 'User',
+  },
+  {
+    value: 'admin',
+    label: 'Admin',
+    labelEn: 'Admin',
+  },
+  {
+    value: 'teacher',
+    label: 'Teacher',
+    labelEn: 'Teacher',
+  },
+];

@@ -21,4 +21,8 @@ export class GetAllQueryDto {
   @IsOptional()
   @IsIn(['ASC', 'DESC'])
   order?: 'ASC' | 'DESC' = 'DESC';
+
+  @IsOptional()
+  @IsString()
+  search?: string;
 }

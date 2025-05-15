@@ -1,4 +1,5 @@
-import { CreateUserDto } from '@dtos/users.dto';
+import { logger } from '@/utils/logger';
+import { CreateUserDto, UpdateUserDto } from '@dtos/users.dto';
 import { User } from '@interfaces/users.interface';
 import { UserService } from '@services/users.service';
 import { NextFunction, Request, Response } from 'express';
@@ -9,9 +10,25 @@ export class UserController {
 
   public getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllUsersData: User[] = await this.user.findAllUser();
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', search } = req.query;
+      const { rows, count }: { rows: User[]; count: number } = await this.user.findAllUserWithPagination(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        search ? String(search) : undefined,
+      );
 
-      res.status(200).json({ data: findAllUsersData, message: 'findAll' });
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
     } catch (error) {
       next(error);
     }
@@ -42,7 +59,8 @@ export class UserController {
   public updateUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.id;
-      const userData: CreateUserDto = req.body;
+      const userData: UpdateUserDto = req.body;
+      logger.info(JSON.stringify(userData));
       const updateUserData: User = await this.user.updateUser(userId, userData);
 
       res.status(200).json({ data: updateUserData, message: 'updated' });
@@ -57,6 +75,17 @@ export class UserController {
       const deleteUserData: User = await this.user.deleteUser(userId);
 
       res.status(200).json({ data: deleteUserData, message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public destroyUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.id;
+      const destroyUserData: User = await this.user.destroyUser(userId);
+
+      res.status(200).json({ data: destroyUserData, message: 'destroyed' });
     } catch (error) {
       next(error);
     }

@@ -8,6 +8,7 @@
     "delete": "Xóa",
     "create": "Tạo",
     "edit": "Chỉnh sửa",
+    "update": "Cập nhật",
     "save": "Lưu",
     "add": "Thêm",
     "search": "Tìm kiếm",
@@ -125,6 +126,7 @@
     "course": "Khóa học",
     "view": "Xem khóa học",
     "updated": "Đã cập nhật",
+    "create": "Tạo",
     "allCourses": "Tất cả",
     "registeredCourses": "Đã đăng ký",
     "completedCourses": "Đã hoàn thành",
@@ -178,5 +180,20 @@
     "update": "Cập nhật",
     "deleteSuccess": "Đã xóa thành công",
     "deleteError": "Xóa thất bại"
+  },
+  "table": {
+    "selectedRows": "Đã chọn {length} hàng trên {total}"
+  },
+  "users": {
+    "name": "Tên",
+    "username": "Username",
+    "email": "Email",
+    "role": "Vai trò",
+    "password": "Mật khẩu",
+    "createUser": "Tạo người dùng",
+    "updateUser": "Cập nhật người dùng",
+    "editUser": "Chỉnh sửa người dùng",
+    "deleteUser": "Xóa người dùng",
+    "viewUser": "Xem người dùng"
   }
 }

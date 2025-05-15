@@ -7,6 +7,7 @@ export const paths = {
   DASHBOARD: "/dashboard",
   TOPICS: "/topics",
   TOPICS_DETAIL: (id: string) => `/topics/${id}`,
+  TOPIC_CREATE: "/topics/create",
   
   SETTINGS: "/settings",
   USERS: "/users",

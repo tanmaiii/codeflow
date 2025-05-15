@@ -5,11 +5,11 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/tiptap-ui-primitive/tooltip"
+} from "@/components/ui/tiptap/tiptap-ui-primitive/tooltip"
 
-import "@/components/tiptap-ui-primitive/button/button-colors.scss"
-import "@/components/tiptap-ui-primitive/button/button-group.scss"
-import "@/components/tiptap-ui-primitive/button/button.scss"
+import "@/components/ui/tiptap/tiptap-ui-primitive/button/button-colors.scss"
+import "@/components/ui/tiptap/tiptap-ui-primitive/button/button-group.scss"
+import "@/components/ui/tiptap/tiptap-ui-primitive/button/button.scss"
 
 type PlatformShortcuts = Record<string, string>
 

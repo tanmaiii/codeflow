@@ -1,3 +1,5 @@
+'use client'
+
 import { type Table } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import {
@@ -51,7 +53,7 @@ export function DataTablePagination<TData>({
   // Update page input value when table page changes
   useEffect(() => {
     setPageInputValue((table.getState().pagination.pageIndex + 1).toString())
-  }, [table.getState().pagination.pageIndex])
+  }, [table])
 
   const handlePageChange = (newPageIndex: number) => {
     table.setPageIndex(newPageIndex)

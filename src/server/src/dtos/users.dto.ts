@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsEmail()
@@ -16,7 +16,21 @@ export class CreateUserDto {
   public name: string;
 }
 
-export class LoginUserDto {
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  @MinLength(3)
+  @MaxLength(255)
+  public name: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(3)
+  @MaxLength(255)
+  public username: string;
+
+  @IsOptional()
+  @IsString()
   @IsEmail()
   public email: string;
 
@@ -27,21 +41,15 @@ export class LoginUserDto {
   public password: string;
 }
 
-export class UpdateUserDto {
+export class LoginUserDto {
+  @IsEmail()
+  public email: string;
+
   @IsString()
   @IsNotEmpty()
-  @MinLength(9)
+  @MinLength(6)
   @MaxLength(32)
   public password: string;
-
-  @IsString()
-  @MinLength(3)
-  @MaxLength(32)
-  public username: string;
-
-  @IsString()
-  @MaxLength(255)
-  public avatar: string;
 }
 
 export class CreateUserGithubDto {
@@ -58,8 +66,7 @@ export class CreateUserGithubDto {
   public accessToken: string;
 }
 
-
-export class CreateUserGithub{
+export class CreateUserGithub {
   @IsString()
   @IsNotEmpty()
   login: string;

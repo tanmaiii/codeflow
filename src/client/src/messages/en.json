@@ -6,6 +6,7 @@
     "no": "No",
     "close": "Close",
     "delete": "Delete",
+    "update": "Update",
     "create": "Create",
     "edit": "Edit",
     "save": "Save",
@@ -132,6 +133,7 @@
     "course": "Course",
     "view": "View",
     "updated": "Updated",
+    "create": "Create",
     "allCourses": "All",
     "registeredCourses": "Registered",
     "completedCourses": "Completed",
@@ -188,5 +190,20 @@
     "update": "Update",
     "deleteSuccess": "Deleted successfully",
     "deleteError": "Failed to delete"
+  },
+  "table": {
+    "selectedRows": "Selected {length} rows on {total}"
+  },
+  "users": {
+    "name": "Name",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "password": "Password",
+    "createUser": "Create User",
+    "updateUser": "Update User",
+    "editUser": "Edit User",
+    "deleteUser": "Delete User",
+    "viewUser": "View User"
   }
 }

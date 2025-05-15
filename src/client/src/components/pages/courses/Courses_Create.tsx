@@ -179,7 +179,6 @@ export default function Courses_Create() {
                       label: tag.name,
                       value: tag.id,
                     }))}
-                    // defaultValue={field.value}
                     onValueChange={field.onChange}
                   />
                 )}

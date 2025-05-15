@@ -27,6 +27,12 @@ export const menuAdmin: ILinkItem[] = [
     href: paths.COURSES,
   },
   {
+    en: 'Topics',
+    vi: 'Đề tài',
+    icon: 'project',
+    href: paths.TOPICS,
+  },
+  {
     en: 'Settings',
     vi: 'Cài đặt',
     icon: 'settings',

@@ -80,6 +80,24 @@ const stringToColor = (status: IStatusObj) => {
       text: 'text-green-500',
       dot: 'bg-green-500',
     },
+    user: {
+      bg: 'bg-green-600/10 dark:bg-green-600/20',
+      bgHover: 'hover:bg-green-600/10',
+      text: 'text-green-500',
+      dot: 'bg-green-500',
+    },
+    admin: {
+      bg: 'bg-blue-600/10 dark:bg-blue-600/20',
+      bgHover: 'hover:bg-blue-600/10',
+      text: 'text-blue-500',
+      dot: 'bg-blue-500',
+    },
+    teacher: {
+      bg: 'bg-yellow-600/10 dark:bg-yellow-600/20',
+      bgHover: 'hover:bg-yellow-600/10',
+      text: 'text-yellow-500',
+      dot: 'bg-yellow-500',
+    },
     default: {
       bg: 'bg-slate-600/10 dark:bg-slate-600/20',
       bgHover: 'hover:bg-slate-600/10',

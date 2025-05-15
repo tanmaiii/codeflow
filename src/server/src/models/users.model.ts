@@ -2,7 +2,10 @@ import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import { User } from '@interfaces/users.interface';
 import { ENUM_USER_ROLE, ENUM_USER_STATUS } from '@/data/enum';
 
-export type UserCreationAttributes = Optional<User, 'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar'>;
+export type UserCreationAttributes = Optional<
+  User,
+  'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar'
+>;
 
 export class UserModel extends Model<User, UserCreationAttributes> implements User {
   public id!: string;
@@ -67,6 +70,18 @@ export default function (sequelize: Sequelize): typeof UserModel {
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm
+      defaultScope: {
+        attributes: {
+          exclude: ['password'],
+        },
+      },
+      scopes: {
+        withPassword: {
+          attributes: {
+            include: ['password'],
+          },
+        },
+      },
     },
   );
 

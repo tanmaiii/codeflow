@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import TextHeading, { TextDescription } from "@/components/ui/text";
-import { IMAGES } from "@/data/images";
-import { cx } from "class-variance-authority";
-import { ChevronRight, Search as SearchICon } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import TextHeading, { TextDescription } from '@/components/ui/text';
+import { IMAGES } from '@/data/images';
+import { cx } from 'class-variance-authority';
+import { ChevronRight, Search as SearchICon } from 'lucide-react';
+import Image from 'next/image';
+import { useState } from 'react';
 
 export default function HeaderSearch() {
   const focusInput = useState(false);
@@ -14,29 +14,29 @@ export default function HeaderSearch() {
     <div className="relative w-full ">
       <div
         className={cx(
-          "flex items-center bg-background-2 dark:bg-background-1  p-2 h-11",
-          focusInput[0] ? "border rounded-t-lg" : "rounded-lg"
+          'flex items-center bg-background-2 dark:bg-background-1  p-2 h-11',
+          focusInput[0] ? 'border rounded-t-lg' : 'rounded-lg',
         )}
       >
         <SearchICon className="text-color-2" />
         <input
           type="text"
           placeholder="Search..."
-          onBlur={(e) => {
-            e.target.placeholder = "Search...";
+          onBlur={e => {
+            e.target.placeholder = 'Search...';
             focusInput[1](false);
           }}
-          onFocus={(e) => {
-            e.target.placeholder = "";
+          onFocus={e => {
+            e.target.placeholder = '';
             focusInput[1](true);
           }}
-          className="ml-2 p-1 focus:outline-none w-100 placeholder:text-color-2"
+          className="ml-2 p-1 focus:outline-none w-100 placeholder:text-color-2 placeholder:text-sm"
         />
       </div>
       <div
         className={cx(
-          "absolute top-[100%] left-0 w-full bg-background-1 shadow-lg rounded-b-lg p-2 border",
-          focusInput[0] ? "block" : "hidden"
+          'absolute top-[100%] left-0 w-full bg-background-1 shadow-lg rounded-b-lg p-2 border',
+          focusInput[0] ? 'block' : 'hidden',
         )}
       >
         <ScrollArea className="h-72 w-full rounded-md">

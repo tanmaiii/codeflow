@@ -95,7 +95,7 @@ export default function Posts_Update() {
       toast.error("You are not authorized to update this post");
       router.push(localPath(paths.POSTS));
     }
-  }, [user?.user?.id, Q_Post.data?.data?.author?.id, localPath, router]);
+  }, [user, Q_Post, localPath, router]);
 
   if (Q_Post.isLoading) return <TextDescription>Loading...</TextDescription>;
   if (Q_Post.error) return <TextDescription>Error...</TextDescription>;
