@@ -21,6 +21,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
 import Users_Update from './Users_Update';
+import Link from 'next/link';
 
 export default function Users_Table() {
   const router = useRouter();
@@ -60,10 +61,27 @@ export default function Users_Table() {
       {
         header: 'Username',
         accessorKey: 'username',
+        cell: ({ row }) => {
+          if (row.original.uid) {
+            return (
+              <Link
+                className="hover:underline"
+                href={`https://github.com/${row.original.username}`}
+                target="_blank"
+              >
+                <TextDescription className="text-color-1">{row.original.username}</TextDescription>
+              </Link>
+            );
+          }
+          return row.original.username;
+        },
       },
       {
         header: 'Email',
         accessorKey: 'email',
+        cell: ({ row }) => (
+          <TextDescription className="text-color-1">{row.original.email}</TextDescription>
+        ),
       },
       {
         header: 'Role',
@@ -77,7 +95,7 @@ export default function Users_Table() {
         },
       },
     ],
-    [data?.data],
+    [],
   );
 
   const mutationDelete = useMutation({

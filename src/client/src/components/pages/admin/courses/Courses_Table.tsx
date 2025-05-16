@@ -147,6 +147,11 @@ export default function Courses_Table() {
               onClick={() => router.push(`${paths.COURSES_DETAIL(row.original.id)}`)}
               type="button"
             />
+            <ActionIcon
+              actionType={'update'}
+              onClick={() => router.push(`${paths.COURSE_UPDATE(row.original.id)}`)}
+              type="button"
+            />
             <ActionDelete
               deleteKey={row.original.title}
               handleSubmit={async () => {
@@ -156,13 +161,11 @@ export default function Courses_Table() {
           </div>
         )}
       />
-      <div className="my-6">
-        <MyPagination
-          currentPage={Q_Courses.data?.pagination.currentPage || 1}
-          totalPages={Q_Courses.data?.pagination.totalPages || 1}
-          onPageChange={page => router.push(`/admin/${paths.COURSES}?page=${page}`)}
-        />
-      </div>
+      <MyPagination
+        currentPage={Q_Courses.data?.pagination.currentPage || 1}
+        totalPages={Q_Courses.data?.pagination.totalPages || 1}
+        onPageChange={page => router.push(`/admin/${paths.COURSES}?page=${page}`)}
+      />
     </div>
   );
 }

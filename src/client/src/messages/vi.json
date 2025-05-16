@@ -162,6 +162,7 @@
   "topic": {
     "title": "Tiêu đề",
     "description": "Mô tả",
+    "course": "Khóa học",
     "courseId": "Khóa học",
     "tags": "Thẻ",
     "status": "Trạng thái",
@@ -175,11 +176,8 @@
     "topicUpdated": "Đề tài đã được cập nhật thành công!",
     "topicDeleted": "Đề tài đã được xóa thành công!",
     "moreTopics": "Xem thêm đề tài",
-    "cancel": "Thoát",
-    "save": "Lưu",
-    "update": "Cập nhật",
-    "deleteSuccess": "Đã xóa thành công",
-    "deleteError": "Xóa thất bại"
+    "author": "Tác giả",
+    "teacher": "Giáo viên"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"

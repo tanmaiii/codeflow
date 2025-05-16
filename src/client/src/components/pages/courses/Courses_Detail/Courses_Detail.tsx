@@ -53,7 +53,7 @@ export default function Courses_Detail() {
                 <Button
                   variant="none"
                   size="sm"
-                  onClick={() => router.push(localPath(paths.COURSE_UPDATE + '/' + id))}
+                  onClick={() => router.push(localPath(paths.COURSE_UPDATE(id)))}
                 >
                   <IconPencil className="size-6" />
                 </Button>

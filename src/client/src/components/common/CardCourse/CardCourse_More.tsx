@@ -28,7 +28,7 @@ export default function CardCourse_More({ course, className }: CardCourse_MorePr
   };
 
   const onUpdate = () => {
-    router.push(localPath(paths.COURSE_UPDATE + '/' + course.id));
+    router.push(localPath(paths.COURSE_UPDATE(course.id)));
   };
 
   const mutationDelete = useMutation({

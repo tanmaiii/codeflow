@@ -1,10 +1,9 @@
-import { HttpException } from '@exceptions/HttpException';
 import { Topic, TopicCreate } from '@/interfaces/topics.interface';
-import { DB } from '../database';
-import Container, { Service } from 'typedi';
-import { TagService } from './tag.service';
 import { isEmpty } from '@/utils/util';
-import { Sequelize } from 'sequelize';
+import { HttpException } from '@exceptions/HttpException';
+import Container, { Service } from 'typedi';
+import { DB } from '../database';
+import { TagService } from './tag.service';
 
 @Service()
 export class TopicService {

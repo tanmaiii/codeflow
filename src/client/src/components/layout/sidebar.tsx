@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import { IMAGES } from "@/data/images";
-import { paths } from "@/data/path";
-import { ILinkItem } from "@/interfaces/common";
-import { useSidebarStore } from "@/stores/sidebar_store";
-import { useThemeStore } from "@/stores/theme_store";
-import clsx from "clsx";
+import { IMAGES } from '@/data/images';
+import { paths } from '@/data/path';
+import { ILinkItem } from '@/interfaces/common';
+import { cn } from '@/lib/utils';
+import { useSidebarStore } from '@/stores/sidebar_store';
+import { useThemeStore } from '@/stores/theme_store';
+import clsx from 'clsx';
 import {
   Book,
   FolderGit,
@@ -16,10 +17,11 @@ import {
   Settings,
   Users,
   Newspaper,
-} from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
-import Link from "next/link";
+} from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const iconMap: Record<string, LucideIcon> = {
   layout: Layout,
@@ -31,28 +33,26 @@ const iconMap: Record<string, LucideIcon> = {
   article: Newspaper,
 };
 
-const RenderNavItem = ({
-  item,
-  prefix,
-}: {
-  item: ILinkItem;
-  prefix: string;
-}) => {
+const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) => {
   const Icon = iconMap[item.icon] || Home;
   const { collapsed } = useSidebarStore();
   const currentLocale = useLocale();
+
+  const pathname = usePathname();
+  const isActive = pathname.startsWith(item.href) || (item.href !== '/' && pathname.includes(item.href));
 
   return (
     <Link
       key={item.href}
       href={`${prefix}${item.href}`}
-      className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10"
+      className={cn(
+        'flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10',
+        isActive && item.href !== '/' && 'bg-primary/10',
+      )}
     >
       <Icon className="w-5 h-5" />
       {!collapsed && (
-        <span className="font-medium">
-          {currentLocale === "vi" ? item.vi : item.en}
-        </span>
+        <span className="font-medium">{currentLocale === 'vi' ? item.vi : item.en}</span>
       )}
     </Link>
   );
@@ -63,36 +63,31 @@ type SidebarProps = {
   menu: ILinkItem[];
 };
 
-export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
+export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
   const { collapsed } = useSidebarStore();
   const { theme } = useThemeStore();
-  const t = useTranslations("auth");
+  const t = useTranslations('auth');
 
   return (
     <aside
       className={clsx(
         `h-[calc(100vh-56px)] border-r bg-background-1 dark:bg-background-3 flex flex-col transition-all duration-300 
         fixed left-0 top-14 bottom-0 md:sticky z-20 xl:sticky`,
-        collapsed ? "hidden md:flex w-16" : "w-full md:w-64"
+        collapsed ? 'hidden md:flex w-16' : 'w-full md:w-64',
       )}
     >
-      <Link
-        href={`${prefix}/`}
-        className="p-4 gap-2 flex items-center w-full justify-start"
-      >
+      <Link href={`${prefix}/`} className="p-4 gap-2 flex items-center w-full justify-start">
         <Image
           width={40}
           height={40}
-          src={theme === "dark" ? IMAGES.LOGO : IMAGES.LOGO_LIGHT}
+          src={theme === 'dark' ? IMAGES.LOGO : IMAGES.LOGO_LIGHT}
           alt="logo.png"
         />
-        {!collapsed && (
-          <h4 className="text-2xl font-bold text-primary">CodeFlow</h4>
-        )}
+        {!collapsed && <h4 className="text-2xl font-bold text-primary">CodeFlow</h4>}
       </Link>
 
       <nav className="flex-1 space-y-1 px-2">
-        {menu.map((item) => (
+        {menu.map(item => (
           <RenderNavItem item={item} prefix={prefix} key={item.href} />
         ))}
       </nav>
@@ -103,7 +98,7 @@ export default function Sidebar({ menu, prefix = "" }: SidebarProps) {
           className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
         >
           <LogOut className="w-5 h-5" />
-          {!collapsed && <span>{t("logout")}</span>}
+          {!collapsed && <span>{t('logout')}</span>}
         </Link>
       </div>
     </aside>

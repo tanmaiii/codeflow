@@ -28,7 +28,7 @@ export default function CardPost_More({ post, className }: CardPost_MoreProps) {
   };
 
   const onUpdate = () => {
-    router.push(localPath(paths.POST_UPDATE + '/' + post.id));
+    router.push(localPath(paths.POST_UPDATE(post.id)));
   };
 
   const mutationDelete = useMutation({

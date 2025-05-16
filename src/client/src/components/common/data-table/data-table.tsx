@@ -32,6 +32,7 @@ import { DataTableViewOptions } from './data-table-view-options';
 import { DataTablePagination } from './data-table-pagination';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -43,6 +44,7 @@ interface DataTableProps<TData, TValue> {
   showSelectionColumn?: boolean;
   onPageChange?: (page: number) => void;
   appendToUrl?: boolean;
+  className?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -56,6 +58,7 @@ export function DataTable<TData, TValue>({
   showSelectionColumn = false,
   onPageChange,
   appendToUrl = false,
+  className,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -86,7 +89,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className={cn('space-y-4', className)}>
       <div className="flex items-center justify-between ">
         <div className="flex items-center space-x-2">
           {fieldFilter && <DataTableToolbar fieldFilter={fieldFilter} table={table} />}

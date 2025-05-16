@@ -16,19 +16,23 @@ import { ITopic } from '@/interfaces/topic';
 import apiConfig from '@/lib/api';
 import topicService from '@/services/topic.service';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
-import { ColumnDef } from '@tanstack/react-table';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
+import { toast } from 'sonner';
 
 export default function Topics_Table() {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') || 1;
-  const t = useTranslations('course');
+  const t = useTranslations('topic');
+  const tCommon = useTranslations('common');
   const { localPath } = useH_LocalPath();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const Q_Topics = useQ_Topic_GetAll({
     params: {
@@ -47,6 +51,16 @@ export default function Topics_Table() {
         cell: ({ row }) => {
           return (
             <Link href={localPath(paths.TOPICS_DETAIL(row.original.id))}>{row.original.title}</Link>
+          );
+        },
+        size: 200,
+      },
+      {
+        header: t('course'),
+        accessorKey: 'course',
+        cell: ({ row }) => {
+          return (
+            <TextDescription className="text-color-1">{row.original.course?.title}</TextDescription>
           );
         },
         size: 200,
@@ -103,6 +117,41 @@ export default function Topics_Table() {
     [localPath, t],
   );
 
+  const mutationDelete = useMutation({
+    mutationFn: async (selectedRowsData: ITopic[]) => {
+      await Promise.all(selectedRowsData.map(item => topicService.delete(item.id)));
+    },
+    onSuccess: () => {
+      toast.success(tCommon('deleteSuccess'));
+      queryClient.invalidateQueries({ queryKey: ['topics'] });
+    },
+    onError: () => {
+      toast.error(tCommon('deleteError'));
+    },
+  });
+
+  const customToolbar = ({ table }: { table: Table<ITopic> }) => {
+    const selectedRowsData = table.getFilteredSelectedRowModel().rows.map(row => row.original);
+    const selectedRowsCount = table.getFilteredSelectedRowModel().rows.length;
+
+    return (
+      <>
+        <Button onClick={() => router.push(`${paths.TOPIC_CREATE}`)} variant="outline" size="sm">
+          {tCommon('create')}
+        </Button>
+        {selectedRowsCount > 0 && (
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => mutationDelete.mutate(selectedRowsData)}
+          >
+            {`${tCommon('delete')} (${selectedRowsCount})`}
+          </Button>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
       <TitleHeader title="Topics" description="Manage your topics" />
@@ -113,16 +162,7 @@ export default function Topics_Table() {
         fieldFilter="title"
         pagination={false}
         showSelectionColumn={true}
-        toolbarCustom={() => (
-          <Button
-            onClick={() => router.push(`${paths.TOPIC_CREATE}`)}
-            variant="outline"
-            size="sm"
-            className="w-fit"
-          >
-            {t('create')}
-          </Button>
-        )}
+        toolbarCustom={customToolbar}
         renderActions={({ row }) => (
           <div className="flex justify-center">
             <ActionIcon

@@ -1,9 +1,9 @@
-'use client'
-import { IGetAllQuery, ResponseAPIDtoWithPagination } from "@/interfaces/common";
-import { ITopic } from "@/interfaces/topic";
-import topicService from "@/services/topic.service";
+'use client';
+import { IGetAllQuery, ResponseAPIDtoWithPagination } from '@/interfaces/common';
+import { ITopic } from '@/interfaces/topic';
+import topicService from '@/services/topic.service';
 
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 interface ParamsProps extends IGetAllQuery {
   courseId: string;
@@ -19,7 +19,7 @@ export default function useQ_Topic_GetAllByCourseId({
   params,
 }: UseQ_Topic_GetAllByCourseIdProps) {
   const query = useQuery({
-    queryKey: ["topics", "course", params.courseId],
+    queryKey: ['topics', 'course', params],
     queryFn: async () => {
       const res = topicService.getAllByCourseId(params, params.courseId);
       return res;

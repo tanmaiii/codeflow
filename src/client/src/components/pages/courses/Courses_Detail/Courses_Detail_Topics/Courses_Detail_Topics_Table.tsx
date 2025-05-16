@@ -6,7 +6,7 @@ import { TextDescription } from '@/components/ui/text';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/contants/object';
 import useQ_Topic_GetAllByCourseId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByCourseId';
@@ -21,15 +21,18 @@ import { useRouter } from 'next/navigation';
 import Courses_Detail_Topics_Create from './Courses_Detail_Topics_Create';
 import Courses_Detail_Topics_Update from './Courses_Detail_Topics_Update';
 import { paths } from '@/data/path';
+import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
   const t = useTranslations('topic');
   const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
   const router = useRouter();
+
   const { data: topicsData } = useQ_Topic_GetAllByCourseId({
     params: {
-      page: 1,
-      limit: 10000,
+      page: page,
+      limit: 2,
       courseId,
     },
   });
@@ -133,7 +136,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
         },
       },
     ],
-    [],
+    [page, topicsData],
   );
 
   const customToolbar = ({ table }: { table: Table<ITopic> }) => {
@@ -155,6 +158,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
   return (
     <div className="h-full">
       <DataTable
+        className="min-h-[600px]"
         columns={columns}
         data={topicsData?.data || []}
         fieldFilter="title"
@@ -178,6 +182,11 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
             />
           </div>
         )}
+      />
+      <MyPagination
+        currentPage={topicsData?.pagination?.currentPage ?? 1}
+        totalPages={topicsData?.pagination?.totalPages ?? 1}
+        onPageChange={value => setPage(value)}
       />
     </div>
   );

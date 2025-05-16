@@ -26,8 +26,16 @@ export const initModels = () => {
   UserModel.hasMany(TopicModel, { foreignKey: 'teacherId' });
 
   // tags
-  CourseModel.belongsToMany(TagModel, { through: CourseTagModel, as: 'tags', foreignKey: 'courseId' });
-  TagModel.belongsToMany(CourseModel, { through: CourseTagModel, as: 'courses', foreignKey: 'tagId' });
+  CourseModel.belongsToMany(TagModel, {
+    through: CourseTagModel,
+    as: 'tags',
+    foreignKey: 'courseId',
+  });
+  TagModel.belongsToMany(CourseModel, {
+    through: CourseTagModel,
+    as: 'courses',
+    foreignKey: 'tagId',
+  });
 
   PostModel.belongsToMany(TagModel, { through: PostTagModel, as: 'tags', foreignKey: 'postId' });
   TagModel.belongsToMany(PostModel, { through: PostTagModel, as: 'posts', foreignKey: 'tagId' });
@@ -49,6 +57,9 @@ export const initModels = () => {
 
   CourseModel.hasMany(CourseDocumentModel, { foreignKey: 'courseId', as: 'documents' });
   CourseDocumentModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
+
+  CourseModel.hasMany(TopicModel, { foreignKey: 'courseId', as: 'topics' });
+  TopicModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
 };
 
 export { CourseModel, UserModel, PostModel, TagModel, PostLikeModel };

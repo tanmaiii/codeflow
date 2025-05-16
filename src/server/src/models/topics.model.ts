@@ -3,8 +3,12 @@ import { Topic } from '@interfaces/topics.interface';
 import { UserModel } from './users.model';
 import { TagModel } from './tags.model';
 import { ENUM_TOPIC_STATUS } from '@/data/enum';
+import { CourseModel } from './courses.model';
 
-type PostCreationAttributes = Optional<Topic, 'id' | 'title' | 'description' | 'courseId' | 'teacherId' | 'authorId' | 'isCustom' | 'status'>;
+type PostCreationAttributes = Optional<
+  Topic,
+  'id' | 'title' | 'description' | 'courseId' | 'teacherId' | 'authorId' | 'isCustom' | 'status'
+>;
 
 export class TopicModel extends Model<Topic, PostCreationAttributes> implements Topic {
   public id!: string;
@@ -93,6 +97,13 @@ export default function (sequelize: Sequelize): typeof TopicModel {
             model: TagModel,
             as: 'tags',
             through: { attributes: [] },
+          },
+          {
+            model: CourseModel,
+            as: 'course',
+            attributes: {
+              exclude: ['description'],
+            },
           },
         ],
       },

@@ -37,7 +37,7 @@ export const MyPagination = ({
   const pages = getPages();
 
   return (
-    <Pagination>
+    <Pagination className="mt-4">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

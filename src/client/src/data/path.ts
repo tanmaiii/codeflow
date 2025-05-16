@@ -13,13 +13,13 @@ export const paths = {
   USERS: "/users",
   POSTS: "/posts",
   POST_CREATE: "/posts/create",
-  POST_UPDATE: "/posts/update",
+  POST_UPDATE: (id: string) => `/posts/${id}/update`,
   SEARCH: "/search",
 
   COURSES: "/courses",
   COURSES_DETAIL: (id: string) => `/courses/${id}`,
   COURSE_CREATE: "/courses/create",
-  COURSE_UPDATE: "/courses/update",
+  COURSE_UPDATE: (id: string) => `/courses/${id}/update`,
 
   LOGIN: "/login",
   REGISTER: "/register",

@@ -171,6 +171,7 @@
   "topic": {
     "title": "Title",
     "description": "Description",
+    "course": "Course",
     "courseId": "Course ID",
     "tags": "Tags",
     "status": "Status",
@@ -185,11 +186,8 @@
     "topicDeleted": "Topic has been deleted successfully!",
     "moreTopics": "See more topics",
     "thumbnail": "Thumbnail",
-    "cancel": "Cancel",
-    "save": "Save",
-    "update": "Update",
-    "deleteSuccess": "Deleted successfully",
-    "deleteError": "Failed to delete"
+    "author": "Author",
+    "teacher": "Teacher"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"

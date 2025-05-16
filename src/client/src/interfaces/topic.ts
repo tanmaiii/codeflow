@@ -1,6 +1,7 @@
-import { IBaseEntity } from "./common";
-import { IUser } from "./user";
-import { ITag } from "./tags";
+import { IBaseEntity } from './common';
+import { ICourse } from './course';
+import { IUser } from './user';
+import { ITag } from './tags';
 
 export interface ITopic extends IBaseEntity {
   id: string;
@@ -14,6 +15,7 @@ export interface ITopic extends IBaseEntity {
   author?: IUser;
   teacher?: IUser;
   tags: ITag[];
+  course?: ICourse;
 }
 
 export interface ITopicCreateDto {
@@ -24,4 +26,3 @@ export interface ITopicCreateDto {
   isCustom?: boolean;
   status?: string;
 }
-
