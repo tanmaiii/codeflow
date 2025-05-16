@@ -1,12 +1,21 @@
 import { Course } from '@/interfaces/courses.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { UserModel } from './users.model';
-import { TagModel } from './tags.model';
-import { CommentModel } from './comments.model';
 import { CourseDocumentModel } from './course_documents.model';
+import { TagModel } from './tags.model';
+import { UserModel } from './users.model';
 export type CourseCreationAttributes = Optional<
   Course,
-  'id' | 'title' | 'thumbnail' | 'description' | 'endDate' | 'startDate' | 'topicDeadline' | 'authorId' | 'status' | 'maxGroupMembers'
+  | 'id'
+  | 'title'
+  | 'thumbnail'
+  | 'description'
+  | 'endDate'
+  | 'startDate'
+  | 'topicDeadline'
+  | 'authorId'
+  | 'status'
+  | 'maxGroupMembers'
+  | 'type'
 >;
 
 export class CourseModel extends Model<Course, CourseCreationAttributes> implements Course {
@@ -17,10 +26,12 @@ export class CourseModel extends Model<Course, CourseCreationAttributes> impleme
   public startDate: Date;
   public endDate: Date;
   public topicDeadline: Date;
+  public regStartDate: Date;
+  public regEndDate: Date;
   public authorId: string;
   public status = false;
   public maxGroupMembers = 3;
-
+  public type = 'elective';
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -53,6 +64,14 @@ export default function (sequelize: Sequelize): typeof CourseModel {
         allowNull: true,
         type: DataTypes.DATE,
       },
+      regStartDate: {
+        allowNull: true,
+        type: DataTypes.DATE,
+      },
+      regEndDate: {
+        allowNull: true,
+        type: DataTypes.DATE,
+      },
       topicDeadline: {
         allowNull: true,
         type: DataTypes.DATE,
@@ -74,6 +93,11 @@ export default function (sequelize: Sequelize): typeof CourseModel {
           model: 'users',
           key: 'id',
         },
+      },
+      type: {
+        allowNull: false,
+        type: DataTypes.ENUM('major', 'foundation', 'thesis', 'elective'),
+        defaultValue: 'elective',
       },
     },
     {

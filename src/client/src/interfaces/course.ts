@@ -1,6 +1,6 @@
-import { IBaseEntity } from "./common";
-import { ITag } from "./tags";
-import { IUser } from "./user";
+import { IBaseEntity } from './common';
+import { ITag } from './tags';
+import { IUser } from './user';
 
 export interface IDocument {
   id: string;
@@ -23,6 +23,7 @@ export interface ICourse extends IBaseEntity {
   documents: IDocument[];
   tags: ITag[];
   author?: IUser;
+  type: string;
 }
 
 export interface ICreateCourseDto {

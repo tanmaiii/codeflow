@@ -1,4 +1,4 @@
-import { ENUM_STATUS_TOPIC } from './enum';
+import { ENUM_STATUS_TOPIC, ENUM_TYPE_COURSE } from './enum';
 
 // ENUM('pending', 'approved', 'rejected')
 
@@ -85,5 +85,28 @@ export const ROLE_USER: IStatusObj[] = [
     value: 'teacher',
     label: 'Teacher',
     labelEn: 'Teacher',
+  },
+];
+
+export const TYPE_COURSE: IStatusObj[] = [
+  {
+    value: ENUM_TYPE_COURSE.MAJOR,
+    label: 'Chuyên ngành',
+    labelEn: 'Major',
+  },
+  {
+    value: ENUM_TYPE_COURSE.FOUNDATION,
+    label: 'Cơ sở ngành',
+    labelEn: 'Foundation',
+  },
+  {
+    value: ENUM_TYPE_COURSE.THESIS,
+    label: 'Khóa luận',
+    labelEn: 'Thesis',
+  },
+  {
+    value: ENUM_TYPE_COURSE.ELECTIVE,
+    label: 'Môn học',
+    labelEn: 'Elective',
   },
 ];

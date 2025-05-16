@@ -2,6 +2,7 @@ import { IBaseEntity } from './common';
 import { ICourse } from './course';
 import { IUser } from './user';
 import { ITag } from './tags';
+import { IGroup } from './group';
 
 export interface ITopic extends IBaseEntity {
   id: string;
@@ -16,6 +17,7 @@ export interface ITopic extends IBaseEntity {
   teacher?: IUser;
   tags: ITag[];
   course?: ICourse;
+  group?: IGroup[];
 }
 
 export interface ITopicCreateDto {

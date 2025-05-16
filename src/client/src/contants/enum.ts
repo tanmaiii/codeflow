@@ -5,6 +5,13 @@ export enum ENUM_STATUS_TOPIC {
 }
 
 export enum ENUM_STATUS_COURSE {
-  PENDING = 'pending',
-  COMPLETED = 'completed',
+  PENDING = 'pending', // chưa bắt đầu
+  COMPLETED = 'completed', // đã bắt đầu
+}
+
+export enum ENUM_TYPE_COURSE {
+  MAJOR = 'major',
+  FOUNDATION = 'foundation',
+  THESIS = 'thesis',
+  ELECTIVE = 'elective',
 }

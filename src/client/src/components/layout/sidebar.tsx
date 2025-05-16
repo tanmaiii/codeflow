@@ -39,7 +39,15 @@ const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) =>
   const currentLocale = useLocale();
 
   const pathname = usePathname();
-  const isActive = pathname.startsWith(item.href) || (item.href !== '/' && pathname.includes(item.href));
+  const pathWithoutLocale = pathname.replace(/^\/(en|vi)/, '');
+  
+  let isActive = false;
+  if (item.href === '/') {
+    isActive = pathWithoutLocale === '/' || pathname === '/en' || pathname === '/vi';
+  } else {
+    isActive = pathWithoutLocale === `${prefix}${item.href}` || 
+              pathWithoutLocale.startsWith(`${prefix}${item.href}/`);
+  }
 
   return (
     <Link
@@ -47,7 +55,7 @@ const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) =>
       href={`${prefix}${item.href}`}
       className={cn(
         'flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10',
-        isActive && item.href !== '/' && 'bg-primary/10',
+        isActive && 'bg-primary/10',
       )}
     >
       <Icon className="w-5 h-5" />

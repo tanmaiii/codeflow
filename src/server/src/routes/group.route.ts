@@ -1,5 +1,6 @@
 import { GroupController } from '@/controllers/group.controller';
-import { CreateGroupDto } from '@/dtos/groups.dto';
+import { GetAllQueryDto } from '@/dtos/common.dto';
+import { CreateGroupDto, AddMemberToGroupDto } from '@/dtos/groups.dto';
 import { Routes } from '@/interfaces/routes.interface';
 import { AuthMiddleware } from '@/middlewares/auth.middleware';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
@@ -15,12 +16,13 @@ export class GroupRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.groupController.getGroups);
-    this.router.get(`${this.path}/pagination`, this.groupController.getGroupsWithPagination);
+    this.router.get(`${this.path}`,ValidationMiddleware(GetAllQueryDto, 'query'), this.groupController.getGroups);
     this.router.get(`${this.path}/:id`, this.groupController.getGroupById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateGroupDto), this.groupController.createGroup);
     this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(CreateGroupDto), this.groupController.updateGroup);
     this.router.delete(`${this.path}/:id`, AuthMiddleware, this.groupController.deleteGroup);
     this.router.delete(`${this.path}/:id/destroy`, AuthMiddleware, this.groupController.destroyGroup);
+
+    this.router.post(`${this.path}/:id/members`, AuthMiddleware, ValidationMiddleware(AddMemberToGroupDto), this.groupController.addMemberToGroup);
   }
 }

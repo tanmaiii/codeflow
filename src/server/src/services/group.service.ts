@@ -2,6 +2,7 @@ import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
 import { Group } from '@/interfaces/groups.interface';
 import { Service } from 'typedi';
+import { Op } from 'sequelize';
 
 @Service()
 export class GroupService {
@@ -10,10 +11,18 @@ export class GroupService {
     return allGroups;
   }
 
-  public async findAndCountAllWithPagination(limit: number, offset: number): Promise<{ count: number; rows: Group[] }> {
+  public async findAndCountAllWithPagination(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+  ): Promise<{ count: number; rows: Group[] }> {
     const { count, rows }: { count: number; rows: Group[] } = await DB.Groups.findAndCountAll({
-      limit,
-      offset,
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+      distinct: true,
+      col: 'groups.id',
     });
     return { count, rows };
   }
@@ -26,6 +35,14 @@ export class GroupService {
   }
 
   public async createGroup(groupData: Partial<Group>): Promise<Group> {
+    // Kiểm tra xem topic đã có group chưa
+    if (groupData.topicId) {
+      const existingGroup = await DB.Groups.findOne({ where: { topicId: groupData.topicId } });
+      if (existingGroup) {
+        throw new HttpException(409, "This topic already has a group");
+      }
+    }
+    
     const createGroupData: Group = await DB.Groups.create(groupData);
     return createGroupData;
   }
@@ -33,6 +50,20 @@ export class GroupService {
   public async updateGroup(groupId: string, groupData: Partial<Group>): Promise<Group> {
     const findGroup: Group = await DB.Groups.findByPk(groupId);
     if (!findGroup) throw new HttpException(409, "Group doesn't exist");
+
+    // Kiểm tra xem topic mới đã có group khác chưa (nếu có cập nhật topicId)
+    if (groupData.topicId && groupData.topicId !== findGroup.topicId) {
+      const existingGroup = await DB.Groups.findOne({
+        where: { 
+          topicId: groupData.topicId,
+          id: { [Op.ne]: groupId } // Không phải group hiện tại
+        }
+      });
+      
+      if (existingGroup) {
+        throw new HttpException(409, "This topic already has another group");
+      }
+    }
 
     await DB.Groups.update(groupData, { where: { id: groupId } });
 

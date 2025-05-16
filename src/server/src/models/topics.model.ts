@@ -4,7 +4,7 @@ import { UserModel } from './users.model';
 import { TagModel } from './tags.model';
 import { ENUM_TOPIC_STATUS } from '@/data/enum';
 import { CourseModel } from './courses.model';
-
+import { GroupModel } from './groups.model';
 type PostCreationAttributes = Optional<
   Topic,
   'id' | 'title' | 'description' | 'courseId' | 'teacherId' | 'authorId' | 'isCustom' | 'status'
@@ -104,6 +104,10 @@ export default function (sequelize: Sequelize): typeof TopicModel {
             attributes: {
               exclude: ['description'],
             },
+          },
+          {
+            model: GroupModel,
+            as: 'group',
           },
         ],
       },

@@ -56,8 +56,7 @@ export const DB = {
   TopicTag: TopicTagModel(sequelize),
   CourseDocument: CourseDocument(sequelize),
   PostLike: PostLikeModel(sequelize),
-  sequelize, // connection instance (RAW queries)
-  Sequelize, // library
+  sequelize, 
 };
 
 initModels();

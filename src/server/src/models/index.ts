@@ -10,6 +10,8 @@ import { TopicModel } from './topics.model';
 import { TopicTagModel } from './topic_tag.model';
 import { CourseDocumentModel } from './course_documents.model';
 import { PostLikeModel } from './post_like.model';
+import { GroupModel } from './groups.model';
+import { GroupMemberModel } from './groups_member.model';
 
 export const initModels = () => {
   // author, teacher
@@ -60,6 +62,18 @@ export const initModels = () => {
 
   CourseModel.hasMany(TopicModel, { foreignKey: 'courseId', as: 'topics' });
   TopicModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
+
+  GroupModel.hasMany(GroupMemberModel, { foreignKey: 'groupId', as: 'members' });
+  GroupMemberModel.belongsTo(GroupModel, { foreignKey: 'groupId', as: 'group' });
+
+  GroupModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
+  UserModel.hasMany(GroupModel, { foreignKey: 'authorId' });
+
+  GroupMemberModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
+  UserModel.hasMany(GroupMemberModel, { foreignKey: 'userId', as: 'members' });
+
+  GroupModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
+  TopicModel.hasMany(GroupModel, { foreignKey: 'topicId', as: 'group' });
 };
 
-export { CourseModel, UserModel, PostModel, TagModel, PostLikeModel };
+export { CourseModel, UserModel, PostModel, TagModel, PostLikeModel, GroupModel, GroupMemberModel };

@@ -1,34 +1,32 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import Image from "next/image";
-import Link from "next/link";
-import { IMAGES } from "@/data/images";
-import { paths } from "@/data/path";
-import { ICourse } from "@/interfaces/course";
-import NameTags from "../NameTags/NameTags";
-import apiConfig from "@/lib/api";
-import { utils_TimeAgo } from "@/utils/date";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import useH_LocalPath from "@/hooks/useH_LocalPath";
-import CardCourse_More from "./CardCourse_More";
-import { utils_ApiImageToLocalImage } from "@/utils/image";
-import TextHeading, { TextDescription } from "@/components/ui/text";
-
+'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import Image from 'next/image';
+import Link from 'next/link';
+import { IMAGES } from '@/data/images';
+import { paths } from '@/data/path';
+import { ICourse } from '@/interfaces/course';
+import NameTags from '../NameTags/NameTags';
+import apiConfig from '@/lib/api';
+import { utils_TimeAgo } from '@/utils/date';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import useH_LocalPath from '@/hooks/useH_LocalPath';
+import CardCourse_More from './CardCourse_More';
+import { utils_ApiImageToLocalImage } from '@/utils/image';
+import TextHeading, { TextDescription } from '@/components/ui/text';
+import { Badge } from '@/components/ui/badge';
+import { TYPE_COURSE } from '@/contants/object';
+import { getCurrentLocale } from '@/lib/utils';
 interface CardCourseProps {
   course: ICourse;
 }
 
 export default function CardCourse({ course }: CardCourseProps) {
-  const t = useTranslations("course");
+  const t = useTranslations('course');
   const router = useRouter();
   const { localPath } = useH_LocalPath();
+  const locale = getCurrentLocale();
 
   const onShowCourse = () => {
     router.push(`${localPath(paths.COURSES)}/${course.id}`);
@@ -50,6 +48,13 @@ export default function CardCourse({ course }: CardCourseProps) {
             className="object-cover w-full h-[120px] rounded-md cursor-pointer"
             onClick={onShowCourse}
           />
+          <div className="absolute top-1 left-1">
+            <Badge variant="default" className="bg-zinc-900/40 text-white">
+              {locale === 'vi'
+                ? TYPE_COURSE.find((type) => type.value === course.type)?.label
+                : TYPE_COURSE.find((type) => type.value === course.type)?.labelEn}
+            </Badge>
+          </div>
           <CardCourse_More
             course={course}
             className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -57,12 +62,9 @@ export default function CardCourse({ course }: CardCourseProps) {
         </div>
       </CardHeader>
       <CardContent className="min-h-[60px] px-4 flex flex-1 flex-col gap-2">
-        <Link href={"/"} className="flex items-center gap-2">
+        <Link href={'/'} className="flex items-center gap-2">
           <Image
-            src={
-              course?.author?.avatar ??
-              apiConfig.avatar(course?.author?.name ?? "c")
-            }
+            src={course?.author?.avatar ?? apiConfig.avatar(course?.author?.name ?? 'c')}
             alt={course?.author?.avatar ?? ''}
             width={100}
             height={100}
@@ -78,14 +80,11 @@ export default function CardCourse({ course }: CardCourseProps) {
         <NameTags className="mt-auto" tags={course?.tags} />
       </CardContent>
       <CardFooter className="flex flex-col px-4 w-full gap-2 items-start mt-auto">
-        <Button
-          className="w-full dark:text-white"
-          onClick={onShowCourse}
-        >
-          {t("view")}
+        <Button className="w-full dark:text-white" onClick={onShowCourse}>
+          {t('view')}
         </Button>
         <TextDescription>
-          {t("updated")} {utils_TimeAgo(new Date(course.updatedAt ?? ""))}
+          {t('updated')} {utils_TimeAgo(new Date(course.updatedAt ?? ''))}
         </TextDescription>
       </CardFooter>
     </Card>
