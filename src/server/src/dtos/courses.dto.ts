@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateCourseDto {
   @IsString()
@@ -16,9 +16,22 @@ export class CreateCourseDto {
   public endDate: Date;
 
   @IsString()
+  public regStartDate: Date;
+
+  @IsString()
+  public regEndDate: Date;
+
+  @IsString()
   public topicDeadline: Date;
 
   @IsOptional()
   @IsArray()
   public tags?: Array<string> | null;
+
+  @IsOptional()
+  @IsString()
+  public type: string;
+
+  @IsNumber()
+  public maxGroupMembers: number;
 }

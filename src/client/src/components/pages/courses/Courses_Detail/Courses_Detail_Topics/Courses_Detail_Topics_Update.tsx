@@ -66,7 +66,6 @@ export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic 
           name="status"
           control={control}
           options={STATUS_TOPIC}
-          placeholder={tTopic('status')}
           error={errors.status}
           required={true}
         />

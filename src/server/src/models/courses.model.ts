@@ -29,9 +29,9 @@ export class CourseModel extends Model<Course, CourseCreationAttributes> impleme
   public regStartDate: Date;
   public regEndDate: Date;
   public authorId: string;
-  public status = false;
-  public maxGroupMembers = 3;
-  public type = 'elective';
+  public status: boolean;
+  public maxGroupMembers: number;
+  public type: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }

@@ -17,6 +17,8 @@ export interface ICourse extends IBaseEntity {
   authorId: string;
   startDate: string;
   endDate: string;
+  regStartDate: string;
+  regEndDate: string;
   topicDeadline: string;
   status: boolean;
   maxGroupMembers: number;

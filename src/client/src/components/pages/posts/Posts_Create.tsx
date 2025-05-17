@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import DragDropImage from "@/components/common/Input/DragDropImage/DragDropImage";
-import TextInput from "@/components/common/Input/TextInput/TextInput";
-import MultiSelect from "@/components/common/MyMultiSelect/MyMultiSelect";
-import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { paths } from "@/data/path";
-import useQ_Tag_GetAll from "@/hooks/query-hooks/Tag/useQ_Tag_GetAll";
-import useH_LocalPath from "@/hooks/useH_LocalPath";
-import { postSchemaType, usePostSchema } from "@/lib/validations/postSchema";
-import postService from "@/services/post.service";
-import uploadService from "@/services/file.service";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { useTranslations } from "next-intl";
-import TextHeading from "@/components/ui/text";
+import DragDropImage from '@/components/common/Input/DragDropImage/DragDropImage';
+import TextInput from '@/components/common/Input/TextInput/TextInput';
+import MyMultiSelect from '@/components/common/MyMultiSelect/MyMultiSelect';
+import RichTextEditor from '@/components/common/RichTextEditor/RichTextEditor';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import TextHeading from '@/components/ui/text';
+import { paths } from '@/data/path';
+import useQ_Tag_GetAll from '@/hooks/query-hooks/Tag/useQ_Tag_GetAll';
+import useH_LocalPath from '@/hooks/useH_LocalPath';
+import { postSchemaType, usePostSchema } from '@/lib/validations/postSchema';
+import uploadService from '@/services/file.service';
+import postService from '@/services/post.service';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export default function Posts_Create() {
   const [file, setFile] = useState<File | null>(null);
   const schema = usePostSchema();
   const router = useRouter();
   const { localPath } = useH_LocalPath();
-  const t = useTranslations("post");
+  const t = useTranslations('post');
 
   const Q_Tag = useQ_Tag_GetAll();
 
@@ -43,7 +43,7 @@ export default function Posts_Create() {
 
   const handleUpload = async (file: File) => {
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append('image', file);
     const image = await uploadService.upload(formData);
     return image.data.files[0].path;
   };
@@ -59,27 +59,25 @@ export default function Posts_Create() {
     },
     onError: (err: unknown) => {
       console.error(err);
-      toast.error(
-        (err as Error)?.message || "An error occurred while creating the post"
-      );
+      toast.error((err as Error)?.message || 'An error occurred while creating the post');
     },
     onSuccess: () => {
       reset();
       router.push(localPath(paths.POSTS));
-      toast.success("Post created successfully");
+      toast.success('Post created successfully');
     },
   });
 
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
       <Card className="w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
-        <TextHeading>{t("createPost")}</TextHeading>
+        <TextHeading>{t('createPost')}</TextHeading>
         <div className="flex flex-col gap-4">
-          <Label className="text-color-2">{t("thumbnail")}</Label>
+          <Label className="text-color-2">{t('thumbnail')}</Label>
           <div className="h-[300px] w-full">
             <DragDropImage
               file={file}
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              onChange={e => setFile(e.target.files?.[0] || null)}
               className="w-full h-full"
               accept="image/*"
             />
@@ -87,60 +85,54 @@ export default function Posts_Create() {
         </div>
 
         <form
-          onSubmit={handleSubmit((value) => mutation.mutate(value))}
+          onSubmit={handleSubmit(value => mutation.mutate(value))}
           className="flex flex-col gap-3"
         >
           <TextInput
-            label={t("title")}
+            label={t('title')}
             className="w-full"
-            registration={register("title")}
+            registration={register('title')}
             error={errors.title?.message ? errors.title : undefined}
           />
 
-          {Q_Tag.data && (
-            <Controller
+          {Q_Tag.data?.data && (
+            <MyMultiSelect
+              label={t('tags')}
               name="tags"
               control={control}
-              render={({ field }) => (
-                <MultiSelect
-                  label={t("tags")}
-                  id="tags"
-                  options={Q_Tag.data?.data?.map((tag) => ({
-                    label: tag.name,
-                    value: tag.id,
-                  }))}
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                />
-              )}
+              error={errors.tags?.message}
+              options={
+                Q_Tag.data?.data?.map(tag => ({
+                  label: tag.name,
+                  value: tag.id,
+                })) || []
+              }
             />
           )}
 
-          <div className="flex flex-col gap-2">
-            <Label className="text-color-2">{t("description")}</Label>
-            <Controller
-              control={control}
-              name="content"
-              render={({ field }) => (
-                <RichTextEditor
-                  content={field.value}
-                  onChange={field.onChange}
-                  error={errors.content}
-                  className="min-h-[400px]"
-                />
-              )}
-            />
-          </div>
+          <Controller
+            control={control}
+            name="content"
+            render={({ field }) => (
+              <RichTextEditor
+                content={field.value}
+                onChange={field.onChange}
+                error={errors.content}
+                className="min-h-[400px]"
+              />
+            )}
+          />
+
           <div className="flex items-center justify-end gap-2 mt-4">
             <Button
-              variant={"outline"}
+              variant={'outline'}
               type="button"
               onClick={() => router.push(localPath(paths.POSTS))}
             >
-              {t("cancel")}
+              {t('cancel')}
             </Button>
             <Button disabled={isSubmitting} type="submit">
-              {t("save")}
+              {t('save')}
             </Button>
           </div>
         </form>

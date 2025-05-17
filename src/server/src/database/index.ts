@@ -12,6 +12,7 @@ import SubmissionModel from '@/models/submissions.model';
 import TagModel from '@/models/tags.model';
 import TopicTagModel from '@/models/topic_tag.model';
 import TopicModel from '@/models/topics.model';
+import ReposModel from '@/models/repos.model';
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER, NODE_ENV } from '@config';
 import UserModel from '@models/users.model';
 import { logger } from '@utils/logger';
@@ -56,6 +57,7 @@ export const DB = {
   TopicTag: TopicTagModel(sequelize),
   CourseDocument: CourseDocument(sequelize),
   PostLike: PostLikeModel(sequelize),
+  Repos: ReposModel(sequelize),
   sequelize, 
 };
 

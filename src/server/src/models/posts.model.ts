@@ -1,8 +1,7 @@
 import { Post } from '@/interfaces/posts.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { UserModel } from './users.model';
 import { TagModel } from './tags.model';
-import { CommentModel } from './comments.model';
+import { UserModel } from './users.model';
 
 type PostCreationAttributes = Optional<Post, 'id' | 'title' | 'content' | 'authorId' | 'thumbnail' | 'status'>;
 

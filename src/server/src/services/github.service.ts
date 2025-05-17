@@ -6,7 +6,7 @@ import { GitHubContent, GitHubRepository, GitHubUser } from '@interfaces/github.
 @Service()
 export class GitHubService {
   private baseUrl = 'https://api.github.com';
-  
+
   /**
    * Get user information from GitHub
    * @param accessToken GitHub access token
@@ -15,10 +15,10 @@ export class GitHubService {
   public async getUserInfo(accessToken: string): Promise<GitHubUser> {
     try {
       const response = await axios.get(`${this.baseUrl}/user`, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/vnd.github.v3+json'
-        }
+          Accept: 'application/vnd.github.v3+json',
+        },
       });
       logger.info(`[GitHub Service] User info: ${response.data}`);
       return response.data;
@@ -34,17 +34,20 @@ export class GitHubService {
    * @param username GitHub username
    * @returns List of repositories
    */
-  public async getUserRepositories(accessToken: string, username: string): Promise<GitHubRepository[]> {
+  public async getUserRepositories(
+    accessToken: string,
+    username: string,
+  ): Promise<GitHubRepository[]> {
     try {
       const response = await axios.get(`${this.baseUrl}/users/${username}/repos`, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/vnd.github.v3+json'
+          Accept: 'application/vnd.github.v3+json',
         },
         params: {
           sort: 'updated',
-          per_page: 100
-        }
+          per_page: 100,
+        },
       });
       return response.data;
     } catch (error) {
@@ -60,13 +63,17 @@ export class GitHubService {
    * @param repo Repository name
    * @returns Repository details
    */
-  public async getRepository(accessToken: string, owner: string, repo: string): Promise<GitHubRepository> {
+  public async getRepository(
+    accessToken: string,
+    owner: string,
+    repo: string,
+  ): Promise<GitHubRepository> {
     try {
       const response = await axios.get(`${this.baseUrl}/repos/${owner}/${repo}`, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/vnd.github.v3+json'
-        }
+          Accept: 'application/vnd.github.v3+json',
+        },
       });
       return response.data;
     } catch (error) {
@@ -83,13 +90,18 @@ export class GitHubService {
    * @param path Path to the file or directory
    * @returns Repository contents
    */
-  public async getRepositoryContents(accessToken: string, owner: string, repo: string, path: string = ''): Promise<GitHubContent | GitHubContent[]> {
+  public async getRepositoryContents(
+    accessToken: string,
+    owner: string,
+    repo: string,
+    path: string = '',
+  ): Promise<GitHubContent | GitHubContent[]> {
     try {
       const response = await axios.get(`${this.baseUrl}/repos/${owner}/${repo}/contents/${path}`, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/vnd.github.v3+json'
-        }
+          Accept: 'application/vnd.github.v3+json',
+        },
       });
       return response.data;
     } catch (error) {
@@ -97,4 +109,26 @@ export class GitHubService {
       throw error;
     }
   }
-} 
+
+  public async inviteUserToOrganization(
+    accessToken: string,
+    organization: string,
+    username: string,
+  ): Promise<void> {
+    try {
+      const response = await axios.post(`${this.baseUrl}/orgs/${organization}/invitations`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+        data: {
+          email: username,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error inviting user to organization: ${error.message}`);
+      throw error;
+    }
+  }
+}

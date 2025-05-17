@@ -12,7 +12,6 @@ import { Label } from '@/components/ui/label';
 interface MySelectProps<T extends FieldValues = FieldValues> {
   label: string;
   options: { label: string; value: string; labelEn?: string }[];
-  placeholder: string;
   name: Path<T>;
   control?: Control<T>;
   error?: FieldError;
@@ -24,7 +23,6 @@ interface MySelectProps<T extends FieldValues = FieldValues> {
 
 export default function MySelect<T extends FieldValues>({
   options,
-  placeholder,
   name,
   control,
   error,
@@ -52,7 +50,7 @@ export default function MySelect<T extends FieldValues>({
               disabled={disabled || field.disabled}
             >
               <SelectTrigger className={`w-full !h-13 !rounded-xl ${className}`}>
-                <SelectValue placeholder={placeholder} />
+                <SelectValue placeholder={`Select ${label}`} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -77,7 +75,7 @@ export default function MySelect<T extends FieldValues>({
       <Label className="mb-2 text-color-2">{label}</Label>
       <Select disabled={disabled}>
         <SelectTrigger className={`w-full !h-13 !rounded-lg ${className}`}>
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={`Select ${label}`} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

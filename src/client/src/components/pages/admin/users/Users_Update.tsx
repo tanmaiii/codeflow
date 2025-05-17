@@ -68,7 +68,6 @@ export default function Users_Update({ user }: { user: IUser }) {
           name="role"
           control={control}
           options={ROLE_USER}
-          placeholder={t('role')}
           error={errors.role}
           required={true}
         />

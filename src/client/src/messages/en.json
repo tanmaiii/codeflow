@@ -88,6 +88,8 @@
     "max": "{field} must be at most {length}",
     "endDateMustBeAfterStartDate": "End date must be after start date",
     "startDateMustBeBeforeEndDate": "Start date must be before end date",
+    "dateBefore": "{firstField} must be before {secondField}",
+    "dateAfter": "{firstField} must be after {secondField}",
     "fileMaxSize": "File size must be less than {length}",
     "fileMaxFiles": "You can only upload {length} files",
     "fileNotAccepted": "File type is not accepted, only accept {field}"
@@ -152,8 +154,11 @@
     "content": "Content",
     "startDate": "Start Date",
     "endDate": "End Date",
+    "regStartDate": "Registration Start Date",
+    "regEndDate": "Registration End Date",
     "topicDeadline": "Topic Deadline",
     "tags": "Tags",
+    "type": "Type",
     "cancel": "Cancel",
     "save": "Save",
     "update": "Update",
@@ -166,7 +171,10 @@
     "author": "Author",
     "teacher": "Teacher",
     "status": "Status",
-    "hidden": "Ẩn"
+    "hidden": "Ẩn",
+    "notStartRegister": "Not start register",
+    "startRegister": "Start register",
+    "endRegister": "End register"
   },
   "topic": {
     "title": "Title",
