@@ -18,6 +18,7 @@ const provider = new GithubAuthProvider();
 // Xin tất cả quyền
 provider.addScope("repo");
 provider.addScope("repo:org");
+provider.addScope("admin:org");
 provider.addScope("write:repo_hook");
 provider.addScope("workflow");
 provider.addScope("write:packages");

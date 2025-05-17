@@ -2,10 +2,16 @@ import { Service } from 'typedi';
 import axios from 'axios';
 import { logger } from '@utils/logger';
 import { GitHubContent, GitHubRepository, GitHubUser } from '@interfaces/github.interface';
+import { env } from 'process';
 
 @Service()
 export class GitHubService {
   private baseUrl = 'https://api.github.com';
+
+  private headers = {
+    Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+    Accept: 'application/vnd.github+json',
+  };
 
   /**
    * Get user information from GitHub
@@ -110,19 +116,18 @@ export class GitHubService {
     }
   }
 
-  public async inviteUserToOrganization(
-    accessToken: string,
-    organization: string,
-    username: string,
-  ): Promise<void> {
+  public async inviteUserToOrganization(organization: string, username: string): Promise<void> {
     try {
+      const userResp = await axios.get(`https://api.github.com/users/${username}`, {
+        headers: this.headers,
+      });
+      const userId = userResp.data.id;
+
       const response = await axios.post(`${this.baseUrl}/orgs/${organization}/invitations`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/vnd.github.v3+json',
-        },
+        headers: this.headers,
         data: {
-          email: username,
+          invitee_id: userId,
+          role: 'direct_member',
         },
       });
       return response.data;

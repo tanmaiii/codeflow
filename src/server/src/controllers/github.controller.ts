@@ -4,6 +4,8 @@ import { GitHubService } from '@services/github.service';
 import { RequestWithUser } from '@interfaces/auth.interface';
 import { HttpException } from '@exceptions/HttpException';
 import { GitHubRequestBody } from '@interfaces/github.interface';
+import { env } from 'process';
+import { logger } from '@/utils/logger';
 
 export class GitHubController {
   public github = Container.get(GitHubService);
@@ -14,11 +16,11 @@ export class GitHubController {
   public getUserInfo = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const { accessToken } = req.body as GitHubRequestBody;
-      
+
       if (!accessToken) {
         throw new HttpException(400, 'Access token is required');
       }
-      
+
       const userData = await this.github.getUserInfo(accessToken);
       res.status(200).json({ data: userData, message: 'github-user-info' });
     } catch (error) {
@@ -33,15 +35,15 @@ export class GitHubController {
     try {
       const { accessToken } = req.body as GitHubRequestBody;
       const { username } = req.params;
-      
+
       if (!accessToken) {
         throw new HttpException(400, 'Access token is required');
       }
-      
+
       if (!username) {
         throw new HttpException(400, 'Username is required');
       }
-      
+
       const repositories = await this.github.getUserRepositories(accessToken, username);
       res.status(200).json({ data: repositories, message: 'github-user-repositories' });
     } catch (error) {
@@ -56,15 +58,15 @@ export class GitHubController {
     try {
       const { accessToken } = req.body as GitHubRequestBody;
       const { owner, repo } = req.params;
-      
+
       if (!accessToken) {
         throw new HttpException(400, 'Access token is required');
       }
-      
+
       if (!owner || !repo) {
         throw new HttpException(400, 'Owner and repo are required');
       }
-      
+
       const repository = await this.github.getRepository(accessToken, owner, repo);
       res.status(200).json({ data: repository, message: 'github-repository' });
     } catch (error) {
@@ -75,24 +77,61 @@ export class GitHubController {
   /**
    * Get repository contents
    */
-  public getRepositoryContents = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public getRepositoryContents = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { accessToken } = req.body as GitHubRequestBody;
       const { owner, repo } = req.params;
       const { path = '' } = req.query;
-      
+
       if (!accessToken) {
         throw new HttpException(400, 'Access token is required');
       }
-      
+
       if (!owner || !repo) {
         throw new HttpException(400, 'Owner and repo are required');
       }
-      
-      const contents = await this.github.getRepositoryContents(accessToken, owner, repo, path as string);
+
+      const contents = await this.github.getRepositoryContents(
+        accessToken,
+        owner,
+        repo,
+        path as string,
+      );
       res.status(200).json({ data: contents, message: 'github-repository-contents' });
     } catch (error) {
       next(error);
     }
   };
-} 
+
+  public inviteUserToOrganization = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const username = req.body.username;
+      const { organization } = req.params;
+
+      logger.info(
+        `[GitHub Controller] username: ${username}, organization: ${organization}`,
+      );
+
+      if (!username) {
+        throw new HttpException(400, 'Username is required');
+      }
+
+      if (!organization || !username) {
+        throw new HttpException(400, 'Organization and username are required');
+      }
+
+      await this.github.inviteUserToOrganization(organization, username);
+      res.status(200).json({ message: 'github-invite-user-to-organization' });
+    } catch (error) {
+      next(error);
+    }
+  };
+}

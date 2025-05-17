@@ -32,6 +32,7 @@ export default function LoginWithGitHub({
         const credential = await GithubAuthProvider.credentialFromResult(
           result
         );
+        console.log(credential);
         const encryptedToken = await CryptoJS.AES.encrypt(
           credential?.accessToken ?? "",
           SECRET_KEY ?? ""
