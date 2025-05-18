@@ -1,0 +1,49 @@
+name: Lint Code with ESLint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Cache client dependencies
+        uses: actions/cache@v3
+        with:
+          path: src/client/node_modules
+          key: ${{ runner.os }}-client-${{ hashFiles('src/client/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-client-
+
+      - name: Install client dependencies
+        run: cd src/client && npm install
+
+      - name: Run client ESLint
+        run: cd src/client && npm run lint
+
+      - name: Cache server dependencies
+        uses: actions/cache@v3
+        with:
+          path: src/server/node_modules
+          key: ${{ runner.os }}-server-${{ hashFiles('src/server/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-server-
+
+      - name: Install server dependencies
+        run: cd src/server && npm install
+
+      - name: Run server ESLint
+        run: cd src/server && npm run lint
