@@ -5,7 +5,7 @@ import { cx } from 'class-variance-authority';
 import { EyeIcon, EyeOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
-import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface FormFieldProps extends React.ComponentProps<'input'> {
   label?: string;
@@ -14,7 +14,7 @@ interface FormFieldProps extends React.ComponentProps<'input'> {
   type?: string;
   placeholder?: string;
   registration: UseFormRegisterReturn;
-  error?: FieldError;
+  error?: string;
 }
 
 export default function PasswordInput({
@@ -59,7 +59,7 @@ export default function PasswordInput({
         </Button>
       </div>
       {description && <p className="text-xs text-gray-500">{description}</p>}
-      {error && <p className="text-red-500 text-sm">{error.message}</p>}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 }

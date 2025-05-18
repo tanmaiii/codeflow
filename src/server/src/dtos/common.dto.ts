@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsPositive, IsIn, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsPositive, IsIn, IsString, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class GetAllQueryDto {
@@ -25,4 +25,9 @@ export class GetAllQueryDto {
   @IsOptional()
   @IsString()
   search?: string;
+  
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  isCustom?: boolean;
 }

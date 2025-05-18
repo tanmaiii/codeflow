@@ -39,7 +39,7 @@ export default function (sequelize: Sequelize): typeof GroupMemberModel {
       },
       role: {
         allowNull: false,
-        type: DataTypes.ENUM('admin', 'member'),
+        type: DataTypes.ENUM('leader', 'member'),
       },
     },
     {

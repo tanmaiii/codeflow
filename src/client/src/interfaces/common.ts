@@ -3,6 +3,7 @@ export interface ILinkItem {
   en: string;
   icon: string;
   href: string;
+  role?: string[];
 }
 
 export interface ResponseAPIDto<T> {

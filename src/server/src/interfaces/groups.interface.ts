@@ -13,7 +13,8 @@ export interface GroupMember {
 }
 
 export interface CreateGroupDto {
-  title: string;
+  name: string;
   topicId: string;
   authorId: string;
+  members: string[];
 }

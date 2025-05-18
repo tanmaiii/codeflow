@@ -40,7 +40,6 @@ export default function Layout({
       </div>
       <div className="z-20 w-full p-4 flex items-center justify-center">
         <Card
- 
           className={cx(
             "w-full md:w-[460px] h-fit dark:bg-background-2 bg-background-1 gap-0 px-2 py-6 shadow-[-2px_-2px_52px_-16px_rgba(0,0,255,0.6)]",
             theme === "dark" && "shadow-[-8px_-27px_59px_-50px_rgba(0,0,255,0.41)]",

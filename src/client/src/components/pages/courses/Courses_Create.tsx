@@ -164,7 +164,7 @@ export default function Courses_Create() {
               label={t('title')}
               className="w-full"
               registration={register('title')}
-              error={errors.title?.message ? errors.title : undefined}
+              error={errors.title?.message}
             />
 
             <div className="flex flex-col gap-2">

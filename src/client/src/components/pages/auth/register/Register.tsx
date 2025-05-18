@@ -71,21 +71,21 @@ export default function Register() {
           id="name"
           label={t("name")}
           registration={register("name")}
-          error={errors.name}
+          error={errors.name?.message}
         />
 
         <TextInput
           id="email"
           label={t("email")}
           registration={register("email")}
-          error={errors.email}
+          error={errors.email?.message}
         />
 
         <PasswordInput
           id="password"
           label={t("password")}
           registration={register("password")}
-          error={errors.password}
+          error={errors.password?.message}
         />
 
         <div className="flex items-center justify-end mt-2">

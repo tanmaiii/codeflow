@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { array, z } from 'zod';
 import { useTranslations } from 'next-intl';
 
 export function useTopicSchema() {
@@ -26,10 +26,13 @@ const topicSchema = ({
       .min(1, {
         message: t('minLength', { field: tTopic('description'), length: 1 }),
       })
-      .max(10000, {
-        message: t('maxLength', { field: tTopic('description'), length: 10000 }),
+      .max(200, {
+        message: t('maxLength', { field: tTopic('description'), length: 200 }),
       }),
     status: z.string({ message: t('required', { field: tTopic('status') }) }).optional(),
+    teacherId: z.string({ message: t('required', { field: tTopic('teacher') }) }).optional(),
+    isCustom: z.boolean().optional(),
+    members: array(z.string()).optional(),
   });
 
 export type TopicSchemaType = z.infer<ReturnType<typeof topicSchema>>;

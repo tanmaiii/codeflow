@@ -1,11 +1,10 @@
 import { HttpException } from '@/exceptions/HttpException';
 import { Post, PostCreate } from '@/interfaces/posts.interface';
-import { CommentModel } from '@/models/comments.model';
 import { isEmpty } from '@/utils/util';
+import { Sequelize } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
 import { TagService } from './tag.service';
-import { Sequelize } from 'sequelize';
 
 @Service()
 export class PostService {

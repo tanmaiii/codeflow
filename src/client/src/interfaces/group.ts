@@ -17,3 +17,9 @@ export interface IGroup extends IBaseEntity {
   author?: IUser;
   members?: IGroupMember[];
 }
+
+export interface IGroupCreateDto {
+  name: string;
+  topicId: string;
+  members: string[];
+}

@@ -17,7 +17,7 @@ class TopicService {
   }
 
   async getAllByCourseId(params: IGetAllQuery, courseId: string): Promise<ResponseAPIDtoWithPagination<ITopic[]>> {
-    const response = await this.client.get(`/course/${courseId}`, { params });
+    const response = await this.client.get(`/${courseId}/course`, { params });
     return response.data;
   }
 

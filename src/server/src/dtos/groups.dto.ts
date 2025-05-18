@@ -1,4 +1,4 @@
-import { IsString, Length, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsOptional, IsString, Length, MaxLength, MinLength } from 'class-validator';
 
 export class CreateGroupDto {
   @IsString()
@@ -9,6 +9,11 @@ export class CreateGroupDto {
   @IsString()
   @Length(36)
   public topicId: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  public members: string[];
 }
 
 

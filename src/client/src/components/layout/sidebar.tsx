@@ -1,11 +1,14 @@
 'use client';
 
+import { ROLE_USER } from '@/contants/object';
 import { IMAGES } from '@/data/images';
 import { paths } from '@/data/path';
 import { ILinkItem } from '@/interfaces/common';
+import apiConfig from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useSidebarStore } from '@/stores/sidebar_store';
 import { useThemeStore } from '@/stores/theme_store';
+import { useUserStore } from '@/stores/user_store';
 import clsx from 'clsx';
 import {
   Book,
@@ -40,13 +43,14 @@ const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) =>
 
   const pathname = usePathname();
   const pathWithoutLocale = pathname.replace(/^\/(en|vi)/, '');
-  
+
   let isActive = false;
   if (item.href === '/') {
     isActive = pathWithoutLocale === '/' || pathname === '/en' || pathname === '/vi';
   } else {
-    isActive = pathWithoutLocale === `${prefix}${item.href}` || 
-              pathWithoutLocale.startsWith(`${prefix}${item.href}/`);
+    isActive =
+      pathWithoutLocale === `${prefix}${item.href}` ||
+      pathWithoutLocale.startsWith(`${prefix}${item.href}/`);
   }
 
   return (
@@ -75,6 +79,7 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
   const { collapsed } = useSidebarStore();
   const { theme } = useThemeStore();
   const t = useTranslations('auth');
+  const { user } = useUserStore();
 
   return (
     <aside
@@ -101,6 +106,24 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
       </nav>
 
       <div className="p-2 border-t flex flex-col gap-2">
+        <div className="flex items-center  gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2">
+          <div className="w-8 h-8 rounded-full overflow-hidden">
+            <Image
+              src={user?.avatar ?? apiConfig.avatar(user?.name)}
+              alt="avatar.png"
+              width={100}
+              height={100}
+            />
+          </div>
+          <div className="flex flex-col justify-center gap-0">
+            {!collapsed && <span className="text-md/3">{user?.name}</span>}
+            {!collapsed && (
+              <span className="text-sm/4 text-gray-500">
+                {ROLE_USER.find(item => item.value === user?.role)?.label}
+              </span>
+            )}
+          </div>
+        </div>
         <Link
           href={paths.LOGOUT}
           className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"

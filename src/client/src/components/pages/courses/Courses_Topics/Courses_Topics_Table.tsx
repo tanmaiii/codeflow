@@ -1,29 +1,35 @@
+'use client';
 import ActionDelete from '@/components/common/Action/ActionDelete';
 import { DataTable } from '@/components/common/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
+import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { TextDescription } from '@/components/ui/text';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ColumnDef, Table } from '@tanstack/react-table';
-import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
-import { toast } from 'sonner';
 import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/contants/object';
+import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 import useQ_Topic_GetAllByCourseId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByCourseId';
 import { ITopic } from '@/interfaces/topic';
 import apiConfig from '@/lib/api';
 import topicService from '@/services/topic.service';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ColumnDef, Table } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
+
 import ActionIcon from '@/components/common/Action/ActionIcon';
 import AvatarGroup from '@/components/common/AvatarGroup';
 import MyBadge from '@/components/common/MyBadge';
-import { useRouter } from 'next/navigation';
-import Courses_Detail_Topics_Create from './Courses_Detail_Topics_Create';
-import Courses_Detail_Topics_Update from './Courses_Detail_Topics_Update';
-import { paths } from '@/data/path';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
+import { paths } from '@/data/path';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
+export default function Courses_Topics_Table() {
+  const { id } = useParams();
+  const { data: course } = useQ_Course_GetDetail({ id: id as string });
   const t = useTranslations('topic');
   const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
@@ -34,7 +40,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
     params: {
       page: page,
       limit: 2,
-      courseId,
+      courseId: id as string,
     },
   });
 
@@ -44,7 +50,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
     },
     onSuccess: () => {
       toast.success(t('deleteSuccess'));
-      queryClient.invalidateQueries({ queryKey: ['topics', 'course', courseId] });
+      queryClient.invalidateQueries({ queryKey: ['topics', 'course', id as string] });
     },
     onError: () => {
       toast.error(t('deleteError'));
@@ -69,30 +75,30 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
           <TextDescription className="line-clamp-3">{row.original.description}</TextDescription>
         ),
       },
-      // {
-      //   accessorKey: 'teacher',
-      //   header: 'Teacher',
-      //   size: 100,
-      //   cell: ({ row }) => {
-      //     const teacher = row.original.teacher;
-      //     if (!teacher) return null;
+      {
+        accessorKey: 'teacher',
+        header: 'Teacher',
+        size: 100,
+        cell: ({ row }) => {
+          const teacher = row.original.teacher;
+          if (!teacher) return null;
 
-      //     return (
-      //       <div className="flex items-center gap-2">
-      //         <AvatarGroup
-      //           avatars={[
-      //             {
-      //               url: apiConfig.avatar(teacher.name ?? 'c'),
-      //               name: teacher.name ?? 'c',
-      //               alt: teacher.name ?? 'c',
-      //             },
-      //           ]}
-      //         />
-      //         <TextDescription className="text-color-1">{teacher.name}</TextDescription>
-      //       </div>
-      //     );
-      //   },
-      // },
+          return (
+            <div className="flex items-center gap-2">
+              <AvatarGroup
+                avatars={[
+                  {
+                    url: apiConfig.avatar(teacher.name ?? 'c'),
+                    name: teacher.name ?? 'c',
+                    alt: teacher.name ?? 'c',
+                  },
+                ]}
+              />
+              <TextDescription className="text-color-1">{teacher.name}</TextDescription>
+            </div>
+          );
+        },
+      },
       {
         accessorKey: 'group',
         header: 'Group',
@@ -152,7 +158,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
 
     return (
       <div className="flex items-center space-x-2">
-        <Courses_Detail_Topics_Create courseId={courseId} />
+        {/* <Courses_Detail_Topics_Create courseId={id as string} /> */}
         {selectedRowsCount > 0 && (
           <Button variant="destructive" size="sm" onClick={() => mutation.mutate(selectedRowsData)}>
             {`${tCommon('delete')} (${selectedRowsCount})`}
@@ -161,9 +167,10 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
       </div>
     );
   };
-
+  
   return (
-    <div className="h-full">
+    <Card className="p-6 flex flex-col gap-4 min-h-[calc(100vh-100px)]">
+      <TitleHeader title={course?.data?.title ?? ''} onBack={true} description={t('topic')} />
       <DataTable
         className="min-h-[600px]"
         columns={columns}
@@ -180,7 +187,7 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
               onClick={() => router.push(`${paths.TOPICS_DETAIL(row.original.id)}`)}
               type="button"
             />
-            <Courses_Detail_Topics_Update topic={row.original} />
+            {/* <Courses_Detail_Topics_Update topic={row.original} /> */}
             <ActionDelete
               deleteKey={row.original.title}
               handleSubmit={async () => {
@@ -195,8 +202,6 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
         totalPages={topicsData?.pagination?.totalPages ?? 1}
         onPageChange={value => setPage(value)}
       />
-    </div>
+    </Card>
   );
 }
-
-export default Courses_Detail_Topics_Table;

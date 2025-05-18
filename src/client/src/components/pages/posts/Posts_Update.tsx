@@ -126,7 +126,7 @@ export default function Posts_Update() {
             placeholder={t('title')}
             className="w-full"
             registration={register('title')}
-            error={errors.title?.message ? errors.title : undefined}
+            error={errors.title?.message}
             {...register('title')}
           />
 

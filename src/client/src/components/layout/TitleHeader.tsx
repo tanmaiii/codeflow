@@ -1,3 +1,4 @@
+'use client';
 import { ArrowLeftIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import TextHeading from '../ui/text';

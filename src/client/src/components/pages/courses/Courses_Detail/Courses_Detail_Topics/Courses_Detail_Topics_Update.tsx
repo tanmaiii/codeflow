@@ -54,11 +54,11 @@ export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic 
   return (
     <ActionModal title={tTopic('updateTopic')} actionType={'update'}>
       <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
-        <TextInput label={tTopic('title')} error={errors.title} {...register('title')} />
+        <TextInput label={tTopic('title')} error={errors.title?.message} {...register('title')} />
         <TextareaInput
           label={tTopic('description')}
           className="min-h-[200px]"
-          error={errors.description}
+          error={errors.description?.message}
           {...register('description')}
         />
         <MySelect

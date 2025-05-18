@@ -17,7 +17,7 @@ export class TopicRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`,  ValidationMiddleware(GetAllQueryDto, 'query'), this.topic.getTopics);
-    this.router.get(`${this.path}/course/:id`, ValidationMiddleware(GetAllQueryDto, 'query'), this.topic.getTopicsByCourseId);
+    this.router.get(`${this.path}/:courseId/course`, ValidationMiddleware(GetAllQueryDto, 'query'), this.topic.getTopicsByCourseId);
     this.router.get(`${this.path}/:id`, this.topic.getTopicById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateTopicDto), this.topic.createTopic);
     this.router.put(`${this.path}/delete/:id`, AuthMiddleware, this.topic.deleteTopic);

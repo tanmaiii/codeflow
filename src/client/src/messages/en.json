@@ -8,6 +8,7 @@
     "delete": "Delete",
     "update": "Update",
     "create": "Create",
+    "register": "Register",
     "edit": "Edit",
     "save": "Save",
     "add": "Add",
@@ -15,6 +16,7 @@
     "clear": "Clear",
     "selectAll": "Select All",
     "deselectAll": "Deselect All",
+    "select": "Select",
     "loading": "Loading...",
     "error": "An error occurred",
     "enter": "Enter",
@@ -177,6 +179,7 @@
     "endRegister": "End register"
   },
   "topic": {
+    "topic": "Topic",
     "title": "Title",
     "description": "Description",
     "course": "Course",
@@ -195,7 +198,9 @@
     "moreTopics": "See more topics",
     "thumbnail": "Thumbnail",
     "author": "Author",
-    "teacher": "Teacher"
+    "teacher": "Teacher",
+    "typeTopic": "Type topic",
+    "members": "Members"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"

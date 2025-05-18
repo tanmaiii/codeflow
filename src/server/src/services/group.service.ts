@@ -1,11 +1,15 @@
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
-import { Group } from '@/interfaces/groups.interface';
-import { Service } from 'typedi';
+import { CreateGroupDto, Group } from '@/interfaces/groups.interface';
 import { Op } from 'sequelize';
-
+import Container, { Service } from 'typedi';
+import { GroupMemberService } from './group_member.service';
+import { logger } from '@/utils/logger';
+import { group } from 'console';
 @Service()
 export class GroupService {
+  public GroupMember = Container.get(GroupMemberService);
+
   public async findAll(): Promise<Group[]> {
     const allGroups: Group[] = await DB.Groups.findAll();
     return allGroups;
@@ -34,16 +38,37 @@ export class GroupService {
     return findGroup;
   }
 
-  public async createGroup(groupData: Partial<Group>): Promise<Group> {
+  public async createGroup(groupData: CreateGroupDto): Promise<Group> {
     // Kiểm tra xem topic đã có group chưa
     if (groupData.topicId) {
       const existingGroup = await DB.Groups.findOne({ where: { topicId: groupData.topicId } });
       if (existingGroup) {
-        throw new HttpException(409, "This topic already has a group");
+        throw new HttpException(409, 'This topic already has a group');
       }
     }
-    
+
     const createGroupData: Group = await DB.Groups.create(groupData);
+
+    // Thêm tác giả vào nhóm với vai trò leader
+    await this.GroupMember.createGroupMember({
+      groupId: createGroupData.id,
+      userId: groupData.authorId,
+      role: 'leader',
+    });
+
+    // Thêm tất cả các member vào group
+    if (groupData.members) {
+      groupData.members.map(async member => {
+        if (member !== groupData.authorId) {
+          await this.GroupMember.createGroupMember({
+            groupId: createGroupData.id,
+            userId: member,
+            role: 'member',
+          });
+        }
+      });
+    }
+
     return createGroupData;
   }
 
@@ -54,14 +79,14 @@ export class GroupService {
     // Kiểm tra xem topic mới đã có group khác chưa (nếu có cập nhật topicId)
     if (groupData.topicId && groupData.topicId !== findGroup.topicId) {
       const existingGroup = await DB.Groups.findOne({
-        where: { 
+        where: {
           topicId: groupData.topicId,
-          id: { [Op.ne]: groupId } // Không phải group hiện tại
-        }
+          id: { [Op.ne]: groupId }, // Không phải group hiện tại
+        },
       });
-      
+
       if (existingGroup) {
-        throw new HttpException(409, "This topic already has another group");
+        throw new HttpException(409, 'This topic already has another group');
       }
     }
 

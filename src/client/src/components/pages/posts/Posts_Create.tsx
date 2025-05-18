@@ -92,7 +92,7 @@ export default function Posts_Create() {
             label={t('title')}
             className="w-full"
             registration={register('title')}
-            error={errors.title?.message ? errors.title : undefined}
+            error={errors.title?.message}
           />
 
           {Q_Tag.data?.data && (

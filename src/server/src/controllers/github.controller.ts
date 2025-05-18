@@ -114,22 +114,32 @@ export class GitHubController {
   ) => {
     try {
       const username = req.body.username;
-      const { organization } = req.params;
 
-      logger.info(
-        `[GitHub Controller] username: ${username}, organization: ${organization}`,
-      );
+      logger.info(`[GitHub Controller] username: ${username}`);
 
       if (!username) {
         throw new HttpException(400, 'Username is required');
       }
 
-      if (!organization || !username) {
+      if (!username) {
         throw new HttpException(400, 'Organization and username are required');
       }
 
-      await this.github.inviteUserToOrganization(organization, username);
+      await this.github.inviteUserToOrganization(username);
       res.status(200).json({ message: 'github-invite-user-to-organization' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getOrganizationMembers = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const members = await this.github.getOrganizationMembers();
+      res.status(200).json({ data: members, message: 'github-organization-members' });
     } catch (error) {
       next(error);
     }

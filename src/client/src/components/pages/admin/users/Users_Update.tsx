@@ -60,9 +60,9 @@ export default function Users_Update({ user }: { user: IUser }) {
   return (
     <ActionModal title={t('updateUser')} actionType={'update'}>
       <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
-        <TextInput label={t('name')} error={errors.name} {...register('name')} />
-        <TextInput label={t('username')} error={errors.username} {...register('username')} />
-        <TextInput label={t('email')} error={errors.email} {...register('email')} />
+        <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />  
+        <TextInput label={t('username')} error={errors.username?.message} {...register('username')} />
+        <TextInput label={t('email')} error={errors.email?.message} {...register('email')} />
         <MySelect
           label={t('role')}
           name="role"
@@ -75,7 +75,7 @@ export default function Users_Update({ user }: { user: IUser }) {
           registration={register('password')}
           label={t('password')}
           description="Để rỗng nếu không có thay đổi"
-          error={errors.password}
+          error={errors.password?.message}
           {...register('password')}
         />
         <div className="flex justify-end gap-2">

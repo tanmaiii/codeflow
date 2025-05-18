@@ -4,10 +4,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog';
-import ActionIcon, { ActionIconProps } from './ActionIcon';
 import { cn } from '@/lib/utils';
+import ActionIcon, { ActionIconProps } from './ActionIcon';
 export interface ActionModalProps extends ActionIconProps {
   title?: string;
   description?: string;
@@ -24,6 +24,7 @@ export default function ActionModal({
   className,
   ...props
 }: ActionModalProps) {
+
   if (props.actionType === 'default') {
     return (
       <Dialog>

@@ -7,6 +7,7 @@
     "close": "Đóng",
     "delete": "Xóa",
     "create": "Tạo",
+    "register": "Đăng ký",
     "edit": "Chỉnh sửa",
     "update": "Cập nhật",
     "save": "Lưu",
@@ -14,6 +15,7 @@
     "search": "Tìm kiếm",
     "clear": "Xóa",
     "selectAll": "Chọn tất cả",
+    "select": "Chọn",
     "deselectAll": "Bỏ chọn tất cả",
     "loading": "Đang tải...",
     "error": "Đã xảy ra lỗi",
@@ -168,6 +170,7 @@
     "endRegister": "Đã hết hạn đăng ký"
   },
   "topic": {
+    "topic": "Đề tài",
     "title": "Tiêu đề",
     "description": "Mô tả",
     "course": "Khóa học",
@@ -185,7 +188,9 @@
     "topicDeleted": "Đề tài đã được xóa thành công!",
     "moreTopics": "Xem thêm đề tài",
     "author": "Tác giả",
-    "teacher": "Giáo viên"
+    "teacher": "Giáo viên",
+    "typeTopic": "Loại đề tài",
+    "members": "Thành viên"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"

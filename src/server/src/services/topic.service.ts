@@ -20,14 +20,25 @@ export class TopicService {
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     courseId?: string,
+    isCustom?: boolean,
   ): Promise<{ count: number; rows: Topic[] }> {
+    const whereClause: any = {};
+    
+    if (courseId) {
+      whereClause.courseId = courseId;
+    }
+    
+    if (isCustom !== undefined) {
+      whereClause.isCustom = isCustom;
+    }
+    
     const { count, rows }: { count: number; rows: Topic[] } = await DB.Topics.findAndCountAll({
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
       col: 'topics.id',
-      where: courseId ? { courseId } : undefined,
+      where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
     });
     return { count, rows };
   }

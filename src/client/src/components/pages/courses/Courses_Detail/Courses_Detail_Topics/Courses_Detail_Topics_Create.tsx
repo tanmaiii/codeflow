@@ -7,7 +7,7 @@ import { IconPlus } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { useTopicSchema, TopicSchemaType } from '@/lib/validations/topicSchema';
-import { useMutation, useQueryClient   } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import topicService from '@/services/topic.service';
 import { toast } from 'sonner';
 import { useRef } from 'react';
@@ -17,7 +17,6 @@ export default function Courses_Detail_Topics_Create({ courseId }: { courseId: s
   const t = useTranslations('common');
   const tTopic = useTranslations('topic');
   const schema = useTopicSchema();
-  // Tạo ref để lưu trữ nút đóng modal
   const closeRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
 
@@ -34,7 +33,7 @@ export default function Courses_Detail_Topics_Create({ courseId }: { courseId: s
     mutationFn: (data: TopicSchemaType) => {
       return topicService.create({
         isCustom: false,
-        status: 'approved', 
+        status: 'approved',
         courseId: courseId,
         ...data,
       });
@@ -60,13 +59,14 @@ export default function Courses_Detail_Topics_Create({ courseId }: { courseId: s
         </>
       }
       actionType={'default'}
+      className="max-w-[50vw]"
     >
       <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
-        <TextInput label={tTopic('title')} error={errors.title} {...register('title')} />
+        <TextInput label={tTopic('title')} error={errors.title?.message} {...register('title')} />
         <TextareaInput
           label={tTopic('description')}
           className="min-h-[200px]"
-          error={errors.description}
+          error={errors.description?.message}
           {...register('description')}
         />
         <div className="flex justify-end gap-2">

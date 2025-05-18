@@ -7,6 +7,7 @@ import { env } from 'process';
 @Service()
 export class GitHubService {
   private baseUrl = 'https://api.github.com';
+  private organization = 'TVU-CodeFlow';
 
   private headers = {
     Authorization: `Bearer ${env.GITHUB_TOKEN}`,
@@ -116,14 +117,14 @@ export class GitHubService {
     }
   }
 
-  public async inviteUserToOrganization(organization: string, username: string): Promise<void> {
+  public async inviteUserToOrganization(username: string): Promise<void> {
     try {
       const userResp = await axios.get(`https://api.github.com/users/${username}`, {
         headers: this.headers,
       });
       const userId = userResp.data.id;
 
-      const response = await axios.post(`${this.baseUrl}/orgs/${organization}/invitations`, {
+      const response = await axios.post(`${this.baseUrl}/orgs/${this.organization}/invitations`, {
         headers: this.headers,
         data: {
           invitee_id: userId,
@@ -133,6 +134,18 @@ export class GitHubService {
       return response.data;
     } catch (error) {
       logger.error(`[GitHub Service] Error inviting user to organization: ${error.message}`);
+      throw error;
+    }
+  }
+
+  public async getOrganizationMembers(): Promise<GitHubUser[]> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/orgs/${this.organization}/members`, {
+        headers: this.headers,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error getting organization members: ${error.message}`);
       throw error;
     }
   }

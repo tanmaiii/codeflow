@@ -10,12 +10,14 @@ export class TopicController {
 
   public getTopics = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom } = req.query;
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
         Number(page),
         Number(limit),
         String(sortBy),
         order as 'ASC' | 'DESC',
+        undefined,
+        isCustom !== undefined ? isCustom === 'true' : undefined,
       );
 
       res.status(200).json({
@@ -35,14 +37,15 @@ export class TopicController {
 
   public getTopicsByCourseId = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const courseId = req.params.id;
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const courseId = req.params.courseId;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom } = req.query;
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
         Number(page),
         Number(limit),
         String(sortBy),
         order as 'ASC' | 'DESC',
         courseId,
+        isCustom !== undefined ? isCustom === 'true' : undefined,
       );
 
       res.status(200).json({

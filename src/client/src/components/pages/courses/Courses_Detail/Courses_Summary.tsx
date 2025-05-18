@@ -26,8 +26,19 @@ export default function Courses_Summary({ course }: { course: ICourse }) {
       </div>
       <div className="flex flex-col justify-center items-center gap-4">
         <TextHeading className="text-2xl font-bold text-center">{course.title}</TextHeading>
-        <Button variant="default" className="w-fit px-10" onClick={() => router.push(`/courses/${course.id}/topics`)}>
-          Tham gia
+        <Button
+          variant="default"
+          className="w-fit px-10"
+          onClick={() => router.push(`/courses/${course.id}/topics`)}
+        >
+          Đề tài
+        </Button>
+        <Button
+          variant="default"
+          className="w-fit px-10"
+          onClick={() => router.push(`/courses/${course.id}/topics/create`)}
+        >
+          Đăng ký
         </Button>
         <div className="flex flex-col flex-1 items-center w-full gap-2">
           <div className="flex items-center gap-2">

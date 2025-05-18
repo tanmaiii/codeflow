@@ -1,9 +1,8 @@
-'use client'
-import { IGetAllQuery, ResponseAPIDtoWithPagination } from "@/interfaces/common";
-import { ITopic } from "@/interfaces/topic";
-import topicService from "@/services/topic.service";
-
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+'use client';
+import { IGetAllQuery, ResponseAPIDtoWithPagination } from '@/interfaces/common';
+import { ITopic } from '@/interfaces/topic';
+import topicService from '@/services/topic.service';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 export default function useQ_Topic_GetAll({
   options,
@@ -13,7 +12,7 @@ export default function useQ_Topic_GetAll({
   params: IGetAllQuery;
 }) {
   const query = useQuery({
-    queryKey: ["topics", params],
+    queryKey: ['topics', params],
     queryFn: async () => {
       const res = topicService.getAll(params);
       return res;

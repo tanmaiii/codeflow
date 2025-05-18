@@ -19,7 +19,7 @@ export const menuAdmin: ILinkItem[] = [
     vi: 'Người dùng',
     icon: 'users',
     href: paths.USERS,
-  },
+    },
   {
     en: 'Courses',
     vi: 'Khóa học',
