@@ -15,6 +15,11 @@ class CourseService {
     return response.data;
   }
 
+  async getAllRegistered(params: IGetAllQuery): Promise<ResponseAPIDtoWithPagination<ICourse[]>> {
+    const response = await this.client.get('/registered', { params });
+    return response.data;
+  }
+
   async getById(id: string): Promise<ResponseAPIDto<ICourse>> {
     const response = await this.client.get(`/${id}`);
     return response.data;

@@ -94,7 +94,7 @@ export default function CardCourse({ course }: CardCourseProps) {
             className="w-full dark:text-white"
             onClick={() => router.push(paths.COURSES_DETAIL(course.id))}
           >
-            Đã tham gia
+            {`${t('view')}`}
           </Button>
         ) : (
           <CardCourse_Submit courseId={course.id} />

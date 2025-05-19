@@ -1,4 +1,5 @@
-import { IsArray, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { GetAllQueryDto } from './common.dto';
 
 export class CreateCourseDto {
   @IsString()
@@ -48,4 +49,11 @@ export class CreateCourseDto {
 export class JoinCourseDto {
   @IsString()
   public password: string;
+}
+
+
+export class GetAllCoursesDto extends GetAllQueryDto {
+  @IsOptional()
+  @IsBoolean()
+  public registered?: boolean;
 }

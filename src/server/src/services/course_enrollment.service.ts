@@ -36,6 +36,13 @@ export class CourseEnrollmentService {
     return findEnrollment;
   }
 
+  public async findEnrollmentByUserId(userId: string): Promise<CourseEnrollment[]> {
+    const findEnrollment: CourseEnrollment[] = await DB.CourseEnrollment.findAll({
+      where: { userId },
+    });
+    return findEnrollment;
+  }
+
   public async createEnrollment(
     enrollmentData: Partial<CourseEnrollment>,
   ): Promise<CourseEnrollment> {

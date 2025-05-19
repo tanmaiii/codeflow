@@ -8,11 +8,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { useTranslations } from 'next-intl';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
+import useQ_Course_GetAllRegistered from '@/hooks/query-hooks/Course/useQ_Course_GetAllRegistered';
 import NoData from '@/components/common/NoData/NoData';
+
 const tabs = [
   { id: 'all', label: 'All Courses' },
   { id: 'registered', label: 'Registered Courses' },
-  { id: 'completed', label: 'Completed Courses' },
 ];
 
 export default function Courses() {
@@ -32,22 +33,40 @@ export default function Courses() {
     },
   });
 
-  if (Q_Courses.isLoading) return <TextDescription>Loading...</TextDescription>;
-  if (Q_Courses.error) return <TextDescription>Error...</TextDescription>;
+  const Q_RegisteredCourses = useQ_Course_GetAllRegistered({
+    params: {
+      page: Number(page),
+      limit: 8,
+      sortBy: 'createdAt',
+      order: 'DESC',
+    },
+  });
+
+  const isLoading = tab === 'all' ? Q_Courses.isLoading : Q_RegisteredCourses.isLoading;
+  const error = tab === 'all' ? Q_Courses.error : Q_RegisteredCourses.error;
+  const currentData = tab === 'all' ? Q_Courses.data : Q_RegisteredCourses.data;
+
+  const handleTabChange = (tabId: string) => {
+    // Reset page to 1 when changing tabs
+    router.push(`${localPath(paths.COURSES)}?page=1&tab=${tabId}`);
+  };
+
+  if (isLoading) return <TextDescription>Loading...</TextDescription>;
+  if (error) return <TextDescription>Error...</TextDescription>;
 
   return (
     <div className="w-full h-full">
       <div className="border-b py-2 flex items-center justify-between flex-row gap-4">
         <div className="flex items-center gap-2">
-          {tabs.map(({ id, label }) => (
+          {tabs.map(({ id }) => (
             <div
               key={id}
-              onClick={() => router.push(`${localPath(paths.COURSES)}?page=${page}&tab=${id}`)}
+              onClick={() => handleTabChange(id)}
               className={`flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md ${
                 tab === id ? 'text-primary' : 'text-gray-500'
               }`}
             >
-              <TextHeading>{label}</TextHeading>
+              <TextHeading>{t(id === 'all' ? 'allCourses' : 'registeredCourses')}</TextHeading>
             </div>
           ))}
         </div>
@@ -61,16 +80,17 @@ export default function Courses() {
         </Button>
       </div>
       <div className="min-h-[600px]">
-        {Q_Courses.data?.data?.length === 0 && <NoData />}
+        {currentData?.data?.length === 0 && <NoData />}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3 2xl:grid-cols-5 py-2">
-          {Q_Courses.data &&
-            Q_Courses.data?.data?.map(course => <CardCourse key={course.id} course={course} />)}
+          {currentData?.data?.map(course => (
+            <CardCourse key={course.id} course={course} />
+          ))}
         </div>
       </div>
       <div className="my-6">
         <MyPagination
-          currentPage={Q_Courses.data?.pagination.currentPage || 1}
-          totalPages={Q_Courses.data?.pagination.totalPages || 1}
+          currentPage={currentData?.pagination.currentPage || 1}
+          totalPages={currentData?.pagination.totalPages || 1}
           onPageChange={page => router.push(`${localPath(paths.COURSES)}?page=${page}&tab=${tab}`)}
         />
       </div>
