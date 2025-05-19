@@ -11,6 +11,7 @@ export interface Course {
   regEndDate: Date;
   topicDeadline: Date;
   status: boolean;
+  password: string;
   maxGroupMembers: number;
   type: string;
 }
@@ -21,6 +22,14 @@ export interface CourseDocument {
   title: string;
   courseId: string;
   url: string;
+}
+
+// model
+export interface CourseEnrollment {
+  id: string;
+  courseId: string;
+  userId: string;
+  status: boolean;
 }
 
 // DTO
@@ -36,4 +45,5 @@ export interface CourseCreate {
   status?: boolean;
   tags?: Array<string>;
   documents?: Array<string>;
+  password?: string;
 }

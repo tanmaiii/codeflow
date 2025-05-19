@@ -28,6 +28,14 @@ export interface ICourse extends IBaseEntity {
   type: string;
 }
 
+export interface ICourseEnrollment {
+  id: string;
+  userId: string;
+  courseId: string;
+  status: boolean;
+  user?: IUser;
+}
+
 export interface ICreateCourseDto {
   title: string;
   description: string;

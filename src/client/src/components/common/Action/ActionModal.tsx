@@ -4,7 +4,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import ActionIcon, { ActionIconProps } from './ActionIcon';
@@ -24,6 +24,20 @@ export default function ActionModal({
   className,
   ...props
 }: ActionModalProps) {
+  if (props.actionType === 'non-icon') {
+    return (
+      <Dialog>
+        <DialogTrigger asChild>{icon}</DialogTrigger>
+        <DialogContent className={cn('px-4', className)}>
+          <DialogHeader>
+            <DialogTitle className="px-2">{title}</DialogTitle>
+            {description && <DialogDescription>{description}</DialogDescription>}
+          </DialogHeader>
+          <div className="max-h-[80vh] overflow-y-auto px-2">{children}</div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   if (props.actionType === 'default') {
     return (

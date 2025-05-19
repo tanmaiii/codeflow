@@ -32,7 +32,9 @@
     "updateSuccess": "Updated successfully",
     "updateError": "Failed to update",
     "createSuccess": "Created successfully",
-    "createError": "Failed to create"
+    "createError": "Failed to create",
+    "joinSuccess": "Joined successfully",
+    "joinError": "Failed to join"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -164,6 +166,7 @@
     "cancel": "Cancel",
     "save": "Save",
     "update": "Update",
+    "join": "Join",
     "maxGroupMembers": "Max Group Members",
     "createCourseSuccess": "Course has been created successfully!",
     "createCourseFailed": "Course has been created failed!",
@@ -176,7 +179,8 @@
     "hidden": "Ẩn",
     "notStartRegister": "Not start register",
     "startRegister": "Start register",
-    "endRegister": "End register"
+    "endRegister": "End register",
+    "joinDescription": "Enter empty if the course is not password protected"
   },
   "topic": {
     "topic": "Topic",

@@ -1,8 +1,10 @@
+import { CreateCourseDto } from '@/dtos/courses.dto';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import { Comment } from '@/interfaces/comments.interface';
-import { Course } from '@/interfaces/courses.interface';
+import { Course, CourseEnrollment } from '@/interfaces/courses.interface';
 import { User } from '@/interfaces/users.interface';
 import { CommentService } from '@/services/comment.service';
+import { CourseEnrollmentService } from '@/services/course_enrollment.service';
 import { CourseService } from '@/services/courses.service';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
@@ -10,6 +12,7 @@ import { Container } from 'typedi';
 export class CourseController {
   public course = Container.get(CourseService);
   public comment = Container.get(CommentService);
+  public courseEnrollment = Container.get(CourseEnrollmentService);
 
   public getCourses = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -33,8 +36,8 @@ export class CourseController {
       });
     } catch (error) {
       next(error);
-    };
-  }
+    }
+  };
 
   public getCourseById = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -47,9 +50,36 @@ export class CourseController {
     }
   };
 
+  public joinCourse = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const courseId = req.params.id;
+      const userId = req.user.id;
+      const password = req.body.password;
+
+      const joinCourseData: CourseEnrollment = await this.course.joinCourse(courseId, userId, password);
+
+      res.status(200).json({ data: joinCourseData, message: 'joined' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public checkEnrollment = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const courseId = req.params.id;
+      const userId = req.user.id;
+
+      const checkEnrollmentData: CourseEnrollment[] = await this.courseEnrollment.findEnrollmentByCourseId(courseId);
+
+      res.status(200).json({ data: checkEnrollmentData ?? [], message: 'checkEnrollment' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public createCourse = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const courseData: Partial<Course> = req.body;
+      const courseData: Partial<CreateCourseDto> = req.body;
       const userData: User = req.user;
       const createCourseData: Course = await this.course.createCourse({
         ...courseData,

@@ -16,6 +16,7 @@ export type CourseCreationAttributes = Optional<
   | 'status'
   | 'maxGroupMembers'
   | 'type'
+  | 'password'
 >;
 
 export class CourseModel extends Model<Course, CourseCreationAttributes> implements Course {
@@ -32,6 +33,7 @@ export class CourseModel extends Model<Course, CourseCreationAttributes> impleme
   public status: boolean;
   public maxGroupMembers: number;
   public type: string;
+  public password: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -86,6 +88,10 @@ export default function (sequelize: Sequelize): typeof CourseModel {
         type: DataTypes.INTEGER,
         defaultValue: 3,
       },
+      password: {
+        allowNull: true,
+        type: DataTypes.STRING(255),
+      },
       authorId: {
         allowNull: false,
         type: DataTypes.UUID,
@@ -106,7 +112,17 @@ export default function (sequelize: Sequelize): typeof CourseModel {
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm
+      scopes: {
+        withPassword: {
+          attributes: {
+            include: ['password'],
+          },
+        },
+      },
       defaultScope: {
+        attributes: {
+          exclude: ['password'],
+        },
         include: [
           {
             model: UserModel,

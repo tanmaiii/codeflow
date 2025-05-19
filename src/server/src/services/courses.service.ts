@@ -1,15 +1,17 @@
 import { HttpException } from '@/exceptions/HttpException';
-import { Course, CourseCreate } from '@/interfaces/courses.interface';
+import { Course, CourseCreate, CourseEnrollment } from '@/interfaces/courses.interface';
 import { DB } from '@database';
-import Container, { Service } from 'typedi';
-import { TagService } from './tag.service';
-import { CourseDocumentService } from './course_document.service';
+import { compare, hash } from 'bcrypt';
 import { Sequelize } from 'sequelize';
-
+import Container, { Service } from 'typedi';
+import { CourseDocumentService } from './course_document.service';
+import { CourseEnrollmentService } from './course_enrollment.service';
+import { TagService } from './tag.service';
 @Service()
 export class CourseService {
   public Tag = Container.get(TagService);
   public CourseDocument = Container.get(CourseDocumentService);
+  public CourseEnrollment = Container.get(CourseEnrollmentService);
 
   public async findAll(): Promise<Course[]> {
     const allCourse: Course[] = await DB.Courses.findAll();
@@ -53,6 +55,9 @@ export class CourseService {
 
   public async createCourse(courseData: Partial<CourseCreate>): Promise<Course> {
     const { tags, documents, ...dataWithoutTags } = courseData;
+    if (dataWithoutTags.password) {
+      dataWithoutTags.password = await hash(dataWithoutTags.password, 10);
+    }
     const createCourseData: Course = await DB.Courses.create(dataWithoutTags);
 
     if (tags?.length) {
@@ -98,6 +103,23 @@ export class CourseService {
     }
 
     return DB.Courses.findByPk(courseId);
+  }
+
+  public async joinCourse(courseId: string, userId: string, password: string): Promise<CourseEnrollment> {
+    const findCourse: Course = await DB.Courses.scope('withPassword').findByPk(courseId);
+    if (!findCourse) throw new HttpException(409, "Course doesn't exist");
+
+    if (findCourse.password) {
+      const isPasswordMatching: boolean = await compare(password, findCourse.password);
+      if (!isPasswordMatching) throw new HttpException(401, 'Invalid password');
+    }
+
+    const createEnrollmentData: CourseEnrollment = await this.CourseEnrollment.createEnrollment({
+      courseId: courseId,
+      userId: userId,
+    });
+
+    return createEnrollmentData;
   }
 
   public async deleteCourse(courseId: string): Promise<Course> {

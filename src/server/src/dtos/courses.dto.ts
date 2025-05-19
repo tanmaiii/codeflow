@@ -32,6 +32,20 @@ export class CreateCourseDto {
   @IsString()
   public type: string;
 
+  @IsOptional()
   @IsNumber()
   public maxGroupMembers: number;
+
+  @IsOptional()
+  @IsArray()
+  public documents?: Array<string> | null;
+
+  @IsOptional()
+  @IsString()
+  public password?: string | null;
+}
+
+export class JoinCourseDto {
+  @IsString()
+  public password: string;
 }

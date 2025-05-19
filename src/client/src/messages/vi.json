@@ -32,7 +32,9 @@
     "updateSuccess": "Đã cập nhật thành công",
     "updateError": "Cập nhật thất bại",
     "createSuccess": "Đã tạo thành công",
-    "createError": "Tạo thất bại"
+    "createError": "Tạo thất bại",
+    "joinSuccess": "Đã tham gia thành công",
+    "joinError": "Tham gia thất bại"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
@@ -157,6 +159,7 @@
     "cancel": "Thoát",
     "save": "Lưu",
     "update": "Cập nhật",
+    "join": "Tham gia",
     "maxGroupMembers": "Số lượng thành viên tối đa",
     "documents": "Tài liệu",
     "topics": "Đề tài",
@@ -167,7 +170,8 @@
     "hidden": "Ẩn",
     "notStartRegister": "Chưa bắt đầu đăng ký",
     "startRegister": "Đã bắt đầu đăng ký",
-    "endRegister": "Đã hết hạn đăng ký"
+    "endRegister": "Đã hết hạn đăng ký",
+    "joinDescription": "Nhập trống nếu khóa học không có mật khẩu"
   },
   "topic": {
     "topic": "Đề tài",

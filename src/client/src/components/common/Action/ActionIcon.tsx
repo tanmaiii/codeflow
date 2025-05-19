@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Pencil, Trash, Eye, Plus } from 'lucide-react';
 import { MyTooltip } from '@/components/common/MyTooltip';
 
-type ActionIconType = 'update' | 'delete' | 'view' | 'create' | 'default';
+type ActionIconType = 'update' | 'delete' | 'view' | 'create' | 'default' | 'non-icon';
 
 export interface ActionIconProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   actionType?: ActionIconType;

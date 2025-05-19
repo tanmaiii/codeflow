@@ -1,5 +1,5 @@
 import { IGetAllQuery, ResponseAPIDto, ResponseAPIDtoWithPagination } from '@/interfaces/common';
-import { ICourse, ICreateCourseDto } from '@/interfaces/course';
+import { ICourse, ICourseEnrollment, ICreateCourseDto } from '@/interfaces/course';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 
@@ -37,6 +37,21 @@ class CourseService {
 
   async destroy(id: string): Promise<ResponseAPIDto<ICourse>> {
     const response = await this.client.delete(`/${id}`);
+    return response.data;
+  }
+
+  async joinCourse(courseId: string, password: string): Promise<ResponseAPIDto<ICourseEnrollment>> {
+    const response = await this.client.post(`/${courseId}/join`, { password });
+    return response.data;
+  }
+
+  async leaveCourse(courseId: string): Promise<ResponseAPIDto<ICourseEnrollment>> {
+    const response = await this.client.post(`/${courseId}/leave`);
+    return response.data;
+  }
+
+  async checkJoinCourse(courseId: string): Promise<ResponseAPIDto<ICourseEnrollment[]>> {
+    const response = await this.client.get(`/${courseId}/check`);
     return response.data;
   }
 }
