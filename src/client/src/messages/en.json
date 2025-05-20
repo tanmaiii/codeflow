@@ -180,7 +180,9 @@
     "notStartRegister": "Not start register",
     "startRegister": "Start register",
     "endRegister": "End register",
-    "joinDescription": "Enter empty if the course is not password protected"
+    "joinDescription": "Enter empty if the course is not password protected",
+    "students": "students",
+    "register": "Register"
   },
   "topic": {
     "topic": "Topic",

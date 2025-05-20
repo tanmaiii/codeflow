@@ -20,7 +20,7 @@ function TitleHeader({ title, description, onBack }: TitleHeaderProps) {
   return (
     <div className="flex items-center gap-2 pb-4">
       {onBack && (
-        <Button variant="outline" size="icon" onClick={handleBack}>
+        <Button type='button' variant="outline" size="icon" onClick={handleBack}>
           <ArrowLeftIcon className="w-4 h-4" />
         </Button>
       )}

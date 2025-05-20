@@ -15,3 +15,9 @@ export enum ENUM_TYPE_COURSE {
   THESIS = 'thesis',
   ELECTIVE = 'elective',
 }
+
+export enum ROLE {
+  USER = 'user',
+  TEACHER = 'teacher',
+  ADMIN = 'admin',
+}

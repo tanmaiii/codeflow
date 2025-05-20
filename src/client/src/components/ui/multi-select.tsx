@@ -76,37 +76,30 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
 
-    const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
-        setIsPopoverOpen(true);
-      } else if (event.key === 'Backspace' && !event.currentTarget.value) {
-        const newSelectedValues = [...selectedValues];
-        newSelectedValues.pop();
-        setSelectedValues(newSelectedValues);
-        onValueChange(newSelectedValues);
-      }
+    const handleTogglePopover = () => {
+      setIsPopoverOpen(prev => !prev);
     };
 
     const toggleOption = (option: string) => {
+      let newSelectedValues: string[];
       if (selectedValues.includes(option)) {
-        setSelectedValues(selectedValues.filter(value => value !== option));
+        newSelectedValues = selectedValues.filter(value => value !== option);
       } else {
         if (maxLength && selectedValues.length >= maxLength) {
           toast.error(`You can only select up to ${maxLength} options`);
           return;
         }
-        setSelectedValues([...selectedValues, option]);
+        newSelectedValues = [...selectedValues, option];
       }
-      onValueChange(selectedValues);
+
+      setSelectedValues(newSelectedValues);
+      onValueChange(newSelectedValues);
     };
 
     const handleClear = () => {
-      setSelectedValues([]);
-      onValueChange([]);
-    };
-
-    const handleTogglePopover = () => {
-      setIsPopoverOpen(prev => !prev);
+      const newValues: string[] = [];
+      setSelectedValues(newValues);
+      onValueChange(newValues);
     };
 
     const clearExtraOptions = () => {
@@ -116,12 +109,25 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
     };
 
     const toggleAll = () => {
+      let newValues: string[];
       if (selectedValues.length === options.length) {
-        handleClear();
+        newValues = [];
       } else {
-        const allValues = options.map(option => option.value);
-        setSelectedValues(allValues);
-        onValueChange(allValues);
+        newValues = options.map(option => option.value);
+      }
+
+      setSelectedValues(newValues);
+      onValueChange(newValues);
+    };
+
+    const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        setIsPopoverOpen(true);
+      } else if (event.key === 'Backspace' && !event.currentTarget.value) {
+        const newSelectedValues = [...selectedValues];
+        newSelectedValues.pop();
+        setSelectedValues(newSelectedValues);
+        onValueChange(newSelectedValues);
       }
     };
 

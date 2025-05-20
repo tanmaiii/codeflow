@@ -8,10 +8,10 @@ import MyDateInput from '@/components/common/MyDateInput';
 import MyMultiSelect from '@/components/common/MyMultiSelect/MyMultiSelect';
 import MySelect from '@/components/common/MySelect';
 import RichTextEditor from '@/components/common/RichTextEditor/RichTextEditor';
+import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import TextHeading from '@/components/ui/text';
 import { TYPE_COURSE } from '@/contants/object';
 import { paths } from '@/data/path';
 import useQ_Tag_GetAll from '@/hooks/query-hooks/Tag/useQ_Tag_GetAll';
@@ -88,7 +88,7 @@ export default function Courses_Create() {
 
   return (
     <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="py-6">
-      <TextHeading className="pb-4 text-2xl font-bold">{t('createCourse')}</TextHeading>
+      <TitleHeader title={t('createCourse')} onBack />
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-12 md:col-span-7 lg:col-span-9 flex flex-col gap-6 order-2 mdmd:order-1">
           <Card className="p-4">
@@ -138,7 +138,7 @@ export default function Courses_Create() {
                 })}
                 min={1}
                 max={100}
-                error={errors.maxGroupMembers?.message ? errors.maxGroupMembers : undefined}
+                error={errors.maxGroupMembers?.message}
               />
             </div>
             {Q_Tag.data && (

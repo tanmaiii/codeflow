@@ -10,6 +10,8 @@ import {
 import { getCurrentLocale } from '@/lib/utils';
 import { Control, Controller, FieldError, FieldValues, Path, PathValue } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+
 interface MySelectProps<T extends FieldValues = FieldValues> {
   label: string;
   options: { label: string; value: string; labelEn?: string }[];
@@ -37,6 +39,11 @@ export default function MySelect<T extends FieldValues>({
 }: MySelectProps<T>) {
   const currentLocale = getCurrentLocale();
   const t = useTranslations('common');
+  const [value, setValue] = useState(defaultValue);
+
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   if (control && !onChange) {
     return (
@@ -77,7 +84,14 @@ export default function MySelect<T extends FieldValues>({
   return (
     <div className="w-full">
       <Label className="mb-2 text-color-2">{label}</Label>
-      <Select disabled={disabled} defaultValue={defaultValue} onValueChange={onChange}>
+      <Select 
+        disabled={disabled} 
+        value={value}
+        onValueChange={(newValue) => {
+          setValue(newValue);
+          onChange?.(newValue);
+        }}
+      >
         <SelectTrigger className={`w-full !h-13 !rounded-lg ${className}`}>
           <SelectValue placeholder={`${t('select')} ${label}`} />
         </SelectTrigger>

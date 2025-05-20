@@ -20,6 +20,8 @@ export const paths = {
   COURSES_DETAIL: (id: string) => `/courses/${id}`,
   COURSE_CREATE: "/courses/create",
   COURSE_UPDATE: (id: string) => `/courses/${id}/update`,
+  COURSE_REGISTER: (id: string) => `/courses/${id}/register`,
+  COURSE_TOPICS: (id: string) => `/courses/${id}/topics`,
 
   LOGIN: "/login",
   REGISTER: "/register",

@@ -21,10 +21,7 @@ export default function useQ_Topic_GetAllByCourseId({
 }: UseQ_Topic_GetAllByCourseIdProps) {
   const query = useQuery({
     queryKey: ['topics', 'course', params],
-    queryFn: async () => {
-      const res = topicService.getAllByCourseId(params, params.courseId);
-      return res;
-    },
+    queryFn: () => topicService.getAllByCourseId(params, params.courseId),
     ...options,
   });
 

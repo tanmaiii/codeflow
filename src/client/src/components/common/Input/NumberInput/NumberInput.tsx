@@ -3,14 +3,14 @@ import { Label } from "@/components/ui/label";
 import { cx } from "class-variance-authority";
 import { useTranslations } from "next-intl";
 import React from "react";
-import { FieldError, UseFormRegisterReturn } from "react-hook-form";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 interface FormFieldProps extends React.ComponentProps<"input"> {
   label?: string;
   id: string;
   placeholder?: string;
   registration: UseFormRegisterReturn;
-  error?: FieldError;
+  error?: string;
 }
 
 export default function NumberInput({
@@ -40,7 +40,7 @@ export default function NumberInput({
           {...props}
         />
       </div>
-      {error && <p className="text-red-500 text-sm">{error.message}</p>}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 }

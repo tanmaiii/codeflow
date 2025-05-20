@@ -42,8 +42,11 @@ export interface ICreateCourseDto {
   thumbnail?: string;
   startDate?: Date;
   endDate?: Date;
+  regStartDate?: Date;
+  regEndDate?: Date;
   topicDeadline?: Date;
   documents?: Array<string>;
   tags?: Array<string>;
   maxGroupMembers?: number;
+  type?: string;
 }

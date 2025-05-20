@@ -10,6 +10,7 @@ import { useSidebarStore } from '@/stores/sidebar_store';
 import { useThemeStore } from '@/stores/theme_store';
 import { useUserStore } from '@/stores/user_store';
 import clsx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Book,
   FolderGit,
@@ -17,15 +18,14 @@ import {
   Layout,
   LogOut,
   LucideIcon,
+  Newspaper,
   Settings,
   Users,
-  Newspaper,
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const iconMap: Record<string, LucideIcon> = {
   layout: Layout,
@@ -55,10 +55,7 @@ const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) =>
   }
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-    >
+    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
       <Link
         key={item.href}
         href={`${prefix}${item.href}`}
@@ -105,9 +102,9 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
         width: collapsed ? '4rem' : '16rem',
       }}
       transition={{
-        type: "spring",
+        type: 'spring',
         stiffness: 300,
-        damping: 30
+        damping: 30,
       }}
       className={clsx(
         `h-[calc(100vh-56px)] border-r bg-background-1 dark:bg-background-3 flex flex-col
@@ -154,7 +151,7 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
             width={100}
             height={100}
             className={cn(
-              'object-cover circle rounded-full w-10 h-10 max-w-10 max-h-10',
+              'object-cover circle rounded-full w-8 h-8 max-w-8 max-h-8',
               collapsed && 'w-full h-full',
             )}
           />

@@ -1,13 +1,13 @@
+import ActionViewPDF from '@/components/common/Action/ActionViewPDF';
 import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
+import { utils_file_size } from '@/utils/file';
 import { IconFile, IconFolder, IconX } from '@tabler/icons-react';
 import { cx } from 'class-variance-authority';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import ActionViewPDF from '@/components/common/Action/ActionViewPDF';
-import { utils_file_size } from '@/utils/file';
 
 interface DragDropFileProps extends React.HTMLProps<HTMLInputElement> {
   files: File[] | [];
@@ -20,7 +20,7 @@ interface DragDropFileProps extends React.HTMLProps<HTMLInputElement> {
 
 export default function DragDropFile(props: DragDropFileProps) {
   const {
-    files,
+    files: filesDefault,
     onChange,
     className,
     maxSize = 5,
@@ -29,7 +29,7 @@ export default function DragDropFile(props: DragDropFileProps) {
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [openDrop, setOpenDrop] = useState(false);
-  const [filesDefault, setFilesDefault] = useState<File[] | []>([]);
+  const [files, setFiles] = useState<File[] | []>([]);
   const t = useTranslations('validate');
   const tCommon = useTranslations('common');
 
@@ -46,7 +46,7 @@ export default function DragDropFile(props: DragDropFileProps) {
           return;
         }
 
-        const combinedFiles = [...filesDefault, ...newFiles];
+        const combinedFiles = [...files, ...newFiles];
 
         if (maxFiles && combinedFiles.length > maxFiles) {
           toast.error(t('fileMaxFiles', { length: `${maxFiles}` }));
@@ -76,7 +76,7 @@ export default function DragDropFile(props: DragDropFileProps) {
   };
 
   const onRemove = (file: File) => {
-    const newFiles = filesDefault.filter(f => f !== file);
+    const newFiles = files.filter(f => f !== file);
     const dataTransfer = new DataTransfer();
     newFiles.forEach(file => dataTransfer.items.add(file));
 
@@ -86,13 +86,14 @@ export default function DragDropFile(props: DragDropFileProps) {
 
     if (inputRef.current) {
       inputRef.current.value = '';
-      setFilesDefault(newFiles);
+      setFiles(newFiles);
     }
   };
 
   useEffect(() => {
-    setFilesDefault(files || []);
-  }, [files]);
+    setFiles(filesDefault || []);
+  }, [filesDefault]);
+
 
   return (
     <div>
@@ -121,7 +122,12 @@ export default function DragDropFile(props: DragDropFileProps) {
             <TextHeading className="text-color-2">
               {tCommon('dragDrop', { field: tCommon('file') })}
             </TextHeading>
-            <Button type="button" onClick={() => inputRef.current?.click()} variant={'outline'} className="w-fit">
+            <Button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              variant={'outline'}
+              className="w-fit"
+            >
               {tCommon('upload', { field: tCommon('file') })}
             </Button>
             <input
@@ -138,7 +144,7 @@ export default function DragDropFile(props: DragDropFileProps) {
           </label>
         </div>
       </div>
-      {filesDefault.map(file => (
+      {files.map(file => (
         <FileItem key={file.name} file={file} onRemove={onRemove} />
       ))}
     </div>

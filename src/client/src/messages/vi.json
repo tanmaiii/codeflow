@@ -171,7 +171,8 @@
     "notStartRegister": "Chưa bắt đầu đăng ký",
     "startRegister": "Đã bắt đầu đăng ký",
     "endRegister": "Đã hết hạn đăng ký",
-    "joinDescription": "Nhập trống nếu khóa học không có mật khẩu"
+    "joinDescription": "Nhập trống nếu khóa học không có mật khẩu",
+    "students": "học viên"
   },
   "topic": {
     "topic": "Đề tài",

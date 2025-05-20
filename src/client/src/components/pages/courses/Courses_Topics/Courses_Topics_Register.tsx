@@ -24,7 +24,7 @@ const TYPE_TOPIC = [
   },
 ];
 
-export default function Courses_Topics_Create() {
+export default function Courses_Topics_Register() {
   const tTopic = useTranslations('topic');
   const { id } = useParams();
   const [isCustom, setIsCustom] = useState<boolean>(true);

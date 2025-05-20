@@ -1,4 +1,4 @@
-import { ENUM_STATUS_TOPIC, ENUM_TYPE_COURSE } from './enum';
+import { ENUM_STATUS_TOPIC, ENUM_TYPE_COURSE, ROLE } from './enum';
 
 // ENUM('pending', 'approved', 'rejected')
 
@@ -72,17 +72,17 @@ export const STATUS_COURSE: IStatusObj[] = [
 
 export const ROLE_USER: IStatusObj[] = [
   {
-    value: 'user',
+    value: ROLE.USER,
     label: 'User',
     labelEn: 'User',
   },
   {
-    value: 'admin',
+    value: ROLE.ADMIN,
     label: 'Admin',
     labelEn: 'Admin',
   },
   {
-    value: 'teacher',
+    value: ROLE.TEACHER,
     label: 'Teacher',
     labelEn: 'Teacher',
   },
