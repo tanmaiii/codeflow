@@ -10,8 +10,7 @@ export interface ResponseAPIDto<T> {
   data: T;
   message: string;
 }
-
-export interface ResponseAPIDtoWithPagination<T> {
+export interface PaginatedResponseAPIDto<T> {
   data: T;
   pagination: {
     totalItems: number;

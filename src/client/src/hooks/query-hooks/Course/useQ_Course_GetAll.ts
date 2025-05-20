@@ -1,5 +1,5 @@
 'use client'
-import { IGetAllQuery, ResponseAPIDtoWithPagination } from "@/interfaces/common";
+import { IGetAllQuery, PaginatedResponseAPIDto } from "@/interfaces/common";
 import { ICourse } from "@/interfaces/course";
 import courseService from "@/services/course.service";
 
@@ -9,7 +9,7 @@ export default function useQ_Course_GetAll({
   options,
   params,
 }: {
-  options?: Partial<UseQueryOptions<ResponseAPIDtoWithPagination<ICourse[]>, Error>>;
+  options?: Partial<UseQueryOptions<PaginatedResponseAPIDto<ICourse[]>, Error>>;
   params: IGetAllQuery;
 }) {
   const query = useQuery({

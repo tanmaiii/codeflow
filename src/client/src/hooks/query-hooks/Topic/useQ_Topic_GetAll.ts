@@ -1,5 +1,5 @@
 'use client';
-import { IGetAllQuery, ResponseAPIDtoWithPagination } from '@/interfaces/common';
+import { IGetAllQuery, PaginatedResponseAPIDto } from '@/interfaces/common';
 import { ITopic } from '@/interfaces/topic';
 import topicService from '@/services/topic.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
@@ -8,7 +8,7 @@ export default function useQ_Topic_GetAll({
   options,
   params,
 }: {
-  options?: Partial<UseQueryOptions<ResponseAPIDtoWithPagination<ITopic[]>, Error>>;
+  options?: Partial<UseQueryOptions<PaginatedResponseAPIDto<ITopic[]>, Error>>;
   params: IGetAllQuery;
 }) {
   const query = useQuery({

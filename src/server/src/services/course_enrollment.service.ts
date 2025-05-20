@@ -10,15 +10,11 @@ export class CourseEnrollmentService {
     return allEnrollments;
   }
 
-  public async findAndCountAllWithPagination(
-    limit: number,
-    offset: number,
-  ): Promise<{ count: number; rows: CourseEnrollment[] }> {
-    const { count, rows }: { count: number; rows: CourseEnrollment[] } =
-      await DB.CourseEnrollment.findAndCountAll({
-        limit,
-        offset,
-      });
+  public async findAndCountAllWithPagination(limit: number, offset: number): Promise<{ count: number; rows: CourseEnrollment[] }> {
+    const { count, rows }: { count: number; rows: CourseEnrollment[] } = await DB.CourseEnrollment.findAndCountAll({
+      limit,
+      offset,
+    });
     return { count, rows };
   }
 
@@ -43,21 +39,22 @@ export class CourseEnrollmentService {
     return findEnrollment;
   }
 
-  public async createEnrollment(
-    enrollmentData: Partial<CourseEnrollment>,
-  ): Promise<CourseEnrollment> {
+  public async createEnrollment(enrollmentData: Partial<CourseEnrollment>): Promise<CourseEnrollment> {
+    const findEnrollment: CourseEnrollment = await DB.CourseEnrollment.findOne({
+      where: { courseId: enrollmentData.courseId, userId: enrollmentData.userId },
+    });
+    if (findEnrollment) return findEnrollment;
+
     const createEnrollmentData: CourseEnrollment = await DB.CourseEnrollment.create(enrollmentData);
+
     return createEnrollmentData;
   }
 
-  public async updateEnrollment(
-    enrollmentId: string,
-    enrollmentData: Partial<CourseEnrollment>,
-  ): Promise<CourseEnrollment> {
+  public async updateEnrollment(enrollmentId: string, enrollmentData: Partial<CourseEnrollment>): Promise<CourseEnrollment> {
     const findEnrollment: CourseEnrollment = await DB.CourseEnrollment.findByPk(enrollmentId);
     if (!findEnrollment) throw new HttpException(409, "Enrollment doesn't exist");
 
-    await DB.CourseEnrollment.update(enrollmentData, { where: { id: enrollmentId } });
+    await DB.CourseEnrollment.update(enrollmentData, { where: { courseId: enrollmentId } });
 
     const updateEnrollment: CourseEnrollment = await DB.CourseEnrollment.findByPk(enrollmentId);
     return updateEnrollment;
@@ -67,11 +64,9 @@ export class CourseEnrollmentService {
     const findEnrollment: CourseEnrollment = await DB.CourseEnrollment.findByPk(enrollmentId);
     if (!findEnrollment) throw new HttpException(409, "Enrollment doesn't exist");
 
-    await DB.CourseEnrollment.destroy({ where: { id: enrollmentId } });
+    await DB.CourseEnrollment.destroy({ where: { courseId: enrollmentId } });
 
-    const softDeletedEnrollment: CourseEnrollment = await DB.CourseEnrollment.findByPk(
-      enrollmentId,
-    );
+    const softDeletedEnrollment: CourseEnrollment = await DB.CourseEnrollment.findByPk(enrollmentId);
     return softDeletedEnrollment;
   }
 
@@ -81,7 +76,7 @@ export class CourseEnrollmentService {
     });
     if (!findEnrollment) throw new HttpException(409, "Enrollment doesn't exist");
 
-    await DB.CourseEnrollment.destroy({ force: true, where: { id: enrollmentId } });
+    await DB.CourseEnrollment.destroy({ force: true, where: { courseId: enrollmentId } });
 
     return findEnrollment;
   }

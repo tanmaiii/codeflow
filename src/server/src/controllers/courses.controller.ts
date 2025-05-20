@@ -92,6 +92,18 @@ export class CourseController {
     }
   };
 
+  public getMembersByCourseId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const courseId = req.params.id;
+
+      const checkEnrollmentData: CourseEnrollment[] = await this.courseEnrollment.findEnrollmentByCourseId(courseId);
+
+      res.status(200).json({ data: checkEnrollmentData.map(enrollment => enrollment.user) ?? [], message: 'checkEnrollment' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public checkEnrollment = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const courseId = req.params.id;
@@ -99,7 +111,9 @@ export class CourseController {
 
       const checkEnrollmentData: CourseEnrollment[] = await this.courseEnrollment.findEnrollmentByCourseId(courseId);
 
-      res.status(200).json({ data: checkEnrollmentData ?? [], message: 'checkEnrollment' });
+      const isEnrolled = checkEnrollmentData.some(enrollment => enrollment.userId === userId);
+
+      res.status(200).json({ data: isEnrolled, message: 'checkEnrollment' });
     } catch (error) {
       next(error);
     }

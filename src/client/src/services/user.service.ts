@@ -1,5 +1,5 @@
 import createHttpClient from '@/lib/createHttpClient';
-import { IGetAllQuery, ResponseAPIDto, ResponseAPIDtoWithPagination } from '@/interfaces/common';
+import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfaces/common';
 import { AxiosInstance } from 'axios';
 import { IUser } from '@/interfaces/user';
 
@@ -10,29 +10,29 @@ class UserService {
     this.client = createHttpClient('users');
   }
 
-  async getAll(params: IGetAllQuery): Promise<ResponseAPIDtoWithPagination<IUser[]>> {
-    const response = await this.client.get('', { params });
-    return response.data;
+  async getAll(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<IUser[]>> {
+    const res = await this.client.get('', { params });
+    return res.data;
   }
 
   async getById(id: string): Promise<ResponseAPIDto<IUser>> {
-    const response = await this.client.get(`/${id}`);
-    return response.data;
+    const res = await this.client.get(`/${id}`);
+    return res.data;
   }
 
   async create(data: IUser): Promise<ResponseAPIDto<IUser>> {
-    const response = await this.client.post('', data);
-    return response.data;
+    const res = await this.client.post('', data);
+    return res.data;
   }
 
   async update(id: string, data: IUser): Promise<ResponseAPIDto<IUser>> {
-    const response = await this.client.put(`/${id}`, data);
-    return response.data;
+    const res = await this.client.put(`/${id}`, data);
+    return res.data;
   }
 
   async delete(id: string): Promise<ResponseAPIDto<IUser>> {
-    const response = await this.client.put(`/${id}/delete`);
-    return response.data;
+    const res = await this.client.put(`/${id}/delete`);
+    return res.data;
   }
 }
 

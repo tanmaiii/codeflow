@@ -1,3 +1,5 @@
+import { User } from '@/interfaces/users.interface';
+
 // model
 export interface Course {
   id: string;
@@ -26,10 +28,10 @@ export interface CourseDocument {
 
 // model
 export interface CourseEnrollment {
-  id: string;
   courseId: string;
   userId: string;
   status: boolean;
+  user?: User;
 }
 
 // DTO

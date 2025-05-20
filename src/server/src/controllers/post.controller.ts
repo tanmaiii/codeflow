@@ -98,13 +98,13 @@ export class PostController {
   };
 
   public getCommentsByPostId = async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const id = req.params.id;
-        const findAllCommentsData: Comment[] = await this.comment.findCommentByPostId(id);
-  
-        res.status(200).json({ data: findAllCommentsData, message: 'findAll' });
-      } catch (error) {
-        next(error);
-      }
-    };
+    try {
+      const id = req.params.id;
+      const findAllCommentsData: Comment[] = await this.comment.findCommentByPostId(id);
+
+      res.status(200).json({ data: findAllCommentsData, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

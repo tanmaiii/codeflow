@@ -204,7 +204,8 @@
     "author": "Author",
     "teacher": "Teacher",
     "typeTopic": "Type topic",
-    "members": "Members"
+    "members": "Members",
+    "nameGroup": "Name group"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"

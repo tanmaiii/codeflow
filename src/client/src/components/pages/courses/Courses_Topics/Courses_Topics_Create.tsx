@@ -27,7 +27,7 @@ const TYPE_TOPIC = [
 export default function Courses_Topics_Create() {
   const tTopic = useTranslations('topic');
   const { id } = useParams();
-  const [isCustom, setIsCustom] = useState<boolean>(false);
+  const [isCustom, setIsCustom] = useState<boolean>(true);
   const { data: Q_Course } = useQ_Course_GetDetail({ id: id as string });
 
   return (
@@ -41,7 +41,7 @@ export default function Courses_Topics_Create() {
         </div>
 
         <MySelect
-          defaultValue="teacher"
+          defaultValue="student"
           label={tTopic('typeTopic')}
           onChange={value => setIsCustom(value === 'student')}
           options={TYPE_TOPIC}

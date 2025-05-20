@@ -55,6 +55,7 @@ export default function Comment_Item({ comment }: CommentItemProps) {
         return commentService.create({
           content: value,
           postId: comment?.postId,
+          courseId: comment?.courseId,
           parentId: comment?.id,
         });
       } else if (comment?.id) {
@@ -70,6 +71,9 @@ export default function Comment_Item({ comment }: CommentItemProps) {
       queryClient.invalidateQueries({
         queryKey: ["post", "comments", comment?.postId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["course", "comments", comment?.courseId],
+      });
     },
   });
 
@@ -82,6 +86,9 @@ export default function Comment_Item({ comment }: CommentItemProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["post", "comments", comment?.postId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["course", "comments", comment?.courseId],
       });
     },
   });

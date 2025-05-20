@@ -34,10 +34,7 @@ export default function CardCourse({ course }: CardCourseProps) {
     queryKey: ['course', course.id, user],
     queryFn: async () => {
       const response = await courseService.checkJoinCourse(course.id);
-      if (response.data.length > 0) {
-        return response.data.map(enrollment => enrollment.userId === user?.id);
-      }
-      return false;
+      return response.data;
     },
     enabled: !!user && !!course.id,
   });

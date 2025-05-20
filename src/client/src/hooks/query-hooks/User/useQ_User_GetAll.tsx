@@ -1,5 +1,5 @@
 'use client'
-import { IGetAllQuery, ResponseAPIDtoWithPagination } from "@/interfaces/common";
+import { IGetAllQuery, PaginatedResponseAPIDto } from "@/interfaces/common";
 import { IUser } from "@/interfaces/user";
 import userService from "@/services/user.service";
 
@@ -9,7 +9,7 @@ export default function useQ_User_GetAll({
   options,
   params,
 }: {
-  options?: Partial<UseQueryOptions<ResponseAPIDtoWithPagination<IUser[]>, Error>>;
+  options?: Partial<UseQueryOptions<PaginatedResponseAPIDto<IUser[]>, Error>>;
   params: IGetAllQuery;
 }) {
   const query = useQuery({

@@ -57,30 +57,6 @@ export default function Courses_Topics_ChoiceTopic({
           <TextDescription className="line-clamp-3">{row.original.description}</TextDescription>
         ),
       },
-    //   {
-    //     accessorKey: 'teacher',
-    //     header: 'Teacher',
-    //     size: 100,
-    //     cell: ({ row }) => {
-    //       const teacher = row.original.teacher;
-    //       if (!teacher) return null;
-
-    //       return (
-    //         <div className="flex items-center gap-2">
-    //           <AvatarGroup
-    //             avatars={[
-    //               {
-    //                 url: apiConfig.avatar(teacher.name ?? 'c'),
-    //                 name: teacher.name ?? 'c',
-    //                 alt: teacher.name ?? 'c',
-    //               },
-    //             ]}
-    //           />
-    //           <TextDescription className="text-color-1">{teacher.name}</TextDescription>
-    //         </div>
-    //       );
-    //     },
-    //   },
       {
         accessorKey: 'group',
         header: 'Group',

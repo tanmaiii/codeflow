@@ -1,10 +1,9 @@
 import { CourseEnrollment } from '@/interfaces/courses.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { UserModel } from './users.model';
-export type CourseEnrollmentCreationAttributes = Optional<CourseEnrollment, 'id' | 'courseId' | 'userId' | 'status'>;
+export type CourseEnrollmentCreationAttributes = Optional<CourseEnrollment, 'courseId' | 'userId' | 'status'>;
 
 export class CourseEnrollmentModel extends Model<CourseEnrollment, CourseEnrollmentCreationAttributes> implements CourseEnrollment {
-  public id: string;
   public courseId: string;
   public userId: string;
   public status: boolean;
@@ -15,11 +14,6 @@ export class CourseEnrollmentModel extends Model<CourseEnrollment, CourseEnrollm
 export default function (sequelize: Sequelize): typeof CourseEnrollmentModel {
   CourseEnrollmentModel.init(
     {
-      id: {
-        primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-      },
       courseId: {
         allowNull: false,
         type: DataTypes.UUID,
@@ -53,7 +47,6 @@ export default function (sequelize: Sequelize): typeof CourseEnrollmentModel {
           {
             model: UserModel,
             as: 'user',
-            attributes: ['id', 'name', 'username', 'role', 'avatar'], // Replace with actual attribute names of UserModel
           },
         ],
       },

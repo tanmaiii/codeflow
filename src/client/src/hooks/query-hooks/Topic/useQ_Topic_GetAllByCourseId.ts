@@ -1,5 +1,5 @@
 'use client';
-import { IGetAllQuery, ResponseAPIDtoWithPagination } from '@/interfaces/common';
+import { IGetAllQuery, PaginatedResponseAPIDto } from '@/interfaces/common';
 import { ITopic } from '@/interfaces/topic';
 import topicService from '@/services/topic.service';
 
@@ -11,7 +11,7 @@ interface ParamsProps extends IGetAllQuery {
 }
 
 interface UseQ_Topic_GetAllByCourseIdProps {
-  options?: Partial<UseQueryOptions<ResponseAPIDtoWithPagination<ITopic[]>, Error>>;
+  options?: Partial<UseQueryOptions<PaginatedResponseAPIDto<ITopic[]>, Error>>;
   params: ParamsProps;
 }
 

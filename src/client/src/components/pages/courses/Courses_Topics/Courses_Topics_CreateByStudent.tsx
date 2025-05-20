@@ -3,42 +3,80 @@ import TextInput from '@/components/common/Input/TextInput/TextInput';
 import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
 import MyMultiSelect from '@/components/common/MyMultiSelect/MyMultiSelect';
 import { Button } from '@/components/ui/button';
+import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 import { TopicSchemaType, useTopicSchema } from '@/lib/validations/topicSchema';
+import courseService from '@/services/course.service';
+import groupService from '@/services/group.service';
+import topicService from '@/services/topic.service';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-
-const members = [
-  {
-    value: '1',
-    label: 'Nguyễn Văn A',
-  },
-  {
-    value: '2',
-    label: 'Nguyễn Văn B',
-  },
-  {
-    value: '3',
-    label: 'Nguyễn Văn C',
-  },
-];
+import { toast } from 'sonner';
 
 export default function Courses_Topics_CreateByStudent() {
   const tTopic = useTranslations('topic');
   const tCommon = useTranslations('common');
   const schema = useTopicSchema();
+  const { id } = useParams();
+  const [members, setMembers] = useState<string[]>([]);
+  const [nameGroup, setNameGroup] = useState<string>('');
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    control,
+    reset,
   } = useForm<TopicSchemaType>({
     resolver: zodResolver(schema),
   });
 
+  const { data: Q_Members } = useQuery({
+    queryKey: ['topics', id],
+    queryFn: () => courseService.memberInCourse(id as string),
+  });
+
+  const { data: Q_Course } = useQ_Course_GetDetail({ id: id as string });
+
+  const mutation = useMutation({
+    mutationFn: async (value: TopicSchemaType) => {
+      const topic = await topicService.create({
+        title: value.title,
+        description: value.description,
+        isCustom: true,
+        courseId: id as string,
+      });
+
+      const res = groupService.create({
+        name: nameGroup,
+        topicId: topic.data.id,
+        members: members,
+      });
+
+      return res;
+    },
+    onSuccess: () => {
+      toast.success(tCommon('createSuccess'));
+      setNameGroup('');
+      setMembers([]);
+      reset();
+      router.back();
+    },
+    onError: () => {
+      toast.error(tCommon('createError'));
+    },
+  });
+
   return (
-    <form onSubmit={handleSubmit(() => {})} className="flex flex-col gap-3">
+    <form
+      onSubmit={handleSubmit(value => {
+        mutation.mutate(value);
+      })}
+      className="flex flex-col gap-3"
+    >
       <TextInput label={tTopic('title')} error={errors.title?.message} {...register('title')} />
       <TextareaInput
         label={tTopic('description')}
@@ -46,15 +84,22 @@ export default function Courses_Topics_CreateByStudent() {
         error={errors.description?.message}
         {...register('description')}
       />
+      <TextInput
+        label={tTopic('nameGroup')}
+        name="nameGroup"
+        onChange={e => setNameGroup(e.target.value)}
+      />
       <MyMultiSelect
         label={tTopic('members')}
         name="members"
-        control={control}
-        maxLength={2}
-        options={members.map(member => ({
-          value: member.value,
-          label: member.label,
-        }))}
+        maxLength={Q_Course?.data.maxGroupMembers ?? 3}
+        onChange={value => setMembers(value)}
+        options={
+          Q_Members?.data?.map(member => ({
+            value: member.id,
+            label: member.name,
+          })) ?? []
+        }
       />
       <div className="flex justify-end mt-auto">
         <Button type="submit" className="w-fit" disabled={isSubmitting}>

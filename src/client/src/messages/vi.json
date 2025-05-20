@@ -194,7 +194,8 @@
     "author": "Tác giả",
     "teacher": "Giáo viên",
     "typeTopic": "Loại đề tài",
-    "members": "Thành viên"
+    "members": "Thành viên",
+    "nameGroup": "Tên nhóm"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"

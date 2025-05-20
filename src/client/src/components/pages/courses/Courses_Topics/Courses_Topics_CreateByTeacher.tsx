@@ -4,28 +4,16 @@ import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput
 import MyMultiSelect from '@/components/common/MyMultiSelect/MyMultiSelect';
 import { Button } from '@/components/ui/button';
 import { ITopic } from '@/interfaces/topic';
+import courseService from '@/services/course.service';
 import groupService from '@/services/group.service';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import Courses_Topics_ChoiceTopic from './Courses_Topics_ChoiceTopic';
-
-const members = [
-  {
-    value: '1',
-    label: 'Nguyễn Văn A',
-  },
-  {
-    value: '2',
-    label: 'Nguyễn Văn B',
-  },
-  {
-    value: '3',
-    label: 'Nguyễn Văn C',
-  },
-];
+import { TextDescription } from '@/components/ui/text';
+import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 
 export default function Courses_Topics_CreateByTeacher() {
   const tTopic = useTranslations('topic');
@@ -33,6 +21,9 @@ export default function Courses_Topics_CreateByTeacher() {
   const { id } = useParams();
   const [selectedTopic, setSelectedTopic] = useState<ITopic | null>(null);
   const [groupName, setGroupName] = useState<string>('');
+  const [members, setMembers] = useState<string[]>([]);
+  const [error, setError] = useState<string>('');
+  const { data: Q_Course } = useQ_Course_GetDetail({ id: id as string });
 
   const mutation = useMutation({
     mutationFn: () => {
@@ -43,7 +34,7 @@ export default function Courses_Topics_CreateByTeacher() {
       return groupService.create({
         name: groupName,
         topicId: selectedTopic.id,
-        members: [],
+        members: members,
       });
     },
     onSuccess: () => {
@@ -56,12 +47,18 @@ export default function Courses_Topics_CreateByTeacher() {
     },
   });
 
+  const { data: Q_Members } = useQuery({
+    queryKey: ['topics', id],
+    queryFn: () => courseService.memberInCourse(id as string),
+  });
+
   return (
     <div className="flex flex-col gap-3">
       <Courses_Topics_ChoiceTopic
         onSelect={item => setSelectedTopic(item)}
         courseId={id as string}
       />
+      {error && <TextDescription className="text-red-500">{error}</TextDescription>}
       <TextInput
         disabled
         label={tTopic('title')}
@@ -75,27 +72,33 @@ export default function Courses_Topics_CreateByTeacher() {
         className="min-h-[200px]"
       />
       <TextInput
-        label={'Tên nhóm'}
+        label={tTopic('nameGroup')}
         name="name"
-        placeholder={'Tên nhóm'}
         onChange={e => setGroupName(e.target.value)}
       />
       <div className="flex flex-col gap-2">
         <MyMultiSelect
           label={tTopic('members')}
           name="members"
-          maxLength={2}
-          options={members.map(member => ({
-            value: member.value,
-            label: member.label,
-          }))}
+          maxLength={Q_Course?.data.maxGroupMembers ?? 3}
+          onChange={value => setMembers(value)}
+          options={Q_Members?.data?.map(member => ({
+            value: member.id,
+            label: member.name,
+          })) ?? []}
         />
       </div>
       <div className="flex justify-end">
         <Button
           variant="default"
           className="w-fit px-10"
-          onClick={() => selectedTopic && mutation.mutate()}
+          onClick={() => {
+            if (!selectedTopic) {
+              setError('Vui lòng chọn chủ đề');
+              return;
+            }
+            mutation.mutate();
+          }}
         >
           {tCommon('register')}
         </Button>

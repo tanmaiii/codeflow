@@ -33,7 +33,7 @@ export default function Courses_Detail_Topics_Create({ courseId }: { courseId: s
     mutationFn: (data: TopicSchemaType) => {
       return topicService.create({
         isCustom: false,
-        status: 'approved',
+        status: 'pending',
         courseId: courseId,
         ...data,
       });

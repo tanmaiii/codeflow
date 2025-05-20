@@ -28,10 +28,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     queryKey: ['course', courseId, user, 'join'],
     queryFn: async () => {
       const response = await courseService.checkJoinCourse(courseId);
-      if (response.data.length > 0) {
-        return response.data.some(enrollment => enrollment.userId === user?.id);
-      }
-      return false;
+      return response.data;
     },
     enabled: !!user && !!courseId,
   });

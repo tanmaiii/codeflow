@@ -11,23 +11,23 @@ class TagService {
   }
 
   async getAll(): Promise<ResponseAPIDto<ITag[]>> {
-    const response = await this.client.get("/");
-    return response.data;
+    const res = await this.client.get("/");
+    return res.data;
   }
 
   async getById(id: string): Promise<ResponseAPIDto<ITag>> {
-    const response = await this.client.get(`/${id}`);
-    return response.data;
+    const res = await this.client.get(`/${id}`);
+    return res.data;
   }
 
   async create(data: ITagCreateDto): Promise<ResponseAPIDto<ITag>> {
-    const response = await this.client.post("/", data);
-    return response.data;
+    const res = await this.client.post("/", data);
+    return res.data;
   }
 
   async update(id: string, data: ITagCreateDto): Promise<ResponseAPIDto<ITag>> {
-    const response = await this.client.put(`/${id}`, data);
-    return response.data;
+    const res = await this.client.put(`/${id}`, data);
+    return res.data;
   }
 }
 

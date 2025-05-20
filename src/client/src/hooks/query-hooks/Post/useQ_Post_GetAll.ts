@@ -1,6 +1,6 @@
 import {
   IGetAllQuery,
-  ResponseAPIDtoWithPagination,
+  PaginatedResponseAPIDto,
 } from "@/interfaces/common";
 import { IPost } from "@/interfaces/post";
 import postService from "@/services/post.service";
@@ -11,7 +11,7 @@ export default function useQ_Post_GetAll({
   params,
 }: {
   options?: Partial<
-    UseQueryOptions<ResponseAPIDtoWithPagination<IPost[]>, Error>
+    UseQueryOptions<PaginatedResponseAPIDto<IPost[]>, Error>
   >;
   params: IGetAllQuery;
 }) {

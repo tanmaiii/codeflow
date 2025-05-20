@@ -1,5 +1,5 @@
-import { array, z } from 'zod';
 import { useTranslations } from 'next-intl';
+import { z } from 'zod';
 
 export function useTopicSchema() {
   const t = useTranslations('validate');
@@ -32,7 +32,6 @@ const topicSchema = ({
     status: z.string({ message: t('required', { field: tTopic('status') }) }).optional(),
     teacherId: z.string({ message: t('required', { field: tTopic('teacher') }) }).optional(),
     isCustom: z.boolean().optional(),
-    members: array(z.string()).optional(),
   });
 
 export type TopicSchemaType = z.infer<ReturnType<typeof topicSchema>>;

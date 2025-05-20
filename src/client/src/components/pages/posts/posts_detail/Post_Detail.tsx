@@ -27,7 +27,7 @@ export default function Post_Detail() {
     id: idString,
   });
 
-  const mutionSubmit = useMutation({
+  const mutionComment = useMutation({
     mutationFn: (value: string) => {
       const res = commentService.create({
         content: value,
@@ -92,7 +92,7 @@ export default function Post_Detail() {
         <SwapperHTML content={data.data.content} />
         {commentData?.data && (
           <Comments
-            onSubmit={(value) => mutionSubmit.mutate(value)}
+            onSubmit={(value) => mutionComment.mutate(value)}
             comments={commentData.data}
           />
         )}

@@ -72,7 +72,7 @@ export default function (sequelize: Sequelize): typeof TopicModel {
       status: {
         allowNull: false,
         type: DataTypes.ENUM(...Object.values(ENUM_TOPIC_STATUS)),
-        defaultValue: ENUM_TOPIC_STATUS.APPROVED,
+        defaultValue: ENUM_TOPIC_STATUS.PENDING,
       },
     },
     {

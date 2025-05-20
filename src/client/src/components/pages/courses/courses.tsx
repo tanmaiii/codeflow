@@ -7,9 +7,9 @@ import { paths } from '@/data/path';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { useTranslations } from 'next-intl';
-import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
-import useQ_Course_GetAllRegistered from '@/hooks/query-hooks/Course/useQ_Course_GetAllRegistered';
 import NoData from '@/components/common/NoData/NoData';
+import { useQuery } from '@tanstack/react-query';
+import courseService from '@/services/course.service';
 
 const tabs = [
   { id: 'all', label: 'All Courses' },
@@ -24,21 +24,29 @@ export default function Courses() {
   const { localPath } = useH_LocalPath();
   const t = useTranslations('course');
 
-  const Q_Courses = useQ_Course_GetAll({
-    params: {
-      page: Number(page),
-      limit: 8,
-      sortBy: 'createdAt',
-      order: 'DESC',
+  const Q_Courses = useQuery({
+    queryKey: ['courses', page],
+    queryFn: async () => {
+      const res = courseService.getAll({
+        page: Number(page),
+        limit: 8,
+        sortBy: 'createdAt',
+        order: 'DESC',
+      });
+      return res;
     },
   });
 
-  const Q_RegisteredCourses = useQ_Course_GetAllRegistered({
-    params: {
-      page: Number(page),
-      limit: 8,
-      sortBy: 'createdAt',
-      order: 'DESC',
+  const Q_RegisteredCourses = useQuery({
+    queryKey: ['courses', 'registered', page],
+    queryFn: async () => {
+      const res = courseService.getAllRegistered({
+        page: Number(page),
+        limit: 8,
+        sortBy: 'createdAt',
+        order: 'DESC',
+      });
+      return res;
     },
   });
 
@@ -47,7 +55,6 @@ export default function Courses() {
   const currentData = tab === 'all' ? Q_Courses.data : Q_RegisteredCourses.data;
 
   const handleTabChange = (tabId: string) => {
-    // Reset page to 1 when changing tabs
     router.push(`${localPath(paths.COURSES)}?page=1&tab=${tabId}`);
   };
 
