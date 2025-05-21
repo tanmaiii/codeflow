@@ -62,8 +62,8 @@ import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfa
       return res.data;
     }
 
-    async memberInCourse(courseId: string): Promise<ResponseAPIDto<IUser[]>> {
-      const res = await this.client.get(`/${courseId}/members`);
+    async memberInCourse(courseId: string, params: IGetAllQuery): Promise<PaginatedResponseAPIDto<IUser[]>> {
+      const res = await this.client.get(`/${courseId}/members`, { params });
       return res.data;
     }
 

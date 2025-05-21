@@ -15,10 +15,14 @@ import { useTranslations } from 'next-intl';
 import { useUserStore } from '@/stores/user_store';
 import { ROLE } from '@/contants/enum';
 import { paths } from '@/data/path';
+import Link from 'next/link';
 
 export default function Courses_Summary({ course }: { course: ICourse }) {
   const router = useRouter();
-  const { data: members } = useQ_Course_GetMembers({ id: course.id });
+  const { data: members } = useQ_Course_GetMembers({
+    id: course.id,
+    params: { page: 1, limit: 1000 },
+  });
   const { data: topics } = useQ_Topic_GetAllByCourseId({
     params: { courseId: course.id, page: 1, limit: 1 },
   });
@@ -68,9 +72,11 @@ export default function Courses_Summary({ course }: { course: ICourse }) {
           </div>
           <div className="flex items-center gap-2">
             <IconUser className="text-color-2" />
-            <TextDescription className="text-sm font-bold">
-              {members?.data?.length} {t('students')}
-            </TextDescription>
+            <Link href={paths.COURSE_MEMBER(course.id)}>
+              <TextDescription className="text-sm font-bold">
+                {members?.data?.length} {t('students')}
+              </TextDescription>
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             <IconStar className="text-color-2" />

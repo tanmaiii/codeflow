@@ -13,9 +13,10 @@ export interface IPost extends IBaseEntity {
   content: string;
   authorId: string;
   thumbnail?: string;
-  author?: IUser;
   commentCount: number;
   likeCount: number;
+  status: string;
+  author?: IUser;
   tags: ITag[];
 }
 

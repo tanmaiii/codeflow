@@ -4,10 +4,11 @@ import DragDropImage from '@/components/common/Input/DragDropImage/DragDropImage
 import TextInput from '@/components/common/Input/TextInput/TextInput';
 import MyMultiSelect from '@/components/common/MyMultiSelect/MyMultiSelect';
 import RichTextEditor from '@/components/common/RichTextEditor/RichTextEditor';
+import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import TextHeading, { TextDescription } from '@/components/ui/text';
+import { TextDescription } from '@/components/ui/text';
 import { paths } from '@/data/path';
 import useQ_Post_GetDetail from '@/hooks/query-hooks/Post/useQ_Post_GetDetail';
 import useQ_Tag_GetAll from '@/hooks/query-hooks/Tag/useQ_Tag_GetAll';
@@ -89,7 +90,12 @@ export default function Posts_Update() {
   });
 
   useEffect(() => {
-    if (user && Q_Post.data && user?.user?.id !== Q_Post.data?.data?.author?.id) {
+    if (
+      user &&
+      Q_Post.data &&
+      user?.user?.id !== Q_Post.data?.data?.author?.id &&
+      user?.user?.role !== 'admin'
+    ) {
       toast.error('You are not authorized to update this post');
       router.push(localPath(paths.POSTS));
     }
@@ -101,7 +107,7 @@ export default function Posts_Update() {
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
       <Card className="bg-background-1 w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
-        <TextHeading>{t('updatePost')}</TextHeading>
+        <TitleHeader title={t('updatePost')} onBack />
         <div className="flex flex-col gap-4">
           <Label className="text-color-2">{t('thumbnail')}</Label>
           <div className="h-[300px] w-full">

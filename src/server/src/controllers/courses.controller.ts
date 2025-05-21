@@ -95,10 +95,25 @@ export class CourseController {
   public getMembersByCourseId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const courseId = req.params.id;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const { count, rows }: { count: number; rows: CourseEnrollment[] } = await this.courseEnrollment.findAllWithPaginationByCourseId(
+        Number(limit),
+        Number(page),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        courseId,
+      );
 
-      const checkEnrollmentData: CourseEnrollment[] = await this.courseEnrollment.findEnrollmentByCourseId(courseId);
-
-      res.status(200).json({ data: checkEnrollmentData.map(enrollment => enrollment.user) ?? [], message: 'checkEnrollment' });
+      res.status(200).json({
+        data: rows.map(enrollment => enrollment.user) ?? [],
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
     } catch (error) {
       next(error);
     }

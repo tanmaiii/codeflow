@@ -10,6 +10,8 @@ import { useTranslations } from 'next-intl';
 import NoData from '@/components/common/NoData/NoData';
 import { useQuery } from '@tanstack/react-query';
 import courseService from '@/services/course.service';
+import { useUserStore } from '@/stores/user_store';
+import { ROLE } from '@/contants/enum';
 
 const tabs = [
   { id: 'all', label: 'All Courses' },
@@ -23,6 +25,7 @@ export default function Courses() {
   const tab = searchParams.get('tab') || 'all';
   const { localPath } = useH_LocalPath();
   const t = useTranslations('course');
+  const { user } = useUserStore();
 
   const Q_Courses = useQuery({
     queryKey: ['courses', page],
@@ -77,14 +80,16 @@ export default function Courses() {
             </div>
           ))}
         </div>
-        <Button
-          onClick={() => router.push(localPath(paths.COURSE_CREATE))}
-          variant="outline"
-          className="bg-background-1"
-          size="sm"
-        >
-          {t('createCourse')}
-        </Button>
+        {user?.role === ROLE.TEACHER && (
+          <Button
+            onClick={() => router.push(localPath(paths.COURSE_CREATE))}
+            variant="outline"
+            className="bg-background-1"
+            size="sm"
+          >
+            {t('createCourse')}
+          </Button>
+        )}
       </div>
       <div className="min-h-[600px]">
         {currentData?.data?.length === 0 && <NoData />}

@@ -7,8 +7,7 @@ import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { TextDescription } from '@/components/ui/text';
 import { ROLE_USER } from '@/contants/object';
-import { paths } from '@/data/path';
-import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
+import useQ_Course_GetMembers from '@/hooks/query-hooks/Course/useQ_Course_GetMembers';
 import { IUser } from '@/interfaces/user';
 import apiConfig from '@/lib/api';
 import userService from '@/services/user.service';
@@ -17,23 +16,21 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
-import { toast } from 'sonner';
-import Users_Update from './Users_Update';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
-export default function Users_Table() {
-  const router = useRouter();
+export default function Courses_Member() {
   const tCommon = useTranslations('common');
+  const tCourse = useTranslations('course');
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 1;
-  const { data } = useQ_User_GetAll({
-    params: {
-      page: Number(page),
-      limit: 10,
-    },
+  const params = useParams();
+  const id = params.id as string;
+  const [page, setPage] = useState(1);
+  const { data } = useQ_Course_GetMembers({
+    id: id,
+    params: { page: Number(page), limit: 10 },
   });
 
   const columns = useMemo<ColumnDef<IUser>[]>(
@@ -49,7 +46,7 @@ export default function Users_Table() {
                   ? utils_ApiImageToLocalImage(row.original.avatar)
                   : apiConfig.avatar(row.original.name)
               }
-              alt={row.original.name ?? ""}
+              alt={row.original.name ?? ''}
               width={32}
               height={32}
               className="rounded-full"
@@ -131,7 +128,7 @@ export default function Users_Table() {
   };
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Users" description="Manage your users" />
+      <TitleHeader title={tCourse('member')} description={tCourse('memberDescription')} onBack />
       <DataTable
         fieldFilter="name"
         showIndexColumn={true}
@@ -142,7 +139,7 @@ export default function Users_Table() {
         toolbarCustom={customToolbar}
         renderActions={({ row }) => (
           <>
-            <Users_Update user={row.original} />
+            {/* <Users_Update user={row.original} /> */}
             <ActionDelete
               deleteKey={row.original.name}
               handleSubmit={async () => {
@@ -156,7 +153,7 @@ export default function Users_Table() {
         <MyPagination
           currentPage={data?.pagination.currentPage || 1}
           totalPages={data?.pagination.totalPages || 1}
-          onPageChange={page => router.push(`/admin/${paths.USERS}?page=${page}`)}
+          onPageChange={page => setPage(page)}
         />
       </div>
     </div>

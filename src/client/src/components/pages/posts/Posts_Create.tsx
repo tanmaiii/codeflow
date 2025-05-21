@@ -4,10 +4,10 @@ import DragDropImage from '@/components/common/Input/DragDropImage/DragDropImage
 import TextInput from '@/components/common/Input/TextInput/TextInput';
 import MyMultiSelect from '@/components/common/MyMultiSelect/MyMultiSelect';
 import RichTextEditor from '@/components/common/RichTextEditor/RichTextEditor';
+import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import TextHeading from '@/components/ui/text';
 import { paths } from '@/data/path';
 import useQ_Tag_GetAll from '@/hooks/query-hooks/Tag/useQ_Tag_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
@@ -71,7 +71,7 @@ export default function Posts_Create() {
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
       <Card className="w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">
-        <TextHeading>{t('createPost')}</TextHeading>
+        <TitleHeader title={t('createPost')} onBack />
         <div className="flex flex-col gap-4">
           <Label className="text-color-2">{t('thumbnail')}</Label>
           <div className="h-[300px] w-full">

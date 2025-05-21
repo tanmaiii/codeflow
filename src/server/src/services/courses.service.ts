@@ -80,11 +80,11 @@ export class CourseService {
 
   public async createCourse(courseData: Partial<CourseCreate>): Promise<Course> {
     const { tags, documents, ...courseDetails } = courseData;
-    
+
     if (courseDetails.password) {
       courseDetails.password = await hash(courseDetails.password, 10);
     }
-    
+
     const createdCourse = await DB.Courses.create(courseDetails);
 
     await this.attachTagsAndDocuments(createdCourse.id, tags, documents);
@@ -104,11 +104,7 @@ export class CourseService {
     return DB.Courses.findByPk(courseId);
   }
 
-  private async attachTagsAndDocuments(
-    courseId: string, 
-    tags?: string[], 
-    documents?: string[]
-  ): Promise<void> {
+  private async attachTagsAndDocuments(courseId: string, tags?: string[], documents?: string[]): Promise<void> {
     if (tags?.length) {
       await Promise.all(tags.map(tagId => this.Tag.createCourseTag(courseId, tagId)));
     }

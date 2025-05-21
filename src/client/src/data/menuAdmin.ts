@@ -33,6 +33,12 @@ export const menuAdmin: ILinkItem[] = [
     href: paths.TOPICS,
   },
   {
+    en: 'Posts',
+    vi: 'Bài viết',
+    icon: "article",
+    href: paths.POSTS,
+  },
+  {
     en: 'Settings',
     vi: 'Cài đặt',
     icon: 'settings',

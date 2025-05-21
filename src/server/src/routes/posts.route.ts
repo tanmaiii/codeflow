@@ -1,9 +1,8 @@
-import { CourseController } from '@/controllers/courses.controller';
 import { PostController } from '@/controllers/post.controller';
 import { PostLikeController } from '@/controllers/post_like.controller';
 import { GetAllQueryDto } from '@/dtos/common.dto';
 import { CreatePostDto, UpdatePostDto } from '@/dtos/posts.dto';
-import { AuthMiddleware } from '@/middlewares/auth.middleware';
+import { AuthMiddleware, OptionalAuthMiddleware } from '@/middlewares/auth.middleware';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
 import { Routes } from '@interfaces/routes.interface';
 import { Router } from 'express';
@@ -19,8 +18,8 @@ export class PostRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, ValidationMiddleware(GetAllQueryDto, 'query'), this.post.getPosts);
-    this.router.get(`${this.path}/:id`, this.post.getPostById);
+    this.router.get(`${this.path}`, OptionalAuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.post.getPosts);
+    this.router.get(`${this.path}/:id`, OptionalAuthMiddleware, this.post.getPostById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreatePostDto), this.post.createPost);
     this.router.put(`${this.path}/:id/delete`, AuthMiddleware, this.post.deletePost);
     this.router.delete(`${this.path}/:id`, AuthMiddleware, this.post.destroyPost);

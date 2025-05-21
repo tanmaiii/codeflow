@@ -1,22 +1,18 @@
-import { IComment } from "@/interfaces/comment";
-import {
-  IGetAllQuery,
-  ResponseAPIDto,
-  PaginatedResponseAPIDto,
-} from "@/interfaces/common";
-import { ICreatePostDto, IPost } from "@/interfaces/post";
-import createHttpClient from "@/lib/createHttpClient";
-import { AxiosInstance } from "axios";
+import { IComment } from '@/interfaces/comment';
+import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfaces/common';
+import { ICreatePostDto, IPost } from '@/interfaces/post';
+import createHttpClient from '@/lib/createHttpClient';
+import { AxiosInstance } from 'axios';
 
 class PostService {
   private client: AxiosInstance;
 
   constructor() {
-    this.client = createHttpClient("posts");
+    this.client = createHttpClient('posts');
   }
 
   async getAll(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<IPost[]>> {
-    const res = await this.client.get("/", { params });
+    const res = await this.client.get('/', { params });
     return res.data;
   }
 
@@ -26,7 +22,7 @@ class PostService {
   }
 
   async create(data: ICreatePostDto): Promise<ResponseAPIDto<IPost>> {
-    const res = await this.client.post("/", data);
+    const res = await this.client.post('/', data);
     return res.data;
   }
 
@@ -37,6 +33,16 @@ class PostService {
 
   async delete(id: string): Promise<ResponseAPIDto<IPost>> {
     const res = await this.client.put(`/${id}/delete`);
+    return res.data;
+  }
+
+  async destroy(id: string): Promise<ResponseAPIDto<IPost>> {
+    const res = await this.client.delete(`/${id}`);
+    return res.data;
+  }
+
+  async updateStatus(id: string, status: boolean): Promise<ResponseAPIDto<IPost>> {
+    const res = await this.client.put(`/${id}`, { status });
     return res.data;
   }
 

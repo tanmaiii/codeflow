@@ -18,7 +18,7 @@ export default function useQ_Post_GetAll({
   const query = useQuery({
     queryKey: ["posts", params],
     queryFn: async () => {
-      const res = postService.getAll({ params });
+      const res = postService.getAll(params);
       return res;
     },
     ...options,

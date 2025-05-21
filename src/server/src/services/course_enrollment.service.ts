@@ -1,6 +1,7 @@
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
 import { CourseEnrollment } from '@/interfaces/courses.interface';
+import { Op } from 'sequelize';
 import { Service } from 'typedi';
 
 @Service()
@@ -14,6 +15,24 @@ export class CourseEnrollmentService {
     const { count, rows }: { count: number; rows: CourseEnrollment[] } = await DB.CourseEnrollment.findAndCountAll({
       limit,
       offset,
+    });
+    return { count, rows };
+  }
+
+  public async findAllWithPaginationByCourseId(
+    pageSize: number,
+    page: number,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    courseId: string,
+  ): Promise<{ count: number; rows: CourseEnrollment[] }> {
+    const { count, rows }: { count: number; rows: CourseEnrollment[] } = await DB.CourseEnrollment.findAndCountAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+      distinct: true,
+      where: { courseId },
+      col: 'course_enrollments.id',
     });
     return { count, rows };
   }

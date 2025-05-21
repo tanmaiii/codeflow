@@ -23,15 +23,15 @@ export class TopicService {
     isCustom?: boolean,
   ): Promise<{ count: number; rows: Topic[] }> {
     const whereClause: any = {};
-    
+
     if (courseId) {
       whereClause.courseId = courseId;
     }
-    
+
     if (isCustom !== undefined) {
       whereClause.isCustom = isCustom;
     }
-    
+
     const { count, rows }: { count: number; rows: Topic[] } = await DB.Topics.findAndCountAll({
       limit: pageSize,
       offset: (page - 1) * pageSize,

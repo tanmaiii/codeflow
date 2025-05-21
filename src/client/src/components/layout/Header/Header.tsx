@@ -3,16 +3,16 @@ import { paths } from '@/data/path';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { useSidebarStore } from '@/stores/sidebar_store';
 import { useUserStore } from '@/stores/user_store';
-import { IconDashboard } from '@tabler/icons-react';
+import { IconDashboard, IconUser } from '@tabler/icons-react';
 import { PanelLeftClose, PanelRightClose } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import ButtonTooltip from '../../common/Button/ButtonWithTooltip/ButtonTooltip';
 import LocaleSwitcher from '../../localeSwicher';
 import ThemeToggle from '../../themeToggle';
 import { Button } from '../../ui/button';
 import HeaderSearch from './HeaderSearch';
-
 
 export default function Header() {
   const { collapsed, toggleSidebar } = useSidebarStore();
@@ -20,6 +20,9 @@ export default function Header() {
   const tAuth = useTranslations('auth');
   const { user } = useUserStore();
   const { localPath } = useH_LocalPath();
+  const pathname = usePathname();
+
+  const isAdminPage = pathname?.includes('/admin');
 
   return (
     <header className="fixed top-0 z-30 bg-background-1 dark:bg-background-3 border-b px-4 py-2 flex items-center justify-between w-full h-14 md:16">
@@ -43,12 +46,12 @@ export default function Header() {
       <div className="gap-2 flex">
         {user && user.role === 'admin' && (
           <ButtonTooltip
-            tooltip={'Admin'}
+            tooltip={isAdminPage ? 'User' : 'Admin'}
             variant="outline"
             className="p-3"
           >
-            <Link href={localPath(paths.ADMIN)}>
-              <IconDashboard />
+            <Link href={isAdminPage ? localPath(paths.HOME) : localPath(paths.ADMIN)}>
+              {isAdminPage ? <IconUser /> : <IconDashboard />}
             </Link>
           </ButtonTooltip>
         )}

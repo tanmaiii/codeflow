@@ -98,7 +98,7 @@ export default function Courses_Update() {
       const filesPath = files.length > 0 ? await handleUploadFile(files) : [];
       const courseData: ICreateCourseDto = {
         ...data,
-        thumbnail: imagePath || undefined,
+        thumbnail: imagePath || '',
         documents: filesPath || [],
       };
       const res = await courseService.update(id as string, courseData);

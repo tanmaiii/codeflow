@@ -1,20 +1,22 @@
 'use client';
 import ActionDelete from '@/components/common/Action/ActionDelete';
 import ActionIcon from '@/components/common/Action/ActionIcon';
+import ActionStatus from '@/components/common/Action/ActionStatus';
 import { DataTable } from '@/components/common/data-table/data-table';
-import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { TextDescription } from '@/components/ui/text';
-import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/contants/object';
+import { STATUS_HIDDEN } from '@/contants/object';
+import { IMAGES } from '@/data/images';
 import { paths } from '@/data/path';
-import useQ_Topic_GetAll from '@/hooks/query-hooks/Topic/useQ_Topic_GetAll';
+import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
-import { ITopic } from '@/interfaces/topic';
+import { IPost } from '@/interfaces/post';
 import apiConfig from '@/lib/api';
-import topicService from '@/services/topic.service';
+import postService from '@/services/post.service';
+import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
@@ -25,16 +27,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
 
-export default function Topics_Table() {
+export default function Posts_Table() {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') || 1;
-  const t = useTranslations('topic');
+  const t = useTranslations('post');
   const tCommon = useTranslations('common');
   const { localPath } = useH_LocalPath();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const Q_Topics = useQ_Topic_GetAll({
+  const Q_Posts = useQ_Post_GetAll({
     params: {
       page: Number(page),
       limit: 10,
@@ -43,31 +45,39 @@ export default function Topics_Table() {
     },
   });
 
-  const columns = useMemo<ColumnDef<ITopic>[]>(
+  const columns = useMemo<ColumnDef<IPost>[]>(
     () => [
       {
         header: t('title'),
         accessorKey: 'title',
         cell: ({ row }) => (
-          <Link href={localPath(paths.TOPICS_DETAIL(row.original.id))}>{row.original.title}</Link>
+          <div className="flex items-center gap-2">
+            <Image
+              src={
+                row.original.thumbnail
+                  ? utils_ApiImageToLocalImage(row.original.thumbnail)
+                  : IMAGES.DEFAULT_POST
+              }
+              alt={row.original.title}
+              width={100}
+              height={100}
+              className="rounded-sm"
+            />
+            <Link className="hover:underline" href={localPath(paths.POST_DETAIL(row.original.id))}>
+              {row.original.title}
+            </Link>
+          </div>
         ),
-        size: 200,
-      },
-      {
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Course" />,
-        accessorKey: 'course',
-        cell: ({ row }) => (
-          <TextDescription className="text-color-1">{row.original.course?.title}</TextDescription>
-        ),
-        size: 200,
+        size: 400,
       },
       {
         header: t('author'),
         accessorKey: 'author',
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <Image
-              src={
+        cell: ({ row }) => {
+          return (
+            <div className="flex items-center gap-2">
+              <Image
+                src={
                   row.original.author?.avatar
                     ? utils_ApiImageToLocalImage(row.original.author?.avatar)
                     : apiConfig.avatar(row.original.author?.name)
@@ -85,26 +95,45 @@ export default function Topics_Table() {
                   {row.original.author?.username}
                 </TextDescription>
               </div>
-          </div>
-        ),
-      },
-      {
-        accessorKey: 'isCustom',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Is Custom" />,
-        size: 100,
-        cell: ({ row }) => {
-          const isCustom = row.original.isCustom;
-          const statusType = isCustom ? 'custom' : 'suggest';
-          return <MyBadge status={STATUS_TOPIC_CUSTOM.find(item => item.value === statusType)!} />;
+            </div>
+          );
         },
       },
       {
+        header: t('comments'),
+        accessorKey: 'commentCount',
+        cell: ({ row }) => (
+          <TextDescription className="text-color-1">{row.original.commentCount}</TextDescription>
+        ),
+      },
+      {
+        header: t('likes'),
+        accessorKey: 'likeCount',
+        cell: ({ row }) => (
+          <TextDescription className="text-color-1">{row.original.likeCount}</TextDescription>
+        ),
+      },
+      {
+        header: tCommon('createdAt'),
+        accessorKey: 'createdAt',
+        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.createdAt!),
+      },
+      {
+        header: tCommon('updatedAt'),
+        accessorKey: 'updatedAt',
+        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.updatedAt!),
+      },
+      {
+        header: tCommon('deletedAt'),
+        accessorKey: 'deletedAt',
+        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.deletedAt!),
+      },
+      {
+        header: t('status'),
         accessorKey: 'status',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-        size: 100,
         cell: ({ row }) => {
-          const status = row.original.status;
-          return <MyBadge status={STATUS_TOPIC.find(item => item.value === status)!} />;
+          const statusType = !row.original.status ? 'hidden' : 'visible';
+          return <MyBadge status={STATUS_HIDDEN.find(item => item.value === statusType)!} />;
         },
       },
     ],
@@ -112,25 +141,30 @@ export default function Topics_Table() {
   );
 
   const mutationDelete = useMutation({
-    mutationFn: async (selectedRowsData: ITopic[]) => {
-      await Promise.all(selectedRowsData.map(item => topicService.delete(item.id)));
+    mutationFn: async (selectedRowsData: IPost[]) => {
+      await Promise.all(selectedRowsData.map(item => postService.destroy(item.id)));
     },
     onSuccess: () => {
       toast.success(tCommon('deleteSuccess'));
-      queryClient.invalidateQueries({ queryKey: ['topics'] });
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
     },
     onError: () => {
       toast.error(tCommon('deleteError'));
     },
   });
 
-  const customToolbar = ({ table }: { table: Table<ITopic> }) => {
+  const customToolbar = ({ table }: { table: Table<IPost> }) => {
     const selectedRowsData = table.getFilteredSelectedRowModel().rows.map(row => row.original);
     const selectedRowsCount = table.getFilteredSelectedRowModel().rows.length;
 
     return (
       <>
-        <Button onClick={() => router.push(`${paths.TOPIC_CREATE}`)} variant="outline" size="sm">
+        <Button
+          onClick={() => router.push(`/admin/${paths.POST_CREATE}`)}
+          variant="outline"
+          size="sm"
+          className="w-fit"
+        >
           {tCommon('create')}
         </Button>
         {selectedRowsCount > 0 && (
@@ -148,38 +182,39 @@ export default function Topics_Table() {
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Topics" description="Manage your topics" />
+      <TitleHeader title="Posts" description="Manage your posts" />
       <DataTable
         showIndexColumn={true}
         columns={columns}
-        data={Q_Topics.data?.data || []}
+        data={Q_Posts.data?.data || []}
         fieldFilter="title"
         pagination={false}
         showSelectionColumn={true}
         toolbarCustom={customToolbar}
         renderActions={({ row }) => (
           <div className="flex justify-center">
+            <ActionStatus
+              handleSubmit={async () =>
+                await postService.updateStatus(row.original.id, !row.original.status)
+              }
+            />
             <ActionIcon
-              actionType={'view'}
-              onClick={() => router.push(`${paths.TOPICS_DETAIL(row.original.id)}`)}
+              actionType={'update'}
+              onClick={() => router.push(`/admin/${paths.POST_UPDATE(row.original.id)}`)}
               type="button"
             />
             <ActionDelete
               deleteKey={row.original.title}
-              handleSubmit={async () => {
-                await topicService.delete(row.original.id);
-              }}
+              handleSubmit={async () => await postService.destroy(row.original.id)}
             />
           </div>
         )}
       />
-      <div className="my-6">
-        <MyPagination
-          currentPage={Q_Topics.data?.pagination.currentPage || 1}
-          totalPages={Q_Topics.data?.pagination.totalPages || 1}
-          onPageChange={page => router.push(`/admin/${paths.TOPICS}?page=${page}`)}
-        />
-      </div>
+      <MyPagination
+        currentPage={Q_Posts.data?.pagination.currentPage || 1}
+        totalPages={Q_Posts.data?.pagination.totalPages || 1}
+        onPageChange={page => router.push(`/admin/${paths.POSTS}?page=${page}`)}
+      />
     </div>
   );
 }

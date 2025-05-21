@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { Pencil, Trash, Eye, Plus } from 'lucide-react';
+import { Pencil, Trash, Eye, Plus, CircleCheck } from 'lucide-react';
 import { MyTooltip } from '@/components/common/MyTooltip';
-
-type ActionIconType = 'update' | 'delete' | 'view' | 'create' | 'default' | 'non-icon';
+import { useTranslations } from 'next-intl';
+type ActionIconType = 'update' | 'delete' | 'view' | 'create' | 'default' | 'non-icon' | 'status';
 
 export interface ActionIconProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   actionType?: ActionIconType;
@@ -14,18 +14,29 @@ export default function ActionIcon({
   children,
   ...props
 }: ActionIconProps) {
+  const t = useTranslations('common');
+
   if (actionType === 'default') {
     return (
-      <MyTooltip content={'Action'}>
+      <MyTooltip content={t('action')}>
         <Button variant="outline" size="sm" className="w-fit" {...props}>
           {children}
         </Button>
       </MyTooltip>
     );
   }
+  if (actionType === 'status') {
+    return (
+      <MyTooltip content={t('status')}>
+        <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
+          <CircleCheck />
+        </Button>
+      </MyTooltip>
+    );
+  }
   if (actionType === 'update') {
     return (
-      <MyTooltip content="Update">
+      <MyTooltip content={t('update')}>
         <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
           <Pencil />
         </Button>
@@ -34,7 +45,7 @@ export default function ActionIcon({
   }
   if (actionType === 'delete') {
     return (
-      <MyTooltip content="Delete">
+      <MyTooltip content={t('delete')}>
         <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
           <Trash />
         </Button>
@@ -43,7 +54,7 @@ export default function ActionIcon({
   }
   if (actionType === 'view') {
     return (
-      <MyTooltip content="View">
+      <MyTooltip content={t('view')}>
         <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
           <Eye />
         </Button>
@@ -52,7 +63,7 @@ export default function ActionIcon({
   }
   if (actionType === 'create') {
     return (
-      <MyTooltip content="Create">
+      <MyTooltip content={t('create')}>
         <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
           <Plus />
         </Button>

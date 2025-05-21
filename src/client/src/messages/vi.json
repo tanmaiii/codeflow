@@ -7,6 +7,9 @@
     "close": "Đóng",
     "delete": "Xóa",
     "create": "Tạo",
+    "view": "Xem",
+    "action": "Hành động",
+    "status": "Trạng thái",
     "register": "Đăng ký",
     "edit": "Chỉnh sửa",
     "update": "Cập nhật",
@@ -22,6 +25,8 @@
     "enter": "Nhập",
     "deleteConfirmTitle": "Xác nhận xóa",
     "deleteConfirm": "Bạn có chắc chắn muốn xóa \"{title}\" không? Hành động này không thể hoàn tác.",
+    "updateStatusConfirm": "Bạn có chắc chắn muốn cập nhật trạng thái của \"{title}\" không?",
+    "updateStatusTitle": "Cập nhật trạng thái",
     "pick": "Chọn {field}",
     "dragDrop": "Kéo và thả {field} vào đây",
     "upload": "Tải lên {field}",
@@ -34,7 +39,10 @@
     "createSuccess": "Đã tạo thành công",
     "createError": "Tạo thất bại",
     "joinSuccess": "Đã tham gia thành công",
-    "joinError": "Tham gia thất bại"
+    "joinError": "Tham gia thất bại",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "deletedAt": "Ngày xóa"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
@@ -109,7 +117,11 @@
     "tags": "Thẻ",
     "cancel": "Thoát",
     "save": "Lưu",
-    "update": "Cập nhật"
+    "update": "Cập nhật",
+    "comments": "Bình luận",
+    "likes": "Lượt thích",
+    "status": "Trạng thái",
+    "author": "Tác giả"
   },
   "comment": {
     "comments": "Bình luận",
@@ -172,7 +184,10 @@
     "startRegister": "Đã bắt đầu đăng ký",
     "endRegister": "Đã hết hạn đăng ký",
     "joinDescription": "Nhập trống nếu khóa học không có mật khẩu",
-    "students": "học viên"
+    "students": "Học viên",
+    "register": "Đăng ký đề tài",
+    "member": "Thành viên",
+    "memberDescription": "Quản lý thành viên"
   },
   "topic": {
     "topic": "Đề tài",

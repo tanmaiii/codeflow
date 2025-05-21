@@ -38,6 +38,25 @@
     }
   };
 
+export const OptionalAuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  try {
+    const Authorization = getAuthorization(req);
+
+    if (Authorization) {
+      const decodedToken: DataStoredInToken = verify(Authorization, SECRET_KEY) as DataStoredInToken;
+      if (decodedToken === undefined) return next();
+      const findUser = await DB.Users.findByPk(decodedToken.user.id);
+
+      if (findUser) {
+        req.user = findUser;
+      }
+    }
+    next();
+  } catch (error) {
+    next();
+  }
+};
+
   export const isAdmin = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const Authorization = getAuthorization(req);

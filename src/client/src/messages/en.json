@@ -8,6 +8,9 @@
     "delete": "Delete",
     "update": "Update",
     "create": "Create",
+    "view": "View",
+    "action": "Action",
+    "status": "Status",
     "register": "Register",
     "edit": "Edit",
     "save": "Save",
@@ -22,6 +25,8 @@
     "enter": "Enter",
     "deleteConfirmTitle": "Confirm delete",
     "deleteConfirm": "Are you sure you want to delete \"{title}\" ? This action cannot be undone.",
+    "updateStatusConfirm": "Are you sure you want to update the status of \"{title}\" ?",
+    "updateStatusTitle": "Update Status",
     "pick": "Pick a {field}",
     "dragDrop": "Drag and drop {field} here",
     "upload": "Upload {field}",
@@ -34,7 +39,10 @@
     "createSuccess": "Created successfully",
     "createError": "Failed to create",
     "joinSuccess": "Joined successfully",
-    "joinError": "Failed to join"
+    "joinError": "Failed to join",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -116,7 +124,11 @@
     "tags": "Tags",
     "cancel": "Cancel",
     "save": "Save",
-    "update": "Update"
+    "update": "Update",
+    "comments": "Comments",
+    "likes": "Likes",
+    "status": "Status",
+    "author": "Author"
   },
   "comment": {
     "comments": "Comments",
@@ -182,7 +194,9 @@
     "endRegister": "End register",
     "joinDescription": "Enter empty if the course is not password protected",
     "students": "students",
-    "register": "Register"
+    "register": "Register",
+    "member": "Member",
+    "memberDescription": "Manage your members"
   },
   "topic": {
     "topic": "Topic",
