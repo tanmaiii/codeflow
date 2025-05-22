@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 import { TopicSchemaType, useTopicSchema } from '@/lib/validations/topicSchema';
 import courseService from '@/services/course.service';
-import groupService from '@/services/group.service';
 import topicService from '@/services/topic.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -36,7 +35,7 @@ export default function Courses_Topics_CreateByStudent() {
 
   const { data: Q_Members } = useQuery({
     queryKey: ['topics', id],
-    queryFn: () => courseService.memberInCourse(id as string),
+    queryFn: () => courseService.memberInCourse(id as string, { page: 1, limit: 100 }),
   });
 
   const { data: Q_Course } = useQ_Course_GetDetail({ id: id as string });
@@ -48,15 +47,10 @@ export default function Courses_Topics_CreateByStudent() {
         description: value.description,
         isCustom: true,
         courseId: id as string,
-      });
-
-      const res = groupService.create({
-        name: nameGroup,
-        topicId: topic.data.id,
+        groupName: nameGroup,
         members: members,
       });
-
-      return res;
+      return topic;
     },
     onSuccess: () => {
       toast.success(tCommon('createSuccess'));

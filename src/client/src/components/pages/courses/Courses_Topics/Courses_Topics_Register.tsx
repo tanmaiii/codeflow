@@ -35,7 +35,7 @@ export default function Courses_Topics_Register() {
     <div className="flex flex-col  gap-4 py-10 justify-center items-center mx-auto bg-background-2">
       <Card className="w-full max-w-4xl min-h-[80vh] py-4 px-4 lg:px-6 lg:py-8">
         <TitleHeader title={tTopic('topic')} onBack />
-        
+
         <div className="flex flex-col items-center gap-3">
           <Label>{tCourse('register')}</Label>
           <TextHeading className="text-xl">{Q_Course?.data?.title ?? ''}</TextHeading>

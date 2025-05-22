@@ -3,7 +3,6 @@ import { DB } from '../database';
 import { HttpException } from '../exceptions/HttpException';
 import { Comment } from '../interfaces/comments.interface';
 import { isEmpty } from '../utils/util';
-import { Sequelize } from 'sequelize';
 
 @Service()
 export class CommentService {

@@ -1,10 +1,7 @@
 import { Repos } from '@/interfaces/repos.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
-type ReposCreationAttributes = Optional<
-  Repos,
-  'id' | 'name' | 'url' | 'courseId' | 'topicId' | 'groupId'
->;
+type ReposCreationAttributes = Optional<Repos, 'id' | 'name' | 'url' | 'courseId' | 'topicId'>;
 
 export class ReposModel extends Model<Repos, ReposCreationAttributes> implements Repos {
   public id: string;
@@ -12,7 +9,6 @@ export class ReposModel extends Model<Repos, ReposCreationAttributes> implements
   public url: string;
   public courseId: string;
   public topicId: string;
-  public groupId: string;
 }
 
 export default function (sequelize: Sequelize): typeof ReposModel {
@@ -44,14 +40,6 @@ export default function (sequelize: Sequelize): typeof ReposModel {
         allowNull: false,
         references: {
           model: 'topics',
-          key: 'id',
-        },
-      },
-      groupId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-          model: 'groups',
           key: 'id',
         },
       },

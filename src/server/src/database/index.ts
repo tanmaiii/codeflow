@@ -4,14 +4,13 @@ import CourseDocument from '@/models/course_documents.model';
 import CourseEnrollmentModel from '@/models/course_enrollment.model';
 import CourseTagModel from '@/models/course_tag.model';
 import CourseModel from '@/models/courses.model';
-import GroupModel from '@/models/groups.model';
-import GroupMemberModel from '@/models/groups_member.model';
 import PostLikeModel from '@/models/post_like.model';
 import PostTagModel from '@/models/post_tag.model';
 import PostModel from '@/models/posts.model';
 import ReposModel from '@/models/repos.model';
 import SubmissionModel from '@/models/submissions.model';
 import TagModel from '@/models/tags.model';
+import TopicMemberModel from '@/models/topic_member.mode';
 import TopicTagModel from '@/models/topic_tag.model';
 import TopicModel from '@/models/topics.model';
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER, NODE_ENV } from '@config';
@@ -47,8 +46,8 @@ export const DB = {
   Posts: PostModel(sequelize),
   Courses: CourseModel(sequelize),
   Topics: TopicModel(sequelize),
-  Groups: GroupModel(sequelize),
-  GroupMembers: GroupMemberModel(sequelize),
+  // Groups: GroupModel(sequelize),
+  // GroupMembers: GroupMemberModel(sequelize),
   Submission: SubmissionModel(sequelize),
   Comments: CommentModel(sequelize),
   Tags: TagModel(sequelize),
@@ -59,7 +58,8 @@ export const DB = {
   PostLike: PostLikeModel(sequelize),
   Repos: ReposModel(sequelize),
   CourseEnrollment: CourseEnrollmentModel(sequelize),
-  sequelize, 
+  TopicMember: TopicMemberModel(sequelize),
+  sequelize,
 };
 
 initModels();

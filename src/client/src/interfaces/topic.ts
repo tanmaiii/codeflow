@@ -2,7 +2,6 @@ import { IBaseEntity } from './common';
 import { ICourse } from './course';
 import { IUser } from './user';
 import { ITag } from './tags';
-import { IGroup } from './group';
 
 export interface ITopic extends IBaseEntity {
   id: string;
@@ -15,7 +14,7 @@ export interface ITopic extends IBaseEntity {
   author?: IUser;
   tags: ITag[];
   course?: ICourse;
-  group?: IGroup[];
+  members?: IUser[];
 }
 
 export interface ITopicCreateDto {
@@ -24,4 +23,16 @@ export interface ITopicCreateDto {
   courseId: string;
   isCustom?: boolean;
   status?: string;
+  groupName?: string;
+  members?: string[];
+}
+
+export interface ITopicUpdateDto {
+  title?: string;
+  description: string;
+  courseId: string;
+  isCustom?: boolean;
+  status?: string;
+  groupName?: string;
+  members?: string[];
 }

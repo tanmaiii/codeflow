@@ -22,6 +22,11 @@ import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfa
       return res.data;
     }
 
+    async getAllByUser(id: string, params: IGetAllQuery): Promise<PaginatedResponseAPIDto<ICourse[]>> {
+      const res = await this.client.get(`/${id}/user`, { params });
+      return res.data;
+    }
+
     async getById(id: string): Promise<ResponseAPIDto<ICourse>> {
       const res = await this.client.get(`/${id}`);
       return res.data;

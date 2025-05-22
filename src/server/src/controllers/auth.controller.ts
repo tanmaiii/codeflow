@@ -1,15 +1,15 @@
-import { UserService } from '@services/users.service';
+import { EmailService } from '@/services/email.service';
+import { logger } from '@/utils/logger';
 import { CreateUserDto, CreateUserGithubDto, LoginUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { AuthService } from '@services/auth.service';
-import axios from 'axios';
+import { GitHubService } from '@services/github.service';
+import { UserService } from '@services/users.service';
 import CryptoJS from 'crypto-js';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
-import { logger } from '@/utils/logger';
-import { GitHubService } from '@services/github.service';
 
 const decodeToken = async (token: string, secret: string) => {
   const bytes = CryptoJS.AES.decrypt(token, secret);
@@ -21,6 +21,7 @@ export class AuthController {
   public auth = Container.get(AuthService);
   public user = Container.get(UserService);
   public github = Container.get(GitHubService);
+  public email = Container.get(EmailService);
 
   public loginWithGithub = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -49,7 +50,6 @@ export class AuthController {
     try {
       const userData: CreateUserDto = req.body;
       const signUpUserData: User = await this.auth.signup(userData);
-
       res.status(201).json({ data: signUpUserData, message: 'signup' });
     } catch (error) {
       next(error);

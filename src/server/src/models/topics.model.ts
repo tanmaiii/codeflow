@@ -4,10 +4,10 @@ import { UserModel } from './users.model';
 import { TagModel } from './tags.model';
 import { ENUM_TOPIC_STATUS } from '@/data/enum';
 import { CourseModel } from './courses.model';
-import { GroupModel } from './groups.model';
+import { TopicMemberModel } from './topic_member.mode';
 type PostCreationAttributes = Optional<
   Topic,
-  'id' | 'title' | 'description' | 'courseId' | 'teacherId' | 'authorId' | 'isCustom' | 'status'
+  'id' | 'title' | 'description' | 'courseId' | 'teacherId' | 'authorId' | 'isCustom' | 'status' | 'groupName'
 >;
 
 export class TopicModel extends Model<Topic, PostCreationAttributes> implements Topic {
@@ -19,6 +19,7 @@ export class TopicModel extends Model<Topic, PostCreationAttributes> implements 
   public teacherId!: string;
   public isCustom!: boolean;
   public status!: string;
+  public groupName!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -74,6 +75,10 @@ export default function (sequelize: Sequelize): typeof TopicModel {
         type: DataTypes.ENUM(...Object.values(ENUM_TOPIC_STATUS)),
         defaultValue: ENUM_TOPIC_STATUS.PENDING,
       },
+      groupName: {
+        allowNull: true,
+        type: DataTypes.STRING(255),
+      },
     },
     {
       sequelize,
@@ -106,8 +111,8 @@ export default function (sequelize: Sequelize): typeof TopicModel {
             },
           },
           {
-            model: GroupModel,
-            as: 'group',
+            model: TopicMemberModel,
+            as: 'members',
           },
         ],
       },

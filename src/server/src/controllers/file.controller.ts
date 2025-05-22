@@ -21,8 +21,8 @@ export class FileController {
           path: file.filename,
           originalname: file.originalname,
           mimetype: file.mimetype,
-          size: file.size
-        }))
+          size: file.size,
+        })),
       }));
 
       return res.status(200).json({

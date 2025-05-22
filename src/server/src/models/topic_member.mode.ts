@@ -1,11 +1,11 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { GroupMember } from '@/interfaces/groups.interface';
+import { TopicMember } from '@/interfaces/topics.interface';
 
-export type GroupCreationAttributes = Optional<GroupMember, 'id' | 'groupId' | 'userId' | 'role'>;
+export type TopicMemberCreationAttributes = Optional<TopicMember, 'id' | 'topicId' | 'userId' | 'role'>;
 
-export class GroupMemberModel extends Model<GroupMember, GroupCreationAttributes> implements GroupMember {
+export class TopicMemberModel extends Model<TopicMember, TopicMemberCreationAttributes> implements TopicMember {
   public id: string;
-  public groupId: string;
+  public topicId: string;
   public userId: string;
   public role: string;
 
@@ -13,19 +13,19 @@ export class GroupMemberModel extends Model<GroupMember, GroupCreationAttributes
   public readonly updatedAt!: Date;
 }
 
-export default function (sequelize: Sequelize): typeof GroupMemberModel {
-  GroupMemberModel.init(
+export default function (sequelize: Sequelize): typeof TopicMemberModel {
+  TopicMemberModel.init(
     {
       id: {
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      groupId: {
+      topicId: {
         allowNull: false,
         type: DataTypes.UUID,
         references: {
-          model: 'groups',
+          model: 'topics',
           key: 'id',
         },
       },
@@ -43,13 +43,13 @@ export default function (sequelize: Sequelize): typeof GroupMemberModel {
       },
     },
     {
-      tableName: 'group_members',
-      modelName: 'group_members',
+      tableName: 'topic_members',
+      modelName: 'topic_members',
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm
     },
   );
 
-  return GroupMemberModel;
+  return TopicMemberModel;
 }

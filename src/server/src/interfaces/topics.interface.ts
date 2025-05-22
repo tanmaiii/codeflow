@@ -7,6 +7,14 @@ export interface Topic {
   authorId: string;
   isCustom: boolean;
   status: string;
+  groupName: string;
+}
+
+export interface TopicMember {
+  id: string;
+  topicId: string;
+  userId: string;
+  role: string;
 }
 
 export interface TopicCreate {
@@ -17,5 +25,7 @@ export interface TopicCreate {
   authorId: string;
   isCustom: boolean;
   status: string;
+  groupName: string;
+  members?: Array<string>;
   tags?: Array<string>;
 }

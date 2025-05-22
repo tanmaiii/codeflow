@@ -3,17 +3,17 @@ import TextInput from '@/components/common/Input/TextInput/TextInput';
 import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
 import MyMultiSelect from '@/components/common/MyMultiSelect/MyMultiSelect';
 import { Button } from '@/components/ui/button';
+import { TextDescription } from '@/components/ui/text';
+import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 import { ITopic } from '@/interfaces/topic';
 import courseService from '@/services/course.service';
-import groupService from '@/services/group.service';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import Courses_Topics_ChoiceTopic from './Courses_Topics_ChoiceTopic';
-import { TextDescription } from '@/components/ui/text';
-import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
+import topicService from '@/services/topic.service';
 
 export default function Courses_Topics_CreateByTeacher() {
   const tTopic = useTranslations('topic');
@@ -31,9 +31,11 @@ export default function Courses_Topics_CreateByTeacher() {
         throw new Error('Topic is not selected');
       }
 
-      return groupService.create({
-        name: groupName,
-        topicId: selectedTopic.id,
+      return topicService.update(selectedTopic.id, {
+        title: selectedTopic.title,
+        description: selectedTopic.description,
+        courseId: selectedTopic.courseId,
+        groupName: groupName,
         members: members,
       });
     },
@@ -49,7 +51,7 @@ export default function Courses_Topics_CreateByTeacher() {
 
   const { data: Q_Members } = useQuery({
     queryKey: ['topics', id],
-    queryFn: () => courseService.memberInCourse(id as string),
+    queryFn: () => courseService.memberInCourse(id as string, { page: 1, limit: 1000 }),
   });
 
   return (
@@ -82,10 +84,12 @@ export default function Courses_Topics_CreateByTeacher() {
           name="members"
           maxLength={Q_Course?.data.maxGroupMembers ?? 3}
           onChange={value => setMembers(value)}
-          options={Q_Members?.data?.map(member => ({
-            value: member.id,
-            label: member.name,
-          })) ?? []}
+          options={
+            Q_Members?.data?.map(member => ({
+              value: member.id,
+              label: member.name,
+            })) ?? []
+          }
         />
       </div>
       <div className="flex justify-end">

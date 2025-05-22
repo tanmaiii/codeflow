@@ -154,6 +154,7 @@
     "create": "Create",
     "allCourses": "All",
     "registeredCourses": "Registered",
+    "authorCourses": "Author",
     "completedCourses": "Completed",
     "createCourse": "Create course",
     "updateCourse": "Update course",
@@ -196,7 +197,8 @@
     "students": "students",
     "register": "Register",
     "member": "Member",
-    "memberDescription": "Manage your members"
+    "memberDescription": "Manage your members",
+    "duration": "Duration {weeks} weeks"
   },
   "topic": {
     "topic": "Topic",

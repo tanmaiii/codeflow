@@ -21,11 +21,7 @@ export class UserService {
   ): Promise<{ rows: User[]; count: number }> {
     const whereCondition = search
       ? {
-          [Op.or]: [
-            { name: { [Op.like]: `%${search}%` } },
-            { email: { [Op.like]: `%${search}%` } },
-            { username: { [Op.like]: `%${search}%` } },
-          ],
+          [Op.or]: [{ name: { [Op.like]: `%${search}%` } }, { email: { [Op.like]: `%${search}%` } }, { username: { [Op.like]: `%${search}%` } }],
         }
       : {};
 

@@ -65,10 +65,13 @@ export default function Courses_Summary({ course }: { course: ICourse }) {
         <div className="flex flex-col flex-1 items-center w-full gap-2">
           <div className="flex items-center gap-2">
             <IconClockHour1 className="text-color-2" />
-            <TextDescription className="text-sm font-bold">{`Thời lượng ${utils_CalculateWeeks(
+            {/* <TextDescription className="text-sm font-bold">{`Thời lượng ${utils_CalculateWeeks(
               course?.startDate ?? '',
               course?.endDate ?? '',
-            )} tuần`}</TextDescription>
+            )} tuần`}</TextDescription> */}
+            <TextDescription className="text-sm font-bold">{`${t('duration', {
+              weeks: utils_CalculateWeeks(course?.startDate ?? '', course?.endDate ?? ''),
+            })}`}</TextDescription>
           </div>
           <div className="flex items-center gap-2">
             <IconUser className="text-color-2" />

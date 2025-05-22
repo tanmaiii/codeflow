@@ -147,6 +147,7 @@
     "create": "Tạo",
     "allCourses": "Tất cả",
     "registeredCourses": "Đã đăng ký",
+    "authorCourses": "Đã tạo",
     "completedCourses": "Đã hoàn thành",
     "createCourse": "Tạo khóa học",
     "updateCourse": "Cập nhật khóa học",
@@ -187,7 +188,8 @@
     "students": "Học viên",
     "register": "Đăng ký đề tài",
     "member": "Thành viên",
-    "memberDescription": "Quản lý thành viên"
+    "memberDescription": "Quản lý thành viên",
+    "duration": "Thời lượng {weeks} tuần"
   },
   "topic": {
     "topic": "Đề tài",

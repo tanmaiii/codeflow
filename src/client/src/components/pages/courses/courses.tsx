@@ -1,74 +1,71 @@
 'use client';
 import CardCourse from '@/components/common/CardCourse/CardCourse';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
+import NoData from '@/components/common/NoData/NoData';
 import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { paths } from '@/data/path';
-import { useRouter, useSearchParams } from 'next/navigation';
-import useH_LocalPath from '@/hooks/useH_LocalPath';
-import { useTranslations } from 'next-intl';
-import NoData from '@/components/common/NoData/NoData';
-import { useQuery } from '@tanstack/react-query';
-import courseService from '@/services/course.service';
-import { useUserStore } from '@/stores/user_store';
 import { ROLE } from '@/contants/enum';
+import { paths } from '@/data/path';
+import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
+import useQ_Course_GetAllByUser from '@/hooks/query-hooks/Course/useQ_Course_GetAllByUser';
+import useQ_Course_GetAllRegistered from '@/hooks/query-hooks/Course/useQ_Course_GetAllRegistered';
+import useH_LocalPath from '@/hooks/useH_LocalPath';
+import { useUserStore } from '@/stores/user_store';
+import { useTranslations } from 'next-intl';
+import { useRouter, useSearchParams } from 'next/navigation';
+const COURSE_TABS = [
+  { id: 'all', label: 'allCourses' },
+  { id: 'registered', label: 'registeredCourses' },
+  { id: 'author', label: 'authorCourses' },
+] as const;
 
-const tabs = [
-  { id: 'all', label: 'All Courses' },
-  { id: 'registered', label: 'Registered Courses' },
-];
+const DEFAULT_PAGE_SIZE = 8;
+const DEFAULT_SORT = { sortBy: 'createdAt', order: 'DESC' as const };
 
 export default function Courses() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 1;
+  const page = Number(searchParams.get('page')) || 1;
   const tab = searchParams.get('tab') || 'all';
   const { localPath } = useH_LocalPath();
   const t = useTranslations('course');
   const { user } = useUserStore();
 
-  const Q_Courses = useQuery({
-    queryKey: ['courses', page],
-    queryFn: async () => {
-      const res = courseService.getAll({
-        page: Number(page),
-        limit: 8,
-        sortBy: 'createdAt',
-        order: 'DESC',
-      });
-      return res;
-    },
+  const queryParams = {
+    page,
+    limit: DEFAULT_PAGE_SIZE,
+    ...DEFAULT_SORT,
+  };
+
+  const { data: allCourses, isLoading: isLoadingAll } = useQ_Course_GetAll({
+    params: queryParams,
   });
 
-  const Q_RegisteredCourses = useQuery({
-    queryKey: ['courses', 'registered', page],
-    queryFn: async () => {
-      const res = courseService.getAllRegistered({
-        page: Number(page),
-        limit: 8,
-        sortBy: 'createdAt',
-        order: 'DESC',
-      });
-      return res;
-    },
+  const { data: registeredCourses, isLoading: isLoadingRegistered } = useQ_Course_GetAllRegistered({
+    params: queryParams,
   });
 
-  const isLoading = tab === 'all' ? Q_Courses.isLoading : Q_RegisteredCourses.isLoading;
-  const error = tab === 'all' ? Q_Courses.error : Q_RegisteredCourses.error;
-  const currentData = tab === 'all' ? Q_Courses.data : Q_RegisteredCourses.data;
+  const { data: authorCourses, isLoading: isLoadingAuthor } = useQ_Course_GetAllByUser({
+    params: queryParams,
+    userId: user?.id || '',
+  });
+
+  const isLoading = isLoadingAll || isLoadingRegistered || isLoadingAuthor;
+  const currentData =
+    tab === 'all' ? allCourses : tab === 'registered' ? registeredCourses : authorCourses;
 
   const handleTabChange = (tabId: string) => {
     router.push(`${localPath(paths.COURSES)}?page=1&tab=${tabId}`);
   };
 
   if (isLoading) return <TextDescription>Loading...</TextDescription>;
-  if (error) return <TextDescription>Error...</TextDescription>;
+  if (!currentData) return <TextDescription>Error...</TextDescription>;
 
   return (
     <div className="w-full h-full">
       <div className="border-b py-2 flex items-center justify-between flex-row gap-4">
         <div className="flex items-center gap-2">
-          {tabs.map(({ id }) => (
+          {COURSE_TABS.map(({ id, label }) => (
             <div
               key={id}
               onClick={() => handleTabChange(id)}
@@ -76,7 +73,7 @@ export default function Courses() {
                 tab === id ? 'text-primary' : 'text-gray-500'
               }`}
             >
-              <TextHeading>{t(id === 'all' ? 'allCourses' : 'registeredCourses')}</TextHeading>
+              <TextHeading>{t(label)}</TextHeading>
             </div>
           ))}
         </div>
@@ -92,17 +89,17 @@ export default function Courses() {
         )}
       </div>
       <div className="min-h-[600px]">
-        {currentData?.data?.length === 0 && <NoData />}
+        {!currentData.data?.length && <NoData />}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3 2xl:grid-cols-5 py-2">
-          {currentData?.data?.map(course => (
+          {currentData.data?.map(course => (
             <CardCourse key={course.id} course={course} />
           ))}
         </div>
       </div>
       <div className="my-6">
         <MyPagination
-          currentPage={currentData?.pagination.currentPage || 1}
-          totalPages={currentData?.pagination.totalPages || 1}
+          currentPage={currentData.pagination.currentPage || 1}
+          totalPages={currentData.pagination.totalPages || 1}
           onPageChange={page => router.push(`${localPath(paths.COURSES)}?page=${page}&tab=${tab}`)}
         />
       </div>

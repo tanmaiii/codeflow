@@ -1,7 +1,7 @@
 import createHttpClient from '@/lib/createHttpClient';
 import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfaces/common';
 import { AxiosInstance } from 'axios';
-import { IUser } from '@/interfaces/user';
+import { IUser, IUserCreate } from '@/interfaces/user';
 
 class UserService {
   private client: AxiosInstance;
@@ -20,7 +20,7 @@ class UserService {
     return res.data;
   }
 
-  async create(data: IUser): Promise<ResponseAPIDto<IUser>> {
+  async create(data: IUserCreate): Promise<ResponseAPIDto<IUser>> {
     const res = await this.client.post('', data);
     return res.data;
   }

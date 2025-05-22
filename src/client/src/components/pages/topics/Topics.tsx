@@ -1,4 +1,4 @@
-export default function DetailPage() {
+export default function Topics() {
     return (
         <div>
             Enter

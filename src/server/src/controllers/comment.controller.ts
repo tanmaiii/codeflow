@@ -50,8 +50,8 @@ export class CommentController {
       const commentId: string = req.params.id;
       const commentData: Comment = req.body;
 
-      if(commentId === commentData.parentId ) throw new HttpException(400, 'CommentId and ParentId are the same');
-      
+      if (commentId === commentData.parentId) throw new HttpException(400, 'CommentId and ParentId are the same');
+
       const updateCommentData: Comment = await this.comment.updateComment(commentId, commentData);
 
       res.status(200).json({ data: updateCommentData, message: 'updated' });

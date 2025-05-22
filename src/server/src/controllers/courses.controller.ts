@@ -67,6 +67,34 @@ export class CourseController {
     }
   };
 
+  public getCoursesByAuthorId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.idAuthor;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+
+      const { count, rows }: { count: number; rows: Course[] } = await this.course.findCoursesByAuthorId(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        userId,
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getCourseById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const courseId = req.params.id;

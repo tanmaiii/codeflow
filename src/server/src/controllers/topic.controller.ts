@@ -63,6 +63,32 @@ export class TopicController {
     }
   };
 
+  public getTopicsByUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.userId;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom } = req.query;
+      const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPaginationByUser(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        userId,
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
   public getTopicById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const topicId = req.params.id;

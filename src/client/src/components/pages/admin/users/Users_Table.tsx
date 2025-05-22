@@ -1,4 +1,14 @@
 'use client';
+
+import { useMemo } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ColumnDef, Table } from '@tanstack/react-table';
+import { toast } from 'sonner';
+
 import ActionDelete from '@/components/common/Action/ActionDelete';
 import { DataTable } from '@/components/common/data-table/data-table';
 import MyBadge from '@/components/common/MyBadge';
@@ -13,26 +23,22 @@ import { IUser } from '@/interfaces/user';
 import apiConfig from '@/lib/api';
 import userService from '@/services/user.service';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ColumnDef, Table } from '@tanstack/react-table';
-import { useTranslations } from 'next-intl';
-import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
-import { toast } from 'sonner';
+import Users_Create from './Users_Create';
 import Users_Update from './Users_Update';
-import Link from 'next/link';
+
+const PAGE_SIZE = 10;
 
 export default function Users_Table() {
   const router = useRouter();
   const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 1;
+  const page = Number(searchParams.get('page')) || 1;
+
   const { data } = useQ_User_GetAll({
     params: {
-      page: Number(page),
-      limit: 10,
+      page,
+      limit: PAGE_SIZE,
     },
   });
 
@@ -44,12 +50,8 @@ export default function Users_Table() {
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             <Image
-              src={
-                row.original.avatar
-                  ? utils_ApiImageToLocalImage(row.original.avatar)
-                  : apiConfig.avatar(row.original.name)
-              }
-              alt={row.original.name ?? ""}
+              src={row.original.avatar ? utils_ApiImageToLocalImage(row.original.avatar) : apiConfig.avatar(row.original.name)}
+              alt={row.original.name ?? ''}
               width={32}
               height={32}
               className="rounded-full"
@@ -62,18 +64,17 @@ export default function Users_Table() {
         header: 'Username',
         accessorKey: 'username',
         cell: ({ row }) => {
-          if (row.original.uid) {
-            return (
-              <Link
-                className="hover:underline"
-                href={`https://github.com/${row.original.username}`}
-                target="_blank"
-              >
-                <TextDescription className="text-color-1">{row.original.username}</TextDescription>
-              </Link>
-            );
-          }
-          return row.original.username;
+          if (!row.original.uid) return row.original.username;
+          
+          return (
+            <Link
+              className="hover:underline"
+              href={`https://github.com/${row.original.username}`}
+              target="_blank"
+            >
+              <TextDescription className="text-color-1">{row.original.username}</TextDescription>
+            </Link>
+          );
         },
       },
       {
@@ -86,13 +87,11 @@ export default function Users_Table() {
       {
         header: 'Role',
         accessorKey: 'role',
-        cell: ({ row }) => {
-          return (
-            <MyBadge
-              status={ROLE_USER.find(item => item.value === (row.original.role ?? 'user'))!}
-            />
-          );
-        },
+        cell: ({ row }) => (
+          <MyBadge
+            status={ROLE_USER.find(item => item.value === (row.original.role ?? 'user'))!}
+          />
+        ),
       },
     ],
     [],
@@ -117,6 +116,7 @@ export default function Users_Table() {
 
     return (
       <div>
+        <Users_Create />
         {selectedRowsCount > 0 && (
           <Button
             variant="destructive"
@@ -129,6 +129,7 @@ export default function Users_Table() {
       </div>
     );
   };
+
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
       <TitleHeader title="Users" description="Manage your users" />

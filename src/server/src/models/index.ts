@@ -10,9 +10,11 @@ import { TopicModel } from './topics.model';
 import { TopicTagModel } from './topic_tag.model';
 import { CourseDocumentModel } from './course_documents.model';
 import { PostLikeModel } from './post_like.model';
-import { GroupModel } from './groups.model';
-import { GroupMemberModel } from './groups_member.model';
+// import { GroupModel } from './groups.model';
+// import { GroupMemberModel } from './groups_member.model';
 import { CourseEnrollmentModel } from './course_enrollment.model';
+import { TopicMemberModel } from './topic_member.mode';
+
 export const initModels = () => {
   // author, teacher
   CourseModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
@@ -28,16 +30,8 @@ export const initModels = () => {
   UserModel.hasMany(TopicModel, { foreignKey: 'teacherId' });
 
   // tags
-  CourseModel.belongsToMany(TagModel, {
-    through: CourseTagModel,
-    as: 'tags',
-    foreignKey: 'courseId',
-  });
-  TagModel.belongsToMany(CourseModel, {
-    through: CourseTagModel,
-    as: 'courses',
-    foreignKey: 'tagId',
-  });
+  CourseModel.belongsToMany(TagModel, { through: CourseTagModel, as: 'tags', foreignKey: 'courseId' });
+  TagModel.belongsToMany(CourseModel, { through: CourseTagModel, as: 'courses', foreignKey: 'tagId' });
 
   PostModel.belongsToMany(TagModel, { through: PostTagModel, as: 'tags', foreignKey: 'postId' });
   TagModel.belongsToMany(PostModel, { through: PostTagModel, as: 'posts', foreignKey: 'tagId' });
@@ -63,17 +57,20 @@ export const initModels = () => {
   CourseModel.hasMany(TopicModel, { foreignKey: 'courseId', as: 'topics' });
   TopicModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
 
-  GroupModel.hasMany(GroupMemberModel, { foreignKey: 'groupId', as: 'members' });
-  GroupMemberModel.belongsTo(GroupModel, { foreignKey: 'groupId', as: 'group' });
+  // GroupModel.hasMany(GroupMemberModel, { foreignKey: 'groupId', as: 'members' });
+  // GroupMemberModel.belongsTo(GroupModel, { foreignKey: 'groupId', as: 'group' });
 
-  GroupModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
-  UserModel.hasMany(GroupModel, { foreignKey: 'authorId' });
+  // GroupModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
+  // UserModel.hasMany(GroupModel, { foreignKey: 'authorId' });
 
-  GroupMemberModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
-  UserModel.hasMany(GroupMemberModel, { foreignKey: 'userId', as: 'members' });
+  // GroupMemberModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
+  // UserModel.hasMany(GroupMemberModel, { foreignKey: 'userId', as: 'members' });
 
-  GroupModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
-  TopicModel.hasMany(GroupModel, { foreignKey: 'topicId', as: 'group' });
+  // GroupModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
+  // TopicModel.hasMany(GroupModel, { foreignKey: 'topicId', as: 'group' });
+
+  TopicModel.hasMany(TopicMemberModel, { foreignKey: 'topicId', as: 'members' });
+  TopicMemberModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
 
   CourseEnrollmentModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
   UserModel.hasMany(CourseEnrollmentModel, { foreignKey: 'userId', as: 'enrollments' });
@@ -82,4 +79,4 @@ export const initModels = () => {
   CourseModel.hasMany(CourseEnrollmentModel, { foreignKey: 'courseId', as: 'enrollments' });
 };
 
-export { CourseModel, UserModel, PostModel, TagModel, PostLikeModel, GroupModel, GroupMemberModel };
+export { CourseModel, UserModel, PostModel, TagModel, PostLikeModel };

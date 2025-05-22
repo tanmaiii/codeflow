@@ -1,11 +1,10 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { Submission } from '../interfaces/submissions.interface';
 
-type SubmissionCreationAttributes = Optional<Submission, 'id' | 'groupId' | 'topicId' | 'commit_hash' | 'evaluation' | 'submittedAt'>;
+type SubmissionCreationAttributes = Optional<Submission, 'id' | 'topicId' | 'commit_hash' | 'evaluation' | 'submittedAt'>;
 
 export class SubmissionModel extends Model<Submission, SubmissionCreationAttributes> implements Submission {
   public id: string;
-  public groupId: string;
   public topicId: string;
   public commit_hash: string;
   public evaluation: string;
@@ -22,14 +21,6 @@ export default function (sequelize: Sequelize): typeof SubmissionModel {
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-      },
-      groupId: {
-        allowNull: false,
-        type: DataTypes.UUID,
-        references: {
-          model: 'groups',
-          key: 'id',
-        },
       },
       topicId: {
         allowNull: false,

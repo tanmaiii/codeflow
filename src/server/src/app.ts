@@ -1,4 +1,8 @@
-import 'reflect-metadata';
+import { LOG_FORMAT, NODE_ENV, PORT } from '@config';
+import { DB } from '@database';
+import { Routes } from '@interfaces/routes.interface';
+import { ErrorMiddleware } from '@middlewares/error.middleware';
+import { logger, stream } from '@utils/logger';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -6,14 +10,10 @@ import express from 'express';
 import helmet from 'helmet'; // bảo vệ header
 import hpp from 'hpp'; // bảo vệ header
 import morgan from 'morgan'; // log request
+import path from 'path';
+import 'reflect-metadata';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
-import { DB } from '@database';
-import { Routes } from '@interfaces/routes.interface';
-import { ErrorMiddleware } from '@middlewares/error.middleware';
-import { logger, stream } from '@utils/logger';
-import path from 'path';
 
 export class App {
   public app: express.Application;

@@ -44,7 +44,7 @@ export class GitHubController {
         throw new HttpException(400, 'Username is required');
       }
 
-      const repositories = await this.github.getUserRepositories(accessToken, username);
+      const repositories = await this.github.getUserRepositories(accessToken);
       res.status(200).json({ data: repositories, message: 'github-user-repositories' });
     } catch (error) {
       next(error);
@@ -67,7 +67,7 @@ export class GitHubController {
         throw new HttpException(400, 'Owner and repo are required');
       }
 
-      const repository = await this.github.getRepository(accessToken, owner, repo);
+      const repository = await this.github.getRepository(accessToken, owner);
       res.status(200).json({ data: repository, message: 'github-repository' });
     } catch (error) {
       next(error);
@@ -77,11 +77,7 @@ export class GitHubController {
   /**
    * Get repository contents
    */
-  public getRepositoryContents = async (
-    req: RequestWithUser,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  public getRepositoryContents = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const { accessToken } = req.body as GitHubRequestBody;
       const { owner, repo } = req.params;
@@ -95,23 +91,14 @@ export class GitHubController {
         throw new HttpException(400, 'Owner and repo are required');
       }
 
-      const contents = await this.github.getRepositoryContents(
-        accessToken,
-        owner,
-        repo,
-        path as string,
-      );
+      const contents = await this.github.getRepositoryContents(owner, repo, path as string);
       res.status(200).json({ data: contents, message: 'github-repository-contents' });
     } catch (error) {
       next(error);
     }
   };
 
-  public inviteUserToOrganization = async (
-    req: RequestWithUser,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  public inviteUserToOrganization = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const username = req.body.username;
 
@@ -132,11 +119,7 @@ export class GitHubController {
     }
   };
 
-  public getOrganizationMembers = async (
-    req: RequestWithUser,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  public getOrganizationMembers = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const members = await this.github.getOrganizationMembers();
       res.status(200).json({ data: members, message: 'github-organization-members' });

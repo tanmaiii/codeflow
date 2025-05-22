@@ -71,6 +71,28 @@ export class CourseService {
     return registeredCourses;
   }
 
+  public async findCoursesByAuthorId(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    authorId: string,
+  ): Promise<{ count: number; rows: Course[] }> {
+    const courses = await DB.Courses.findAndCountAll({
+      attributes: {
+        include: [[this.commentCountLiteral, 'commentCount']],
+      },
+      where: {
+        authorId,
+      },
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+    });
+
+    return courses;
+  }
+
   public async findCourseById(courseId: string): Promise<Course> {
     const findCourse: Course = await DB.Courses.findByPk(courseId);
     if (!findCourse) throw new HttpException(409, "Course doesn't exist");
@@ -104,6 +126,8 @@ export class CourseService {
     return DB.Courses.findByPk(courseId);
   }
 
+
+  // Phương thức thêm tags và documents cho course
   private async attachTagsAndDocuments(courseId: string, tags?: string[], documents?: string[]): Promise<void> {
     if (tags?.length) {
       await Promise.all(tags.map(tagId => this.Tag.createCourseTag(courseId, tagId)));
