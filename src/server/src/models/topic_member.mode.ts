@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { TopicMember } from '@/interfaces/topics.interface';
+import { UserModel } from './users.model';
 
 export type TopicMemberCreationAttributes = Optional<TopicMember, 'id' | 'topicId' | 'userId' | 'role'>;
 
@@ -28,6 +29,7 @@ export default function (sequelize: Sequelize): typeof TopicMemberModel {
           model: 'topics',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
       userId: {
         allowNull: false,
@@ -36,6 +38,7 @@ export default function (sequelize: Sequelize): typeof TopicMemberModel {
           model: 'users',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
       role: {
         allowNull: false,
@@ -48,6 +51,15 @@ export default function (sequelize: Sequelize): typeof TopicMemberModel {
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm
+
+      defaultScope: {
+        include: [
+          {
+            model: UserModel,
+            as: 'user',
+          },
+        ],
+      },
     },
   );
 

@@ -79,8 +79,8 @@ export default function Courses_Topics_CreateByStudent() {
         {...register('description')}
       />
       <TextInput
-        label={tTopic('nameGroup')}
-        name="nameGroup"
+        label={tTopic('groupName')}
+        name="groupName"
         onChange={e => setNameGroup(e.target.value)}
       />
       <MyMultiSelect

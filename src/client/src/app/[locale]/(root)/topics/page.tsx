@@ -1,7 +1,5 @@
+import Topics from '@/components/pages/topics/Topics';
+
 export default function Page() {
-    return (
-        <div>
-            Enter
-        </div>
-    );
+  return <Topics />;
 }

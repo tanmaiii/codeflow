@@ -213,7 +213,11 @@
     "teacher": "Giáo viên",
     "typeTopic": "Loại đề tài",
     "members": "Thành viên",
-    "nameGroup": "Tên nhóm"
+    "groupName": "Tên nhóm",
+    "all": "Tất cả",
+    "approved": "Đã duyệt",
+    "pending": "Chờ duyệt",
+    "rejected": "Từ chối"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"

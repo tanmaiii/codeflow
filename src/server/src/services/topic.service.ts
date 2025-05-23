@@ -44,16 +44,26 @@ export class TopicService {
     sortBy = this.defaultSortBy,
     sortOrder = this.defaultSortOrder,
     userId?: string,
+    status?: string,
   ): Promise<{ count: number; rows: Topic[] }> {
-    const whereClause = this.buildWhereClause({ userId });
+    // Tìm các topic mà user là thành viên
+    const userTopics = await DB.TopicMember.findAll({
+      where: { userId },
+      attributes: ['topicId'],
+    });
+    const topicIds = userTopics.map(tm => tm.topicId);
 
+    // Lấy thông tin đầy đủ của các topic và tất cả thành viên
     return DB.Topics.findAndCountAll({
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
+      where: {
+        id: topicIds,
+        ...(status ? { status } : {}),
+      },
       col: 'topics.id',
-      where: whereClause,
     });
   }
 

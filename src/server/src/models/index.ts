@@ -72,6 +72,9 @@ export const initModels = () => {
   TopicModel.hasMany(TopicMemberModel, { foreignKey: 'topicId', as: 'members' });
   TopicMemberModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
 
+  TopicMemberModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
+  UserModel.hasMany(TopicMemberModel, { foreignKey: 'userId', as: 'members' });
+
   CourseEnrollmentModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
   UserModel.hasMany(CourseEnrollmentModel, { foreignKey: 'userId', as: 'enrollments' });
 

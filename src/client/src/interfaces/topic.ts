@@ -1,7 +1,15 @@
-import { IBaseEntity } from './common';
+import { IBaseEntity, IGetAllQuery } from './common';
 import { ICourse } from './course';
 import { IUser } from './user';
 import { ITag } from './tags';
+
+export interface ITopicMember extends IBaseEntity {
+  id: string;
+  userId: string;
+  topicId: string;
+  role: string;
+  user?: IUser;
+}
 
 export interface ITopic extends IBaseEntity {
   id: string;
@@ -14,7 +22,8 @@ export interface ITopic extends IBaseEntity {
   author?: IUser;
   tags: ITag[];
   course?: ICourse;
-  members?: IUser[];
+  groupName?: string;
+  members?: ITopicMember[];
 }
 
 export interface ITopicCreateDto {
@@ -35,4 +44,8 @@ export interface ITopicUpdateDto {
   status?: string;
   groupName?: string;
   members?: string[];
+}
+
+export interface IGetAllTopicByUserIdParams extends IGetAllQuery {
+  status: string;
 }

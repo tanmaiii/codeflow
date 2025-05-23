@@ -1,4 +1,5 @@
 import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { GetAllQueryDto } from './common.dto';
 
 export class CreateTopicDto {
   @IsString()
@@ -83,3 +84,11 @@ export class UpdateTopicDto {
   @IsArray()
   public members?: Array<string> | null;
 }
+
+
+export class GetTopicByUserDto extends GetAllQueryDto {
+  @IsOptional()
+  @IsString()
+  public status: string;
+}
+

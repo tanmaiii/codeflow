@@ -1,6 +1,7 @@
 'use client';
 import ActionDelete from '@/components/common/Action/ActionDelete';
 import ActionIcon from '@/components/common/Action/ActionIcon';
+import AvatarGroup from '@/components/common/AvatarGroup';
 import { DataTable } from '@/components/common/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
 import MyBadge from '@/components/common/MyBadge';
@@ -62,29 +63,50 @@ export default function Topics_Table() {
         size: 200,
       },
       {
+        accessorKey: 'group',
+        header: 'Group',
+        size: 100,
+        cell: ({ row }) => {
+          return (
+            <AvatarGroup
+              avatars={
+                row.original.members?.map(member => ({
+                  url: member.user?.avatar
+                    ? member.user?.avatar
+                    : apiConfig.avatar(member.user?.name ?? 'c'),
+                  name: member.user?.name ?? 'c',
+                  alt: member.user?.name ?? 'c',
+                })) ?? []
+              }
+              max={3}
+            />
+          );
+        },
+      },
+      {
         header: t('author'),
         accessorKey: 'author',
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             <Image
               src={
-                  row.original.author?.avatar
-                    ? utils_ApiImageToLocalImage(row.original.author?.avatar)
-                    : apiConfig.avatar(row.original.author?.name)
-                }
-                alt={row.original.title}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-              <div className="flex flex-col">
-                <TextDescription className="text-color-1">
-                  {row.original.author?.name}
-                </TextDescription>
-                <TextDescription className="text-xs text-color-2">
-                  {row.original.author?.username}
-                </TextDescription>
-              </div>
+                row.original.author?.avatar
+                  ? utils_ApiImageToLocalImage(row.original.author?.avatar)
+                  : apiConfig.avatar(row.original.author?.name)
+              }
+              alt={row.original.title}
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+            <div className="flex flex-col">
+              <TextDescription className="text-color-1">
+                {row.original.author?.name}
+              </TextDescription>
+              <TextDescription className="text-xs text-color-2">
+                {row.original.author?.username}
+              </TextDescription>
+            </div>
           </div>
         ),
       },
@@ -130,7 +152,12 @@ export default function Topics_Table() {
 
     return (
       <>
-        <Button onClick={() => router.push(`${paths.TOPIC_CREATE}`)} variant="outline" size="sm">
+        <Button
+          onClick={() => router.push(`/admin/${paths.TOPIC_CREATE}`)}
+          variant="outline"
+          size="sm"
+          className="w-fit"
+        >
           {tCommon('create')}
         </Button>
         {selectedRowsCount > 0 && (
@@ -162,6 +189,11 @@ export default function Topics_Table() {
             <ActionIcon
               actionType={'view'}
               onClick={() => router.push(`${paths.TOPICS_DETAIL(row.original.id)}`)}
+              type="button"
+            />
+            <ActionIcon
+              actionType={'update'}
+              onClick={() => router.push(`/admin/${paths.TOPIC_UPDATE(row.original.id)}`)}
               type="button"
             />
             <ActionDelete

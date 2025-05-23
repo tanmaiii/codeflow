@@ -223,7 +223,11 @@
     "teacher": "Teacher",
     "typeTopic": "Type topic",
     "members": "Members",
-    "nameGroup": "Name group"
+    "groupName": "Group name",
+    "all": "All",
+    "approved": "Approved",
+    "pending": "Pending",
+    "rejected": "Rejected"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"

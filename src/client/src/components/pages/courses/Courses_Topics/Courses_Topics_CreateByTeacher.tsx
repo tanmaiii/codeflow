@@ -74,7 +74,7 @@ export default function Courses_Topics_CreateByTeacher() {
         className="min-h-[200px]"
       />
       <TextInput
-        label={tTopic('nameGroup')}
+        label={tTopic('groupName')}
         name="name"
         onChange={e => setGroupName(e.target.value)}
       />

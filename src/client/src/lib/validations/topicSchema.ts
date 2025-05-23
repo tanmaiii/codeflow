@@ -26,12 +26,13 @@ const topicSchema = ({
       .min(1, {
         message: t('minLength', { field: tTopic('description'), length: 1 }),
       })
-      .max(200, {
-        message: t('maxLength', { field: tTopic('description'), length: 200 }),
+      .max(300, {
+        message: t('maxLength', { field: tTopic('description'), length: 300 }),
       }),
     status: z.string({ message: t('required', { field: tTopic('status') }) }).optional(),
-    teacherId: z.string({ message: t('required', { field: tTopic('teacher') }) }).optional(),
+    groupName: z.string().optional(),
     isCustom: z.boolean().optional(),
+    members: z.array(z.string()).optional(),
   });
 
 export type TopicSchemaType = z.infer<ReturnType<typeof topicSchema>>;

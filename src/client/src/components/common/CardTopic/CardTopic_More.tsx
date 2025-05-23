@@ -1,22 +1,23 @@
+import { Button } from '@/components/ui/button';
 import { paths } from '@/data/path';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
-import { IPost } from '@/interfaces/post';
-import postService from '@/services/post.service';
+import { ITopic } from '@/interfaces/topic';
+import topicService from '@/services/topic.service';
 import { useUserStore } from '@/stores/user_store';
-import { IconEye, IconTrash } from '@tabler/icons-react';
+import { IconEye, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { EllipsisIcon, PenIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import MoreDropdown, { DropdownAction } from '../MoreDropdown';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+import { EllipsisIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import MoreDropdown, { DropdownAction } from '../MoreDropdown';
+
 interface CardPost_MoreProps {
-  post: IPost;
+  topic: ITopic;
   className?: string;
 }
 
-export default function CardPost_More({ post, className }: CardPost_MoreProps) {
+export default function CardTopic_More({ topic, className }: CardPost_MoreProps) {
   const user = useUserStore();
   const router = useRouter();
   const { localPath } = useH_LocalPath();
@@ -24,16 +25,12 @@ export default function CardPost_More({ post, className }: CardPost_MoreProps) {
   const t = useTranslations('post');
 
   const onView = () => {
-    router.push(localPath(paths.POSTS + '/' + post.id));
-  };
-
-  const onUpdate = () => {
-    router.push(localPath(paths.POST_UPDATE(post.id)));
+    router.push(localPath(paths.TOPICS_DETAIL(topic.id)));
   };
 
   const mutationDelete = useMutation({
     mutationFn: () => {
-      return postService.delete(post.id);
+      return topicService.delete(topic.id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
@@ -44,7 +41,7 @@ export default function CardPost_More({ post, className }: CardPost_MoreProps) {
     },
   });
 
-  const isAuthor = user?.user?.id === post?.author?.id;
+//   const isAuthor = user?.user?.id === topic?.author?.id;
   const isAdmin = user?.user?.role === 'admin';
 
   const actions: DropdownAction[] = [
@@ -57,17 +54,17 @@ export default function CardPost_More({ post, className }: CardPost_MoreProps) {
     },
     {
       id: 'update',
-      label: 'Update Post',
-      icon: <PenIcon size={16} />,
-      onClick: onUpdate,
-      isVisible: isAuthor || isAdmin,
+      label: 'Update Topic',
+      icon: <IconPencil size={16} />,
+      onClick: () => router.push(localPath(`/admin/${paths.TOPIC_UPDATE(topic.id)}`)),
+      isVisible: isAdmin,
     },
     {
       id: 'delete',
       label: 'Delete Post',
       icon: <IconTrash size={16} />,
       onClick: () => {},
-      isVisible: isAuthor || isAdmin,
+      isVisible: isAdmin,
       isDeleteAction: true,
     },
   ];
@@ -86,7 +83,7 @@ export default function CardPost_More({ post, className }: CardPost_MoreProps) {
     <MoreDropdown
       actions={actions}
       className={className}
-      deleteItemName={post.title}
+      deleteItemName={topic.title}
       onDelete={handleDelete}
       trigger={customTrigger}
     />

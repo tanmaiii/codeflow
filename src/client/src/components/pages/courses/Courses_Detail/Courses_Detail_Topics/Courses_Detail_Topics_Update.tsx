@@ -1,19 +1,19 @@
 import ActionModal from '@/components/common/Action/ActionModal';
 import TextInput from '@/components/common/Input/TextInput/TextInput';
 import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
-import { Button } from '@/components/ui/button';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { useTopicSchema, TopicSchemaType } from '@/lib/validations/topicSchema';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import topicService from '@/services/topic.service';
-import { toast } from 'sonner';
-import { useRef } from 'react';
-import { DialogClose } from '@/components/ui/dialog';
-import { ITopic } from '@/interfaces/topic';
 import MySelect from '@/components/common/MySelect';
+import { Button } from '@/components/ui/button';
+import { DialogClose } from '@/components/ui/dialog';
 import { STATUS_TOPIC } from '@/contants/object';
+import { ITopic } from '@/interfaces/topic';
+import { TopicSchemaType, useTopicSchema } from '@/lib/validations/topicSchema';
+import topicService from '@/services/topic.service';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic }) {
   const t = useTranslations('common');
@@ -30,7 +30,6 @@ export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic 
     control,
   } = useForm<TopicSchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: topic,
   });
 
   const mutation = useMutation({
@@ -51,6 +50,14 @@ export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic 
     },
   });
 
+  useEffect(() => {
+    reset({
+      ...topic,
+      members: topic.members?.map(member => member.userId),
+      groupName: topic.groupName ?? '',
+    });
+  }, [topic]);
+
   return (
     <ActionModal title={tTopic('updateTopic')} actionType={'update'}>
       <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
@@ -64,10 +71,10 @@ export default function Courses_Detail_Topics_Update({ topic }: { topic: ITopic 
         <MySelect
           label={tTopic('status')}
           name="status"
-          control={control}
           options={STATUS_TOPIC}
           error={errors.status}
           required={true}
+          control={control}
         />
         <div className="flex justify-end gap-2">
           <DialogClose asChild ref={closeRef}>

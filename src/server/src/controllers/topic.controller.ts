@@ -66,13 +66,14 @@ export class TopicController {
   public getTopicsByUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom } = req.query;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', status } = req.query;
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPaginationByUser(
         Number(page),
         Number(limit),
         String(sortBy),
         order as 'ASC' | 'DESC',
         userId,
+        status as string,
       );
 
       res.status(200).json({
@@ -83,7 +84,7 @@ export class TopicController {
           currentPage: Number(page),
           pageSize: Number(limit),
         },
-        message: 'findAll',
+        message: 'find by user',
       });
     } catch (error) {
       next(error);

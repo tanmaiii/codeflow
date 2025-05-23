@@ -68,6 +68,8 @@ export default function Posts_Create() {
     },
   });
 
+  
+
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">
       <Card className="w-full max-w-4xl py-4 px-4 lg:px-6 lg:py-8">

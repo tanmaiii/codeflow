@@ -76,54 +76,21 @@ export default function Courses_Topics_Table() {
         ),
       },
       {
-        accessorKey: 'teacher',
-        header: 'Teacher',
-        size: 100,
-        cell: ({ row }) => {
-          const teacher = row.original.teacher;
-          if (!teacher) return null;
-
-          return (
-            <div className="flex items-center gap-2">
-              <AvatarGroup
-                avatars={[
-                  {
-                    url: apiConfig.avatar(teacher.name ?? 'c'),
-                    name: teacher.name ?? 'c',
-                    alt: teacher.name ?? 'c',
-                  },
-                ]}
-              />
-              <TextDescription className="text-color-1">{teacher.name}</TextDescription>
-            </div>
-          );
-        },
-      },
-      {
         accessorKey: 'group',
         header: 'Group',
         size: 100,
         cell: ({ row }) => {
-          const authorName = row.original.author?.name ?? 'c';
           return (
             <AvatarGroup
-              avatars={[
-                {
-                  url: 'http://localhost:3001/api/avatar',
-                  name: authorName,
-                  alt: authorName,
-                },
-                {
-                  url: apiConfig.avatar('s'),
-                  name: authorName,
-                  alt: authorName,
-                },
-                {
-                  url: apiConfig.avatar('12321'),
-                  name: authorName,
-                  alt: authorName,
-                },
-              ]}
+              avatars={
+                row.original.members?.map(member => ({
+                  url: member.user?.avatar
+                    ? member.user?.avatar
+                    : apiConfig.avatar(member.user?.name ?? 'c'),
+                  name: member.user?.name ?? 'c',
+                  alt: member.user?.name ?? 'c',
+                })) ?? []
+              }
               max={3}
             />
           );
@@ -167,7 +134,7 @@ export default function Courses_Topics_Table() {
       </div>
     );
   };
-  
+
   return (
     <Card className="p-6 flex flex-col gap-4 min-h-[calc(100vh-100px)]">
       <TitleHeader title={course?.data?.title ?? ''} onBack={true} description={t('topic')} />

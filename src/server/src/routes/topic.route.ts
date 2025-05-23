@@ -1,5 +1,5 @@
 import { TopicController } from '@/controllers/topic.controller';
-import { CreateTopicDto } from '@/dtos/topics.dto';
+import { CreateTopicDto, GetTopicByUserDto } from '@/dtos/topics.dto';
 import { AuthMiddleware } from '@/middlewares/auth.middleware';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
 import { Routes } from '@interfaces/routes.interface';
@@ -18,7 +18,7 @@ export class TopicRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`,  ValidationMiddleware(GetAllQueryDto, 'query'), this.topic.getTopics);
     this.router.get(`${this.path}/:courseId/course`, ValidationMiddleware(GetAllQueryDto, 'query'), this.topic.getTopicsByCourseId);
-    this.router.get(`${this.path}/:isUser/user`, ValidationMiddleware(GetAllQueryDto, 'query'), this.topic.getTopicsByUser);
+    this.router.get(`${this.path}/:userId/user`, ValidationMiddleware(GetTopicByUserDto, 'query'), this.topic.getTopicsByUser);
     this.router.get(`${this.path}/:id`, this.topic.getTopicById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateTopicDto), this.topic.createTopic);
     this.router.put(`${this.path}/delete/:id`, AuthMiddleware, this.topic.deleteTopic);

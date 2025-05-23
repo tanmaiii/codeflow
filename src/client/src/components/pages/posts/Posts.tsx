@@ -8,6 +8,7 @@ import { paths } from '@/data/path';
 import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { IPost } from '@/interfaces/post';
+import { useUserStore } from '@/stores/user_store';
 import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -17,6 +18,7 @@ export default function Posts() {
   const page = searchParams.get('page') || 1;
   const { localPath } = useH_LocalPath();
   const t = useTranslations('post');
+  const { user } = useUserStore();
 
   const Q_Post = useQ_Post_GetAll({
     params: {
@@ -36,14 +38,16 @@ export default function Posts() {
         <div className="flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md text-primary">
           <TextHeading>{t('post')}</TextHeading>
         </div>
-        <Button
-          onClick={() => route.push(localPath(paths.POST_CREATE))}
-          variant="outline"
-          className="bg-background-1"
-          size="sm"
-        >
-          {t('createPost')}
-        </Button>
+        {!(user?.role === 'user') && (
+          <Button
+            onClick={() => route.push(localPath(paths.POST_CREATE))}
+            variant="outline"
+            className="bg-background-1"
+            size="sm"
+          >
+            {t('createPost')}
+          </Button>
+        )}
       </div>
       <div className="min-h-[600px]">
         {Q_Post.data?.data?.length === 0 && <NoData />}

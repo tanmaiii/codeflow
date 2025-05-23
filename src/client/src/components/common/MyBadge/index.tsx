@@ -110,12 +110,20 @@ const stringToColor = (status: IStatusObj) => {
   return colorMap[normalizedStr] || colorMap['default'];
 };
 
-export default function MyBadge({ status }: { status: IStatusObj }) {
+export default function MyBadge({
+  status,
+  className,
+}: {
+  status: IStatusObj;
+  className?: string;
+}) {
   const colors = stringToColor(status);
   const locale = getCurrentLocale();
 
   return (
-    <Badge className={`${colors.bg} ${colors.bgHover} ${colors.text} shadow-none rounded-full`}>
+    <Badge
+      className={`${colors.bg} ${colors.bgHover} ${colors.text} shadow-none rounded-full ${className}`}
+    >
       <div className={`h-1.5 w-1.5 rounded-full ${colors.dot} mr-2`} />
       {locale === 'vi' ? status.label : status.labelEn}
     </Badge>

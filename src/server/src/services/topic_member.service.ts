@@ -1,6 +1,7 @@
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
 import { TopicMember } from '@/interfaces/topics.interface';
+import { logger } from '@/utils/logger';
 import { Service } from 'typedi';
 
 @Service()
@@ -36,6 +37,11 @@ export class TopicMemberService {
   }
 
   public async createTopicMember(topicMemberData: Partial<TopicMember>): Promise<TopicMember> {
+    const findTopicMember: TopicMember[] = await DB.TopicMember.findAll({
+      where: { topicId: topicMemberData.topicId, userId: topicMemberData.userId },
+    });
+    logger.info(`------------------------FIND TOPIC MEMBER: ${topicMemberData.userId} ${topicMemberData.topicId} ${findTopicMember}`);
+    if (findTopicMember.length) return;
     const createTopicMemberData: TopicMember = await DB.TopicMember.create(topicMemberData);
     return createTopicMemberData;
   }

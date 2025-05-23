@@ -83,11 +83,11 @@ function Courses_Detail_Topics_Table({ courseId }: { courseId: string }) {
             <AvatarGroup
               avatars={
                 row.original.members?.map(member => ({
-                  url: member.avatar
-                    ? member.avatar
-                    : apiConfig.avatar(member.name ?? 'c'),
-                  name: member.name ?? 'c',
-                  alt: member.name ?? 'c',
+                  url: member.user?.avatar
+                    ? member.user?.avatar
+                    : apiConfig.avatar(member.user?.name ?? 'c'),
+                  name: member.user?.name ?? 'c',
+                  alt: member.user?.name ?? 'c',
                 })) ?? []
               }
               max={3}
