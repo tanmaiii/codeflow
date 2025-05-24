@@ -8,6 +8,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 interface ParamsProps extends IGetAllQuery {
   courseId: string;
   isCustom?: boolean;
+  status?: string;
 }
 
 interface UseQ_Topic_GetAllByCourseIdProps {

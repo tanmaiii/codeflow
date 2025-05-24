@@ -17,6 +17,13 @@ export interface TopicMember {
   role: string;
 }
 
+export interface TopicEvaluations {
+  id: string;
+  topicId: string;
+  userId: string;
+  evaluation: string;
+}
+
 export interface TopicCreate {
   title: string;
   description: string;

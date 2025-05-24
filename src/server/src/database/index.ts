@@ -10,6 +10,7 @@ import PostModel from '@/models/posts.model';
 import ReposModel from '@/models/repos.model';
 import SubmissionModel from '@/models/submissions.model';
 import TagModel from '@/models/tags.model';
+import TopicEvaluationsModel from '@/models/topic_evaluations.model';
 import TopicMemberModel from '@/models/topic_member.mode';
 import TopicTagModel from '@/models/topic_tag.model';
 import TopicModel from '@/models/topics.model';
@@ -59,6 +60,7 @@ export const DB = {
   Repos: ReposModel(sequelize),
   CourseEnrollment: CourseEnrollmentModel(sequelize),
   TopicMember: TopicMemberModel(sequelize),
+  TopicEvaluations: TopicEvaluationsModel(sequelize),
   sequelize,
 };
 

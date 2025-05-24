@@ -3,7 +3,7 @@
 import Comments from '@/components/common/Comments/Comments';
 import NameTags from '@/components/common/NameTags/NameTags';
 import NoData from '@/components/common/NoData/NoData';
-import PostDetailSkeleton from '@/components/skeletons/PostDetailSkeleton';
+import PostDetailSkeleton from '@/components/skeletons/post/PostDetailSkeleton';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';

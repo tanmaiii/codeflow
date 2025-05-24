@@ -1,7 +1,5 @@
+import Topics_Detail from '@/components/pages/topics/Topics_Detail';
+
 export default function Page() {
-    return (
-        <div>
-            <h1>Topic</h1>
-        </div>
-    );
+  return <Topics_Detail />;
 }

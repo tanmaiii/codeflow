@@ -1,7 +1,14 @@
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfaces/common';
-import { IGetAllTopicByUserIdParams, ITopic, ITopicCreateDto } from '@/interfaces/topic';
+import {
+  IGetAllTopicByUserIdParams,
+  ITopic,
+  ITopicCreateDto,
+  ITopicEvaluation,
+  ITopicEvaluationCreateDto,
+  ITopicEvaluationUpdateDto,
+} from '@/interfaces/topic';
 
 class TopicService {
   private client: AxiosInstance;
@@ -48,6 +55,31 @@ class TopicService {
 
   async delete(id: string): Promise<ResponseAPIDto<ITopic>> {
     const res = await this.client.put(`/delete/${id}`);
+    return res.data;
+  }
+
+  async createEvaluation(
+    id: string,
+    data: ITopicEvaluationCreateDto,
+  ): Promise<ResponseAPIDto<ITopicEvaluation>> {
+    const res = await this.client.post(`/${id}/evaluations`, data);
+    return res.data;
+  }
+
+  async updateEvaluation(
+    topicId: string,
+    evaluationId: string,
+    data: ITopicEvaluationUpdateDto,
+  ): Promise<ResponseAPIDto<ITopicEvaluation>> {
+    const res = await this.client.put(`/${topicId}/evaluations/${evaluationId}`, data);
+    return res.data;
+  }
+
+  async deleteEvaluation(
+    topicId: string,
+    evaluationId: string,
+  ): Promise<ResponseAPIDto<ITopicEvaluation>> {
+    const res = await this.client.delete(`/${topicId}/evaluations/${evaluationId}`);
     return res.data;
   }
 }

@@ -1,5 +1,5 @@
-import Courses_Update from "@/components/pages/courses/Courses_Update";
+import { CourseUpdate } from '@/components/pages/courses';
 
 export default function Page() {
-  return <Courses_Update />;
+  return <CourseUpdate />;
 }

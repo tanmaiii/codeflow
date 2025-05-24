@@ -1,5 +1,6 @@
 'use client';
 import CardFile from '@/components/common/CardFile/CardFile';
+import Comments from '@/components/common/Comments/Comments';
 import NameTags from '@/components/common/NameTags/NameTags';
 import NoData from '@/components/common/NoData/NoData';
 import SwapperHTML from '@/components/common/SwapperHTML/SwapperHTML';
@@ -9,9 +10,11 @@ import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { TYPE_COURSE } from '@/contants/object';
 import { paths } from '@/data/path';
+import useQ_Course_GetComments from '@/hooks/query-hooks/Course/useQ_Course_GetComments';
 import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import apiConfig from '@/lib/api';
+import commentService from '@/services/comment.service';
 import { useUserStore } from '@/stores/user_store';
 import {
   utils_CalculateProgress,
@@ -22,15 +25,13 @@ import {
 } from '@/utils/date';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { IconCalendar, IconClockHour1, IconPencil, IconUsers } from '@tabler/icons-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { cx } from 'class-variance-authority';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import Courses_Summary from './Courses_Summary';
-import useQ_Course_GetComments from '@/hooks/query-hooks/Course/useQ_Course_GetComments';
-import Comments from '@/components/common/Comments/Comments';
-import commentService from '@/services/comment.service';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Courses_Topics from './Courses_Topics';
 
 export default function Courses_Detail() {
   const params = useParams();
@@ -225,6 +226,7 @@ export default function Courses_Detail() {
               </>
             )}
           </div>
+          <Courses_Topics />
           <div className="flex flex-col gap-2 mt-auto">
             {dataComments?.data && (
               <Comments

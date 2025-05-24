@@ -176,7 +176,7 @@
     "maxGroupMembers": "Số lượng thành viên tối đa",
     "documents": "Tài liệu",
     "topics": "Đề tài",
-    "suggestedTopics": "Đề tài đề xuất",
+    "suggestedTopics": "Đề tài gợi ý",
     "author": "Tác giả",
     "teacher": "Giáo viên",
     "status": "Trạng thái",
@@ -217,7 +217,14 @@
     "all": "Tất cả",
     "approved": "Đã duyệt",
     "pending": "Chờ duyệt",
-    "rejected": "Từ chối"
+    "rejected": "Từ chối",
+    "createdAt": "Ngày tạo",
+    "link": "Liên kết",
+    "progress": "Tiến độ",
+    "repository": "Kho lưu trữ",
+    "notRegistered": "Chưa được đăng ký",
+    "registered": "Đã được đăng ký",
+    "evaluations": "Đánh giá"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"

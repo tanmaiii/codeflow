@@ -227,7 +227,14 @@
     "all": "All",
     "approved": "Approved",
     "pending": "Pending",
-    "rejected": "Rejected"
+    "rejected": "Rejected",
+    "createdAt": "Created at",
+    "link": "Link",
+    "progress": "Progress",
+    "repository": "Repository",
+    "notRegistered": "Not registered",
+    "registered": "Registered",
+    "evaluations": "Evaluations"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"

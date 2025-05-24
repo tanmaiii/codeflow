@@ -5,6 +5,7 @@ import { TagModel } from './tags.model';
 import { ENUM_TOPIC_STATUS } from '@/data/enum';
 import { CourseModel } from './courses.model';
 import { TopicMemberModel } from './topic_member.mode';
+import { TopicEvaluationsModel } from './topic_evaluations.model';
 type PostCreationAttributes = Optional<
   Topic,
   'id' | 'title' | 'description' | 'courseId' | 'teacherId' | 'authorId' | 'isCustom' | 'status' | 'groupName'
@@ -113,6 +114,10 @@ export default function (sequelize: Sequelize): typeof TopicModel {
           {
             model: TopicMemberModel,
             as: 'members',
+          },
+          {
+            model: TopicEvaluationsModel,
+            as: 'evaluations',
           },
         ],
       },

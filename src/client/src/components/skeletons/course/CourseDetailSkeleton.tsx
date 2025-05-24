@@ -76,8 +76,7 @@ export default function CourseDetailSkeleton() {
       </div>
       <div className="col-span-12 md:col-span-4 xl:col-span-3 sticky top-20">
         <div className="flex flex-col gap-4">
-          <Skeleton className="w-full h-[100px] rounded-lg" />
-          <Skeleton className="w-full h-[100px] rounded-lg" />
+          <Skeleton className="w-full h-[400px] rounded-lg" />
         </div>
       </div>
     </div>

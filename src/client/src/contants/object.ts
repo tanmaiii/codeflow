@@ -110,3 +110,16 @@ export const TYPE_COURSE: IStatusObj[] = [
     labelEn: 'Elective',
   },
 ];
+
+export const ROLE_TOPIC: IStatusObj[] = [
+  {
+    value: 'leader',
+    label: 'Trưởng nhóm',
+    labelEn: 'Leader',
+  },
+  {
+    value: 'member',
+    label: 'Thành viên',
+    labelEn: 'Member',
+  },
+];

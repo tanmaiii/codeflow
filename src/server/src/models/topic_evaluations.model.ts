@@ -1,21 +1,21 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { TopicMember } from '@/interfaces/topics.interface';
+import { TopicEvaluations } from '@/interfaces/topics.interface';
 import { UserModel } from './users.model';
 
-export type TopicMemberCreationAttributes = Optional<TopicMember, 'id' | 'topicId' | 'userId' | 'role'>;
+export type TopicEvaluationsCreationAttributes = Optional<TopicEvaluations, 'id' | 'topicId' | 'userId' | 'evaluation'>;
 
-export class TopicMemberModel extends Model<TopicMember, TopicMemberCreationAttributes> implements TopicMember {
+export class TopicEvaluationsModel extends Model<TopicEvaluations, TopicEvaluationsCreationAttributes> implements TopicEvaluations {
   public id: string;
   public topicId: string;
   public userId: string;
-  public role: string;
+  public evaluation: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-export default function (sequelize: Sequelize): typeof TopicMemberModel {
-  TopicMemberModel.init(
+export default function (sequelize: Sequelize): typeof TopicEvaluationsModel {
+  TopicEvaluationsModel.init(
     {
       id: {
         primaryKey: true,
@@ -40,14 +40,14 @@ export default function (sequelize: Sequelize): typeof TopicMemberModel {
         },
         onDelete: 'CASCADE',
       },
-      role: {
+      evaluation: {
         allowNull: false,
-        type: DataTypes.ENUM('leader', 'member'),
+        type: DataTypes.STRING,
       },
     },
     {
-      tableName: 'topic_members',
-      modelName: 'topic_members',
+      tableName: 'topic_evaluations',
+      modelName: 'topic_evaluations',
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm
@@ -62,5 +62,5 @@ export default function (sequelize: Sequelize): typeof TopicMemberModel {
     },
   );
 
-  return TopicMemberModel;
+  return TopicEvaluationsModel;
 }

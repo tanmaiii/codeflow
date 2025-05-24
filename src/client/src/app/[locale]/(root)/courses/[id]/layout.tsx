@@ -6,7 +6,7 @@ import courseService from '@/services/course.service';
 import { useParams, useRouter } from 'next/navigation';
 import { paths } from '@/data/path';
 import { useEffect, useState } from 'react';
-import CourseDetailSkeleton from '@/components/skeletons/CourseDetailSkeleton';
+import CourseDetailSkeleton from '@/components/skeletons/course/CourseDetailSkeleton';
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   const { user } = useUserStore();

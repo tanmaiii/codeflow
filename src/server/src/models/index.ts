@@ -14,6 +14,7 @@ import { PostLikeModel } from './post_like.model';
 // import { GroupMemberModel } from './groups_member.model';
 import { CourseEnrollmentModel } from './course_enrollment.model';
 import { TopicMemberModel } from './topic_member.mode';
+import { TopicEvaluationsModel } from './topic_evaluations.model';
 
 export const initModels = () => {
   // author, teacher
@@ -74,6 +75,12 @@ export const initModels = () => {
 
   TopicMemberModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
   UserModel.hasMany(TopicMemberModel, { foreignKey: 'userId', as: 'members' });
+
+  TopicModel.hasMany(TopicEvaluationsModel, { foreignKey: 'topicId', as: 'evaluations' });
+  TopicEvaluationsModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
+
+  TopicEvaluationsModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
+  UserModel.hasMany(TopicEvaluationsModel, { foreignKey: 'userId', as: 'evaluations' });
 
   CourseEnrollmentModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
   UserModel.hasMany(CourseEnrollmentModel, { foreignKey: 'userId', as: 'enrollments' });

@@ -11,6 +11,14 @@ export interface ITopicMember extends IBaseEntity {
   user?: IUser;
 }
 
+export interface ITopicEvaluation extends IBaseEntity {
+  id: string;
+  evaluation: string;
+  topicId: string;
+  userId: string;
+  user?: IUser;
+}
+
 export interface ITopic extends IBaseEntity {
   id: string;
   title: string;
@@ -24,6 +32,7 @@ export interface ITopic extends IBaseEntity {
   course?: ICourse;
   groupName?: string;
   members?: ITopicMember[];
+  evaluations?: ITopicEvaluation[];
 }
 
 export interface ITopicCreateDto {
@@ -44,6 +53,14 @@ export interface ITopicUpdateDto {
   status?: string;
   groupName?: string;
   members?: string[];
+}
+
+export interface ITopicEvaluationCreateDto {
+  evaluation: string;
+}
+
+export interface ITopicEvaluationUpdateDto {
+  evaluation: string;
 }
 
 export interface IGetAllTopicByUserIdParams extends IGetAllQuery {

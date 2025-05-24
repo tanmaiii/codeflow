@@ -2,6 +2,7 @@
 import CardCourse from '@/components/common/CardCourse/CardCourse';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import NoData from '@/components/common/NoData/NoData';
+import { CourseListSkeleton } from '@/components/skeletons/course';
 import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { ROLE } from '@/contants/enum';
@@ -58,7 +59,7 @@ export default function Courses() {
     router.push(`${localPath(paths.COURSES)}?page=1&tab=${tabId}`);
   };
 
-  if (isLoading) return <TextDescription>Loading...</TextDescription>;
+  if (isLoading) return <CourseListSkeleton />;
   if (!currentData) return <TextDescription>Error...</TextDescription>;
 
   return (

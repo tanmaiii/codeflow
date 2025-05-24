@@ -22,7 +22,6 @@ export default function CardTopic({ topic }: CardTopicProps) {
   return (
     <Card
       className="px-3 py-4 hover:border-white/30 rounded-md cursor-pointer bg-background-1 group/item"
-      onClick={onClick}
     >
       <CardContent className="p-0 h-full flex flex-col gap-2 justify-between">
         <div className="flex flex-row justify-between items-center gap-2">
@@ -33,12 +32,10 @@ export default function CardTopic({ topic }: CardTopicProps) {
           <CardTopic_More topic={topic} />
         </div>
         <TextDescription lineClamp={1}>{topic.course?.title}</TextDescription>
-        <TextHeading className="text-xl mb-auto">{topic.title}</TextHeading>
+        <TextHeading className="text-xl mb-auto" onClick={onClick}>
+          {topic.title}
+        </TextHeading>
         <TextDescription lineClamp={2}>{topic.description}</TextDescription>
-        {/* <TextDescription lineClamp={2}>
-          {utils_DateToDDMMYYYY(topic.course?.topicDeadline ?? '')} -{' '}
-          {utils_TimeRemaining(topic.course?.topicDeadline ?? '')}
-        </TextDescription> */}
         <div className={cn('h-2 bg-input/60 w-full relative right-0 bottom-0 rounded-md')}>
           <div
             className={cn('h-2 bg-zinc-300 w-full absolute left-0 bottom-0 rounded-md')}

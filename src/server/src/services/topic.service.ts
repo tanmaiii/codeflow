@@ -25,6 +25,7 @@ export class TopicService {
     sortOrder = this.defaultSortOrder,
     courseId?: string,
     isCustom?: boolean,
+    status?: string,
   ): Promise<{ count: number; rows: Topic[] }> {
     const whereClause = this.buildWhereClause({ courseId, isCustom });
 
@@ -34,7 +35,9 @@ export class TopicService {
       order: [[sortBy, sortOrder]],
       distinct: true,
       col: 'topics.id',
-      where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
+      where: {
+        ...whereClause,
+      },
     });
   }
 

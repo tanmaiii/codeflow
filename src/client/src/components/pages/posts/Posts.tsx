@@ -2,6 +2,7 @@
 import CardPost from '@/components/common/CardPost/CardPost';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import NoData from '@/components/common/NoData/NoData';
+import { PostListSkeleton } from '@/components/skeletons/post';
 import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { paths } from '@/data/path';
@@ -29,7 +30,6 @@ export default function Posts() {
     },
   });
 
-  if (Q_Post.isLoading) return <TextDescription>Loading...</TextDescription>;
   if (Q_Post.error) return <TextDescription>Error...</TextDescription>;
 
   return (
@@ -50,6 +50,7 @@ export default function Posts() {
         )}
       </div>
       <div className="min-h-[600px]">
+        {Q_Post.isLoading && <PostListSkeleton />}
         {Q_Post.data?.data?.length === 0 && <NoData />}
         <div className="grid grid-cols-1 gap-4 md:gap-4 xl:gap-8 md:grid-cols-3 xl:grid-cols-4 py-2 mt-6">
           {Q_Post.data &&
