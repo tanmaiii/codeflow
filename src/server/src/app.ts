@@ -14,11 +14,17 @@ import path from 'path';
 import 'reflect-metadata';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import { Container } from 'typedi';
+import { SocketService } from './services/socket.service';
 
 export class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
+  private httpServer: any;
+  private io: Server;
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -30,10 +36,36 @@ export class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.initializeSocketIO();
+  }
+
+  private initializeSocketIO() {
+    this.httpServer = createServer(this.app);
+    this.io = new Server(this.httpServer, {
+      cors: {
+        origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization']
+      },
+      path: '/socket.io',
+      transports: ['websocket', 'polling'],
+      pingTimeout: 60000,
+      pingInterval: 25000,
+      connectTimeout: 45000,
+      allowUpgrades: true,
+      perMessageDeflate: {
+        threshold: 2048
+      }
+    });
+
+    // Initialize SocketService
+    const socketService = Container.get(SocketService);
+    socketService.initialize(this.io);
   }
 
   public listen() {
-    this.app.listen(this.port, () => {
+    this.httpServer.listen(this.port, () => {
       logger.info(`=================================`);
       logger.info(`======= ENV: ${this.env} =======`);
       logger.info(`🚀 App listening on the port ${this.port}`);

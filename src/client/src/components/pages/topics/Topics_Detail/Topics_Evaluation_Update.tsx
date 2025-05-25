@@ -1,7 +1,8 @@
 import ActionModal from '@/components/common/Action/ActionModal';
 import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
 import { Button } from '@/components/ui/button';
-import { ITopic, ITopicEvaluation } from '@/interfaces/topic';
+import { useEvaluationSchema } from '@/lib/validations/evaluationSchema';
+import { evaluationSchemaType } from '@/lib/validations/evaluationSchema';
 import topicService from '@/services/topic.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogClose } from '@radix-ui/react-dialog';
@@ -10,42 +11,33 @@ import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import { ITopic, ITopicEvaluation } from '@/interfaces/topic';
 
-const schema = z.object({
-  evaluation: z
-    .string()
-    .min(1, { message: 'Nội dung không được để trống' })
-    .max(1000, { message: 'Nội dung không được vượt quá 1000 ký tự' }),
-});
-
-type SchemaType = z.infer<typeof schema>;
-
-export default function Topics_Evaluation_Update({ 
+export default function Topics_Evaluation_Update({
   topic,
-  evaluation 
-}: { 
+  evaluation,
+}: {
   topic: ITopic;
   evaluation: ITopicEvaluation;
 }) {
   const tCommon = useTranslations('common');
   const closeRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
-
+  const schema = useEvaluationSchema();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<SchemaType>({
+  } = useForm<evaluationSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      evaluation: evaluation.evaluation
-    }
+      evaluation: evaluation.evaluation,
+    },
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: SchemaType) => {
+    mutationFn: async (data: evaluationSchemaType) => {
       try {
         return await topicService.updateEvaluation(topic.id, evaluation.id, data);
       } catch (error) {
@@ -65,11 +57,7 @@ export default function Topics_Evaluation_Update({
   });
 
   return (
-    <ActionModal
-      title={'Cập nhật nhận xét'}
-      actionType={'update'}
-      className="max-w-[50vw]"
-    >
+    <ActionModal title={'Cập nhật nhận xét'} actionType={'update'} className="max-w-[50vw]">
       <form onSubmit={handleSubmit(data => mutation.mutate(data))}>
         <div className="flex flex-col gap-2">
           <TextareaInput

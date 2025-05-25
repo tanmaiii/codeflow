@@ -42,7 +42,7 @@ export default function (sequelize: Sequelize): typeof TopicEvaluationsModel {
       },
       evaluation: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(300),
       },
     },
     {

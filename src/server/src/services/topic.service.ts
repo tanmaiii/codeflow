@@ -12,7 +12,10 @@ export class TopicService {
   private readonly defaultSortBy = 'created_at';
   private readonly defaultSortOrder: 'ASC' | 'DESC' = 'DESC';
 
-  constructor(private readonly tagService = Container.get(TagService), private readonly topicMemberService = Container.get(TopicMemberService)) {}
+  constructor(
+    private readonly tagService = Container.get(TagService),
+    private readonly topicMemberService = Container.get(TopicMemberService),
+  ) {}
 
   public async findAll(): Promise<Topic[]> {
     return DB.Topics.findAll();
@@ -112,6 +115,10 @@ export class TopicService {
     }
 
     if (members?.length) {
+      // Delete all existing members first
+      await this.topicMemberService.deleteAllTopicMembers(topic.id);
+
+      // Create new members
       await Promise.all(
         members.map(memberId =>
           this.topicMemberService.createTopicMember({

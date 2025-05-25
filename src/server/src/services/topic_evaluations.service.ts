@@ -2,9 +2,23 @@ import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
 import { TopicEvaluations } from '@/interfaces/topics.interface';
 import { Service } from 'typedi';
+import { SocketService } from './socket.service';
+import { v4 as uuidv4 } from 'uuid';
+import { NotificationService } from './notification.service';
+import { Notification } from '@/interfaces/notification.interface';
+import { TopicService } from './topic.service';
+import { TopicMemberService } from './topic_member.service';
+import { logger } from '@/utils/logger';
 
 @Service()
 export class TopicEvaluationsService {
+  constructor(
+    private socketService: SocketService,
+    private notificationService: NotificationService,
+    private topicService: TopicService,
+    private topicMemberService: TopicMemberService,
+  ) {}
+
   public async findAll(): Promise<TopicEvaluations[]> {
     const allTopicEvaluations: TopicEvaluations[] = await DB.TopicEvaluations.findAll();
     return allTopicEvaluations;
@@ -37,6 +51,20 @@ export class TopicEvaluationsService {
 
   public async createTopicEvaluation(topicEvaluationData: Partial<TopicEvaluations>): Promise<TopicEvaluations> {
     const createTopicEvaluationData: TopicEvaluations = await DB.TopicEvaluations.create(topicEvaluationData);
+    const members = await this.topicMemberService.findTopicMembersByTopicId(topicEvaluationData.topicId);
+
+    const notificationData: Notification = {
+      id: uuidv4(),
+      type: 'TOPIC_EVALUATION',
+      title: 'New Topic Evaluation',
+      message: `New topic evaluation created by ${topicEvaluationData.userId}`,
+      userId: members.find(member => member.role === 'leader')?.userId || members[0].userId,
+      isRead: false,
+      link: `/topic-evaluations/${createTopicEvaluationData.id}`,
+    };
+
+    await this.notificationService.createNotification(notificationData);
+
     return createTopicEvaluationData;
   }
 

@@ -6,12 +6,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { IconPlus } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-import { useTopicSchema, TopicSchemaType } from '@/lib/validations/topicSchema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import topicService from '@/services/topic.service';
 import { toast } from 'sonner';
 import { useRef } from 'react';
 import { DialogClose } from '@/components/ui/dialog';
+import { TopicSchemaType, useTopicSchema } from '@/lib/validations/topicSchema';
 
 export default function Courses_Detail_Topics_Create({ courseId }: { courseId: string }) {
   const t = useTranslations('common');

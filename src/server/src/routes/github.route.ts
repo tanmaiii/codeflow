@@ -17,21 +17,13 @@ export class GitHubRoute implements Routes {
     this.router.post(`${this.path}/user`, this.github.getUserInfo);
 
     // Route to get user repositories
-    this.router.post(
-      `${this.path}/user/:username/repos`,
-      AuthMiddleware,
-      this.github.getUserRepositories,
-    );
+    this.router.post(`${this.path}/user/:username/repos`, AuthMiddleware, this.github.getUserRepositories);
 
     // Route to get repository details
     this.router.post(`${this.path}/repos/:owner/:repo`, AuthMiddleware, this.github.getRepository);
 
     // Route to get repository contents
-    this.router.post(
-      `${this.path}/repos/:owner/:repo/contents`,
-      AuthMiddleware,
-      this.github.getRepositoryContents,
-    );
+    this.router.post(`${this.path}/repos/:owner/:repo/contents`, AuthMiddleware, this.github.getRepositoryContents);
 
     this.router.post(`${this.path}/orgs/invitations`, this.github.inviteUserToOrganization);
 

@@ -26,8 +26,18 @@ export class TopicRoute implements Routes {
     this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(CreateTopicDto, 'body', true), this.topic.updateTopic);
 
     this.router.get(`${this.path}/:id/evaluations`, AuthMiddleware, this.topic.getTopicEvaluations);
-    this.router.post(`${this.path}/:id/evaluations`, isTeacherOrAdmin, ValidationMiddleware(CreateTopicEvaluationDto, 'body'), this.topic.createTopicEvaluation);
-    this.router.put(`${this.path}/:id/evaluations/:evaluationId`, isTeacherOrAdmin, ValidationMiddleware(CreateTopicEvaluationDto, 'body'), this.topic.updateTopicEvaluation);
+    this.router.post(
+      `${this.path}/:id/evaluations`,
+      isTeacherOrAdmin,
+      ValidationMiddleware(CreateTopicEvaluationDto, 'body'),
+      this.topic.createTopicEvaluation,
+    );
+    this.router.put(
+      `${this.path}/:id/evaluations/:evaluationId`,
+      isTeacherOrAdmin,
+      ValidationMiddleware(CreateTopicEvaluationDto, 'body'),
+      this.topic.updateTopicEvaluation,
+    );
     this.router.delete(`${this.path}/:id/evaluations/:evaluationId`, isTeacherOrAdmin, this.topic.deleteTopicEvaluation);
   }
 }

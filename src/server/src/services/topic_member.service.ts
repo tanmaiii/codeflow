@@ -56,6 +56,10 @@ export class TopicMemberService {
     return updateTopicMember;
   }
 
+  public async deleteAllTopicMembers(topicId: string): Promise<void> {
+    await DB.TopicMember.destroy({ where: { topicId } });
+  }
+
   public async deleteTopicMember(topicMemberId: string): Promise<TopicMember> {
     const findTopicMember: TopicMember = await DB.TopicMember.findByPk(topicMemberId);
     if (!findTopicMember) throw new HttpException(409, "Topic member doesn't exist");

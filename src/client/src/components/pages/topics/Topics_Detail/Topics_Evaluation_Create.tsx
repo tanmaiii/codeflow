@@ -11,33 +11,25 @@ import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
-
-const schema = z.object({
-  evaluation: z
-    .string()
-    .min(1, { message: 'Nội dung không được để trống' })
-    .max(1000, { message: 'Nội dung không được vượt quá 1000 ký tự' }),
-});
-
-type SchemaType = z.infer<typeof schema>;
+import { useEvaluationSchema } from '@/lib/validations/evaluationSchema';
+import { evaluationSchemaType } from '@/lib/validations/evaluationSchema';
 
 export default function Topics_Evaluation_Create({ topic }: { topic: ITopic }) {
   const tCommon = useTranslations('common');
   const closeRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
-
+  const schema = useEvaluationSchema();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<SchemaType>({
+  } = useForm<evaluationSchemaType>({
     resolver: zodResolver(schema),
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: SchemaType) => {
+    mutationFn: async (data: evaluationSchemaType) => {
       try {
         return await topicService.createEvaluation(topic.id, data);
       } catch (error) {

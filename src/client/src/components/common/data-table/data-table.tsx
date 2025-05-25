@@ -126,7 +126,9 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                   );
                 })}
-                {renderActions && <TableHead className="text-center w-[100px]">Actions</TableHead>}
+                {renderActions &&  (
+                  <TableHead className="text-center w-[100px]">Actions</TableHead>
+                )}
               </TableRow>
             ))}
           </TableHeader>

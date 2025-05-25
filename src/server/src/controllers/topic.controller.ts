@@ -196,7 +196,9 @@ export class TopicController {
 
   public deleteTopicEvaluation = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const topicEvaluationId = req.params.id;
+      const topicId = req.params.id;
+      const topicEvaluationId = req.params.evaluationId;
+
       const deleteTopicEvaluationData: TopicEvaluations = await this.topicEvaluation.deleteTopicEvaluation(topicEvaluationId);
       res.status(200).json({ data: deleteTopicEvaluationData, message: 'deleted' });
     } catch (error) {
