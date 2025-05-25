@@ -13,6 +13,7 @@ import LocaleSwitcher from '../../localeSwicher';
 import ThemeToggle from '../../themeToggle';
 import { Button } from '../../ui/button';
 import HeaderSearch from './HeaderSearch';
+import NotificationCenter from '../Navbar/NotificationCenter';
 
 export default function Header() {
   const { collapsed, toggleSidebar } = useSidebarStore();
@@ -44,12 +45,9 @@ export default function Header() {
         <HeaderSearch />
       </div>
       <div className="gap-2 flex">
+        <NotificationCenter />
         {user && user.role === 'admin' && (
-          <ButtonTooltip
-            tooltip={isAdminPage ? 'User' : 'Admin'}
-            variant="outline"
-            className="p-3"
-          >
+          <ButtonTooltip tooltip={isAdminPage ? 'User' : 'Admin'} variant="ghost" size="icon" className="p-3">
             <Link href={isAdminPage ? localPath(paths.HOME) : localPath(paths.ADMIN)}>
               {isAdminPage ? <IconUser /> : <IconDashboard />}
             </Link>

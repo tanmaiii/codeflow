@@ -1,9 +1,9 @@
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
 import { Notification } from '@/interfaces/notification.interface';
+import { NotificationModel } from '@/models/notification.model';
 import { Service } from 'typedi';
 import { SocketService } from './socket.service';
-import { NotificationModel } from '@/models/notification.model';
 @Service()
 export class NotificationService {
   constructor(private socketService: SocketService) {}
@@ -15,6 +15,19 @@ export class NotificationService {
 
   public async findAndCountAllWithPagination(limit: number, offset: number): Promise<{ count: number; rows: Notification[] }> {
     const { count, rows }: { count: number; rows: Notification[] } = await DB.Notifications.findAndCountAll({
+      limit,
+      offset,
+    });
+    return { count, rows };
+  }
+
+  public async findAndCountAllWithPaginationByUserId(
+    userId: string,
+    limit: number,
+    offset: number,
+  ): Promise<{ count: number; rows: Notification[] }> {
+    const { count, rows }: { count: number; rows: Notification[] } = await DB.Notifications.findAndCountAll({
+      where: { userId },
       limit,
       offset,
     });
@@ -33,9 +46,17 @@ export class NotificationService {
     return findNotifications;
   }
 
+  public async readNotification(notificationId: string): Promise<Notification> {
+    const findNotification: Notification = await DB.Notifications.findByPk(notificationId);
+    if (!findNotification) throw new HttpException(409, "Notification doesn't exist");
+
+    await DB.Notifications.update({ isRead: true }, { where: { id: notificationId } });
+    return findNotification;
+  }
+
   public async createNotification(notificationData: Partial<Notification>): Promise<Notification> {
     const createNotificationData: Notification = await DB.Notifications.create(notificationData);
-    
+
     // Emit notification to specific user if userId is provided
     if (notificationData.userId) {
       this.socketService.emitNotification(notificationData.userId, createNotificationData);
@@ -43,7 +64,7 @@ export class NotificationService {
       // Emit to all users if no specific userId
       this.socketService.emitNotificationToAll(createNotificationData);
     }
-    
+
     return createNotificationData;
   }
 

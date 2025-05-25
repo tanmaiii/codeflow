@@ -10,83 +10,90 @@ import { TopicModel } from './topics.model';
 import { TopicTagModel } from './topic_tag.model';
 import { CourseDocumentModel } from './course_documents.model';
 import { PostLikeModel } from './post_like.model';
-// import { GroupModel } from './groups.model';
-// import { GroupMemberModel } from './groups_member.model';
 import { CourseEnrollmentModel } from './course_enrollment.model';
 import { TopicMemberModel } from './topic_member.mode';
 import { TopicEvaluationsModel } from './topic_evaluations.model';
+import { NotificationModel } from './notification.model';
+import { ReposModel } from './repos.model';
 
 export const initModels = () => {
-  // author, teacher
-  CourseModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
+  // User Model Relations
   UserModel.hasMany(CourseModel, { foreignKey: 'authorId' });
-
-  PostModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
   UserModel.hasMany(PostModel, { foreignKey: 'authorId' });
-
-  TopicModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
   UserModel.hasMany(TopicModel, { foreignKey: 'authorId' });
-
-  TopicModel.belongsTo(UserModel, { foreignKey: 'teacherId', as: 'teacher' });
   UserModel.hasMany(TopicModel, { foreignKey: 'teacherId' });
+  UserModel.hasMany(CommentModel, { foreignKey: 'authorId' });
+  UserModel.hasMany(SubmissionModel, { foreignKey: 'authorId', as: 'submissions' });
+  UserModel.hasMany(TopicMemberModel, { foreignKey: 'userId', as: 'members' });
+  UserModel.hasMany(TopicEvaluationsModel, { foreignKey: 'userId', as: 'evaluations' });
+  UserModel.hasMany(CourseEnrollmentModel, { foreignKey: 'userId', as: 'enrollments' });
+  UserModel.hasMany(NotificationModel, { foreignKey: 'authorId', as: 'sentNotifications' });
+  UserModel.hasMany(NotificationModel, { foreignKey: 'userId', as: 'receivedNotifications' });
 
-  // tags
+  // Course Model Relations
+  CourseModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
   CourseModel.belongsToMany(TagModel, { through: CourseTagModel, as: 'tags', foreignKey: 'courseId' });
-  TagModel.belongsToMany(CourseModel, { through: CourseTagModel, as: 'courses', foreignKey: 'tagId' });
+  CourseModel.hasMany(CommentModel, { foreignKey: 'courseId', as: 'comments' });
+  CourseModel.hasMany(CourseDocumentModel, { foreignKey: 'courseId', as: 'documents' });
+  CourseModel.hasMany(TopicModel, { foreignKey: 'courseId', as: 'topics' });
+  CourseModel.hasMany(CourseEnrollmentModel, { foreignKey: 'courseId', as: 'enrollments' });
+  CourseModel.hasMany(NotificationModel, { foreignKey: 'courseId', as: 'notifications' });
 
+  // Post Model Relations
+  PostModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
   PostModel.belongsToMany(TagModel, { through: PostTagModel, as: 'tags', foreignKey: 'postId' });
-  TagModel.belongsToMany(PostModel, { through: PostTagModel, as: 'posts', foreignKey: 'tagId' });
+  PostModel.hasMany(CommentModel, { foreignKey: 'postId', as: 'comments' });
+  PostModel.hasMany(NotificationModel, { foreignKey: 'postId', as: 'notifications' });
 
+  // Topic Model Relations
+  TopicModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
+  TopicModel.belongsTo(UserModel, { foreignKey: 'teacherId', as: 'teacher' });
   TopicModel.belongsToMany(TagModel, { through: TopicTagModel, as: 'tags', foreignKey: 'topicId' });
+  TopicModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
+  TopicModel.hasMany(TopicMemberModel, { foreignKey: 'topicId', as: 'members' });
+  TopicModel.hasMany(TopicEvaluationsModel, { foreignKey: 'topicId', as: 'evaluations' });
+  TopicModel.hasMany(NotificationModel, { foreignKey: 'topicId', as: 'notifications' });
+
+  // Tag Model Relations
+  TagModel.belongsToMany(CourseModel, { through: CourseTagModel, as: 'courses', foreignKey: 'tagId' });
+  TagModel.belongsToMany(PostModel, { through: PostTagModel, as: 'posts', foreignKey: 'tagId' });
   TagModel.belongsToMany(TopicModel, { through: TopicTagModel, as: 'topics', foreignKey: 'tagId' });
 
+  // Comment Model Relations
   CommentModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
   CommentModel.hasMany(CommentModel, { foreignKey: 'parentId', as: 'replies' });
-
   CommentModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
-  CourseModel.hasMany(CommentModel, { foreignKey: 'courseId', as: 'comments' });
   CommentModel.belongsTo(PostModel, { foreignKey: 'postId', as: 'post' });
-  PostModel.hasMany(CommentModel, { foreignKey: 'postId', as: 'comments' });
 
+  // Submission Model Relations
   SubmissionModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
-  UserModel.hasMany(SubmissionModel, { foreignKey: 'authorId', as: 'submissions' });
   SubmissionModel.belongsTo(CommentModel, { foreignKey: 'submissionId', as: 'submission' });
 
-  CourseModel.hasMany(CourseDocumentModel, { foreignKey: 'courseId', as: 'documents' });
+  // CourseDocument Model Relations
   CourseDocumentModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
 
-  CourseModel.hasMany(TopicModel, { foreignKey: 'courseId', as: 'topics' });
-  TopicModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
-
-  // GroupModel.hasMany(GroupMemberModel, { foreignKey: 'groupId', as: 'members' });
-  // GroupMemberModel.belongsTo(GroupModel, { foreignKey: 'groupId', as: 'group' });
-
-  // GroupModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
-  // UserModel.hasMany(GroupModel, { foreignKey: 'authorId' });
-
-  // GroupMemberModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
-  // UserModel.hasMany(GroupMemberModel, { foreignKey: 'userId', as: 'members' });
-
-  // GroupModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
-  // TopicModel.hasMany(GroupModel, { foreignKey: 'topicId', as: 'group' });
-
-  TopicModel.hasMany(TopicMemberModel, { foreignKey: 'topicId', as: 'members' });
+  // TopicMember Model Relations
   TopicMemberModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
-
   TopicMemberModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
-  UserModel.hasMany(TopicMemberModel, { foreignKey: 'userId', as: 'members' });
 
-  TopicModel.hasMany(TopicEvaluationsModel, { foreignKey: 'topicId', as: 'evaluations' });
+  // TopicEvaluations Model Relations
   TopicEvaluationsModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
-
   TopicEvaluationsModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
-  UserModel.hasMany(TopicEvaluationsModel, { foreignKey: 'userId', as: 'evaluations' });
 
+  // CourseEnrollment Model Relations
   CourseEnrollmentModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
-  UserModel.hasMany(CourseEnrollmentModel, { foreignKey: 'userId', as: 'enrollments' });
-
   CourseEnrollmentModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
-  CourseModel.hasMany(CourseEnrollmentModel, { foreignKey: 'courseId', as: 'enrollments' });
+
+  // Notification Model Relations
+  NotificationModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
+  NotificationModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
+  NotificationModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
+  NotificationModel.belongsTo(PostModel, { foreignKey: 'postId', as: 'post' });
+  NotificationModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
+  NotificationModel.belongsTo(ReposModel, { foreignKey: 'reposId', as: 'repos' });
+
+  // Repos Model Relations
+  ReposModel.hasMany(NotificationModel, { foreignKey: 'reposId', as: 'notifications' });
 };
 
 export { CourseModel, UserModel, PostModel, TagModel, PostLikeModel };

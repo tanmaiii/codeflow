@@ -1,4 +1,4 @@
-import { ENUM_STATUS_TOPIC, ENUM_TYPE_COURSE, ROLE } from './enum';
+import { ENUM_STATUS_TOPIC, ENUM_TYPE_COURSE, ENUM_TYPE_NOTIFICATION, ROLE } from './enum';
 
 // ENUM('pending', 'approved', 'rejected')
 
@@ -121,5 +121,33 @@ export const ROLE_TOPIC: IStatusObj[] = [
     value: 'member',
     label: 'Thành viên',
     labelEn: 'Member',
+  },
+];
+
+export const NOTIFICATION_TYPE: IStatusObj[] = [
+  {
+    value: ENUM_TYPE_NOTIFICATION.TOPIC_EVALUATION,
+    label: 'Đánh giá đề tài',
+    labelEn: 'Topic Evaluation',
+  },
+  {
+    value: ENUM_TYPE_NOTIFICATION.TOPIC_COMMENT,
+    label: 'Bình luận đề tài',
+    labelEn: 'Topic Comment',
+  },
+  {
+    value: ENUM_TYPE_NOTIFICATION.TOPIC_UPDATE,
+    label: 'Cập nhật đề tài',
+    labelEn: 'Topic Update',
+  },
+  {
+    value: ENUM_TYPE_NOTIFICATION.COURSE_DEADLINE,
+    label: 'Hạn chót khóa học',
+    labelEn: 'Course Deadline',
+  },
+  {
+    value: ENUM_TYPE_NOTIFICATION.GROUP_INVITATION,
+    label: 'Lời mời tham gia nhóm',
+    labelEn: 'Group Invitation',
   },
 ];

@@ -11,7 +11,7 @@ export default function ThemeToggle() {
   return (
     <ButtonTooltip
       tooltip={t("switchTheme")}
-      variant="outline"
+      variant="ghost" size="icon"
       onClick={toggleTheme}
     >
       {theme === "dark" ? (
