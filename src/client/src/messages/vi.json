@@ -240,5 +240,19 @@
     "editUser": "Chỉnh sửa người dùng",
     "deleteUser": "Xóa người dùng",
     "viewUser": "Xem người dùng"
+  },
+  "notification": {
+    "notification": "Thông báo",
+    "title": "Tiêu đề",
+    "description": "Mô tả",
+    "markAllAsRead": "Đánh dấu đọc tất cả",
+    "all": "Tất cả",
+    "unread": "Chưa đọc",
+    "loadMore": "Xem thêm",
+    "readNotification": "Đánh dấu đọc",
+    "unreadNotification": "Đánh dấu chưa đọc",
+    "deleteNotification": "Xóa thông báo",
+    "noNotifications": "Không có thông báo nào",
+    "seeAll": "Xem tất cả"
   }
 }

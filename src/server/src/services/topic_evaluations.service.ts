@@ -5,7 +5,7 @@ import { Service } from 'typedi';
 import { SocketService } from './socket.service';
 import { v4 as uuidv4 } from 'uuid';
 import { NotificationService } from './notification.service';
-import { Notification } from '@/interfaces/notification.interface';
+import { ENUM_TYPE_NOTIFICATION, Notification } from '@/interfaces/notification.interface';
 import { TopicService } from './topic.service';
 import { TopicMemberService } from './topic_member.service';
 import { logger } from '@/utils/logger';
@@ -55,12 +55,12 @@ export class TopicEvaluationsService {
 
     const notificationData: Notification = {
       id: uuidv4(),
-      type: 'TOPIC_EVALUATION',
+      type: ENUM_TYPE_NOTIFICATION.TOPIC_EVALUATION,
       title: 'New Topic Evaluation',
-      message: `New topic evaluation created by ${topicEvaluationData.userId}`,
+      message: `New topic evaluation created by "${createTopicEvaluationData.evaluation.slice(0, 10)}..."`,
       userId: members.find(member => member.role === 'leader')?.userId || members[0].userId,
       isRead: false,
-      link: `/topic-evaluations/${createTopicEvaluationData.id}`,
+      link: `/topics/${createTopicEvaluationData.topicId}`,
     };
 
     await this.notificationService.createNotification(notificationData);

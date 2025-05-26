@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsOptional, IsBoolean, IsEnum } from 'class-validator';
+import { GetAllQueryDto } from './common.dto';
 
 export class CreateNotificationDto {
   @IsNumber()
@@ -39,3 +40,10 @@ export class UpdateNotificationDto {
   @IsOptional()
   public link?: string;
 } 
+
+export class GetAllNotificationsDto extends GetAllQueryDto {
+  @IsOptional()
+  @IsEnum(['true', 'false'])
+  public isRead?: string;
+}
+

@@ -1,6 +1,6 @@
 import { IBaseEntity } from "./common";
 
-export interface Notification extends IBaseEntity {
+export interface INotification extends IBaseEntity {
     id: string;
     type: 'TOPIC_EVALUATION' | 'TOPIC_COMMENT' | 'TOPIC_UPDATE' | 'SYSTEM';
     title: string;

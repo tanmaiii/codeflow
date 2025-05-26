@@ -21,8 +21,35 @@ export class NotificationController {
   public getNotificationsByUserId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.id;
-      const notifications = await this.notification.findAndCountAllWithPaginationByUserId(userId, 10, 0);
-      res.status(200).json({ data: notifications, message: 'getNotifications' });
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isRead } = req.query;
+      const { rows, count } = await this.notification.findAndCountAllWithPaginationByUserId(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        userId,
+        isRead !== undefined ? (isRead === 'true' ? true : false) : undefined,
+      );
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public readAllNotifications = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.user.id;
+      const notifications = await this.notification.readAllNotifications(userId);
+      res.status(200).json({ data: notifications, message: 'readAllNotifications' });
     } catch (error) {
       next(error);
     }
@@ -31,7 +58,8 @@ export class NotificationController {
   public readNotification = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const notificationId = req.params.id;
-      const notification = await this.notification.readNotification(notificationId);
+      const isRead = req.body.isRead;
+      const notification = await this.notification.readNotification(notificationId, isRead);
       res.status(200).json({ data: notification, message: 'readNotification' });
     } catch (error) {
       next(error);

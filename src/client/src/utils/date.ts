@@ -77,7 +77,7 @@ export function utils_DateToDDMonth(
 }
 
 //trả về chuỗi thời gian đã trôi qua
-export const utils_TimeAgo = (date: Date): string => {
+export const utils_TimeAgo = (date: Date | string): string => {
   const dateObj = new Date(date);
   const now = new Date();
   const seconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
@@ -94,7 +94,7 @@ export const utils_TimeAgo = (date: Date): string => {
     }
   }
 
-  return 'just now';
+  return locale === 'en' ? 'just now' : 'vừa xong';
 };
 
 export function utils_CalculateWeeks(startDate: string, endDate: string): number {

@@ -9,11 +9,11 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ButtonTooltip from '../../common/Button/ButtonWithTooltip/ButtonTooltip';
-import LocaleSwitcher from '../../localeSwicher';
-import ThemeToggle from '../../themeToggle';
-import { Button } from '../../ui/button';
 import HeaderSearch from './HeaderSearch';
-import NotificationCenter from '../Navbar/NotificationCenter';
+import LocaleSwitcher from './LocaleSwicher';
+import NotificationCenter from './NotificationCenter';
+import ThemeToggle from './ThemeToggle';
+import { Button } from '@/components/ui/button';
 
 export default function Header() {
   const { collapsed, toggleSidebar } = useSidebarStore();
@@ -47,7 +47,12 @@ export default function Header() {
       <div className="gap-2 flex">
         <NotificationCenter />
         {user && user.role === 'admin' && (
-          <ButtonTooltip tooltip={isAdminPage ? 'User' : 'Admin'} variant="ghost" size="icon" className="p-3">
+          <ButtonTooltip
+            tooltip={isAdminPage ? 'User' : 'Admin'}
+            variant="ghost"
+            size="icon"
+            className="p-3"
+          >
             <Link href={isAdminPage ? localPath(paths.HOME) : localPath(paths.ADMIN)}>
               {isAdminPage ? <IconUser /> : <IconDashboard />}
             </Link>

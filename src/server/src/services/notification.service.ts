@@ -22,14 +22,21 @@ export class NotificationService {
   }
 
   public async findAndCountAllWithPaginationByUserId(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
     userId: string,
-    limit: number,
-    offset: number,
+    isRead?: boolean,
   ): Promise<{ count: number; rows: Notification[] }> {
     const { count, rows }: { count: number; rows: Notification[] } = await DB.Notifications.findAndCountAll({
-      where: { userId },
-      limit,
-      offset,
+      where: {
+        userId,
+        ...(isRead !== undefined ? { isRead } : {}),
+      },
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
     });
     return { count, rows };
   }
@@ -46,11 +53,17 @@ export class NotificationService {
     return findNotifications;
   }
 
-  public async readNotification(notificationId: string): Promise<Notification> {
+  public async readAllNotifications(userId: string): Promise<Notification[]> {
+    const findNotifications: Notification[] = await DB.Notifications.findAll({ where: { userId, isRead: false } });
+    await DB.Notifications.update({ isRead: true }, { where: { userId, isRead: false } });
+    return findNotifications;
+  }
+
+  public async readNotification(notificationId: string, isRead: boolean): Promise<Notification> {
     const findNotification: Notification = await DB.Notifications.findByPk(notificationId);
     if (!findNotification) throw new HttpException(409, "Notification doesn't exist");
 
-    await DB.Notifications.update({ isRead: true }, { where: { id: notificationId } });
+    await DB.Notifications.update({ isRead }, { where: { id: notificationId } });
     return findNotification;
   }
 

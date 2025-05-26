@@ -2,7 +2,7 @@
 import { useThemeStore } from "@/stores/theme_store";
 import { Moon, Sun } from "lucide-react";
 import { useTranslations } from "next-intl";
-import ButtonTooltip from "./common/Button/ButtonWithTooltip/ButtonTooltip";
+import ButtonTooltip from "../../common/Button/ButtonWithTooltip/ButtonTooltip";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useThemeStore();

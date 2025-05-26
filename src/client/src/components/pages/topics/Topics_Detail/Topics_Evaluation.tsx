@@ -15,6 +15,7 @@
   export default function Topics_Evaluation({ topic }: { topic: ITopic }) {
     const t = useTranslations('topic');
     const { user } = useUserStore();
+
     const columns = useMemo<ColumnDef<ITopicEvaluation>[]>(
       () => [
         {
@@ -51,6 +52,7 @@
         <DataTable
           fieldFilter="evaluation"
           columns={columns}
+          pagination={true}
           toolbarCustom={() => {
             if (user?.role === ROLE.ADMIN || user?.role === ROLE.TEACHER) {
               return <Topics_Evaluation_Create topic={topic} />;
@@ -61,7 +63,6 @@
               (a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime(),
             ) || []
           }
-          pagination={false}
           showIndexColumn={true}
           renderActions={({ row }) => {
             if (user?.role === ROLE.ADMIN || user?.role === ROLE.TEACHER) {

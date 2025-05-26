@@ -1,4 +1,4 @@
-import NotificationCenter from '@/components/layout/Navbar/NotificationCenter';
+import NotificationCenter from '@/components/layout/Header/NotificationCenter';
 
 export default function Page() {
   return (

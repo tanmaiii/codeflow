@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { label_options } from "@/components/filters";
+import { label_options } from "@/components/common/data-table/filters";
 import { Copy, Eye, MoreHorizontal } from "lucide-react";
 import { taskSchema } from "./columns";
 // import EditDialog from "@/components/modals/edit-modal";

@@ -1,6 +1,6 @@
 "use client";
-import LocaleSwitcher from "../localeSwicher";
-import ThemeToggle from "../themeToggle";
+import LocaleSwitcher from "./Header/LocaleSwicher";
+import ThemeToggle from "./Header/ThemeToggle";
 
 export default function HeaderAuth() {
   return (

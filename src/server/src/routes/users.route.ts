@@ -1,5 +1,5 @@
 import { GetAllQueryDto } from '@/dtos/common.dto';
-import { AuthMiddleware, isAdmin, isUserOrAdmin } from '@/middlewares/auth.middleware';
+import { isAdmin, isUserOrAdmin } from '@/middlewares/auth.middleware';
 import { UserController } from '@controllers/users.controller';
 import { CreateUserDto, UpdateUserDto } from '@dtos/users.dto';
 import { Routes } from '@interfaces/routes.interface';

@@ -19,6 +19,6 @@ export class CommentRoute implements Routes {
     this.router.get(`${this.path}/:id`, this.comment.getCommentById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateCommentDto), this.comment.createComment);
     this.router.delete(`${this.path}/:id`, AuthMiddleware, this.comment.deleteComment);
-    this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(CreateCommentDto,'body', true), this.comment.updateComment);
+    this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(CreateCommentDto, 'body', true), this.comment.updateComment);
   }
 }
