@@ -4,7 +4,7 @@ import TextInput from '@/components/common/Input/TextInput/TextInput';
 import MySelect from '@/components/common/MySelect';
 import { Button } from '@/components/ui/button';
 import { DialogClose } from '@/components/ui/dialog';
-import { ROLE_USER } from '@/contants/object';
+import { ROLE_USER } from '@/constants/object';
 import { IUserCreate } from '@/interfaces/user';
 import { UserCreateSchemaType, useUserSchema } from '@/lib/validations/userSchema';
 import userService from '@/services/user.service';

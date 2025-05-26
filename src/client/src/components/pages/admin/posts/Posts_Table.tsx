@@ -8,7 +8,7 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { TextDescription } from '@/components/ui/text';
-import { STATUS_HIDDEN } from '@/contants/object';
+import { STATUS_HIDDEN } from '@/constants/object';
 import { IMAGES } from '@/data/images';
 import { paths } from '@/data/path';
 import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';

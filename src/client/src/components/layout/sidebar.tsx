@@ -1,6 +1,6 @@
 'use client';
 
-import { ROLE_USER } from '@/contants/object';
+import { ROLE_USER } from '@/constants/object';
 import { IMAGES } from '@/data/images';
 import { paths } from '@/data/path';
 import { ILinkItem } from '@/interfaces/common';

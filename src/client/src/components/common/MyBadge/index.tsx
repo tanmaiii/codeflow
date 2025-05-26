@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { IStatusObj } from '@/contants/object';
+import { IStatusObj } from '@/constants/object';
 import { getCurrentLocale } from '@/lib/utils';
 /**
  * Generates a consistent color code from a string

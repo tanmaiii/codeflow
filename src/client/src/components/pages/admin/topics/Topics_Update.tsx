@@ -6,7 +6,7 @@ import MySelect from '@/components/common/MySelect';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { STATUS_TOPIC } from '@/contants/object';
+import { STATUS_TOPIC } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';

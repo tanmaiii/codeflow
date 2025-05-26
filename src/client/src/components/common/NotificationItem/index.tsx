@@ -48,9 +48,7 @@ export default function NotificationItem({ item, className }: NotificationItemPr
         </div>
         <div className="space-y-1 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <TextHeading lineClamp={1}>
-              {item?.title}-{item?.id}
-            </TextHeading>
+            <TextHeading lineClamp={1}>{item?.title}</TextHeading>
             <span className="text-xs text-muted-foreground whitespace-nowrap">
               {utils_TimeAgo(item?.createdAt || '')}
             </span>

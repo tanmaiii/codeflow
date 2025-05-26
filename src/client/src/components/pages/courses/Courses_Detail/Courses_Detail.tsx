@@ -8,7 +8,7 @@ import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { TYPE_COURSE } from '@/contants/object';
+import { TYPE_COURSE } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Course_GetComments from '@/hooks/query-hooks/Course/useQ_Course_GetComments';
 import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';

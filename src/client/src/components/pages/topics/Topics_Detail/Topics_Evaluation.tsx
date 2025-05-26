@@ -11,7 +11,7 @@
   import Topics_Evaluation_Create from './Topics_Evaluation_Create';
   import Topics_Evaluation_Update from './Topics_Evaluation_Update';
   import { useUserStore } from '@/stores/user_store';
-  import { ROLE } from '@/contants/enum';
+  import { ROLE } from '@/constants/enum';
   export default function Topics_Evaluation({ topic }: { topic: ITopic }) {
     const t = useTranslations('topic');
     const { user } = useUserStore();

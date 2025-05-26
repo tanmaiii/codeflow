@@ -3,7 +3,7 @@ import TitleHeader from '@/components/layout/TitleHeader';
 import { TopicListSkeleton } from '@/components/skeletons/topic';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { STATUS_TOPIC } from '@/contants/object';
+import { STATUS_TOPIC } from '@/constants/object';
 import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
 import { getCurrentLocale } from '@/lib/utils';
 import { utils_DateToDDMMYYYY } from '@/utils/date';

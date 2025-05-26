@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { STATUS_TOPIC } from '@/contants/object';
+import { STATUS_TOPIC } from '@/constants/object';
 import { paths } from '@/data/path';
 import { ITopic } from '@/interfaces/topic';
 import { cn } from '@/lib/utils';

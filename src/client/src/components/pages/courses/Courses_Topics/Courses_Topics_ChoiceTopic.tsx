@@ -7,7 +7,7 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import { Button } from '@/components/ui/button';
 import { DialogClose } from '@/components/ui/dialog';
 import { TextDescription } from '@/components/ui/text';
-import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/contants/object';
+import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Topic_GetAllByCourseId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByCourseId';
 import { ITopic } from '@/interfaces/topic';

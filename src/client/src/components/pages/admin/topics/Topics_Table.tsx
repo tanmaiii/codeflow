@@ -9,7 +9,7 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { TextDescription } from '@/components/ui/text';
-import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/contants/object';
+import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Topic_GetAll from '@/hooks/query-hooks/Topic/useQ_Topic_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';

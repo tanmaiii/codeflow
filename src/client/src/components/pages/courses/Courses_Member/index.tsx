@@ -6,7 +6,7 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { TextDescription } from '@/components/ui/text';
-import { ROLE_USER } from '@/contants/object';
+import { ROLE_USER } from '@/constants/object';
 import useQ_Course_GetMembers from '@/hooks/query-hooks/Course/useQ_Course_GetMembers';
 import { IUser } from '@/interfaces/user';
 import apiConfig from '@/lib/api';

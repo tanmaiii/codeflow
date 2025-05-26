@@ -12,7 +12,7 @@ import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { TYPE_COURSE } from '@/contants/object';
+import { TYPE_COURSE } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Tag_GetAll from '@/hooks/query-hooks/Tag/useQ_Tag_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';

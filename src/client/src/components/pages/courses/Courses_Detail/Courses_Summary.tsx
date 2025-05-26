@@ -13,7 +13,7 @@ import useQ_Course_GetMembers from '@/hooks/query-hooks/Course/useQ_Course_GetMe
 import useQ_Topic_GetAllByCourseId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByCourseId';
 import { useTranslations } from 'next-intl';
 import { useUserStore } from '@/stores/user_store';
-import { ROLE } from '@/contants/enum';
+import { ROLE } from '@/constants/enum';
 import { paths } from '@/data/path';
 import Link from 'next/link';
 

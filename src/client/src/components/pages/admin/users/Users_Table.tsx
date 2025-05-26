@@ -16,7 +16,7 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { TextDescription } from '@/components/ui/text';
-import { ROLE_USER } from '@/contants/object';
+import { ROLE_USER } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
 import { IUser } from '@/interfaces/user';

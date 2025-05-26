@@ -5,7 +5,7 @@ import NoData from '@/components/common/NoData/NoData';
 import { CourseListSkeleton } from '@/components/skeletons/course';
 import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { ROLE } from '@/contants/enum';
+import { ROLE } from '@/constants/enum';
 import { paths } from '@/data/path';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useQ_Course_GetAllByUser from '@/hooks/query-hooks/Course/useQ_Course_GetAllByUser';

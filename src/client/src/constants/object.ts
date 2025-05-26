@@ -1,7 +1,5 @@
 import { ENUM_STATUS_TOPIC, ENUM_TYPE_COURSE, ENUM_TYPE_NOTIFICATION, ROLE } from './enum';
 
-// ENUM('pending', 'approved', 'rejected')
-
 export interface IStatusObj {
   value: string;
   label: string;

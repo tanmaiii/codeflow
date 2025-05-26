@@ -2,7 +2,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { TYPE_COURSE } from '@/contants/object';
+import { TYPE_COURSE } from '@/constants/object';
 import { IMAGES } from '@/data/images';
 import { ICourse } from '@/interfaces/course';
 import apiConfig from '@/lib/api';

@@ -4,7 +4,7 @@ import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput
 import MySelect from '@/components/common/MySelect';
 import { Button } from '@/components/ui/button';
 import { DialogClose } from '@/components/ui/dialog';
-import { STATUS_TOPIC } from '@/contants/object';
+import { STATUS_TOPIC } from '@/constants/object';
 import { ITopic } from '@/interfaces/topic';
 import { TopicSchemaType, useTopicSchema } from '@/lib/validations/topicSchema';
 import topicService from '@/services/topic.service';

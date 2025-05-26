@@ -7,7 +7,7 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { TextDescription } from '@/components/ui/text';
-import { STATUS_COURSE, STATUS_HIDDEN } from '@/contants/object';
+import { STATUS_COURSE, STATUS_HIDDEN } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';

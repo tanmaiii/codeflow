@@ -1,5 +1,5 @@
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { ROLE_TOPIC } from '@/contants/object';
+import { ROLE_TOPIC } from '@/constants/object';
 import apiConfig from '@/lib/api';
 import Image from 'next/image';
 

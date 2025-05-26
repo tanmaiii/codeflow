@@ -6,7 +6,7 @@ import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { TextDescription } from '@/components/ui/text';
-import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/contants/object';
+import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/constants/object';
 import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 import useQ_Topic_GetAllByCourseId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByCourseId';
 import { ITopic } from '@/interfaces/topic';
