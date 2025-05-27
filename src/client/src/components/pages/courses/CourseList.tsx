@@ -23,11 +23,11 @@ const COURSE_TABS = [
 const DEFAULT_PAGE_SIZE = 8;
 const DEFAULT_SORT = { sortBy: 'createdAt', order: 'DESC' as const };
 
-export default function Courses() {
+export default function CourseList() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const page = Number(searchParams.get('page')) || 1;
-  const tab = searchParams.get('tab') || 'all';
+  const page = Number(searchParams?.get('page')) || 1;
+  const tab = searchParams?.get('tab') || 'all';
   const { localPath } = useH_LocalPath();
   const t = useTranslations('course');
   const { user } = useUserStore();

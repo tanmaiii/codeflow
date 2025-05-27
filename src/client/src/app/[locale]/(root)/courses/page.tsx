@@ -1,5 +1,5 @@
-import { Courses } from '@/components/pages/courses';
+import CourseList from '@/components/pages/courses/CourseList';
 
 export default function Page() {
-  return <Courses />;
+  return <CourseList />;
 }

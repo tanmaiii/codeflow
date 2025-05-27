@@ -35,7 +35,8 @@ export default function Courses_Update() {
   const [files, setFiles] = useState<File[] | []>([]);
   const schema = useCourseSchema();
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const { localPath } = useH_LocalPath();
   const Q_Tag = useQ_Tag_GetAll();
 

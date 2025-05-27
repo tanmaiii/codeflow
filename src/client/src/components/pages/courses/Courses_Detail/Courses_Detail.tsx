@@ -32,10 +32,11 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import Courses_Summary from './Courses_Summary';
 import Courses_Topics from './Courses_Topics';
+import { CourseDetailSkeleton } from '@/components/skeletons/course';
 
 export default function Courses_Detail() {
   const params = useParams();
-  const id = params.id as string;
+  const id = params?.id as string;
   const t = useTranslations('course');
   const router = useRouter();
   const { localPath } = useH_LocalPath();
@@ -66,7 +67,7 @@ export default function Courses_Detail() {
     id: id,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CourseDetailSkeleton />;
   if (!dataCourse) return <NoData />;
   if (isError) return <div>Error</div>;
 

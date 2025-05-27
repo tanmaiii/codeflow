@@ -1,7 +1,5 @@
+import Search from '@/components/pages/search';
+
 export default function Page() {
-    return (
-        <div>
-            Enter
-        </div>
-    );
+  return <Search />;
 }

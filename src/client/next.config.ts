@@ -36,6 +36,18 @@ const config: NextConfig = {
     });
     return config;
   },
+  // SEO Optimizations
+  poweredByHeader: false,
+  compress: true,
+  reactStrictMode: true,
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  experimental: {
+    optimizeCss: true,
+    scrollRestoration: true,
+  },
 };
 
 export default withNextIntl(config);
