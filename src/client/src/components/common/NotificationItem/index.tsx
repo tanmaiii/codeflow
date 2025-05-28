@@ -37,8 +37,8 @@ export default function NotificationItem({ item, className }: NotificationItemPr
   return (
     <div
       className={cn(
-        'border bg-gradient-to-r dark:from-green-600/10 dark:to-green-600/10 py-4 px-3 rounded-lg cursor-pointer transition-colors flex items-start gap-2 ',
-        !item?.isRead ? 'border-l-4 border-green-500 from-green-50 to-blue-50' : '',
+        'border bg-gradient-to-r py-4 px-3 rounded-lg cursor-pointer transition-colors flex items-start gap-2 ',
+        !item?.isRead ? 'border-l-4 border-green-500 from-green-50 to-blue-50 dark:from-green-500/10 dark:to-green-500/10' : '',
         className,
       )}
     >

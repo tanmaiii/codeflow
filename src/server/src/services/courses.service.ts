@@ -16,6 +16,18 @@ export class CourseService {
     WHERE c.course_id = courses.id
   )`);
 
+  private readonly enrollmentCountLiteral = Sequelize.literal(`(
+    SELECT COUNT(*)
+    FROM course_enrollments AS ce
+    WHERE ce.course_id = courses.id
+  )`);
+
+  private readonly topicCountLiteral = Sequelize.literal(`(
+    SELECT COUNT(*)
+    FROM topics AS t
+    WHERE t.course_id = courses.id
+  )`);
+
   public Tag = Container.get(TagService);
   public CourseDocument = Container.get(CourseDocumentService);
   public CourseEnrollment = Container.get(CourseEnrollmentService);
@@ -23,7 +35,11 @@ export class CourseService {
   public async findAll(): Promise<Course[]> {
     const allCourse: Course[] = await DB.Courses.findAll({
       attributes: {
-        include: [[this.commentCountLiteral, 'commentCount']],
+        include: [
+          [this.commentCountLiteral, 'commentCount'],
+          [this.enrollmentCountLiteral, 'enrollmentCount'],
+          [this.topicCountLiteral, 'topicCount'],
+        ],
       },
     });
     return allCourse;
@@ -37,7 +53,11 @@ export class CourseService {
   ): Promise<{ count: number; rows: Course[] }> {
     const { count, rows } = await DB.Courses.findAndCountAll({
       attributes: {
-        include: [[this.commentCountLiteral, 'commentCount']],
+        include: [
+          [this.commentCountLiteral, 'commentCount'],
+          [this.enrollmentCountLiteral, 'enrollmentCount'],
+          [this.topicCountLiteral, 'topicCount'],
+        ],
       },
       limit: pageSize,
       offset: (page - 1) * pageSize,
@@ -60,7 +80,10 @@ export class CourseService {
 
     const registeredCourses = await DB.Courses.findAndCountAll({
       attributes: {
-        include: [[this.commentCountLiteral, 'commentCount']],
+        include: [
+          [this.commentCountLiteral, 'commentCount'],
+          [this.enrollmentCountLiteral, 'enrollmentCount'],
+        ],
       },
       where: { id: { [Op.in]: courseIds } },
       limit: pageSize,
@@ -80,7 +103,11 @@ export class CourseService {
   ): Promise<{ count: number; rows: Course[] }> {
     const courses = await DB.Courses.findAndCountAll({
       attributes: {
-        include: [[this.commentCountLiteral, 'commentCount']],
+        include: [
+          [this.commentCountLiteral, 'commentCount'],
+          [this.enrollmentCountLiteral, 'enrollmentCount'],
+          [this.topicCountLiteral, 'topicCount'],
+        ],
       },
       where: {
         authorId,
@@ -125,7 +152,6 @@ export class CourseService {
 
     return DB.Courses.findByPk(courseId);
   }
-
 
   // Phương thức thêm tags và documents cho course
   private async attachTagsAndDocuments(courseId: string, tags?: string[], documents?: string[]): Promise<void> {

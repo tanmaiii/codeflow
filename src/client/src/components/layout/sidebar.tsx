@@ -43,7 +43,7 @@ const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) =>
   const currentLocale = useLocale();
 
   const pathname = usePathname();
-  const pathWithoutLocale = pathname.replace(/^\/(en|vi)/, '');
+  const pathWithoutLocale = pathname?.replace(/^\/(en|vi)/, '');
 
   let isActive = false;
   if (item.href === '/') {
@@ -51,7 +51,8 @@ const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) =>
   } else {
     isActive =
       pathWithoutLocale === `${prefix}${item.href}` ||
-      pathWithoutLocale.startsWith(`${prefix}${item.href}/`);
+      pathWithoutLocale?.startsWith(`${prefix}${item.href}/`) ||
+      false;
   }
 
   return (
@@ -112,27 +113,29 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
         collapsed ? 'hidden md:flex' : 'w-full md:w-64',
       )}
     >
-      <motion.div layout className="p-4 gap-2 flex items-center w-full justify-start">
-        <Image
-          width={40}
-          height={40}
-          src={theme === 'dark' ? IMAGES.LOGO : IMAGES.LOGO_LIGHT}
-          alt="logo.png"
-        />
-        <AnimatePresence mode="wait">
-          {!collapsed && (
-            <motion.h4
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.2 }}
-              className="text-2xl font-bold text-primary"
-            >
-              CodeFlow
-            </motion.h4>
-          )}
-        </AnimatePresence>
-      </motion.div>
+      <Link href={prefix} className="flex items-center gap-2">
+        <motion.div layout className="p-4 gap-2 flex items-center w-full justify-start">
+          <Image
+            width={40}
+            height={40}
+            src={theme === 'dark' ? IMAGES.LOGO : IMAGES.LOGO_LIGHT}
+            alt="logo.png"
+          />
+          <AnimatePresence mode="wait">
+            {!collapsed && (
+              <motion.h4
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2 }}
+                className="text-2xl font-bold text-primary"
+              >
+                CodeFlow
+              </motion.h4>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </Link>
 
       <nav className="flex-1 space-y-1 px-2">
         {menu.map(item => (

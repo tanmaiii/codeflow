@@ -18,7 +18,8 @@ import Link from 'next/link';
 import Topics_Evaluation from './Topics_Evaluation';
 
 export default function Topics_Detail() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const t = useTranslations('topic');
   const { data: dataTopic, isLoading, isError } = useQ_Topic_GetDetail({ id: id as string });
   const locale = getCurrentLocale() || 'vi';

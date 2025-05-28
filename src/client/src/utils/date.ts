@@ -54,6 +54,11 @@ const intervalsEn: IIntervals = {
   second: 1,
 };
 
+/**
+ * Trả về chuỗi ngày tháng năm (Ex: 28-05-2025)
+ * @param date Ngày
+ * @returns chuỗi ngày tháng năm (Ex: 28-05-2025)
+ */
 export function utils_DateToDDMMYYYY(date: string | Date): string {
   if (!date) return '...';
   const dateObj = new Date(date);
@@ -63,6 +68,11 @@ export function utils_DateToDDMMYYYY(date: string | Date): string {
   return `${day}-${month}-${year}`;
 }
 
+/**
+ * Trả về chuỗi ngày tháng (Ex: 28 tháng 5)
+ * @param date Ngày
+ * @returns chuỗi ngày tháng (Ex: 28 tháng 5)
+ */
 export function utils_DateToDDMonth(
   date: Date,
   // locale: "vi" | "en" = "vi"
@@ -76,7 +86,11 @@ export function utils_DateToDDMonth(
   return `${day} ${month}`;
 }
 
-//trả về chuỗi thời gian đã trôi qua
+/**
+ * Trả về chuỗi thời gian đã trôi qua (Ex: 1 tuần trước)
+ * @param date Ngày
+ * @returns chuỗi thời gian đã trôi qua (Ex: 1 tuần trước)
+ */
 export const utils_TimeAgo = (date: Date | string): string => {
   const dateObj = new Date(date);
   const now = new Date();
@@ -97,6 +111,12 @@ export const utils_TimeAgo = (date: Date | string): string => {
   return locale === 'en' ? 'just now' : 'vừa xong';
 };
 
+/**
+ * Trả về số tuần giữa hai ngày (Ex: 1 tuần)
+ * @param startDate Ngày bắt đầu
+ * @param endDate Ngày kết thúc
+ * @returns số tuần giữa hai ngày (Ex: 1 tuần)
+ */
 export function utils_CalculateWeeks(startDate: string, endDate: string): number {
   const start = new Date(startDate);
   const end = new Date(endDate);
@@ -111,6 +131,11 @@ export function utils_CalculateWeeks(startDate: string, endDate: string): number
   return weeks;
 }
 
+/**
+ * Trả về chuỗi thời gian còn lại (Ex: Còn 1 ngày 1 giờ)
+ * @param endDate Ngày kết thúc
+ * @returns chuỗi thời gian còn lại (Ex: Còn 1 ngày 1 giờ)
+ */
 export function utils_TimeRemaining(endDate: string): string {
   const end = new Date(endDate);
   const now = new Date();
@@ -140,6 +165,12 @@ export function utils_TimeRemaining(endDate: string): string {
   }
 }
 
+/**
+ * Kiểm tra xem ngày thứ nhất có trước ngày thứ hai không
+ * @param firstDate Ngày thứ nhất
+ * @param secondDate Ngày thứ hai
+ * @returns phần trăm tiến độ (Ex: 50%)
+ */
 export function utils_CalculateProgress(startDate: string, endDate: string): number {
   const start = new Date(startDate);
   const end = new Date(endDate);

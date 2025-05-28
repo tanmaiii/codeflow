@@ -2,33 +2,45 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { IMAGES } from '@/data/images';
+import { paths } from '@/data/path';
 import { cx } from 'class-variance-authority';
 import { ChevronRight, Search as SearchICon } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 export default function HeaderSearch() {
-  const focusInput = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const router = useRouter();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsFocused(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="relative w-full ">
+    <div ref={ref} className="relative w-full">
       <div
         className={cx(
           'flex items-center bg-background-2 dark:bg-background-1  p-2 h-11',
-          focusInput[0] ? 'border rounded-t-lg' : 'rounded-lg',
+          isFocused ? 'border rounded-t-lg' : 'rounded-lg',
         )}
       >
         <SearchICon className="text-color-2" />
         <input
           type="text"
           placeholder="Search..."
-          onBlur={e => {
-            e.target.placeholder = 'Search...';
-            focusInput[1](false);
-          }}
-          onFocus={e => {
-            e.target.placeholder = '';
-            focusInput[1](true);
+          onFocus={() => {
+            setIsFocused(true);
           }}
           className="ml-2 p-1 focus:outline-none w-100 placeholder:text-color-2 placeholder:text-sm"
         />
@@ -36,7 +48,7 @@ export default function HeaderSearch() {
       <div
         className={cx(
           'absolute top-[100%] left-0 w-full bg-background-1 shadow-lg rounded-b-lg p-2 border',
-          focusInput[0] ? 'block' : 'hidden',
+          isFocused ? 'block' : 'hidden',
         )}
       >
         <ScrollArea className="h-72 w-full rounded-md">
@@ -162,7 +174,14 @@ export default function HeaderSearch() {
               </div>
             </div>
           </div>
-          <Button variant="text" className="w-full mt-2 justify-start">
+          <Button
+            variant="text"
+            className="w-full mt-2 justify-start"
+            onClick={() => {
+              router.push(paths.SEARCH);
+              setIsFocused(false);
+            }}
+          >
             <TextHeading className="text-md text-left font-semibold text-color-1">
               Xem tất cả
             </TextHeading>

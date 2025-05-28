@@ -18,6 +18,7 @@ export const IMAGES = {
   DEFAULT_COURSE: dfCourses,
   DEFAULT_PROJECT: dfCourses,
   DEFAULT_POST: dfCourses,
+  DEFAULT_AVATAR: dfCourses,
   BG_AUTH: authbg,
   ERR_404: err404,
   GITHUB: github,
