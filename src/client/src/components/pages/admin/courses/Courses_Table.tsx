@@ -6,26 +6,23 @@ import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
-import { TextDescription } from '@/components/ui/text';
+import MemberAvatar from '@/components/ui/member-avatar';
 import { STATUS_COURSE, STATUS_HIDDEN } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { ICourse } from '@/interfaces/course';
-import apiConfig from '@/lib/api';
 import courseService from '@/services/course.service';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
-import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 
 export default function Courses_Table() {
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 1;
+  const page = searchParams?.get('page') || 1;
   const t = useTranslations('course');
   const { localPath } = useH_LocalPath();
   const router = useRouter();
@@ -56,31 +53,13 @@ export default function Courses_Table() {
       {
         header: t('author'),
         accessorKey: 'author',
-        cell: ({ row }) => {
-          return (
-            <div className="flex items-center gap-2">
-              <Image
-                src={
-                  row.original.author?.avatar
-                    ? utils_ApiImageToLocalImage(row.original.author?.avatar)
-                    : apiConfig.avatar(row.original.author?.name)
-                }
-                alt={row.original.title}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-              <div className="flex flex-col">
-                <TextDescription className="text-color-1">
-                  {row.original.author?.name}
-                </TextDescription>
-                <TextDescription className="text-xs text-color-2">
-                  {row.original.author?.username}
-                </TextDescription>
-              </div>
-            </div>
-          );
-        },
+        cell: ({ row }) => (
+          <MemberAvatar
+            name={row.original.author?.name || ''}
+            avatar={row.original.author?.avatar}
+            description={row.original.author?.username}
+          />
+        ),
       },
       {
         header: t('startDate'),

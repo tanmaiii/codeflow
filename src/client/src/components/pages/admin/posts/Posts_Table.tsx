@@ -7,6 +7,7 @@ import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
+import MemberAvatar from '@/components/ui/member-avatar';
 import { TextDescription } from '@/components/ui/text';
 import { STATUS_HIDDEN } from '@/constants/object';
 import { IMAGES } from '@/data/images';
@@ -14,7 +15,6 @@ import { paths } from '@/data/path';
 import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { IPost } from '@/interfaces/post';
-import apiConfig from '@/lib/api';
 import postService from '@/services/post.service';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
@@ -29,7 +29,7 @@ import { toast } from 'sonner';
 
 export default function Posts_Table() {
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 1;
+  const page = searchParams?.get('page') || 1;
   const t = useTranslations('post');
   const tCommon = useTranslations('common');
   const { localPath } = useH_LocalPath();
@@ -73,31 +73,13 @@ export default function Posts_Table() {
       {
         header: t('author'),
         accessorKey: 'author',
-        cell: ({ row }) => {
-          return (
-            <div className="flex items-center gap-2">
-              <Image
-                src={
-                  row.original.author?.avatar
-                    ? utils_ApiImageToLocalImage(row.original.author?.avatar)
-                    : apiConfig.avatar(row.original.author?.name)
-                }
-                alt={row.original.title}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-              <div className="flex flex-col">
-                <TextDescription className="text-color-1">
-                  {row.original.author?.name}
-                </TextDescription>
-                <TextDescription className="text-xs text-color-2">
-                  {row.original.author?.username}
-                </TextDescription>
-              </div>
-            </div>
-          );
-        },
+        cell: ({ row }) => (
+          <MemberAvatar
+            name={row.original.author?.name || ''}
+            avatar={row.original.author?.avatar}
+            description={row.original.author?.username}
+          />
+        ),
       },
       {
         header: t('comments'),

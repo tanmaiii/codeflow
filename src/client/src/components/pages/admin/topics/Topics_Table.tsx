@@ -8,6 +8,7 @@ import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
+import MemberAvatar from '@/components/ui/member-avatar';
 import { TextDescription } from '@/components/ui/text';
 import { STATUS_TOPIC, STATUS_TOPIC_CUSTOM } from '@/constants/object';
 import { paths } from '@/data/path';
@@ -16,11 +17,9 @@ import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { ITopic } from '@/interfaces/topic';
 import apiConfig from '@/lib/api';
 import topicService from '@/services/topic.service';
-import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
@@ -28,7 +27,7 @@ import { toast } from 'sonner';
 
 export default function Topics_Table() {
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 1;
+  const page = searchParams?.get('page') || 1;
   const t = useTranslations('topic');
   const tCommon = useTranslations('common');
   const { localPath } = useH_LocalPath();
@@ -87,27 +86,11 @@ export default function Topics_Table() {
         header: t('author'),
         accessorKey: 'author',
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <Image
-              src={
-                row.original.author?.avatar
-                  ? utils_ApiImageToLocalImage(row.original.author?.avatar)
-                  : apiConfig.avatar(row.original.author?.name)
-              }
-              alt={row.original.title}
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
-            <div className="flex flex-col">
-              <TextDescription className="text-color-1">
-                {row.original.author?.name}
-              </TextDescription>
-              <TextDescription className="text-xs text-color-2">
-                {row.original.author?.username}
-              </TextDescription>
-            </div>
-          </div>
+          <MemberAvatar
+            name={row.original.author?.name || ''}
+            avatar={row.original.author?.avatar}
+            description={row.original.author?.username}
+          />
         ),
       },
       {

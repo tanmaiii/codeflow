@@ -10,6 +10,7 @@ import { PostRoute } from './routes/posts.route';
 import { TagRoute } from './routes/tags.route';
 import { TopicRoute } from './routes/topic.route';
 import { NotificationRoute } from './routes/notification.route';
+import { SearchRoute } from './routes/search.route';
 ValidateEnv();
 
 const app = new App([
@@ -23,6 +24,7 @@ const app = new App([
   new TopicRoute(),
   new GitHubRoute(),
   new NotificationRoute(),
+  new SearchRoute(),
 ]);
 
 app.listen();

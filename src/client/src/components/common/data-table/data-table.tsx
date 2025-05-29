@@ -191,8 +191,6 @@ export function DataTable<TData, TValue>({
       {table.getFilteredSelectedRowModel().rows.length > 0 && (
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <span>
-            {/* Đã chọn {table.getFilteredSelectedRowModel().rows.length} trên{' '}
-            {table.getFilteredRowModel().rows.length} hàng */}
             {tTable('selectedRows', {
               length: table.getFilteredSelectedRowModel().rows.length,
               total: table.getFilteredRowModel().rows.length,

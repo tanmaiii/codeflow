@@ -1,10 +1,14 @@
   import { IComment } from '@/interfaces/comment';
-import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfaces/common';
-  import { ICourse, ICourseEnrollment, ICreateCourseDto } from '@/interfaces/course';
-  import { IUser } from '@/interfaces/user';
-  import createHttpClient from '@/lib/createHttpClient';
-  import { AxiosInstance } from 'axios';
+import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
+import { ICourse, ICourseEnrollment, ICreateCourseDto } from '@/interfaces/course';
+import { IUser } from '@/interfaces/user';
+import createHttpClient from '@/lib/createHttpClient';
+import { AxiosInstance } from 'axios';
 
+
+  interface IGetCourseAllQuery extends IGetAllQuery {
+    type?: string;
+  }
   class CourseService {
     private client: AxiosInstance;
 
@@ -12,17 +16,17 @@ import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfa
       this.client = createHttpClient('courses');
     }
 
-    async getAll(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<ICourse[]>> {
+    async getAll(params: IGetCourseAllQuery): Promise<PaginatedResponseAPIDto<ICourse[]>> {
       const res = await this.client.get('/', { params });
       return res.data;
     }
 
-    async getAllRegistered(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<ICourse[]>> {
+    async getAllRegistered(params: IGetCourseAllQuery): Promise<PaginatedResponseAPIDto<ICourse[]>> {
       const res = await this.client.get('/registered', { params });
       return res.data;
     }
 
-    async getAllByUser(id: string, params: IGetAllQuery): Promise<PaginatedResponseAPIDto<ICourse[]>> {
+    async getAllByUser(id: string, params: IGetCourseAllQuery): Promise<PaginatedResponseAPIDto<ICourse[]>> {
       const res = await this.client.get(`/${id}/user`, { params });
       return res.data;
     }

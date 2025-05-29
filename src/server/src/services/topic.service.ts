@@ -5,7 +5,7 @@ import Container, { Service } from 'typedi';
 import { DB } from '../database';
 import { TagService } from './tag.service';
 import { TopicMemberService } from './topic_member.service';
-
+import { Op } from 'sequelize';
 @Service()
 export class TopicService {
   private readonly defaultPageSize = 10;
@@ -29,6 +29,7 @@ export class TopicService {
     courseId?: string,
     isCustom?: boolean,
     status?: string,
+    search?: string,
   ): Promise<{ count: number; rows: Topic[] }> {
     const whereClause = this.buildWhereClause({ courseId, isCustom });
 
@@ -40,6 +41,8 @@ export class TopicService {
       col: 'topics.id',
       where: {
         ...whereClause,
+        ...(status ? { status } : {}),
+        ...(search ? { title: { [Op.like]: `%${search}%` } } : {}),
       },
     });
   }

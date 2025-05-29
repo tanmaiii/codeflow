@@ -71,17 +71,17 @@ export const STATUS_COURSE: IStatusObj[] = [
 export const ROLE_USER: IStatusObj[] = [
   {
     value: ROLE.USER,
-    label: 'User',
+    label: 'Người dùng',
     labelEn: 'User',
   },
   {
     value: ROLE.ADMIN,
-    label: 'Admin',
+    label: 'Quản trị viên',
     labelEn: 'Admin',
   },
   {
     value: ROLE.TEACHER,
-    label: 'Teacher',
+    label: 'Giảng viên',
     labelEn: 'Teacher',
   },
 ];

@@ -1,28 +1,25 @@
 'use client';
 
-import { useMemo } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
 import { toast } from 'sonner';
-
 import ActionDelete from '@/components/common/Action/ActionDelete';
 import { DataTable } from '@/components/common/data-table/data-table';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
+import MemberAvatar from '@/components/ui/member-avatar';
 import { TextDescription } from '@/components/ui/text';
 import { ROLE_USER } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
 import { IUser } from '@/interfaces/user';
-import apiConfig from '@/lib/api';
 import userService from '@/services/user.service';
-import { utils_ApiImageToLocalImage } from '@/utils/image';
 import Users_Create from './Users_Create';
 import Users_Update from './Users_Update';
 
@@ -33,7 +30,7 @@ export default function Users_Table() {
   const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
-  const page = Number(searchParams.get('page')) || 1;
+  const page = Number(searchParams?.get('page')) || 1;
 
   const { data } = useQ_User_GetAll({
     params: {
@@ -48,16 +45,7 @@ export default function Users_Table() {
         header: 'Name',
         accessorKey: 'name',
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <Image
-              src={row.original.avatar ? utils_ApiImageToLocalImage(row.original.avatar) : apiConfig.avatar(row.original.name)}
-              alt={row.original.name ?? ''}
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
-            <TextDescription className="text-color-1">{row.original.name}</TextDescription>
-          </div>
+          <MemberAvatar name={row.original.name || ''} avatar={row.original.avatar} />
         ),
       },
       {
@@ -65,7 +53,7 @@ export default function Users_Table() {
         accessorKey: 'username',
         cell: ({ row }) => {
           if (!row.original.uid) return row.original.username;
-          
+
           return (
             <Link
               className="hover:underline"
@@ -88,9 +76,7 @@ export default function Users_Table() {
         header: 'Role',
         accessorKey: 'role',
         cell: ({ row }) => (
-          <MyBadge
-            status={ROLE_USER.find(item => item.value === (row.original.role ?? 'user'))!}
-          />
+          <MyBadge status={ROLE_USER.find(item => item.value === (row.original.role ?? 'user'))!} />
         ),
       },
     ],

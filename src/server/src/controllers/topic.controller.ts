@@ -12,7 +12,7 @@ export class TopicController {
 
   public getTopics = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom } = req.query;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom, status, search} = req.query;
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
         Number(page),
         Number(limit),
@@ -20,6 +20,8 @@ export class TopicController {
         order as 'ASC' | 'DESC',
         undefined,
         isCustom !== undefined ? isCustom === 'true' : undefined,
+        status as string,
+        String(search ?? ''),
       );
 
       res.status(200).json({
@@ -40,7 +42,7 @@ export class TopicController {
   public getTopicsByCourseId = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const courseId = req.params.courseId;
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom, status } = req.query;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom, status, search } = req.query;
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
         Number(page),
         Number(limit),
@@ -49,6 +51,7 @@ export class TopicController {
         courseId,
         isCustom !== undefined ? isCustom === 'true' : undefined,
         status as string,
+        String(search ?? ''),
       );
 
       res.status(200).json({

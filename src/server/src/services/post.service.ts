@@ -51,7 +51,6 @@ export class PostService {
     isAdmin = false,
   ): Promise<{ count: number; rows: Post[] }> {
     const offset = (page - 1) * pageSize;
-    logger.info(`search: ${search}`);
 
     const whereClause = {
       ...(!isAdmin && { status: true }),

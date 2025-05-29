@@ -26,6 +26,7 @@ export interface IGetAllQuery {
   limit: number;
   sortBy?: string;
   order?: "ASC" | "DESC";
+  search?: string;
 }
 
 export interface ApiError {

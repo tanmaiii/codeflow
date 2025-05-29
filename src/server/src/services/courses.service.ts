@@ -50,6 +50,8 @@ export class CourseService {
     pageSize = 10,
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
+    search = '',
+    type = '',
   ): Promise<{ count: number; rows: Course[] }> {
     const { count, rows } = await DB.Courses.findAndCountAll({
       attributes: {
@@ -58,6 +60,10 @@ export class CourseService {
           [this.enrollmentCountLiteral, 'enrollmentCount'],
           [this.topicCountLiteral, 'topicCount'],
         ],
+      },
+      where: {
+        ...(search && { title: { [Op.like]: `%${search}%` } }),
+        ...(type && { type }),
       },
       limit: pageSize,
       offset: (page - 1) * pageSize,

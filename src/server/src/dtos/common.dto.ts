@@ -25,9 +25,4 @@ export class GetAllQueryDto {
   @IsOptional()
   @IsString()
   search?: string;
-  
-  @IsOptional()
-  @IsBoolean()
-  @Type(() => Boolean)
-  isCustom?: boolean;
 }

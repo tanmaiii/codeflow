@@ -56,4 +56,8 @@ export class GetAllCoursesDto extends GetAllQueryDto {
   @IsOptional()
   @IsBoolean()
   public registered?: boolean;
+
+  @IsOptional()
+  @IsString()
+  public type?: string;
 }

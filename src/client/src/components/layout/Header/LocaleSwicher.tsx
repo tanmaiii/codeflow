@@ -16,7 +16,7 @@ export default function LocaleSwitcher() {
   const toggleLanguage = () => {
     const newLocale = currentLocale === 'vi' ? 'en' : 'vi';
     setCurrentLocale(newLocale);
-    router.push(`/${newLocale}${pathname.replace(/^\/(en|vi)/, '')}`);
+    router.push(`/${newLocale}${pathname?.replace(/^\/(en|vi)/, '')}`);
   };
 
   useEffect(() => {

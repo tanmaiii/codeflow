@@ -6,6 +6,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import NotificationItem_More from './NotificationItem_More';
 import { cn } from '@/lib/utils';
+import { util_get_locale_label } from '@/utils/common';
+import { NOTIFICATION_TYPE } from '@/constants/object';
 interface NotificationItemProps {
   item?: INotification;
   className?: string;
@@ -48,7 +50,9 @@ export default function NotificationItem({ item, className }: NotificationItemPr
         </div>
         <div className="space-y-1 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <TextHeading lineClamp={1}>{item?.title}</TextHeading>
+            <TextHeading lineClamp={1}>
+              {util_get_locale_label(NOTIFICATION_TYPE, item?.type || '')}
+            </TextHeading>
             <span className="text-xs text-muted-foreground whitespace-nowrap">
               {utils_TimeAgo(item?.createdAt || '')}
             </span>

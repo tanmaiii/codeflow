@@ -1,5 +1,4 @@
-
-export default function Courses_Update() {
+export default function Dashboard() {
     return (
         <div>
             Enter

@@ -1,5 +1,6 @@
 import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { GetAllQueryDto } from './common.dto';
+import { Type } from 'class-transformer';
 
 export class CreateTopicDto {
   @IsString()
@@ -95,4 +96,9 @@ export class GetTopicAllDto extends GetAllQueryDto {
   @IsOptional()
   @IsString()
   public status: string;
+    
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  isCustom?: boolean;
 }

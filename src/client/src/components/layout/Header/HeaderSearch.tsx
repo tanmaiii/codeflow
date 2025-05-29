@@ -3,9 +3,15 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { IMAGES } from '@/data/images';
 import { paths } from '@/data/path';
+import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
+import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
+import useQ_Topic_GetAll from '@/hooks/query-hooks/Topic/useQ_Topic_GetAll';
+import { useDebounce } from '@/hooks/useDebounce';
+import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { cx } from 'class-variance-authority';
-import { ChevronRight, Search as SearchICon } from 'lucide-react';
+import { ChevronLeft, Search as SearchICon } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -13,6 +19,10 @@ export default function HeaderSearch() {
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
+  const [keyword, setKeyword] = useState('');
+  
+  // Debounce the keyword with 300ms delay
+  const debouncedKeyword = useDebounce(keyword, 300);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -27,168 +37,226 @@ export default function HeaderSearch() {
     };
   }, []);
 
+  // Use debounced keyword for API calls
+  const { data: courses } = useQ_Course_GetAll({
+    params: {
+      search: debouncedKeyword,
+      page: 1,
+      limit: 3,
+    },
+    options: {
+      enabled: debouncedKeyword.length > 0, // Only fetch when there's actually a search term
+    },
+  });
+
+  const { data: posts } = useQ_Post_GetAll({
+    params: {
+      search: debouncedKeyword,
+      page: 1,
+      limit: 3,
+    },
+    options: {
+      enabled: debouncedKeyword.length > 0,
+    },
+  });
+
+  const { data: topics } = useQ_Topic_GetAll({
+    params: {
+      search: debouncedKeyword,
+      page: 1,
+      limit: 3,
+    },
+    options: {
+      enabled: debouncedKeyword.length > 0,
+    },
+  });
+
+  // Show loading state while debouncing
+  const isSearching = keyword !== debouncedKeyword && keyword.length > 0;
+
   return (
     <div ref={ref} className="relative w-full">
       <div
         className={cx(
           'flex items-center bg-background-2 dark:bg-background-1  p-2 h-11',
-          isFocused ? 'border rounded-t-lg' : 'rounded-lg',
+          isFocused ? keyword ? 'border rounded-t-lg' : 'rounded-lg' : 'rounded-lg',
         )}
       >
-        <SearchICon className="text-color-2" />
+        <SearchICon className={cx(
+          'text-color-2 transition-colors',
+          isSearching && 'animate-pulse text-primary'
+        )} />
         <input
           type="text"
           placeholder="Search..."
           onFocus={() => {
             setIsFocused(true);
           }}
+          onChange={e => {
+            setKeyword(e.target.value);
+          }}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && keyword.trim()) {
+              router.push(`${paths.SEARCH}?keyword=${keyword.trim()}`);
+              setIsFocused(false);
+            }
+          }}
+          value={keyword}
           className="ml-2 p-1 focus:outline-none w-100 placeholder:text-color-2 placeholder:text-sm"
         />
       </div>
       <div
         className={cx(
           'absolute top-[100%] left-0 w-full bg-background-1 shadow-lg rounded-b-lg p-2 border',
-          isFocused ? 'block' : 'hidden',
+          isFocused ? keyword ? 'block' : 'hidden' : 'hidden',
         )}
       >
         <ScrollArea className="h-72 w-full rounded-md">
-          <div className="flex flex-col gap-1">
-            <div className="relative w-full text-start">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t text-color-2"></div>
-              </div>
-              <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
-                Course
-              </TextDescription>
+          {/* Show searching state */}
+          {isSearching && (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-sm text-gray-500">Đang tìm kiếm...</div>
             </div>
-            <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-background-1 rounded-md">
-                <Image
-                  src={IMAGES.DEFAULT_COURSE}
-                  alt="logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
-              <div className="flex flex-col">
-                <TextHeading className="text-md font-semibold text-color-1">
-                  Course Name
-                </TextHeading>
-                <TextDescription>@Description</TextDescription>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-background-1 rounded-md">
-                <Image
-                  src={IMAGES.DEFAULT_COURSE}
-                  alt="logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
-              <div className="flex flex-col">
-                <TextHeading className="text-md font-semibold text-color-1">
-                  Course Name
-                </TextHeading>
-                <TextDescription>@Description</TextDescription>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-background-1 rounded-md">
-                <Image
-                  src={IMAGES.DEFAULT_COURSE}
-                  alt="logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
-              <div className="flex flex-col">
-                <TextHeading className="text-md font-semibold text-color-1">
-                  Course Name
-                </TextHeading>
-                <TextDescription>@Description</TextDescription>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="relative w-full text-start">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t text-color-2"></div>
-              </div>
-              <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
-                Posts
-              </TextDescription>
-            </div>
-            <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-background-1 rounded-md">
-                <Image
-                  src={IMAGES.DEFAULT_COURSE}
-                  alt="logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
-              <div className="flex flex-col">
-                <TextHeading className="text-md font-semibold text-color-1">
-                  Course Name
-                </TextHeading>
-                <TextDescription>@Description</TextDescription>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-background-1 rounded-md">
-                <Image
-                  src={IMAGES.DEFAULT_COURSE}
-                  alt="logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
-              <div className="flex flex-col">
-                <TextHeading className="text-md font-semibold text-color-1">
-                  Course Name
-                </TextHeading>
-                <TextDescription>@Description</TextDescription>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-              <div className="w-10 h-10 bg-background-1 rounded-md">
-                <Image
-                  src={IMAGES.DEFAULT_COURSE}
-                  alt="logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
-              <div className="flex flex-col">
-                <TextHeading className="text-md font-semibold text-color-1">
-                  Course Name
-                </TextHeading>
-                <TextDescription>@Description</TextDescription>
+          )}
+          
+          {/* Show results only when not searching and have debounced keyword */}
+          {!isSearching && debouncedKeyword && (
+            <>
+              {courses?.data && courses?.data.length > 0 && (
+                <div className="flex flex-col gap-1">
+                  <div className="relative w-full text-start">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t text-color-2"></div>
+                    </div>
+                    <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
+                      Course
+                    </TextDescription>
+                  </div>
+                  {courses?.data.map(course => (
+                    <Item
+                      key={course.id}
+                      item={{
+                        id: course.id,
+                        title: course.title,
+                        description: course.author?.name ?? '',
+                        image: course.thumbnail ?? '',
+                        link: `${paths.COURSES}/${course.id}`,
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+              {posts?.data && posts?.data.length > 0 && (
+                <div className="flex flex-col gap-1">
+                  <div className="relative w-full text-start">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t text-color-2"></div>
+                    </div>
+                    <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
+                      Post
+                    </TextDescription>
+                  </div>
+                  {posts?.data.map(post => (
+                    <Item
+                      key={post.id}
+                      item={{
+                        id: post.id,
+                        title: post.title,
+                        description: post.author?.name ?? '',
+                        image: post.thumbnail ?? '',
+                        link: `${paths.POSTS}/${post.id}`,
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+              {topics?.data && topics?.data.length > 0 && (
+                <div className="flex flex-col gap-1">
+                  <div className="relative w-full text-start">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t text-color-2"></div>
+                    </div>
+                    <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
+                      Topic
+                    </TextDescription>
+                  </div>
+                  {topics?.data.map(topic => (
+                    <Item
+                      key={topic.id}
+                      item={{
+                        id: topic.id,
+                        title: topic.title,
+                        description: topic.author?.name ?? '',
+                        image: '',
+                        link: `${paths.TOPICS}/${topic.id}`,
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+          
+          {/* Show "View All" only when there's a keyword (original or debounced) */}
+          {(keyword || debouncedKeyword) && (courses?.data?.length || posts?.data?.length || topics?.data?.length) ? (
+            <Button
+              variant="text"
+              className="w-full justify-start mt-2"
+              onClick={() => {
+                router.push(`${paths.SEARCH}?keyword=${keyword || debouncedKeyword}`);
+                setIsFocused(false);
+              }}
+            >
+              <ChevronLeft />
+              <TextHeading className="text-md text-left font-semibold text-color-1">
+                Xem tất cả kết quả cho &ldquo;{keyword || debouncedKeyword}&rdquo;
+              </TextHeading>
+            </Button>
+          ) : null}
+          
+          {/* Show empty state when no results and not searching */}
+          {!isSearching && debouncedKeyword && 
+           (!courses?.data?.length && !posts?.data?.length && !topics?.data?.length) && (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-sm text-gray-500">
+                Không tìm thấy kết quả cho &ldquo;{debouncedKeyword}&rdquo;
               </div>
             </div>
-          </div>
-          <Button
-            variant="text"
-            className="w-full mt-2 justify-start"
-            onClick={() => {
-              router.push(paths.SEARCH);
-              setIsFocused(false);
-            }}
-          >
-            <TextHeading className="text-md text-left font-semibold text-color-1">
-              Xem tất cả
-            </TextHeading>
-            <ChevronRight />
-          </Button>
+          )}
         </ScrollArea>
       </div>
     </div>
   );
 }
+
+const Item = ({
+  item,
+}: {
+  item: {
+    id: string;
+    title: string;
+    description: string;
+    image: string;
+    link: string;
+  };
+}) => {
+  return (
+    <Link href={item.link}>
+      <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
+        <div className="w-10 h-10 bg-background-1 rounded-md">
+          <Image
+            src={item.image ? utils_ApiImageToLocalImage(item.image) : IMAGES.DEFAULT_COURSE}
+            alt="logo"
+            width={40}
+            height={40}
+            className="w-full h-full object-cover rounded-md"
+          />
+        </div>
+        <div className="flex flex-col">
+          <TextHeading className="text-md font-semibold text-color-1">{item.title}</TextHeading>
+          <TextDescription>{item.description}</TextDescription>
+        </div>
+      </div>
+    </Link>
+  );
+};
