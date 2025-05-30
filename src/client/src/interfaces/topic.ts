@@ -63,6 +63,8 @@ export interface ITopicEvaluationUpdateDto {
   evaluation: string;
 }
 
-export interface IGetAllTopicByUserIdParams extends IGetAllQuery {
-  status: string;
+
+export interface IGetAllTopicParams extends IGetAllQuery {
+  status?: string;
 }
+

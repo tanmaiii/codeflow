@@ -264,5 +264,24 @@
     "deleteNotification": "Delete notification",
     "noNotifications": "No notifications yet",
     "seeAll": "See all"
+  },
+  "search": {
+    "courses": "Courses",
+    "posts": "Posts",
+    "topics": "Topics",
+    "filter": "Filter",
+    "all": "All",
+    "course": "Course",
+    "post": "Post",
+    "topic": "Topic",
+    "tags": "Tags",
+    "results": "Results",
+    "resultsFor": "Results for \"{keyword}\"",
+    "noResults": "No results found",
+    "reset": "Reset",
+    "showingResultsFor": "Showing results for \"{keyword}\"",
+    "searching": "Searching...",
+    "appliedFilters": "Applied {length} filters",
+    "viewAllResults": "View all results for \"{keyword}\""
   }
 }

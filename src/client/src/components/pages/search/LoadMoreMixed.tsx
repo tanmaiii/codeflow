@@ -1,17 +1,19 @@
 'use client';
 
+import CardCourse from '@/components/common/CardCourse/CardCourse';
+import CardPost from '@/components/common/CardPost/CardPost';
+import CardTopic from '@/components/common/CardTopic';
+import NoData from '@/components/common/NoData/NoData';
+import TextHeading from '@/components/ui/text';
+import { PaginatedResponseAPIDto } from '@/interfaces/common';
 import { ICourse } from '@/interfaces/course';
 import { IPost } from '@/interfaces/post';
 import { ITopic } from '@/interfaces/topic';
-import { PaginatedResponseAPIDto } from '@/interfaces/common';
 import courseService from '@/services/course.service';
 import postService from '@/services/post.service';
 import topicService from '@/services/topic.service';
-import TextHeading from '@/components/ui/text';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import CardSearch from './CardSearch';
-
 interface QueryParams {
   page: number;
   sort?: string;
@@ -45,18 +47,18 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
 
   const loadMoreData = useCallback(async () => {
     if (isLoading) return;
-    
+
     const { dataTypes = ['course', 'post', 'topic'] } = params;
-    
-    const hasMoreData = 
+
+    const hasMoreData =
       (dataTypes.includes('course') && currentPage <= totalPages.courses) ||
       (dataTypes.includes('post') && currentPage <= totalPages.posts) ||
       (dataTypes.includes('topic') && currentPage <= totalPages.topics);
-    
+
     if (!hasMoreData) return;
-    
+
     setIsLoading(true);
-    
+
     try {
       // Fetch only selected data types simultaneously
       const promises: (
@@ -65,40 +67,47 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
         | Promise<PaginatedResponseAPIDto<ITopic[]>>
         | Promise<null>
       )[] = [];
-      
+
       // Only fetch courses if selected and has more pages
       if (dataTypes.includes('course') && currentPage <= totalPages.courses) {
-        promises.push(courseService.getAll({ 
-          ...params,
-          search: params.keyword,
-          page: currentPage,
-          type: params.courseTypes?.[0],
-          // Add course-specific filters here if needed
-        }));
+        promises.push(
+          courseService.getAll({
+            ...params,
+            search: params.keyword,
+            page: currentPage,
+            type: params.courseTypes?.[0],
+            // Add course-specific filters here if needed
+          }),
+        );
       } else {
         promises.push(Promise.resolve(null));
       }
-      
+
       // Only fetch posts if selected and has more pages
       if (dataTypes.includes('post') && currentPage <= totalPages.posts) {
-        promises.push(postService.getAll({ 
-          ...params,
-          search: params.keyword,
-          page: currentPage,
-          // Add post-specific filters here if needed
-        }));
+        promises.push(
+          postService.getAll({
+            ...params,
+            search: params.keyword,
+            page: currentPage,
+            // Add post-specific filters here if needed
+          }),
+        );
       } else {
         promises.push(Promise.resolve(null));
       }
-      
+
       // Only fetch topics if selected and has more pages
       if (dataTypes.includes('topic') && currentPage <= totalPages.topics) {
-        promises.push(topicService.getAll({ 
-          ...params,
-          search: params.keyword,
-          page: currentPage,
-          // Add topic-specific filters here if needed
-        }));
+        promises.push(
+          topicService.getAll({
+            ...params,
+            search: params.keyword,
+            status: 'approved',
+            page: currentPage,
+            // Add topic-specific filters here if needed
+          }),
+        );
       } else {
         promises.push(Promise.resolve(null));
       }
@@ -112,7 +121,11 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
       };
 
       // Update courses
-      if (coursesRes.status === 'fulfilled' && coursesRes.value !== null && dataTypes.includes('course')) {
+      if (
+        coursesRes.status === 'fulfilled' &&
+        coursesRes.value !== null &&
+        dataTypes.includes('course')
+      ) {
         const courseResponse = coursesRes.value as PaginatedResponseAPIDto<ICourse[]>;
         newBatch.courses = courseResponse.data;
         setTotalPages(prev => ({
@@ -122,7 +135,11 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
       }
 
       // Update posts
-      if (postsRes.status === 'fulfilled' && postsRes.value !== null && dataTypes.includes('post')) {
+      if (
+        postsRes.status === 'fulfilled' &&
+        postsRes.value !== null &&
+        dataTypes.includes('post')
+      ) {
         const postResponse = postsRes.value as PaginatedResponseAPIDto<IPost[]>;
         newBatch.posts = postResponse.data;
         setTotalPages(prev => ({
@@ -132,7 +149,11 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
       }
 
       // Update topics
-      if (topicsRes.status === 'fulfilled' && topicsRes.value !== null && dataTypes.includes('topic')) {
+      if (
+        topicsRes.status === 'fulfilled' &&
+        topicsRes.value !== null &&
+        dataTypes.includes('topic')
+      ) {
         const topicResponse = topicsRes.value as PaginatedResponseAPIDto<ITopic[]>;
         newBatch.topics = topicResponse.data;
         setTotalPages(prev => ({
@@ -149,12 +170,7 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [
-    isLoading, 
-    currentPage, 
-    totalPages, 
-    params
-  ]);
+  }, [isLoading, currentPage, totalPages, params]);
 
   // Reset when search params change
   useEffect(() => {
@@ -182,7 +198,7 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
     }
   }, [inView, loadMoreData]);
 
-  const hasMoreData = 
+  const hasMoreData =
     (params.dataTypes?.includes('course') && currentPage <= totalPages.courses) ||
     (params.dataTypes?.includes('post') && currentPage <= totalPages.posts) ||
     (params.dataTypes?.includes('topic') && currentPage <= totalPages.topics);
@@ -190,55 +206,46 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
   return (
     <>
       {dataBatches.map((batch, batchIndex) => (
-        <div key={`batch-${batchIndex}`} className="mb-8 border-b pb-6 last:border-b-0">
+        <div key={`batch-${batchIndex}`}>
           {/* Courses Section */}
           {batch.courses.length > 0 && params.dataTypes?.includes('course') && (
             <div className="flex flex-col py-2 gap-3 relative mb-6">
-              <TextHeading>Course - Batch {batchIndex + 1} ({batch.courses.length})</TextHeading>
-              {batch.courses.map((course, index) => (
-                <CardSearch
-                  key={`course-${batchIndex}-${course.id}-${index}`}
-                  item={{
-                    title: course.title,
-                    description: course.description,
-                  }}
-                  type="Course"
-                />
-              ))}
+              <TextHeading>
+                Course
+              </TextHeading>
+              <div className="relative grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-4 py-2">
+                {batch.courses.map((course, index) => (
+                  <CardCourse key={`course-${batchIndex}-${course.id}-${index}`} course={course} />
+                ))}
+              </div>
             </div>
           )}
 
           {/* Posts Section */}
           {batch.posts.length > 0 && params.dataTypes?.includes('post') && (
             <div className="flex flex-col py-2 gap-3 relative mb-6">
-              <TextHeading>Post - Batch {batchIndex + 1} ({batch.posts.length})</TextHeading>
-              {batch.posts.map((post, index) => (
-                <CardSearch
-                  key={`post-${batchIndex}-${post.id}-${index}`}
-                  item={{
-                    title: post.title,
-                    description: post.content,
-                  }}
-                  type="Post"
-                />
-              ))}
+              <TextHeading>
+                Post
+              </TextHeading>
+              <div className="relative grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-4 py-2">
+                {batch.posts.map((post, index) => (
+                  <CardPost key={`post-${batchIndex}-${post.id}-${index}`} post={post} />
+                ))}
+              </div>
             </div>
           )}
 
           {/* Topics Section */}
           {batch.topics.length > 0 && params.dataTypes?.includes('topic') && (
             <div className="flex flex-col py-2 gap-3 relative mb-6">
-              <TextHeading>Topic - Batch {batchIndex + 1} ({batch.topics.length})</TextHeading>
-              {batch.topics.map((topic, index) => (
-                <CardSearch
-                  key={`topic-${batchIndex}-${topic.id}-${index}`}
-                  item={{
-                    title: topic.title,
-                    description: topic.description,
-                  }}
-                  type="Topic"
-                />
-              ))}
+              <TextHeading>
+                Topic
+              </TextHeading>
+              <div className="relative grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-3 py-2">
+                {batch.topics.map((topic, index) => (
+                  <CardTopic key={`topic-${batchIndex}-${topic.id}-${index}`} topic={topic} />
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -259,13 +266,24 @@ function LoadMoreMixed({ params }: LoadMoreMixedProps) {
         >
           {inView && isLoading && (
             <button style={{ margin: '0 auto' }}>
-              ...Loading {params.dataTypes?.join(', ') || 'Course, Post & Topic'} (Batch {dataBatches.length + 1})
+              ...Loading {params.dataTypes?.join(', ') || 'Course, Post & Topic'} (Batch{' '}
+              {dataBatches.length + 1})
             </button>
           )}
         </div>
       )}
+
+
+      {/* No data */}
+      {dataBatches.map((batch, batchIndex) => ( 
+        <div key={`batch-${batchIndex}`}>
+          {batch.courses.length === 0 && batch.posts.length === 0 && batch.topics.length === 0 && (
+            <NoData />
+          )}
+        </div>
+      ))}
     </>
   );
 }
 
-export default LoadMoreMixed; 
+export default LoadMoreMixed;

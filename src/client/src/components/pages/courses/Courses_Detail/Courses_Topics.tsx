@@ -17,13 +17,13 @@ export default function Courses_Topics() {
   const t = useTranslations('topic');
   const tCourse = useTranslations('course');
   const [page, setPage] = useState(1);
-  const { id } = useParams();
+  const params = useParams(); 
 
   const { data: topicsData } = useQ_Topic_GetAllByCourseId({
     params: {
       page: page,
       limit: 10,
-      courseId: id as string,
+      courseId: params?.id as string,
       isCustom: false,
     },
   });

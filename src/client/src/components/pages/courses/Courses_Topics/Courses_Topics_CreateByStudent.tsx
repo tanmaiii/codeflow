@@ -19,7 +19,7 @@ export default function Courses_Topics_CreateByStudent() {
   const tTopic = useTranslations('topic');
   const tCommon = useTranslations('common');
   const schema = useTopicSchema();
-  const { id } = useParams();
+  const params = useParams();
   const [members, setMembers] = useState<string[]>([]);
   const [nameGroup, setNameGroup] = useState<string>('');
   const router = useRouter();
@@ -34,11 +34,11 @@ export default function Courses_Topics_CreateByStudent() {
   });
 
   const { data: Q_Members } = useQuery({
-    queryKey: ['topics', id],
-    queryFn: () => courseService.memberInCourse(id as string, { page: 1, limit: 100 }),
+    queryKey: ['topics', params?.id],
+    queryFn: () => courseService.memberInCourse(params?.id as string, { page: 1, limit: 100 }),
   });
 
-  const { data: Q_Course } = useQ_Course_GetDetail({ id: id as string });
+  const { data: Q_Course } = useQ_Course_GetDetail({ id: params?.id as string });
 
   const mutation = useMutation({
     mutationFn: async (value: TopicSchemaType) => {
@@ -46,7 +46,7 @@ export default function Courses_Topics_CreateByStudent() {
         title: value.title,
         description: value.description,
         isCustom: true,
-        courseId: id as string,
+        courseId: params?.id as string,
         groupName: nameGroup,
         members: members,
       });

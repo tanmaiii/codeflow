@@ -1,14 +1,14 @@
-import createHttpClient from '@/lib/createHttpClient';
-import { AxiosInstance } from 'axios';
-import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfaces/common';
+import { PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
 import {
-  IGetAllTopicByUserIdParams,
+  IGetAllTopicParams,
   ITopic,
   ITopicCreateDto,
   ITopicEvaluation,
   ITopicEvaluationCreateDto,
-  ITopicEvaluationUpdateDto,
+  ITopicEvaluationUpdateDto
 } from '@/interfaces/topic';
+import createHttpClient from '@/lib/createHttpClient';
+import { AxiosInstance } from 'axios';
 
 class TopicService {
   private client: AxiosInstance;
@@ -17,13 +17,13 @@ class TopicService {
     this.client = createHttpClient('topics');
   }
 
-  async getAll(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<ITopic[]>> {
+  async getAll(params: IGetAllTopicParams): Promise<PaginatedResponseAPIDto<ITopic[]>> {
     const res = await this.client.get('/', { params });
     return res.data;
   }
 
   async getAllByCourseId(
-    params: IGetAllQuery,
+    params: IGetAllTopicParams,
     courseId: string,
   ): Promise<PaginatedResponseAPIDto<ITopic[]>> {
     const res = await this.client.get(`/${courseId}/course`, { params });
@@ -31,7 +31,7 @@ class TopicService {
   }
 
   async getAllByUserId(
-    params: IGetAllTopicByUserIdParams,
+    params: IGetAllTopicParams,
     userId: string,
   ): Promise<PaginatedResponseAPIDto<ITopic[]>> {
     const res = await this.client.get(`/${userId}/user`, { params });

@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import TextHeading, { TextDescription } from '@/components/ui/text';
@@ -9,10 +10,11 @@ import useQ_Topic_GetAll from '@/hooks/query-hooks/Topic/useQ_Topic_GetAll';
 import { useDebounce } from '@/hooks/useDebounce';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { cx } from 'class-variance-authority';
-import { ChevronLeft, Search as SearchICon } from 'lucide-react';
+import { ChevronLeft, Search as SearchICon, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export default function HeaderSearch() {
@@ -20,6 +22,10 @@ export default function HeaderSearch() {
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
   const [keyword, setKeyword] = useState('');
+  const t = useTranslations('search');  
+  const searchParams = useSearchParams();
+  const k = searchParams?.get('keyword')
+  const pathname = usePathname();
   
   // Debounce the keyword with 300ms delay
   const debouncedKeyword = useDebounce(keyword, 300);
@@ -63,6 +69,7 @@ export default function HeaderSearch() {
   const { data: topics } = useQ_Topic_GetAll({
     params: {
       search: debouncedKeyword,
+      status: 'approved',
       page: 1,
       limit: 3,
     },
@@ -73,6 +80,19 @@ export default function HeaderSearch() {
 
   // Show loading state while debouncing
   const isSearching = keyword !== debouncedKeyword && keyword.length > 0;
+
+  useEffect(() => {
+    if (k) {
+      setKeyword(k);
+    }else{
+      setKeyword('');
+    }
+  }, [k, pathname]);
+
+  
+  useEffect(() => {
+    setIsFocused(false);
+  }, [pathname]);
 
   return (
     <div ref={ref} className="relative w-full">
@@ -104,6 +124,11 @@ export default function HeaderSearch() {
           value={keyword}
           className="ml-2 p-1 focus:outline-none w-100 placeholder:text-color-2 placeholder:text-sm"
         />
+        {keyword && (
+          <button className='text-color-2 cursor-pointer hover:text-color-1' onClick={() => setKeyword('')}>
+            <X size={16} />
+          </button>
+        )}
       </div>
       <div
         className={cx(
@@ -115,7 +140,7 @@ export default function HeaderSearch() {
           {/* Show searching state */}
           {isSearching && (
             <div className="flex items-center justify-center py-8">
-              <div className="text-sm text-gray-500">Đang tìm kiếm...</div>
+              <div className="text-sm text-gray-500">{t('searching')}</div>
             </div>
           )}
           
@@ -129,7 +154,7 @@ export default function HeaderSearch() {
                       <div className="w-full border-t text-color-2"></div>
                     </div>
                     <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
-                      Course
+                      {t('course')}
                     </TextDescription>
                   </div>
                   {courses?.data.map(course => (
@@ -153,7 +178,7 @@ export default function HeaderSearch() {
                       <div className="w-full border-t text-color-2"></div>
                     </div>
                     <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
-                      Post
+                      {t('post')}
                     </TextDescription>
                   </div>
                   {posts?.data.map(post => (
@@ -177,7 +202,7 @@ export default function HeaderSearch() {
                       <div className="w-full border-t text-color-2"></div>
                     </div>
                     <TextDescription className="relative font-medium bg-background-1 dark:bg-background-1 px-2 ml-2">
-                      Topic
+                      {t('topic')}
                     </TextDescription>
                   </div>
                   {topics?.data.map(topic => (
@@ -208,8 +233,8 @@ export default function HeaderSearch() {
               }}
             >
               <ChevronLeft />
-              <TextHeading className="text-md text-left font-semibold text-color-1">
-                Xem tất cả kết quả cho &ldquo;{keyword || debouncedKeyword}&rdquo;
+              <TextHeading lineClamp={1} className="text-md text-left font-semibold text-color-1">
+                {t('viewAllResults', { keyword: keyword || debouncedKeyword })}
               </TextHeading>
             </Button>
           ) : null}
@@ -219,7 +244,7 @@ export default function HeaderSearch() {
            (!courses?.data?.length && !posts?.data?.length && !topics?.data?.length) && (
             <div className="flex items-center justify-center py-8">
               <div className="text-sm text-gray-500">
-                Không tìm thấy kết quả cho &ldquo;{debouncedKeyword}&rdquo;
+                {t('noResults')} 
               </div>
             </div>
           )}
@@ -243,7 +268,7 @@ const Item = ({
   return (
     <Link href={item.link}>
       <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
-        <div className="w-10 h-10 bg-background-1 rounded-md">
+        <div className="w-10 h-10 min-w-10 min-h-10 bg-background-1 rounded-md">
           <Image
             src={item.image ? utils_ApiImageToLocalImage(item.image) : IMAGES.DEFAULT_COURSE}
             alt="logo"
@@ -253,8 +278,8 @@ const Item = ({
           />
         </div>
         <div className="flex flex-col">
-          <TextHeading className="text-md font-semibold text-color-1">{item.title}</TextHeading>
-          <TextDescription>{item.description}</TextDescription>
+          <TextHeading lineClamp={1} className="text-md font-semibold text-color-1">{item.title}</TextHeading>
+          <TextDescription lineClamp={1}>{item.description}</TextDescription>
         </div>
       </div>
     </Link>

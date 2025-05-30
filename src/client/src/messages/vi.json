@@ -254,5 +254,24 @@
     "deleteNotification": "Xóa thông báo",
     "noNotifications": "Không có thông báo nào",
     "seeAll": "Xem tất cả"
+  },
+  "search": {
+    "courses": "Khóa học",
+    "posts": "Bài viết",
+    "topics": "Đề tài",
+    "filter": "Lọc",
+    "all": "Tất cả",
+    "course": "Khóa học",
+    "post": "Bài viết",
+    "topic": "Đề tài",
+    "tags": "Thẻ",
+    "results": "Kết quả", 
+    "resultsFor": "Kết quả tìm kiếm cho \"{keyword}\"",
+    "noResults": "Không tìm thấy kết quả",
+    "reset": "Đặt lại",
+    "showingResultsFor": "Hiển thị kết quả cho \"{keyword}\"",
+    "searching": "Đang tìm kiếm...",
+    "appliedFilters": "Đã áp dụng {length} bộ lọc",
+    "viewAllResults": "Xem tất cả kết quả cho \"{keyword}\""
   }
 }

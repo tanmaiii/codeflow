@@ -28,8 +28,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function Courses_Topics_Table() {
-  const { id } = useParams();
-  const { data: course } = useQ_Course_GetDetail({ id: id as string });
+  const params = useParams();
+  const { data: course } = useQ_Course_GetDetail({ id: params?.id as string });
   const t = useTranslations('topic');
   const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
@@ -40,7 +40,7 @@ export default function Courses_Topics_Table() {
     params: {
       page: page,
       limit: 2,
-      courseId: id as string,
+      courseId: params?.id as string,
     },
   });
 
@@ -50,7 +50,7 @@ export default function Courses_Topics_Table() {
     },
     onSuccess: () => {
       toast.success(t('deleteSuccess'));
-      queryClient.invalidateQueries({ queryKey: ['topics', 'course', id as string] });
+      queryClient.invalidateQueries({ queryKey: ['topics', 'course', params?.id as string] });
     },
     onError: () => {
       toast.error(t('deleteError'));

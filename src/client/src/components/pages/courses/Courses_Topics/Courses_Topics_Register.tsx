@@ -27,9 +27,9 @@ const TYPE_TOPIC = [
 export default function Courses_Topics_Register() {
   const tTopic = useTranslations('topic');
   const tCourse = useTranslations('course');
-  const { id } = useParams();
+  const params = useParams();
   const [isCustom, setIsCustom] = useState<boolean>(true);
-  const { data: Q_Course } = useQ_Course_GetDetail({ id: id as string });
+  const { data: Q_Course } = useQ_Course_GetDetail({ id: params?.id as string });
 
   return (
     <div className="flex flex-col  gap-4 py-10 justify-center items-center mx-auto bg-background-2">

@@ -66,9 +66,11 @@ export default function Courses_Topics_ChoiceTopic({
             <AvatarGroup
               avatars={
                 row.original.members?.map(member => ({
-                  url: member.avatar ? member.avatar : apiConfig.avatar(member.name ?? 'c'),
-                  name: member.name ?? 'c',
-                  alt: member.name ?? 'c',
+                  url: member.user?.avatar
+                    ? member.user?.avatar
+                    : apiConfig.avatar(member.user?.name ?? 'c'),
+                  name: member.user?.name ?? 'c',
+                  alt: member.user?.name ?? 'c',
                 })) ?? []
               }
               max={3}
@@ -105,7 +107,7 @@ export default function Courses_Topics_ChoiceTopic({
       icon={
         <>
           <IconPlus className="w-4 h-4" />
-          Chọn chủ đề
+          {tCommon('select')}
         </>
       }
       actionType={'default'}

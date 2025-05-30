@@ -70,7 +70,7 @@ export const useSearchFilter = () => {
   // API params for LoadMore component using debounced keyword
   const apiParams = useMemo(() => ({
     page: 1,
-    limit: 5,
+    limit: 4,
     keyword: debouncedKeyword, // Use debounced keyword for API calls
     dataTypes: filters.types,
   }), [debouncedKeyword, filters.types]);
