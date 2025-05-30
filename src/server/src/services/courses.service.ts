@@ -7,9 +7,19 @@ import Container, { Service } from 'typedi';
 import { CourseDocumentService } from './course_document.service';
 import { CourseEnrollmentService } from './course_enrollment.service';
 import { TagService } from './tag.service';
+import { NotificationService } from './notification.service';
+import { Notification } from '@/interfaces/notification.interface';
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 
 @Service()
 export class CourseService {
+  constructor(
+    private notificationService = Container.get(NotificationService),
+    public Tag = Container.get(TagService),
+    public CourseDocument = Container.get(CourseDocumentService),
+    public CourseEnrollment = Container.get(CourseEnrollmentService),
+  ) {}
+
   private readonly commentCountLiteral = Sequelize.literal(`(
     SELECT COUNT(*)
     FROM comments AS c
@@ -27,10 +37,6 @@ export class CourseService {
     FROM topics AS t
     WHERE t.course_id = courses.id
   )`);
-
-  public Tag = Container.get(TagService);
-  public CourseDocument = Container.get(CourseDocumentService);
-  public CourseEnrollment = Container.get(CourseEnrollmentService);
 
   public async findAll(): Promise<Course[]> {
     const allCourse: Course[] = await DB.Courses.findAll({
@@ -187,6 +193,16 @@ export class CourseService {
       if (!isPasswordMatching) throw new HttpException(401, 'Invalid password');
     }
 
+    // Notification: Thông báo vào khóa học
+    const notificationData: Notification = {
+      type: ENUM_TYPE_NOTIFICATION.JOIN_COURSE,
+      title: 'New Course Enrollment',
+      message: `New course enrollment "${findCourse.title}"`,
+      userId: findCourse.authorId,
+      link: `/courses/${courseId}`,
+    };
+
+    await this.notificationService.createNotification(notificationData);
     return this.CourseEnrollment.createEnrollment({ courseId, userId });
   }
 

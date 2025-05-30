@@ -16,6 +16,8 @@ export class GitHubRoute implements Routes {
     // Route to get GitHub user info
     this.router.post(`${this.path}/user`, this.github.getUserInfo);
 
+    this.router.get(`${this.path}/user/:username`, this.github.getUserInfoByUsername);
+
     // Route to get user repositories
     this.router.post(`${this.path}/user/:username/repos`, AuthMiddleware, this.github.getUserRepositories);
 

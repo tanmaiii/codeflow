@@ -32,17 +32,20 @@ export default function CourseListSkeleton() {
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4"
     >
       {[...Array(8)].map((_, index) => (
-        <motion.div key={index} variants={itemVariants} className="space-y-3 mb-2">
-          <Skeleton className="w-full aspect-video rounded-lg" />
-          <div className="flex flex-row items-center gap-2">
-            <Skeleton className="h-10 w-10 rounded-full" />
+        <motion.div key={index} variants={itemVariants}>
+          <div className="px-2 py-3 h-full space-y-3 mb-2 flex flex-col justify-between border rounded-lg">
+            <Skeleton className="w-full aspect-video rounded-lg" />
+            <div className="flex flex-row items-center gap-2">
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-3 w-1/2" />
+            </div>
+            <Skeleton className="h-10 w-full" />
             <Skeleton className="h-4 w-1/2" />
           </div>
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-3 w-1/2" />
-          </div>
-          <Skeleton className="h-10 w-full" />
         </motion.div>
       ))}
     </motion.div>

@@ -1,4 +1,5 @@
-import { ENUM_TYPE_NOTIFICATION, Notification } from '@/interfaces/notification.interface';
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+import { Notification } from '@/interfaces/notification.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { UserModel } from './users.model';
 import { TopicModel } from './topics.model';

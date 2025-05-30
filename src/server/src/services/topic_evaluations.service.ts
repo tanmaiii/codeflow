@@ -1,14 +1,13 @@
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
+import { Notification } from '@/interfaces/notification.interface';
 import { TopicEvaluations } from '@/interfaces/topics.interface';
 import { Service } from 'typedi';
-import { SocketService } from './socket.service';
-import { v4 as uuidv4 } from 'uuid';
 import { NotificationService } from './notification.service';
-import { ENUM_TYPE_NOTIFICATION, Notification } from '@/interfaces/notification.interface';
+import { SocketService } from './socket.service';
 import { TopicService } from './topic.service';
 import { TopicMemberService } from './topic_member.service';
-import { logger } from '@/utils/logger';
 
 @Service()
 export class TopicEvaluationsService {
@@ -53,12 +52,17 @@ export class TopicEvaluationsService {
     const createTopicEvaluationData: TopicEvaluations = await DB.TopicEvaluations.create(topicEvaluationData);
     const members = await this.topicMemberService.findTopicMembersByTopicId(topicEvaluationData.topicId);
 
+    const userId =
+      members.find(member => member.role === 'leader')?.userId ||
+      (members.length > 0 && members[0].userId) || 
+      topicEvaluationData.userId;
+
+    // Tạo thông báo cho leader
     const notificationData: Notification = {
-      id: uuidv4(),
       type: ENUM_TYPE_NOTIFICATION.TOPIC_EVALUATION,
       title: 'New Topic Evaluation',
-      message: `New topic evaluation created by "${createTopicEvaluationData.evaluation.slice(0, 10)}..."`,
-      userId: members.find(member => member.role === 'leader')?.userId || members[0].userId,
+      message: `New topic evaluation "${createTopicEvaluationData.evaluation.slice(0, 10)}..."`,
+      userId,
       isRead: false,
       link: `/topics/${createTopicEvaluationData.topicId}`,
     };

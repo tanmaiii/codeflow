@@ -38,7 +38,7 @@ export default function Comments({ comments, onSubmit }: ICommentsProps) {
 
       {comments && visibleCount < comments.length && (
         <Button variant="text" onClick={handleLoadMore}>
-          {t("loadMore")}
+          {t("loadMore")} ({comments.length - visibleCount})
         </Button>
       )}
     </div>

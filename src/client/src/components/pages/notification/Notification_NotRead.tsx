@@ -15,7 +15,7 @@ export default function Notification_NotRead() {
   } = useQ_Notification_GetAllByUser({
     params: {
       page,
-      limit: 6,
+      limit: 9,
       isRead: false,
     },
   });
@@ -24,8 +24,8 @@ export default function Notification_NotRead() {
   if (errorAll) return <div>Error: {errorAll.message}</div>;
 
   return (
-    <div>
-      <div className="flex flex-col gap-2 min-h-[500px]">
+    <div className="flex flex-col gap-2 h-full">
+      <div className="flex flex-col gap-2 min-h-[600px]">
         {allData?.data.length && allData?.data.length > 0 ? (
           allData?.data.map((notification, index) => (
             <NotificationItem key={index} item={notification} />
@@ -36,7 +36,7 @@ export default function Notification_NotRead() {
           </div>
         )}
       </div>
-      {allData?.pagination?.totalItems && allData?.pagination?.totalItems > 1 ? (
+      {allData?.pagination?.totalPages && allData?.pagination?.totalPages > 1 ? (
         <MyPagination
           currentPage={page}
           totalPages={allData?.pagination?.totalPages || 0}

@@ -6,6 +6,11 @@ import { DB } from '../database';
 import { TagService } from './tag.service';
 import { TopicMemberService } from './topic_member.service';
 import { Op } from 'sequelize';
+import { NotificationService } from './notification.service';
+import { Notification } from '@/interfaces/notification.interface';
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+import { CourseService } from './courses.service';
+import { ENUM_TOPIC_STATUS } from '@/data/enum';
 @Service()
 export class TopicService {
   private readonly defaultPageSize = 10;
@@ -15,6 +20,8 @@ export class TopicService {
   constructor(
     private readonly tagService = Container.get(TagService),
     private readonly topicMemberService = Container.get(TopicMemberService),
+    private readonly notificationService = Container.get(NotificationService),
+    private readonly courseService = Container.get(CourseService),
   ) {}
 
   public async findAll(): Promise<Topic[]> {
@@ -86,8 +93,14 @@ export class TopicService {
     const { tags, members, ...topicDataWithoutTags } = topicData;
     const createdTopic = await DB.Topics.create(topicDataWithoutTags);
 
+    const course = await this.courseService.findCourseById(topicData.courseId);
+
     if (tags?.length) {
       await Promise.all(tags.map(tagId => this.tagService.createTopicTag(createdTopic.id, tagId)));
+    }
+
+    if (topicData.authorId !== course.authorId && members.filter(memberId => memberId === topicData.authorId).length === 0) {
+      members.push(topicData.authorId);
     }
 
     if (members?.length) {
@@ -100,6 +113,18 @@ export class TopicService {
           }),
         ),
       );
+    }
+
+    if (topicData.isCustom) {
+      const notificationData: Notification = {
+        type: ENUM_TYPE_NOTIFICATION.REGISTER_TOPIC,
+        title: 'Register Topic',
+        message: `New topic "${createdTopic.title}"`,
+        link: `/topics/${createdTopic.id}`,
+        userId: course?.authorId,
+      };
+
+      await this.notificationService.createNotification(notificationData);
     }
 
     return createdTopic;
@@ -131,6 +156,18 @@ export class TopicService {
           }),
         ),
       );
+    }
+
+    if (topicData.status === ENUM_TOPIC_STATUS.APPROVED || topicData.status === ENUM_TOPIC_STATUS.REJECTED) {
+      const notificationData: Notification = {
+        type: topicData.status === ENUM_TOPIC_STATUS.APPROVED ? ENUM_TYPE_NOTIFICATION.APPROVE_TOPIC : ENUM_TYPE_NOTIFICATION.REJECT_TOPIC,
+        title: topicData.status === 'approved' ? 'Approve Topic' : 'Reject Topic',
+        message: `Topic "${topic.title}" is ${topicData.status}`,
+        link: `/topics/${topic.id}`,
+        userId: topic.authorId,
+      };
+
+      await this.notificationService.createNotification(notificationData);
     }
 
     return topic;

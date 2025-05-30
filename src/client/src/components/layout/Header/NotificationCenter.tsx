@@ -14,6 +14,7 @@ import useQ_Notification_GetAllByUser from '@/hooks/query-hooks/Notification/use
 import { INotification } from '@/interfaces/notification';
 import socketService from '@/services/socket.service';
 import { useUserStore } from '@/stores/user_store';
+import { util_format_notification_count } from '@/utils/common';
 
 const NOTIFICATION_LIMIT = 10;
 const UNREAD_LIMIT = 100000;
@@ -82,7 +83,7 @@ const NotificationCenter: React.FC = () => {
           />
         ))}
         {notifications.length > DISPLAY_LIMIT && (
-          <div className="flex justify-center p-2">
+          <div className="flex justify-center mt-3">
             <Button
               variant="secondary"
               className="w-full"
@@ -98,8 +99,8 @@ const NotificationCenter: React.FC = () => {
 
   const renderUnreadBadge = () => (
     unreadCount > 0 && (
-      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-        {unreadCount}
+      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
+        {util_format_notification_count(unreadCount)}
       </span>
     )
   );
@@ -107,7 +108,7 @@ const NotificationCenter: React.FC = () => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" onClick={() => setUnreadCount(0)} className="relative">
           <Bell className="h-5 w-5" />
           {renderUnreadBadge()}
         </Button>

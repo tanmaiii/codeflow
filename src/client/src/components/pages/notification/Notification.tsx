@@ -37,8 +37,8 @@ export default function Notification() {
             </Button>
           }
         />
-        <div className="flex flex-col gap-4">
-          <Tabs defaultValue="all" className="w-full">
+        <div className="flex flex-col gap-4 h-full">
+          <Tabs defaultValue="all" className="w-full h-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="all">{t('all')}</TabsTrigger>
               <TabsTrigger value="unread">{t('unread')}</TabsTrigger>

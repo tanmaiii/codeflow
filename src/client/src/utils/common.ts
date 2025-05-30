@@ -141,3 +141,12 @@ export function util_object_to_color(obj: IStatusObj) {
   const normalizedStr = obj.value.toLowerCase().trim();
   return colorMap[normalizedStr] || colorMap['default'];
 }
+
+/**
+ * Format số thông báo để hiển thị "9+" nếu lớn hơn 9
+ * @param count - Số lượng thông báo
+ * @returns Chuỗi đã format (ví dụ: "5", "9+")
+ */
+export function util_format_notification_count(count: number, max: number = 9): string {
+  return count > max ? `${max}+` : count.toString();
+}

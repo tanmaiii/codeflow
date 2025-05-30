@@ -13,7 +13,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
       <Header />
       <div className="flex flex-1 mt-14 ">
         <Sidebar menu={menuUser} />
-        <div className="w-full px-2 py-2 md:px-4 lg:px-10">
+        <div className="w-full">
           {children}
         </div>
       </div>

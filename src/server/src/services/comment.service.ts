@@ -3,9 +3,19 @@ import { DB } from '../database';
 import { HttpException } from '../exceptions/HttpException';
 import { Comment } from '../interfaces/comments.interface';
 import { isEmpty } from '../utils/util';
-
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+import { Notification } from '@/interfaces/notification.interface';
+import { NotificationService } from './notification.service';
+import { PostService } from './post.service';
+import { CourseService } from './courses.service';
 @Service()
 export class CommentService {
+  constructor(
+    private notificationService: NotificationService,
+    private postService: PostService,
+    private courseService: CourseService,
+  ) {}
+
   public buildCommentTree = (comments, parentId = null) => {
     return comments
       .filter(comment => comment.parentId == parentId)
@@ -52,6 +62,26 @@ export class CommentService {
     if (isEmpty(commentData)) throw new HttpException(400, 'commentData is empty');
 
     const createCommentData: Comment = await DB.Comments.create(commentData);
+    const comment = await this.findCommentById(createCommentData.id);
+
+    const post = comment.postId ? await this.postService.findPostById(comment.postId) : null;
+    const course = comment.courseId ? await this.courseService.findCourseById(comment.courseId) : null;
+
+    // Tạo thông báo cho tác giả
+    const notificationData: Notification = {
+      type: comment.parentId ? ENUM_TYPE_NOTIFICATION.COMMENT_REPLY : ENUM_TYPE_NOTIFICATION.COMMENT,
+      title: 'New Comment',
+      message: `New comment "${commentData.content.slice(0, 10)}..."`,
+      userId: post?.authorId ?? course?.authorId ?? undefined,
+      postId: comment.postId ?? undefined,
+      courseId: comment.courseId ?? undefined,
+      isRead: false,
+      link: comment.postId ? `/posts/${comment.postId}` : `/courses/${comment.courseId}`,
+    };
+
+    if (commentData.authorId !== post?.authorId && commentData.authorId !== course?.authorId) {
+      await this.notificationService.createNotification(notificationData);
+    }
     return createCommentData;
   }
 

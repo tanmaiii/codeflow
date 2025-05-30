@@ -1,11 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
-import { Container } from 'typedi';
-import { GitHubService } from '@services/github.service';
-import { RequestWithUser } from '@interfaces/auth.interface';
-import { HttpException } from '@exceptions/HttpException';
-import { GitHubRequestBody } from '@interfaces/github.interface';
-import { env } from 'process';
 import { logger } from '@/utils/logger';
+import { HttpException } from '@exceptions/HttpException';
+import { RequestWithUser } from '@interfaces/auth.interface';
+import { GitHubRequestBody } from '@interfaces/github.interface';
+import { GitHubService } from '@services/github.service';
+import { NextFunction, Response } from 'express';
+import { Container } from 'typedi';
 
 export class GitHubController {
   public github = Container.get(GitHubService);
@@ -22,6 +21,21 @@ export class GitHubController {
       }
 
       const userData = await this.github.getUserInfo(accessToken);
+      res.status(200).json({ data: userData, message: 'github-user-info' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getUserInfoByUsername = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const { username } = req.params;
+
+      if (!username) {
+        throw new HttpException(400, 'Username is required');
+      }
+
+      const userData = await this.github.getUserInfoByUsername(username);
       res.status(200).json({ data: userData, message: 'github-user-info' });
     } catch (error) {
       next(error);

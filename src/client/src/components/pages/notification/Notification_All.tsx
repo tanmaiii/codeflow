@@ -14,7 +14,7 @@ export default function Notification_All() {
   } = useQ_Notification_GetAllByUser({
     params: {
       page,
-      limit: 6,
+      limit: 9,
     },
   });
 
@@ -22,25 +22,27 @@ export default function Notification_All() {
   if (errorAll) return <div>Error: {errorAll.message}</div>;
 
   return (
-    <div>
-      <div className="flex flex-col gap-2 min-h-[500px]">
+    <div className="flex flex-col gap-2 h-full">
+      <div className="flex flex-col gap-2 min-h-[600px]">
         {allData?.data.length && allData?.data.length > 0 ? (
           allData?.data.map((notification, index) => (
             <NotificationItem key={index} item={notification} />
           ))
         ) : (
-          <div className="flex flex-col gap-2 min-h-[500px]">
+          <div className="flex flex-col gap-2 h-full">
             <p className="text-center text-muted-foreground">{t('noNotifications')}</p>
           </div>
         )}
       </div>
-      {allData?.pagination?.totalItems && allData?.pagination?.totalItems > 1 ? (
-        <MyPagination
-          currentPage={page}
-          totalPages={allData?.pagination?.totalPages || 0}
-          onPageChange={setPage}
-        />
-      ) : null}
+      <div className="flex justify-center mt-auto">
+        {allData?.pagination?.totalPages && allData?.pagination?.totalPages > 1 ? (
+          <MyPagination
+            currentPage={page}
+            totalPages={allData?.pagination?.totalPages || 0}
+            onPageChange={setPage}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

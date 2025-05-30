@@ -35,6 +35,19 @@ export class GitHubService {
     }
   }
 
+  public async getUserInfoByUsername(username: string): Promise<GitHubUser> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/users/${username}`, {
+        headers: this.headers,
+      });
+      logger.info(`[GitHub Service] User info: ${response.data}`);
+      return response.data;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error getting user info: ${error.message}`);
+      throw error;
+    }
+  }
+
   /**
    * Tạo repository mới trên GitHub
    * @param repoData Thông tin repository

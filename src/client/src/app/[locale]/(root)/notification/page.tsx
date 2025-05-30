@@ -1,5 +1,10 @@
+import PageContent from '@/components/layout/PageContent';
 import Notification from '@/components/pages/notification/Notification';
 
 export default function Page() {
-  return <Notification />;
+  return (
+    <PageContent>
+      <Notification />
+    </PageContent>
+  );
 }

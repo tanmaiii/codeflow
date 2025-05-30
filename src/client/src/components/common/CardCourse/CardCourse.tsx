@@ -20,6 +20,7 @@ import CardCourse_Submit from './CardCourse_Submit';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { paths } from '@/data/path';
+import Link from 'next/link';
 interface CardCourseProps {
   course: ICourse;
 }
@@ -68,7 +69,7 @@ export default function CardCourse({ course }: CardCourseProps) {
         </div>
       </CardHeader>
       <CardContent className="min-h-[60px] px-4 flex flex-1 flex-col gap-2">
-        <div className="flex items-center gap-2">
+        <Link href={paths.USER_DETAIL(course?.author?.id ?? '')} className="flex items-center gap-2">
           <Image
             src={course?.author?.avatar ?? apiConfig.avatar(course?.author?.name ?? 'c')}
             alt={course?.author?.avatar ?? ''}
@@ -79,7 +80,7 @@ export default function CardCourse({ course }: CardCourseProps) {
           <TextDescription className="text-primary line-clamp-1 ">
             {course?.author?.name}
           </TextDescription>
-        </div>
+        </Link>
         <div className="text-lg">
           <TextHeading className="line-clamp-2 hover:underline">{course.title}</TextHeading>
         </div>

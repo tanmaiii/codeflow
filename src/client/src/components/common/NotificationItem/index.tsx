@@ -1,5 +1,5 @@
 import TextHeading from '@/components/ui/text';
-import { INotification } from '@/interfaces/notification';
+import { ENUM_TYPE_NOTIFICATION, INotification } from '@/interfaces/notification';
 import notificationService from '@/services/notification.service';
 import { utils_TimeAgo } from '@/utils/date';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,6 +12,39 @@ interface NotificationItemProps {
   item?: INotification;
   className?: string;
 }
+
+const IconNotification = ({ type }: { type: ENUM_TYPE_NOTIFICATION }) => {
+  const getIcon = () => {
+    switch (type) {
+      case ENUM_TYPE_NOTIFICATION.TOPIC_EVALUATION:
+        return '📝';
+      case ENUM_TYPE_NOTIFICATION.COMMENT:
+        return '💬';
+      case ENUM_TYPE_NOTIFICATION.COMMENT_REPLY:
+        return '↩️';
+      case ENUM_TYPE_NOTIFICATION.LIKE_POST:
+        return '❤️';
+      case ENUM_TYPE_NOTIFICATION.JOIN_COURSE:
+        return '👥';
+      case ENUM_TYPE_NOTIFICATION.REGISTER_TOPIC:
+        return '📋';
+      case ENUM_TYPE_NOTIFICATION.APPROVE_TOPIC:
+        return '✅';
+      case ENUM_TYPE_NOTIFICATION.REJECT_TOPIC:
+        return '❌';
+      case ENUM_TYPE_NOTIFICATION.SYSTEM:
+        return '⚙️';
+      default:
+        return '🔔';
+    }
+  };
+
+  return (
+    <div className="p-2 bg-color-2/10 rounded-full w-10 h-10 flex items-center justify-center">
+      {getIcon()}
+    </div>
+  );
+};
 
 export default function NotificationItem({ item, className }: NotificationItemProps) {
   const router = useRouter();
@@ -45,9 +78,7 @@ export default function NotificationItem({ item, className }: NotificationItemPr
       )}
     >
       <div className="flex-1 flex flex-row gap-2" onClick={handleNotificationClick}>
-        <div className="p-2 bg-color-2/10 rounded-full w-10 h-10 flex items-center justify-center">
-          🏫
-        </div>
+        <IconNotification type={item?.type || ENUM_TYPE_NOTIFICATION.SYSTEM} />
         <div className="space-y-1 flex-1">
           <div className="flex items-center justify-between gap-2">
             <TextHeading lineClamp={1}>

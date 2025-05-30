@@ -1,5 +1,6 @@
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { Notification } from '@/interfaces/notification.interface';
 import { NotificationModel } from '@/models/notification.model';
 import { Service } from 'typedi';
@@ -68,8 +69,13 @@ export class NotificationService {
   }
 
   public async createNotification(notificationData: Partial<Notification>): Promise<Notification> {
-    const createNotificationData: Notification = await DB.Notifications.create(notificationData);
+    if (notificationData.type === ENUM_TYPE_NOTIFICATION.LIKE_POST) {
+      const post = await DB.Notifications.findOne({ where: { postId: notificationData.postId, authorId: notificationData.authorId} });
+      if (post) return;
+    }
 
+    const createNotificationData: Notification = await DB.Notifications.create(notificationData);
+    
     // Emit notification to specific user if userId is provided
     if (notificationData.userId) {
       this.socketService.emitNotification(notificationData.userId, createNotificationData);

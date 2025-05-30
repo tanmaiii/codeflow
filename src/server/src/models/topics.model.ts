@@ -19,7 +19,7 @@ export class TopicModel extends Model<Topic, PostCreationAttributes> implements 
   public authorId!: string;
   public teacherId!: string;
   public isCustom!: boolean;
-  public status!: string;
+  public status!: ENUM_TOPIC_STATUS;
   public groupName!: string;
 
   public readonly createdAt!: Date;

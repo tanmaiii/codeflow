@@ -12,7 +12,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
   const { user } = useUserStore();
   const params = useParams();
   const router = useRouter();
-  const courseId = params.id as string;
+  const courseId = params?.id as string;
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {

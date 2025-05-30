@@ -1,5 +1,10 @@
-import Posts from "@/components/pages/posts/Posts";
+import Posts from '@/components/pages/posts/Posts';
+import PageContent from '@/components/layout/PageContent';
 
 export default function Page() {
-  return <Posts />;
+  return (
+    <PageContent>
+      <Posts />
+    </PageContent>
+  );
 }
