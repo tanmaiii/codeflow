@@ -1,6 +1,6 @@
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { CreateNotificationDto } from '@/dtos/notification.dto';
 import { RequestWithUser } from '@/interfaces/auth.interface';
-import { ENUM_TYPE_NOTIFICATION } from '@/interfaces/notification.interface';
 import { NotificationService } from '@/services/notification.service';
 import { NextFunction, Response } from 'express';
 import { Container } from 'typedi';

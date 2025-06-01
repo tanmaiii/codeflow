@@ -38,6 +38,8 @@ export class NotificationService {
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
+      distinct: true,
+      col: 'notifications.id',
     });
     return { count, rows };
   }
