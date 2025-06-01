@@ -53,6 +53,33 @@ export class PostController {
     }
   };
 
+  public getPostsByTagId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+    
+      const { count, rows } = await this.post.findPostByTagIdAlternative(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        req.params.idTag,
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAllByTagId',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getPostById = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const postId = req.params.id;

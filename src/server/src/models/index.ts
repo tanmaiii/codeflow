@@ -38,6 +38,8 @@ export const initModels = () => {
   CourseModel.hasMany(TopicModel, { foreignKey: 'courseId', as: 'topics' });
   CourseModel.hasMany(CourseEnrollmentModel, { foreignKey: 'courseId', as: 'enrollments' });
   CourseModel.hasMany(NotificationModel, { foreignKey: 'courseId', as: 'notifications' });
+  CourseModel.hasMany(CourseTagModel, { foreignKey: 'courseId', as: 'courseTag' });
+  
 
   // Post Model Relations
   PostModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
@@ -58,6 +60,10 @@ export const initModels = () => {
   TagModel.belongsToMany(CourseModel, { through: CourseTagModel, as: 'courses', foreignKey: 'tagId' });
   TagModel.belongsToMany(PostModel, { through: PostTagModel, as: 'posts', foreignKey: 'tagId' });
   TagModel.belongsToMany(TopicModel, { through: TopicTagModel, as: 'topics', foreignKey: 'tagId' });
+
+  // CourseTag Model Relations
+  CourseTagModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
+  CourseTagModel.belongsTo(TagModel, { foreignKey: 'tagId', as: 'tag' });
 
   // Comment Model Relations
   CommentModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });

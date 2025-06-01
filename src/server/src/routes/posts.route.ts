@@ -19,6 +19,7 @@ export class PostRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, OptionalAuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.post.getPosts);
+    this.router.get(`${this.path}/tag/:idTag`, OptionalAuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.post.getPostsByTagId);
     this.router.get(`${this.path}/:id`, OptionalAuthMiddleware, this.post.getPostById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreatePostDto), this.post.createPost);
     this.router.put(`${this.path}/:id/delete`, AuthMiddleware, this.post.deletePost);

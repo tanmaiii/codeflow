@@ -132,6 +132,90 @@ export class CourseService {
     return courses;
   }
 
+  public async findCourseByTagId(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    tagId: string,
+  ): Promise<{ count: number; rows: Course[] }> { 
+    const courses = await DB.Courses.findAndCountAll({
+      attributes: {
+        include: [
+          [this.commentCountLiteral, 'commentCount'],
+          [this.enrollmentCountLiteral, 'enrollmentCount'],
+          [this.topicCountLiteral, 'topicCount'],
+        ],
+      },
+      include: [{
+        model: DB.Tags,
+        as: 'tags',
+        where: { id: tagId },
+        required: true,
+        through: {
+          attributes: [] // Exclude CourseTag attributes from result
+        }
+      }],
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+      distinct: true,
+      col: 'courses.id',
+    });
+
+    return courses;
+  }
+
+  // Alternative method using CourseTag directly
+  public async findCourseByTagIdAlternative(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    tagId: string,
+  ): Promise<{ count: number; rows: Course[] }> {
+    // First get course IDs that have the specified tag
+    const courseTagsResult = await DB.CourseTag.findAll({
+      where: { tagId },
+      attributes: ['courseId']
+    });
+    
+    const courseIds = courseTagsResult.map(ct => ct.courseId);
+    
+    if (courseIds.length === 0) {
+      return { count: 0, rows: [] };
+    }
+
+    // Get total count of courses with this tag (without pagination)
+    const totalCount = courseIds.length;
+
+    // Get paginated courses
+    const courses = await DB.Courses.findAll({
+      attributes: {
+        include: [
+          [this.commentCountLiteral, 'commentCount'],
+          [this.enrollmentCountLiteral, 'enrollmentCount'],
+          [this.topicCountLiteral, 'topicCount'],
+        ],
+      },
+      where: {
+        id: { [Op.in]: courseIds }
+      },
+      include: [{
+        model: DB.Tags,
+        as: 'tags',
+        through: {
+          attributes: []
+        }
+      }],
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+    });
+
+    return { count: totalCount, rows: courses };
+  }
+
   public async findCourseById(courseId: string): Promise<Course> {
     const findCourse: Course = await DB.Courses.findByPk(courseId);
     if (!findCourse) throw new HttpException(409, "Course doesn't exist");
@@ -222,5 +306,16 @@ export class CourseService {
     await DB.Courses.destroy({ force: true, where: { id: courseId } });
 
     return findCourse;
+  }
+
+  // Debug method to check CourseTag data
+  public async getCourseTagDebugData() {
+    const courseTagsData = await DB.CourseTag.findAll({
+      include: [
+        { model: DB.Courses, as: 'course', attributes: ['id', 'title'] },
+        { model: DB.Tags, as: 'tag', attributes: ['id', 'name'] }
+      ]
+    });
+    return courseTagsData;
   }
 }

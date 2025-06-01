@@ -99,6 +99,28 @@ export class CourseController {
     }
   };
 
+  public getCoursesByTagId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+
+      const { count, rows } = await this.course.findCourseByTagIdAlternative(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        req.params.idTag,
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: this.createPaginationResponse(count, Number(page), Number(limit)),
+        message: 'findAll',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getMembersByCourseId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
@@ -175,5 +197,19 @@ export class CourseController {
     await this.handleRequest(req, res, next, async () => {
       return await this.comment.findCommentByCourseId(req.params.id);
     });
+  };
+
+  // Debug method to test CourseTag data
+  public debugCourseTagData = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // Get all CourseTag records to debug
+      const courseTagsData = await this.course.getCourseTagDebugData();
+      res.status(200).json({
+        data: courseTagsData,
+        message: 'debug data',
+      });
+    } catch (error) {
+      next(error);
+    }
   };
 }

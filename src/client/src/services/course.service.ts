@@ -31,6 +31,11 @@ import { AxiosInstance } from 'axios';
       return res.data;
     }
 
+    async getAllByTag(params: IGetCourseAllQuery, tagId: string): Promise<PaginatedResponseAPIDto<ICourse[]>> {
+      const res = await this.client.get(`/tag/${tagId}`, { params });
+      return res.data;
+    }
+
     async getById(id: string): Promise<ResponseAPIDto<ICourse>> {
       const res = await this.client.get(`/${id}`);
       return res.data;

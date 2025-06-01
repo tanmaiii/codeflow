@@ -25,6 +25,7 @@ export class CourseRoute implements Routes {
     this.router.get(`${this.path}/registered`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getRegisteredCourses);
     this.router.get(`${this.path}/:idAuthor/user`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getCoursesByAuthorId);
     this.router.get(`${this.path}/author/:id`, AuthMiddleware, this.course.getCoursesByAuthorId);
+    this.router.get(`${this.path}/tag/:idTag`, AuthMiddleware, this.course.getCoursesByTagId);
 
     // Course management routes (teacher/admin only)
     this.router.post(`${this.path}`, isTeacherOrAdmin, ValidationMiddleware(CreateCourseDto), this.course.createCourse);
@@ -37,5 +38,8 @@ export class CourseRoute implements Routes {
     this.router.get(`${this.path}/:id`, this.course.getCourseById);
     // Course comments route
     this.router.get(`${this.path}/:id/comments`, AuthMiddleware, this.course.getCommentsByCourseId);
+    
+    // Debug route for CourseTag data
+    this.router.get(`${this.path}/debug/coursetags`, this.course.debugCourseTagData);
   }
 }

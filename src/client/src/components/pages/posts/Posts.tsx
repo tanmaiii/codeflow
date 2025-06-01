@@ -16,7 +16,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export default function Posts() {
   const route = useRouter();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 1;
+  const page = searchParams?.get('page') || 1;
   const { localPath } = useH_LocalPath();
   const t = useTranslations('post');
   const { user } = useUserStore();

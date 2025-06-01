@@ -1,21 +1,21 @@
+import { paths } from "@/data/path";
 import { ITag } from "@/interfaces/tags";
 import { cn } from "@/lib/utils";
 import { cx } from "class-variance-authority";
-
+import { useRouter } from "next/navigation";
 interface NameTagsProps extends Omit<React.HTMLAttributes<HTMLParagraphElement>, 'onClick'> {
   max?: number;
   tags: ITag[];
   className?: string;
-  onClick?: (tag: ITag) => void;
 }
 
 export default function NameTags({
   tags,
   max = 3,
   className,
-  onClick,
   ...rest
 }: NameTagsProps) {
+  const router = useRouter();
   if (tags.length === 0) return null;
 
   return (
@@ -27,13 +27,13 @@ export default function NameTags({
         return (
           <span
             key={tag.id || index}
+            onClick={() => router.push(paths.TAG(tag.id))}
             className={cn(
               "text-xs font-medium px-2 py-0.5 rounded-full",
               "bg-primary/10 text-primary hover:bg-primary/20 transition-colors",
               "dark:bg-primary/20 dark:hover:bg-primary/30",
-              { "cursor-pointer": onClick }
+              "cursor-pointer"
             )}
-            onClick={() => onClick?.(tag)}
           >
             {tag.name}
           </span>

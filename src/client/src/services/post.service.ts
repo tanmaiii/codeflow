@@ -16,6 +16,11 @@ class PostService {
     return res.data;
   }
 
+  async getAllByTag(params: IGetAllQuery, tagId: string): Promise<PaginatedResponseAPIDto<IPost[]>> {
+    const res = await this.client.get(`/tag/${tagId}`, { params });
+    return res.data;
+  }
+
   async getById(id: string): Promise<ResponseAPIDto<IPost>> {
     const res = await this.client.get(`/${id}`);
     return res.data;

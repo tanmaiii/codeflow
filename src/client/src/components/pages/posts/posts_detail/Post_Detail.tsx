@@ -23,7 +23,7 @@ import SwapperHTML from '../../../common/SwapperHTML/SwapperHTML';
 export default function Post_Detail() {
   const router = useRouter();
   const params = useParams();
-  const id = params.id;
+  const id = params?.id;
   const idString = Array.isArray(id) ? id[0] : String(id || '');
   const quereClient = useQueryClient();
 

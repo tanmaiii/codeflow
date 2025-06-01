@@ -5,7 +5,6 @@ import NameTags from '@/components/common/NameTags/NameTags';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TextHeading from '@/components/ui/text';
 import { ITag } from '@/interfaces/tags';
-
 interface SearchFiltersProps {
   filters: {
     keyword: string;

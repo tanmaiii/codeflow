@@ -1,9 +1,5 @@
+import Tag from '@/components/pages/tag';
 
-// TODO: làm trang tag
 export default function Page() {
-    return (
-        <div>
-            Tag
-        </div>
-    );
+  return <Tag />;
 }

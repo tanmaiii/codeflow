@@ -5,7 +5,7 @@ import { Op, Sequelize } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
 import { TagService } from './tag.service';
-import { logger } from '@/utils/logger';
+import { Course } from '@/interfaces/courses.interface';
 
 @Service()
 export class PostService {
@@ -72,6 +72,62 @@ export class PostService {
       col: 'posts.id',
       paranoid: !isAdmin,
     });
+  }
+
+  public async findPostByTagIdAlternative(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    tagId: string,
+  ): Promise<{ count: number; rows: Post[] }> {
+    // First get course IDs that have the specified tag
+    const courseTagsResult = await DB.PostTag.findAll({
+      where: {
+        tagId,
+      },
+      attributes: ['postId'],
+    });
+
+    const postIds = courseTagsResult.map(ct => ct.postId);
+
+    if (postIds.length === 0) {
+      return { count: 0, rows: [] };
+    }
+
+    // Get total count of posts with this tag (excluding soft deleted posts for non-admin)
+    const totalCount = await DB.Posts.count({
+      where: {
+        id: { [Op.in]: postIds },
+      },
+    });
+
+    // Get paginated courses
+    const posts = await DB.Posts.findAll({
+      attributes: {
+        include: [
+          [this.getCommentCountLiteral(), 'commentCount'],
+          [this.getLikeCountLiteral(), 'likeCount'],
+        ],
+      },
+      where: {
+        id: { [Op.in]: postIds },
+      },
+      include: [
+        {
+          model: DB.Tags,
+          as: 'tags',
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+    });
+
+    return { count: totalCount, rows: posts };
   }
 
   public async findPostById(id: string, isAdmin = false): Promise<Post> {
