@@ -1,16 +1,15 @@
+import { ENUM_TOPIC_STATUS, ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+import { Notification } from '@/interfaces/notification.interface';
 import { Topic, TopicCreate } from '@/interfaces/topics.interface';
 import { isEmpty } from '@/utils/util';
 import { HttpException } from '@exceptions/HttpException';
+import { Op } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
+import { CourseService } from './courses.service';
+import { NotificationService } from './notification.service';
 import { TagService } from './tag.service';
 import { TopicMemberService } from './topic_member.service';
-import { Op } from 'sequelize';
-import { NotificationService } from './notification.service';
-import { Notification } from '@/interfaces/notification.interface';
-import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
-import { CourseService } from './courses.service';
-import { ENUM_TOPIC_STATUS } from '@/data/enum';
 @Service()
 export class TopicService {
   private readonly defaultPageSize = 10;

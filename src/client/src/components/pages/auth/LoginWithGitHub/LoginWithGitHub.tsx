@@ -32,6 +32,7 @@ export default function LoginWithGitHub({
         const credential = await GithubAuthProvider.credentialFromResult(
           result
         );
+        // FIXME: Lấy token để test 
         console.log(credential);
         const encryptedToken = await CryptoJS.AES.encrypt(
           credential?.accessToken ?? "",

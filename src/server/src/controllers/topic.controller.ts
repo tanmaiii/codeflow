@@ -96,6 +96,7 @@ export class TopicController {
       next(error);
     }
   };
+  
   public getTopicById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const topicId = req.params.id;

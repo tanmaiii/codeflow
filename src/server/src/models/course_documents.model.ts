@@ -1,4 +1,5 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+
 import { CourseDocument } from '@/interfaces/courses.interface';
 
 export type CourseDocumentCreationAttributes = Optional<CourseDocument, 'id' | 'title' | 'url' | 'courseId'>;

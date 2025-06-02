@@ -7,9 +7,6 @@ export interface Repos {
 }
 
 export interface RepoCreate {
-  name: string;
-  url: string;
   courseId: string;
   topicId: string;
-  groupId: string;
 }

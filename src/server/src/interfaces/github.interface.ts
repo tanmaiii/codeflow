@@ -1,3 +1,11 @@
+export interface GitHubRepositoryCreate {
+  name: string;
+  private?: boolean;
+  auto_init?: boolean;
+  description?: string;
+  team_id?: number;
+}
+
 export interface GitHubRepository {
   id: number;
   name: string;

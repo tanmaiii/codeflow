@@ -1,4 +1,4 @@
-
+import { Course } from './courses.interface';
 export interface Topic {
   id: string;
   title: string;
@@ -9,6 +9,7 @@ export interface Topic {
   isCustom: boolean;
   status: string;
   groupName: string;
+  course?: Course;
 }
 
 export interface TopicMember {

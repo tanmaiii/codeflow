@@ -28,3 +28,11 @@ export enum ENUM_TYPE_NOTIFICATION {
   REJECT_TOPIC = 'REJECT_TOPIC', // Từ chối chủ đề
   SYSTEM = 'SYSTEM', // Hệ thống
 }
+
+
+export enum ENUM_TYPE_COURSE {
+  MAJOR = 'major', // Chuyên ngành
+  FOUNDATION = 'foundation', // Cơ sở ngành
+  ELECTIVE = 'elective', // Môn học
+  THESIS = 'thesis', // Khóa luận
+}

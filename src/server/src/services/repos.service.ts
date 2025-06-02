@@ -1,13 +1,15 @@
-import { Repos, RepoCreate } from '@/interfaces/repos.interface';
-import { isEmpty } from '@/utils/util';
+import { RepoCreate, Repos } from '@/interfaces/repos.interface';
+import { isEmpty, reposName } from '@/utils/util';
 import { HttpException } from '@exceptions/HttpException';
+import { Op } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
-import { TagService } from './tag.service';
-
+import { TopicService } from './topic.service';
+import { ENUM_TYPE_COURSE } from '@/data/enum';
+import { GitHubService } from './github.service';
 @Service()
-export class RepoService {
-  public Tag = Container.get(TagService);
+export class ReposService {
+  constructor(private readonly githubService = Container.get(GitHubService), private readonly topicService = Container.get(TopicService)) {}
 
   public async findAll(): Promise<Repos[]> {
     const allData: Repos[] = await DB.Repos.findAll();
@@ -19,31 +21,44 @@ export class RepoService {
     pageSize = 10,
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
-    courseId?: string,
-    isCustom?: boolean,
+    search: string = '',
   ): Promise<{ count: number; rows: Repos[] }> {
-    const whereClause: any = {};
-
-    if (courseId) {
-      whereClause.courseId = courseId;
-    }
-
-    if (isCustom !== undefined) {
-      whereClause.isCustom = isCustom;
-    }
-
     const { count, rows }: { count: number; rows: Repos[] } = await DB.Repos.findAndCountAll({
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
       col: 'repos.id',
-      where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
+      where: {
+        [Op.or]: [{ name: { [Op.like]: `%${search}%` } }],
+      },
     });
     return { count, rows };
   }
 
-  public async findRepoById(id: string): Promise<Repos> {
+  public async finAndCountByTopic(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    search: string = '',
+    topicId: string,
+  ): Promise<{ count: number; rows: Repos[] }> {
+    const { count, rows }: { count: number; rows: Repos[] } = await DB.Repos.findAndCountAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+      distinct: true,
+      col: 'repos.id',
+      where: {
+        [Op.or]: [{ name: { [Op.like]: `%${search}%` } }],
+        topicId: topicId,
+      },
+    });
+    return { count, rows };
+  }
+
+  public async findById(id: string): Promise<Repos> {
     const findRepo = await DB.Repos.findByPk(id);
     if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
 
@@ -51,7 +66,22 @@ export class RepoService {
   }
 
   public async createRepo(repoData: Partial<RepoCreate>): Promise<Repos> {
-    const createdRepo: Repos = await DB.Repos.create(repoData);
+    const topic = await this.topicService.findTopicById(repoData.topicId);
+    const name = reposName({ type: topic.course?.type as ENUM_TYPE_COURSE, name: topic?.title, groupName: topic?.groupName });
+
+    const repo = await this.githubService.createRepoInOrg({
+      name: name,
+      description: topic.description,
+      private: true,
+      team_id: null,
+      auto_init: true,
+    });
+
+    const createdRepo: Repos = await DB.Repos.create({
+      url: repo.html_url,
+      name: repo.name,
+      ...repoData,
+    });
     return createdRepo;
   }
 
@@ -79,6 +109,8 @@ export class RepoService {
   public async destroyRepo(id: string): Promise<Repos> {
     const findRepo = await DB.Repos.findByPk(id, { paranoid: false });
     if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
+
+    await this.githubService.deleteRepoInOrg(findRepo.name);
 
     await DB.Repos.destroy({ force: true, where: { id: id } });
 

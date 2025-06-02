@@ -3,6 +3,8 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { CourseDocumentModel } from './course_documents.model';
 import { TagModel } from './tags.model';
 import { UserModel } from './users.model';
+import { ENUM_TYPE_COURSE, ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+
 export type CourseCreationAttributes = Optional<
   Course,
   | 'id'
@@ -102,8 +104,8 @@ export default function (sequelize: Sequelize): typeof CourseModel {
       },
       type: {
         allowNull: false,
-        type: DataTypes.ENUM('major', 'foundation', 'thesis', 'elective'),
-        defaultValue: 'elective',
+        type: DataTypes.ENUM(...Object.values(ENUM_TYPE_COURSE)),
+        defaultValue: ENUM_TYPE_COURSE.ELECTIVE,
       },
     },
     {

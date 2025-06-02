@@ -1,8 +1,8 @@
-import { Service } from 'typedi';
-import axios from 'axios';
+import { GitHubContent, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
 import { logger } from '@utils/logger';
-import { GitHubContent, GitHubRepository, GitHubUser } from '@interfaces/github.interface';
+import axios from 'axios';
 import { env } from 'process';
+import { Service } from 'typedi';
 
 @Service()
 export class GitHubService {
@@ -53,11 +53,11 @@ export class GitHubService {
    * @param repoData Thông tin repository
    * @returns Thông tin repository đã tạo
    */
-  public async createRepository(repoData: Partial<GitHubRepository>): Promise<GitHubRepository> {
+  public async createRepoInOrg(repoData: Partial<GitHubRepositoryCreate>): Promise<GitHubRepository> {
     try {
-      const response = await axios.post(`${this.baseUrl}/user/repos`, {
+      logger.info(`[GitHub Service] Creating repository: ${JSON.stringify(repoData)} ${this.baseUrl}/orgs/${this.organization}/repos`);
+      const response = await axios.post(`${this.baseUrl}/orgs/${this.organization}/repos`, repoData, {
         headers: this.headers,
-        data: repoData,
       });
       return response.data;
     } catch (error) {
@@ -66,6 +66,18 @@ export class GitHubService {
     }
   }
 
+  public async deleteRepoInOrg(repoName: string): Promise<GitHubRepository> {
+    try {
+      logger.info(`[GitHub Service] Deleting repository: ${repoName} ${this.baseUrl}/repos/${this.organization}/${repoName}`);
+      const response = await axios.delete(`${this.baseUrl}/repos/${this.organization}/${repoName}`, {
+        headers: this.headers,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error deleting repository: ${error.message}`);
+      throw error;
+    }
+  }
   /**
    * Lấy danh sách repository từ GitHub
    * @param accessToken GitHub access token
@@ -139,11 +151,10 @@ export class GitHubService {
       const userId = userResp.data.id;
 
       const response = await axios.post(`${this.baseUrl}/orgs/${this.organization}/invitations`, {
+        invitee_id: userId,
+        role: 'direct_member',
+      }, {
         headers: this.headers,
-        data: {
-          invitee_id: userId,
-          role: 'direct_member',
-        },
       });
       return response.data;
     } catch (error) {
