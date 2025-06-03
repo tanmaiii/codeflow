@@ -25,8 +25,21 @@ class AuthService {
     return res.data;
   }
 
-  async getInfoUser(): Promise<ResponseAPIDto<IUser>> {
-    const res = await this.client.get('/info');
+  async checkJoinOrganization({ token }: { token?: string }): Promise<ResponseAPIDto<IUser>> {
+    const res = await this.client.get('/checkJoinOrganization', {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+    });
+    return res.data;
+  }
+
+  async getInfoUser({ token }: { token?: string }): Promise<ResponseAPIDto<IUser>> {
+    const res = await this.client.get('/info', {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+    });
     return res.data;
   }
 

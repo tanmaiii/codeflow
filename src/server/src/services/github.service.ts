@@ -3,11 +3,12 @@ import { logger } from '@utils/logger';
 import axios from 'axios';
 import { env } from 'process';
 import { Service } from 'typedi';
+import { join } from 'path';
 
 @Service()
 export class GitHubService {
   private baseUrl = 'https://api.github.com';
-  private organization = 'TVU-CodeFlow';
+  private organization = process.env.GITHUB_ORGANIZATION || 'organization-codeflow';
 
   private headers = {
     Authorization: `Bearer ${env.GITHUB_TOKEN}`,
@@ -150,16 +151,31 @@ export class GitHubService {
       });
       const userId = userResp.data.id;
 
-      const response = await axios.post(`${this.baseUrl}/orgs/${this.organization}/invitations`, {
-        invitee_id: userId,
-        role: 'direct_member',
-      }, {
-        headers: this.headers,
-      });
+      const response = await axios.post(
+        `${this.baseUrl}/orgs/${this.organization}/invitations`,
+        {
+          invitee_id: userId,
+          role: 'direct_member',
+        },
+        {
+          headers: this.headers,
+        },
+      );
       return response.data;
     } catch (error) {
       logger.error(`[GitHub Service] Error inviting user to organization: ${error.message}`);
       throw error;
+    }
+  }
+
+  public async checkUserInOrganization(username: string): Promise<boolean> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/orgs/${this.organization}/members/${username}`, {
+        headers: this.headers,
+      });
+      return response.status === 204;
+    } catch (error) {
+      return false;
     }
   }
 

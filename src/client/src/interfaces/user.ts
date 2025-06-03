@@ -8,6 +8,7 @@ export interface IUser extends IBaseEntity {
   email: string;
   avatar?: string;
   password?: string;
+  status?: 'active' | 'inactive';
   role: string;
 }
 

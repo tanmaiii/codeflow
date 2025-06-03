@@ -34,4 +34,5 @@ export const paths = {
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   LOGOUT: '/logout',
+  JOIN_ORG: (token: string) => `/join-org?token=${token}`,
 };

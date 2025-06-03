@@ -73,7 +73,9 @@
     "welcome": "Chào mừng đến với CodeFlow 👋🏻",
     "pleaseLogin": "Vui lòng đăng nhập vào tài khoản của bạn để bắt đầu hành trình",
     "dontHaveAnAccount": "Bạn chưa có tài khoản?",
-    "signInWithGitHub": "Đăng nhập bằng GitHub (Đề xuất)"
+    "signInWithGitHub": "Đăng nhập bằng GitHub (Đề xuất)",
+    "acceptInvitation": "Chấp nhận lời mời vào GitHub Organization",
+    "acceptInvitationDescription": "Vui lòng nhấn nút bên dưới để chấp nhận lời mời"
   },
   "validate": {
     "name": "Tên",

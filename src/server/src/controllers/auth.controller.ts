@@ -1,4 +1,5 @@
 import { EmailService } from '@/services/email.service';
+import { ReposService } from '@/services/repos.service';
 import { logger } from '@/utils/logger';
 import { CreateUserDto, CreateUserGithubDto, LoginUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
@@ -18,10 +19,17 @@ const decodeToken = async (token: string, secret: string) => {
 };
 
 export class AuthController {
-  public auth = Container.get(AuthService);
-  public user = Container.get(UserService);
-  public github = Container.get(GitHubService);
-  public email = Container.get(EmailService);
+  private readonly auth: AuthService;
+  private readonly user: UserService;
+  private readonly github: GitHubService;
+  private readonly email: EmailService;
+
+  constructor() {
+    this.auth = Container.get(AuthService);
+    this.user = Container.get(UserService);
+    this.github = Container.get(GitHubService);
+    this.email = Container.get(EmailService);
+  }
 
   public loginWithGithub = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -51,6 +59,16 @@ export class AuthController {
       const userData: CreateUserDto = req.body;
       const signUpUserData: User = await this.auth.signup(userData);
       res.status(201).json({ data: signUpUserData, message: 'signup' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public checkJoinOrganization = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const userData: User = req.user;
+      const checkInvitationUserData: User = await this.auth.checkJoinOrganization(userData.id);
+      res.status(200).json({ data: checkInvitationUserData, message: 'check invitation' });
     } catch (error) {
       next(error);
     }

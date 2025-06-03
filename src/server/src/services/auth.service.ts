@@ -7,7 +7,9 @@ import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
-import { Service } from 'typedi';
+import Container, { Service } from 'typedi';
+import { GitHubService } from './github.service';
+import { logger } from '@/utils/logger';
 
 export const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { user: user };
@@ -22,6 +24,12 @@ export const createCookie = (tokenData: TokenData): string => {
 
 @Service()
 export class AuthService {
+  private readonly github: GitHubService;
+
+  constructor() {
+    this.github = Container.get(GitHubService);
+  }
+
   public async createToken(user: User): Promise<TokenData> {
     return createToken(user);
   }
@@ -40,12 +48,22 @@ export class AuthService {
     uid: string;
   }): Promise<{ tokenData: TokenData; findUser: User }> {
     const findUser: User = await DB.Users.findOne({ where: { email } });
+
+    const checkUserInOrganization = await this.github.checkUserInOrganization(userBody.login);
+
     if (findUser) {
       const tokenData = createToken(findUser);
       // const cookie = createCookie(tokenData);
 
+      if (checkUserInOrganization) {
+        findUser.status = ENUM_USER_STATUS.ACTIVE;
+        await DB.Users.update({ status: ENUM_USER_STATUS.ACTIVE }, { where: { id: findUser.id } });
+      }
+
       return { tokenData, findUser };
     }
+
+    if(!checkUserInOrganization) await this.github.inviteUserToOrganization(userBody.login);
 
     const createUserData: User = await DB.Users.create({
       email: email,
@@ -54,7 +72,7 @@ export class AuthService {
       username: userBody.login,
       uid: uid,
       role: ENUM_USER_ROLE.USER,
-      status: ENUM_USER_STATUS.ACTIVE,
+      status: checkUserInOrganization ? ENUM_USER_STATUS.ACTIVE : ENUM_USER_STATUS.INACTIVE,
       avatar: userBody.avatar_url,
     });
 
@@ -78,6 +96,20 @@ export class AuthService {
     const createUserData: User = await DB.Users.create(newUser);
 
     return createUserData;
+  }
+
+  public async checkJoinOrganization(id: string): Promise<User> {
+    const findUser: User = await DB.Users.findByPk(id);
+    if (!findUser) throw new HttpException(409, `This user ${id} was not found`);
+
+    const checkUserInOrganization = await this.github.checkUserInOrganization(findUser.username);
+
+    if (checkUserInOrganization) {
+      findUser.status = ENUM_USER_STATUS.ACTIVE;
+      await DB.Users.update({ status: ENUM_USER_STATUS.ACTIVE }, { where: { id: findUser.id } });
+    }
+
+    return findUser;
   }
 
   public async login(userData: LoginUserDto): Promise<{ tokenData: TokenData; findUser: User }> {

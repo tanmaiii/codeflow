@@ -19,7 +19,7 @@ export default function AuthProvider({
     if (tokenService.accessToken) {
       (async () => {
         try {
-          const response = await authService.getInfoUser();
+          const response = await authService.getInfoUser({ token: tokenService.accessToken });
           if (response && response.data) {
             setUser(response.data);
           } 
@@ -35,7 +35,7 @@ export default function AuthProvider({
   const {} = useQuery({
     queryKey: ["user_info"],
     queryFn: async () => {
-      const response = await authService.getInfoUser();
+      const response = await authService.getInfoUser({ token: tokenService.accessToken });
       if (response && response.data) {
         setUser(response.data);
       }

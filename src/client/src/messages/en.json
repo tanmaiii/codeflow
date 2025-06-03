@@ -80,7 +80,9 @@
     "loginSuccess": "Login successful!",
     "loginFailed": "Login failed!",
     "signUpSuccess": "Sign up successful!",
-    "signUpFailed": "Sign up failed!"
+    "signUpFailed": "Sign up failed!",
+    "acceptInvitation": "Accept invitation to GitHub Organization",
+    "acceptInvitationDescription": "Please click the button below to accept the invitation"
   },
   "validate": {
     "name": "Name",

@@ -1,20 +1,18 @@
 "use client";
 import HeaderAuth from "@/components/layout/HeaderAuth";
-import LoginWithGitHub from "@/components/pages/auth/LoginWithGitHub/LoginWithGitHub";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
-import TextHeading, { TextDescription } from "@/components/ui/text";
+import TextHeading from "@/components/ui/text";
 import { IMAGES } from "@/data/images";
 import { useThemeStore } from "@/stores/theme_store";
+import { cx } from "class-variance-authority";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import "./style.css";
-import { cx } from "class-variance-authority";
 
 // export const metadata: Metadata = {
 //   title: "Đăng nhập | CodeFlow",
@@ -58,17 +56,6 @@ export default function Layout({
             </CardTitle>
           </CardHeader> 
           <CardContent>{children}</CardContent>
-          <CardFooter className="flex flex-col gap-2 mt-4 pb-4">
-            <div className="relative my-3 w-full text-center">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
-              </div>
-              <TextDescription className="relative bg-background-1 dark:bg-background-2 px-4">
-                {t("or")}
-              </TextDescription>
-            </div>
-            <LoginWithGitHub />
-          </CardFooter>
         </Card>
       </div>
     </div>

@@ -21,7 +21,7 @@ export class ReposService {
     pageSize = 10,
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
-    search: string = '',
+    search = '',
   ): Promise<{ count: number; rows: Repos[] }> {
     const { count, rows }: { count: number; rows: Repos[] } = await DB.Repos.findAndCountAll({
       limit: pageSize,
@@ -41,7 +41,7 @@ export class ReposService {
     pageSize = 10,
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
-    search: string = '',
+    search = '',
     topicId: string,
   ): Promise<{ count: number; rows: Repos[] }> {
     const { count, rows }: { count: number; rows: Repos[] } = await DB.Repos.findAndCountAll({
