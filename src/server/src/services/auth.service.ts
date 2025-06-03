@@ -68,7 +68,7 @@ export class AuthService {
     const createUserData: User = await DB.Users.create({
       email: email,
       password: null,
-      name: userBody.name,
+      name: userBody.name ?? userBody.login,
       username: userBody.login,
       uid: uid,
       role: ENUM_USER_ROLE.USER,

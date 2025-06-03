@@ -25,6 +25,21 @@ export const removeVietnameseDiacritics = (str: string): string => {
     .replace(/\s+/g, ''); // Xoá khoảng trắng
 };
 
+/**
+ * Clean special characters like \n, \r, \t, and other control characters from string
+ * @param str - Input string that may contain special characters
+ * @returns Clean string without special characters
+ */
+export const cleanSpecialCharacters = (str: string): string => {
+  if (!str || typeof str !== 'string') return '';
+  
+  return str
+    .replace(/[\r\n\t]/g, ' ') // Replace newlines, carriage returns, and tabs with spaces
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
+    .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+    .trim(); // Remove leading and trailing whitespace
+};
+
 export const reposName = ({ type, name, groupName }: { type: ENUM_TYPE_COURSE; name: string; groupName?: string }) => {
   logger.info(`${type} ${name} ${groupName}`);
 

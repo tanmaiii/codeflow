@@ -115,6 +115,12 @@ export default function Courses_Update() {
     },
   });
 
+  useEffect(() => {
+    if (errors) {
+      console.log(errors);
+    }
+  }, [errors]);
+
   if (Q_Course.isLoading) return <div>Loading...</div>;
 
   return (

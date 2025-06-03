@@ -1,4 +1,5 @@
 import { Course } from './courses.interface';
+import { User } from './users.interface';
 export interface Topic {
   id: string;
   title: string;
@@ -10,6 +11,8 @@ export interface Topic {
   status: string;
   groupName: string;
   course?: Course;
+  members?: TopicMember[];
+  author?: User;
 }
 
 export interface TopicMember {
@@ -17,6 +20,7 @@ export interface TopicMember {
   topicId: string;
   userId: string;
   role: string;
+  user?: User;
 }
 
 export interface TopicEvaluations {

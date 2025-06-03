@@ -7,6 +7,11 @@ export interface Repos {
 }
 
 export interface RepoCreate {
-  courseId: string;
   topicId: string;
+}
+
+export interface RepoUpdate {
+  topicId: string;
+  name: string;
+  url: string;
 }

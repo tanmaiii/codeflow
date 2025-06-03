@@ -168,6 +168,11 @@ export class GitHubService {
     }
   }
 
+  /**
+   * Kiểm tra xem user có tồn tại trong tổ chức GitHub hay không
+   * @param username GitHub username
+   * @returns true nếu user tồn tại trong tổ chức, false nếu ngược lại
+   */
   public async checkUserInOrganization(username: string): Promise<boolean> {
     try {
       const response = await axios.get(`${this.baseUrl}/orgs/${this.organization}/members/${username}`, {
@@ -176,6 +181,23 @@ export class GitHubService {
       return response.status === 204;
     } catch (error) {
       return false;
+    }
+  }
+
+
+  public async collaborateRepo(repoName: string, username: string): Promise<void> {
+    try {
+      const response = await axios.put(
+        `${this.baseUrl}/repos/${this.organization}/${repoName}/collaborators/${username}`,
+        {},
+        {
+          headers: this.headers,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error collaborating repo: ${error.message}`);
+      throw error;
     }
   }
 

@@ -24,6 +24,7 @@ export default function CardTopic_More({ topic, className }: CardPost_MoreProps)
   const queryClient = useQueryClient();
   const t = useTranslations('post');
 
+
   const onView = () => {
     router.push(localPath(paths.TOPICS_DETAIL(topic.id)));
   };
@@ -41,7 +42,7 @@ export default function CardTopic_More({ topic, className }: CardPost_MoreProps)
     },
   });
 
-//   const isAuthor = user?.user?.id === topic?.author?.id;
+  const isAuthor = user?.user?.id === topic?.author?.id;
   const isAdmin = user?.user?.role === 'admin';
 
   const actions: DropdownAction[] = [
@@ -64,7 +65,7 @@ export default function CardTopic_More({ topic, className }: CardPost_MoreProps)
       label: 'Delete Post',
       icon: <IconTrash size={16} />,
       onClick: () => {},
-      isVisible: isAdmin,
+      isVisible: isAdmin || isAuthor,
       isDeleteAction: true,
     },
   ];

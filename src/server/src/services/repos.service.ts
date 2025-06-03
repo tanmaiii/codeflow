@@ -1,5 +1,5 @@
-import { RepoCreate, Repos } from '@/interfaces/repos.interface';
-import { isEmpty, reposName } from '@/utils/util';
+import { RepoCreate, Repos, RepoUpdate } from '@/interfaces/repos.interface';
+import { isEmpty, reposName, cleanSpecialCharacters } from '@/utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { Op } from 'sequelize';
 import Container, { Service } from 'typedi';
@@ -67,31 +67,46 @@ export class ReposService {
 
   public async createRepo(repoData: Partial<RepoCreate>): Promise<Repos> {
     const topic = await this.topicService.findTopicById(repoData.topicId);
-    const name = reposName({ type: topic.course?.type as ENUM_TYPE_COURSE, name: topic?.title, groupName: topic?.groupName });
+    const repoName = reposName({ type: topic.course?.type as ENUM_TYPE_COURSE, name: topic?.title, groupName: topic?.groupName });
 
+    // Tạo repo trong GitHub
     const repo = await this.githubService.createRepoInOrg({
-      name: name,
-      description: topic.description,
-      private: true,
+      name: repoName,
+      description: cleanSpecialCharacters(topic.description || ''),
+      private: false,
       team_id: null,
       auto_init: true,
     });
 
+    // Thêm tất cả thành viên của topic vào repo
+    topic.members.forEach(async member => {
+      if (member.user?.uid && member.user?.username) {
+        await this.githubService.collaborateRepo(repoName, member.user?.username);
+      }
+    });
+
+    // Tạo repo trong database
     const createdRepo: Repos = await DB.Repos.create({
       url: repo.html_url,
-      name: repo.name,
-      ...repoData,
+      name: repoName,
+      topicId: repoData.topicId,
+      courseId: topic.courseId,
     });
     return createdRepo;
   }
 
-  public async updateRepo(id: string, repoData: Partial<RepoCreate>): Promise<Repos> {
+  public async updateRepo(id: string, repoData: Partial<RepoUpdate>): Promise<Repos> {
     if (isEmpty(id)) throw new HttpException(400, 'RepoId is empty');
 
     const findRepo = await DB.Repos.findByPk(id);
     if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
 
-    await DB.Repos.update(repoData, { where: { id } });
+    await DB.Repos.update(
+      {
+        ...repoData,
+      },
+      { where: { id } },
+    );
 
     return findRepo;
   }
