@@ -32,7 +32,7 @@ export const removeVietnameseDiacritics = (str: string): string => {
  */
 export const cleanSpecialCharacters = (str: string): string => {
   if (!str || typeof str !== 'string') return '';
-  
+
   return str
     .replace(/[\r\n\t]/g, ' ') // Replace newlines, carriage returns, and tabs with spaces
     .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
@@ -54,13 +54,13 @@ export const reposName = ({ type, name, groupName }: { type: ENUM_TYPE_COURSE; n
   let nameRepo = '';
 
   if (type === ENUM_TYPE_COURSE.MAJOR) {
-    nameRepo = `cn-${formattedName}${formattedgroupName ? `-${formattedgroupName}` : ''}-${Date.now()}`;
+    nameRepo = `cn-${formattedName}${formattedgroupName ? `-${formattedgroupName}` : ''}`;
   } else if (type === ENUM_TYPE_COURSE.FOUNDATION) {
-    nameRepo = `csn-${formattedName}${formattedgroupName ? `-${formattedgroupName}` : ''}-${Date.now()}`;
+    nameRepo = `csn-${formattedName}${formattedgroupName ? `-${formattedgroupName}` : ''}`;
   } else if (type === ENUM_TYPE_COURSE.ELECTIVE) {
-    nameRepo = `mh-${formattedName}${formattedgroupName ? `-${formattedgroupName}` : ''}-${Date.now()}`;
+    nameRepo = `mh-${formattedName}${formattedgroupName ? `-${formattedgroupName}` : ''}`;
   } else if (type === ENUM_TYPE_COURSE.THESIS) {
-    nameRepo = `kl-${formattedName}${formattedgroupName ? `-${formattedgroupName}` : ''}-${Date.now()}`;
+    nameRepo = `kl-${formattedName}${formattedgroupName ? `-${formattedgroupName}` : ''}`;
   }
 
   return nameRepo;

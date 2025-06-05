@@ -21,9 +21,9 @@ const TABS = [
 export default function Topics() {
   const route = useRouter();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 1;
+  const page = searchParams?.get('page') || 1;
   const t = useTranslations('topic');
-  const tab = searchParams.get('tab') || 'all';
+  const tab = searchParams?.get('tab') || 'all';
   const { user } = useUserStore();
 
   const {
@@ -32,7 +32,7 @@ export default function Topics() {
     isError,
   } = useQ_Topic_GetAllByUserId({
     params: {
-      page: Number(page),
+      page: 1,
       limit: 12,
       userId: user?.id || '',
       status: tab !== 'all' ? tab : '',

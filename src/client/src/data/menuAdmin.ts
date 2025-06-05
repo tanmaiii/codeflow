@@ -39,6 +39,12 @@ export const menuAdmin: ILinkItem[] = [
     href: paths.POSTS,
   },
   {
+    en: 'Repos',
+    vi: 'Repository',
+    icon: 'repo',
+    href: paths.REPOS,
+  },
+  {
     en: 'Settings',
     vi: 'Cài đặt',
     icon: 'settings',

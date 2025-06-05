@@ -121,6 +121,7 @@ export class TopicService {
         message: `New topic "${createdTopic.title}"`,
         link: `/topics/${createdTopic.id}`,
         userId: course?.authorId,
+        topicId: createdTopic.id,
       };
 
       await this.notificationService.createNotification(notificationData);
@@ -163,6 +164,7 @@ export class TopicService {
         title: topicData.status === 'approved' ? 'Approve Topic' : 'Reject Topic',
         message: `Topic "${topic.title}" is ${topicData.status}`,
         link: `/topics/${topic.id}`,
+        topicId: topic.id,
         userId: topic.authorId,
       };
 

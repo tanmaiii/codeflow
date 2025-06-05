@@ -202,6 +202,28 @@ export class GitHubService {
   }
 
   /**
+   * Kiểm tra xem repository có tồn tại trong tổ chức hay không
+   * @param repoName Tên repository cần kiểm tra
+   * @returns true nếu repository tồn tại, false nếu không
+   */
+  public async checkRepoExists(repoName: string): Promise<boolean> {
+    try {
+      await axios.get(`${this.baseUrl}/repos/${this.organization}/${repoName}`, {
+        headers: this.headers,
+      });
+      return true;
+    } catch (error) {
+      // Nếu repository không tồn tại, GitHub API sẽ trả về lỗi 404
+      if (error.response && error.response.status === 404) {
+        return false;
+      }
+      // Nếu có lỗi khác, log và coi như repository đã tồn tại để an toàn
+      logger.error(`[GitHub Service] Error checking repository existence: ${error.message}`);
+      return true;
+    }
+  }
+
+  /**
    * Lấy danh sách thành viên tổ chức GitHub
    * @returns Danh sách thành viên tổ chức
    */

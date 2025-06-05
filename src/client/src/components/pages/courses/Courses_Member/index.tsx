@@ -5,17 +5,15 @@ import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
+import MemberAvatar from '@/components/ui/member-avatar';
 import { TextDescription } from '@/components/ui/text';
 import { ROLE_USER } from '@/constants/object';
 import useQ_Course_GetMembers from '@/hooks/query-hooks/Course/useQ_Course_GetMembers';
 import { IUser } from '@/interfaces/user';
-import apiConfig from '@/lib/api';
 import userService from '@/services/user.service';
-import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -26,7 +24,7 @@ export default function Courses_Member() {
   const tCourse = useTranslations('course');
   const queryClient = useQueryClient();
   const params = useParams();
-  const id = params.id as string;
+  const id = params?.id as string;
   const [page, setPage] = useState(1);
   const { data } = useQ_Course_GetMembers({
     id: id,
@@ -39,20 +37,7 @@ export default function Courses_Member() {
         header: 'Name',
         accessorKey: 'name',
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <Image
-              src={
-                row.original.avatar
-                  ? utils_ApiImageToLocalImage(row.original.avatar)
-                  : apiConfig.avatar(row.original.name)
-              }
-              alt={row.original.name ?? ''}
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
-            <TextDescription className="text-color-1">{row.original.name}</TextDescription>
-          </div>
+          <MemberAvatar avatar={row.original.avatar ?? ''} id={row.original.id} name={row.original.name} />
         ),
       },
       {

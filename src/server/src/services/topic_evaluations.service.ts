@@ -64,6 +64,7 @@ export class TopicEvaluationsService {
       message: `New topic evaluation "${createTopicEvaluationData.evaluation.slice(0, 10)}..."`,
       userId,
       isRead: false,
+      topicId: createTopicEvaluationData.topicId,
       link: `/topics/${createTopicEvaluationData.topicId}`,
     };
 

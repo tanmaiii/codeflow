@@ -65,13 +65,61 @@ export class ReposService {
     return findRepo;
   }
 
+  /**
+   * Tạo tên repository duy nhất bằng cách kiểm tra trong database và GitHub
+   * @param baseName Tên gốc của repository
+   * @returns Tên repository duy nhất
+   */
+  private async generateUniqueRepoName(baseName: string): Promise<string> {
+    let repoName = baseName;
+    let counter = 1;
+    
+    while (await this.isRepoNameExists(repoName)) {
+      repoName = `${baseName}-${counter}`;
+      counter++;
+    }
+    
+    return repoName;
+  }
+
+  /**
+   * Kiểm tra xem tên repository đã tồn tại chưa (cả trong database và GitHub)
+   * @param repoName Tên repository cần kiểm tra
+   * @returns true nếu đã tồn tại, false nếu chưa
+   */
+  private async isRepoNameExists(repoName: string): Promise<boolean> {
+    try {
+      // Kiểm tra trong database local
+      const existingRepo = await DB.Repos.findOne({
+        where: { name: repoName }
+      });
+      
+      if (existingRepo) {
+        return true;
+      }
+
+      // Kiểm tra trên GitHub
+      const githubRepoExists = await this.githubService.checkRepoExists(repoName);
+      return githubRepoExists;
+    } catch (error) {
+      // Nếu có lỗi khi kiểm tra, coi như tên đã tồn tại để an toàn
+      console.error('Error checking repo name existence:', error);
+      return true;
+    }
+  }
+
   public async createRepo(repoData: Partial<RepoCreate>): Promise<Repos> {
     const topic = await this.topicService.findTopicById(repoData.topicId);
-    const repoName = reposName({ type: topic.course?.type as ENUM_TYPE_COURSE, name: topic?.title, groupName: topic?.groupName });
+    const defaultRepoName = reposName({ type: topic.course?.type as ENUM_TYPE_COURSE, name: topic?.title, groupName: topic?.groupName });
 
+    const baseRepoName = `${defaultRepoName}-${repoData?.name || ''}`;
+    
+    // Tạo tên repository duy nhất
+    const uniqueRepoName = await this.generateUniqueRepoName(baseRepoName);
+    
     // Tạo repo trong GitHub
     const repo = await this.githubService.createRepoInOrg({
-      name: repoName,
+      name: uniqueRepoName,
       description: cleanSpecialCharacters(topic.description || ''),
       private: false,
       team_id: null,
@@ -81,16 +129,17 @@ export class ReposService {
     // Thêm tất cả thành viên của topic vào repo
     topic.members.forEach(async member => {
       if (member.user?.uid && member.user?.username) {
-        await this.githubService.collaborateRepo(repoName, member.user?.username);
+        await this.githubService.collaborateRepo(uniqueRepoName, member.user?.username);
       }
     });
 
     // Tạo repo trong database
     const createdRepo: Repos = await DB.Repos.create({
       url: repo.html_url,
-      name: repoName,
+      name: uniqueRepoName,
       topicId: repoData.topicId,
       courseId: topic.courseId,
+      authorId: repoData.authorId || '',
     });
     return createdRepo;
   }

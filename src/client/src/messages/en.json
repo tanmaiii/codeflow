@@ -30,6 +30,7 @@
     "pick": "Pick a {field}",
     "dragDrop": "Drag and drop {field} here",
     "upload": "Upload {field}",
+    "name": "Name",
     "image": "Image",
     "file": "File",
     "deleteSuccess": "Deleted successfully",
@@ -285,5 +286,14 @@
     "searching": "Searching...",
     "appliedFilters": "Applied {length} filters",
     "viewAllResults": "View all results for \"{keyword}\""
+  },
+  "repo": {
+    "repo": "Repo",
+    "nameRepo": "Repo name",
+    "createRepo": "Create Repo",
+    "createRepoDescription": "Name must be lowercase, no special characters or spaces",
+    "updateRepo": "Update Repo",
+    "editRepo": "Edit Repo",
+    "deleteRepo": "Delete Repo"
   }
 }

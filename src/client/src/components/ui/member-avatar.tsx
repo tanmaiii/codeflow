@@ -1,8 +1,10 @@
 import { TextDescription } from '@/components/ui/text';
 import { ROLE_TOPIC } from '@/constants/object';
+import { paths } from '@/data/path';
 import apiConfig from '@/lib/api';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface MemberAvatarProps {
   avatar?: string;
@@ -11,6 +13,7 @@ interface MemberAvatarProps {
   description?: string;
   size?: number;
   className?: string;
+  id?: string;
 }
 
 export default function MemberAvatar({
@@ -20,9 +23,18 @@ export default function MemberAvatar({
   description,
   size = 34,
   className,
+  id,
 }: MemberAvatarProps) {
+  const router = useRouter();
   return (
-    <div className={cn('flex flex-row items-center gap-2', className)}>
+    <div
+      onClick={() => {
+        if (id) {
+          router.push(paths.USER_DETAIL(id));
+        }
+      }}
+      className={cn('flex flex-row cursor-pointer items-center gap-2', className)}
+    >
       <Image
         src={!avatar ? apiConfig.avatar(name) : avatar}
         alt={name}

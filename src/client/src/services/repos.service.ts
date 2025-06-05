@@ -33,6 +33,11 @@ class ReposService {
     const res = await this.client.put(`/${id}`, data);
     return res.data;
   }
+
+  async delete(id: string): Promise<ResponseAPIDto<IRepos>> {
+    const res = await this.client.delete(`/${id}`);
+    return res.data;
+  }
 }
 
 export default new ReposService() as ReposService;

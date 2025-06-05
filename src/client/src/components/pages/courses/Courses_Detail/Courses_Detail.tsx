@@ -118,7 +118,7 @@ export default function Courses_Detail() {
             <NameTags tags={dataCourse.data?.tags} max={dataCourse.data?.tags.length} />
             <div className="">
               {new Date(dataCourse?.data?.startDate) < new Date() && (
-                <div className="flex flex-row items-center rounded-md gap-2  bg-primary/30  p-4 relative overflow-hidden mb-2">
+                <div className="flex flex-row items-center rounded-md gap-2 bg-primary/30  p-4 relative overflow-hidden mb-2">
                   <IconClockHour1 className="text-color-1 size-5" />
                   <TextHeading>{t('topicDeadline') + ': '}</TextHeading>
                   <TextDescription className="text-color-1 ">
@@ -129,7 +129,15 @@ export default function Courses_Detail() {
                     className={cx('h-1 bg-input/60 w-full absolute right-0 bottom-0 rounded-md')}
                   >
                     <div
-                      className={cx('h-1 bg-green-500 w-full absolute left-0 bottom-0 rounded-md')}
+                      className={cx(
+                        'h-1 w-full absolute left-0 bottom-0 rounded-md',
+                        utils_CalculateProgress(
+                          dataCourse.data?.startDate ?? '',
+                          dataCourse.data?.topicDeadline ?? '',
+                        ) >= 90
+                          ? 'bg-red-400'
+                          : ' bg-green-500',
+                      )}
                       style={{
                         width: `${utils_CalculateProgress(
                           dataCourse.data?.startDate ?? '',

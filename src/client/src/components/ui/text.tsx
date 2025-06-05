@@ -13,7 +13,7 @@ export default function TextHeading({
     <h4
       className={cn(
         'flex items-left gap-2 text-base text-left leading-none font-bold group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
-        lineClamp && `line-clamp-${lineClamp} overflow-hidden text-ellipsis`,
+        lineClamp && `line-clamp-${lineClamp} overflow-hidden text-ellipsis `,
         className,
       )}
       {...props}

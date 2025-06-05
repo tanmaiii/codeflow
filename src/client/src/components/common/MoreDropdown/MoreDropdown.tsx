@@ -80,7 +80,7 @@ export default function MoreDropdown({
             <Button 
               variant="rounded" 
               size="icon" 
-              className={cx('bg-white/20')} 
+              className={cx('bg-white/20 ')} 
               {...buttonProps}
             >
               <EllipsisIcon size={26} className="text-color-1" />

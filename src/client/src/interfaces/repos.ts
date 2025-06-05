@@ -1,22 +1,22 @@
 import { IBaseEntity } from './common';
-import { ITopic } from './topic';
+import { IUser } from './user';
 
 export interface IRepos extends IBaseEntity {
   id: string;
   name: string;
   description: string;
   topicId: string;
-  topic: ITopic;
+  url: string;
+  authorId: string;
+  author: IUser;
 }
 
 export interface IReposCreateDto {
   name: string;
   topicId: string;
-  url: string;
 }
 
 export interface IReposUpdateDto {
   name: string;
   topicId: string;
-  url: string;
 }

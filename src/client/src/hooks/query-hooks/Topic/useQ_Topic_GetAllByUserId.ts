@@ -1,11 +1,11 @@
 'use client';
 import { PaginatedResponseAPIDto } from '@/interfaces/common';
-import { IGetAllTopicByUserIdParams, ITopic } from '@/interfaces/topic';
+import { IGetAllTopicParams, ITopic } from '@/interfaces/topic';
 import topicService from '@/services/topic.service';
 
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-interface ParamsProps extends IGetAllTopicByUserIdParams {
+interface ParamsProps extends IGetAllTopicParams {
   userId: string;
 }
 

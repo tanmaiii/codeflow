@@ -1,7 +1,9 @@
 import { Repos } from '@/interfaces/repos.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { UserModel } from './users.model';
+import { TopicModel } from './topics.model';
 
-type ReposCreationAttributes = Optional<Repos, 'id' | 'name' | 'url' | 'courseId' | 'topicId'>;
+type ReposCreationAttributes = Optional<Repos, 'id' | 'name' | 'url' | 'courseId' | 'topicId' | 'authorId'>;
 
 export class ReposModel extends Model<Repos, ReposCreationAttributes> implements Repos {
   public id: string;
@@ -9,6 +11,7 @@ export class ReposModel extends Model<Repos, ReposCreationAttributes> implements
   public url: string;
   public courseId: string;
   public topicId: string;
+  public authorId: string;
 }
 
 export default function (sequelize: Sequelize): typeof ReposModel {
@@ -43,6 +46,14 @@ export default function (sequelize: Sequelize): typeof ReposModel {
           key: 'id',
         },
       },
+      authorId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
     },
     {
       tableName: 'repos',
@@ -50,6 +61,14 @@ export default function (sequelize: Sequelize): typeof ReposModel {
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm
+      defaultScope: {
+        include: [
+          {
+            model: UserModel,
+            as: 'author',
+          },
+        ]
+      }
     },
   );
 

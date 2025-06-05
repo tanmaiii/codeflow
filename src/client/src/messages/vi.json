@@ -31,6 +31,7 @@
     "dragDrop": "Kéo và thả {field} vào đây",
     "upload": "Tải lên {field}",
     "image": "hình ảnh",
+    "name": "Tên",
     "file": "tập tin",
     "deleteSuccess": "Đã xóa thành công",
     "deleteError": "Xóa thất bại",
@@ -267,7 +268,7 @@
     "post": "Bài viết",
     "topic": "Đề tài",
     "tags": "Thẻ",
-    "results": "Kết quả", 
+    "results": "Kết quả",
     "resultsFor": "Kết quả tìm kiếm cho \"{keyword}\"",
     "noResults": "Không tìm thấy kết quả",
     "reset": "Đặt lại",
@@ -275,5 +276,14 @@
     "searching": "Đang tìm kiếm...",
     "appliedFilters": "Đã áp dụng {length} bộ lọc",
     "viewAllResults": "Xem tất cả kết quả cho \"{keyword}\""
+  },
+  "repo": {
+    "repo": "Kho lưu trữ",
+    "nameRepo": "Tên kho lưu trữ",
+    "createRepo": "Tạo kho lưu trữ",
+    "createRepoDescription": "Tên phải viết thường, không được chứa ký tự đặc biệt và khoảng trắng",
+    "updateRepo": "Cập nhật kho lưu trữ",
+    "editRepo": "Chỉnh sửa kho lưu trữ",
+    "deleteRepo": "Xóa kho lưu trữ"
   }
 }

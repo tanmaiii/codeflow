@@ -10,6 +10,8 @@ import { TagService } from './tag.service';
 import { NotificationService } from './notification.service';
 import { Notification } from '@/interfaces/notification.interface';
 import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+import { UserService } from './users.service';
+import { User } from '@/interfaces/users.interface';
 
 @Service()
 export class CourseService {
@@ -18,6 +20,7 @@ export class CourseService {
     public Tag = Container.get(TagService),
     public CourseDocument = Container.get(CourseDocumentService),
     public CourseEnrollment = Container.get(CourseEnrollmentService),
+    public User = Container.get(UserService),
   ) {}
 
   private readonly commentCountLiteral = Sequelize.literal(`(
@@ -270,6 +273,7 @@ export class CourseService {
 
   public async joinCourse(courseId: string, userId: string, password: string): Promise<CourseEnrollment> {
     const findCourse: Course = await DB.Courses.scope('withPassword').findByPk(courseId);
+    const user: User = await this.User.findUserById(userId);
     if (!findCourse) throw new HttpException(409, "Course doesn't exist");
 
     if (findCourse.password) {
@@ -281,8 +285,9 @@ export class CourseService {
     const notificationData: Notification = {
       type: ENUM_TYPE_NOTIFICATION.JOIN_COURSE,
       title: 'New Course Enrollment',
-      message: `New course enrollment "${findCourse.title}"`,
+      message: `${user.name} joined "${findCourse.title}"`,
       userId: findCourse.authorId,
+      courseId: courseId,
       link: `/courses/${courseId}`,
     };
 

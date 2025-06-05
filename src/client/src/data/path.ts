@@ -19,6 +19,8 @@ export const paths = {
   POST_UPDATE: (id: string) => `/posts/${id}/update`,
   POST_DETAIL: (id: string) => `/posts/${id}`,
 
+  REPOS: '/repos',
+
   COURSES: '/courses',
   COURSES_DETAIL: (id: string) => `/courses/${id}`,
   COURSE_CREATE: '/courses/create',

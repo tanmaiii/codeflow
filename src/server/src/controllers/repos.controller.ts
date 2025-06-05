@@ -1,6 +1,5 @@
-import { CourseService } from '@/services/courses.service';
+import { RequestWithUser } from '@/interfaces/auth.interface';
 import { ReposService } from '@/services/repos.service';
-import { TopicService } from '@/services/topic.service';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
 
@@ -71,9 +70,9 @@ export class ReposController {
     }
   };
 
-  public createRepo = async (req: Request, res: Response, next: NextFunction) => {
+  public createRepo = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const repo = await this.reposService.createRepo(req.body);
+      const repo = await this.reposService.createRepo({ ...req.body, authorId: req.user.id });
       res.status(201).json(repo);
     } catch (error) {
       next(error);

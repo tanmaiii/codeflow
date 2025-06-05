@@ -7,7 +7,7 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import MemberAvatar from '@/components/ui/member-avatar';
-import { STATUS_COURSE, STATUS_HIDDEN } from '@/constants/object';
+import { STATUS_COURSE } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
@@ -87,14 +87,14 @@ export default function Courses_Table() {
           return <MyBadge status={STATUS_COURSE.find(item => item.value === statusType)!} />;
         },
       },
-      {
-        header: t('hidden'),
-        accessorKey: 'hidden',
-        cell: ({ row }) => {
-          const statusType = row.original.status ? 'hidden' : 'visible';
-          return <MyBadge status={STATUS_HIDDEN.find(item => item.value === statusType)!} />;
-        },
-      },
+      // {
+      //   header: t('hidden'),
+      //   accessorKey: 'hidden',
+      //   cell: ({ row }) => {
+      //     const statusType = row.original.status ? 'hidden' : 'visible';
+      //     return <MyBadge status={STATUS_HIDDEN.find(item => item.value === statusType)!} />;
+      //   },
+      // },
     ],
     [localPath, t],
   );

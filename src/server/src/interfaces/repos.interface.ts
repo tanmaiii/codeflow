@@ -4,10 +4,13 @@ export interface Repos {
   url: string;
   courseId: string;
   topicId: string;
+  authorId: string;
 }
 
 export interface RepoCreate {
+  name: string;
   topicId: string;
+  authorId: string;
 }
 
 export interface RepoUpdate {

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { paths } from '@/data/path';
 import Link from 'next/link';
 import Topics_Evaluation from './Topics_Evaluation';
+import Topics_Contribute from './Topics_Contribute';
 
 export default function Topics_Detail() {
   const params = useParams();
@@ -31,7 +32,7 @@ export default function Topics_Detail() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mx-auto my-4">
-      <div className="col-span-12 md:col-span-8 xl:col-span-9">
+      <div className="flex flex-col col-span-12 gap-6 md:col-span-8 xl:col-span-9">
         <Card className="flex flex-col gap-4 p-4 lg:p-6 min-h-[90vh]">
           <div className="flex flex-row items-center justify-between gap-2">
             <TitleHeader title={`${dataTopic?.data?.title}`} onBack={true} />
@@ -111,9 +112,13 @@ export default function Topics_Detail() {
             {dataTopic?.data && <Topics_Evaluation topic={dataTopic?.data} />}
           </div>
         </Card>
+
+        <Topics_Contribute />
       </div>
-      <div className="col-span-12 md:col-span-4 xl:col-span-3">
-        {dataTopic?.data && <Topics_About topic={dataTopic?.data} />}
+      <div className="col-span-12 md:col-span-4 xl:col-span-3 sticky top-20">
+        <div className="sticky top-20">
+          {dataTopic?.data && <Topics_About topic={dataTopic?.data} />}
+        </div>
       </div>
     </div>
   );

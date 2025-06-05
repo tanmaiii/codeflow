@@ -2,6 +2,7 @@ import { IBaseEntity, IGetAllQuery } from './common';
 import { ICourse } from './course';
 import { IUser } from './user';
 import { ITag } from './tags';
+import { IRepos } from './repos';
 
 export interface ITopicMember extends IBaseEntity {
   id: string;
@@ -33,6 +34,7 @@ export interface ITopic extends IBaseEntity {
   groupName?: string;
   members?: ITopicMember[];
   evaluations?: ITopicEvaluation[];
+  repos?: IRepos[];
 }
 
 export interface ITopicCreateDto {
