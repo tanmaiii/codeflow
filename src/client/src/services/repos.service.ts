@@ -1,4 +1,4 @@
-import { IGetAllQuery, ResponseAPIDto } from '@/interfaces/common';
+import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
 import { IRepos, IReposCreateDto, IReposUpdateDto } from '@/interfaces/repos';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
@@ -10,14 +10,17 @@ class ReposService {
     this.client = createHttpClient('repos');
   }
 
-  public async getAll(params: IGetAllQuery): Promise<ResponseAPIDto<IRepos[]>> {
+  public async getAll(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<IRepos[]>> {
     const res = await this.client.get('/', {
       params,
     });
     return res.data;
   }
 
-  public async getByTopic(params: IGetAllQuery, topicId: string) {
+  public async getByTopic(
+    params: IGetAllQuery,
+    topicId: string,
+  ): Promise<PaginatedResponseAPIDto<IRepos[]>> {
     const res = await this.client.get(`/topic/${topicId}`, {
       params,
     });
@@ -36,6 +39,11 @@ class ReposService {
 
   async delete(id: string): Promise<ResponseAPIDto<IRepos>> {
     const res = await this.client.delete(`/${id}`);
+    return res.data;
+  }
+
+  async destroy(id: string): Promise<ResponseAPIDto<IRepos>> {
+    const res = await this.client.delete(`/${id}/force`);
     return res.data;
   }
 }

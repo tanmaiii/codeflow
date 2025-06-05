@@ -67,6 +67,7 @@ export class GitHubService {
     }
   }
 
+
   public async deleteRepoInOrg(repoName: string): Promise<GitHubRepository> {
     try {
       logger.info(`[GitHub Service] Deleting repository: ${repoName} ${this.baseUrl}/repos/${this.organization}/${repoName}`);
@@ -79,6 +80,20 @@ export class GitHubService {
       throw error;
     }
   }
+
+  public async updateRepoInOrg(repoName: string, repoData: Partial<GitHubRepositoryCreate>): Promise<GitHubRepository> {
+    try {
+      logger.info(`[GitHub Service] Updating repository: ${repoName} ${this.baseUrl}/repos/${this.organization}/${repoName}`);
+      const response = await axios.patch(`${this.baseUrl}/repos/${this.organization}/${repoName}`, repoData, {
+        headers: this.headers,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error updating repository: ${error.message}`);
+      throw error;
+    }
+  }
+
   /**
    * Lấy danh sách repository từ GitHub
    * @param accessToken GitHub access token

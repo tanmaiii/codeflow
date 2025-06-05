@@ -112,7 +112,7 @@ export class TopicController {
       const topicData: Partial<TopicCreate> = req.body;
       const userData: User = req.user;
 
-      const createTopicData: TopicCreate = await this.topic.createTopic({
+      const createTopicData: Topic = await this.topic.createTopic({
         ...topicData,
         authorId: userData.id,
       });

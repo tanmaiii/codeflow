@@ -17,6 +17,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useMemo, useRef, useState } from 'react';
+import { ENUM_STATUS_TOPIC } from '@/constants/enum';
 
 interface Courses_Topics_ChoiceTopicProps {
   onSelect: (topic: ITopic) => void;
@@ -121,7 +122,10 @@ export default function Courses_Topics_ChoiceTopic({
           pagination={false}
           showIndexColumn={true}
           renderActions={({ row }) => {
-            if (row.original.members && row.original.members.length > 0) {
+            if (
+              (row.original.members && row.original.members.length > 0) ||
+              row.original.status === ENUM_STATUS_TOPIC.REJECTED
+            ) {
               return null;
             }
             return (

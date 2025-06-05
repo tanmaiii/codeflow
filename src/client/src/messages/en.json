@@ -43,7 +43,9 @@
     "joinError": "Failed to join",
     "createdAt": "Created at",
     "updatedAt": "Updated at",
-    "deletedAt": "Deleted at"
+    "deletedAt": "Deleted at",
+    "updating": "Updating...",
+    "deleting": "Deleting..."
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -287,13 +289,15 @@
     "appliedFilters": "Applied {length} filters",
     "viewAllResults": "View all results for \"{keyword}\""
   },
-  "repo": {
-    "repo": "Repo",
+  "repos": {
+    "repos": "Repo",
     "nameRepo": "Repo name",
     "createRepo": "Create Repo",
     "createRepoDescription": "Name must be lowercase, no special characters or spaces",
     "updateRepo": "Update Repo",
     "editRepo": "Edit Repo",
-    "deleteRepo": "Delete Repo"
+    "deleteRepo": "Delete Repo",
+    "author": "Author",
+    "name": "Name"
   }
 }

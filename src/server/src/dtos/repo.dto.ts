@@ -19,5 +19,6 @@ export class UpdateRepoDto {
 
   @IsString()
   @MinLength(1)
+  @IsOptional()
   public topicId: string;
 }

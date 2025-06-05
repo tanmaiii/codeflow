@@ -43,7 +43,9 @@
     "joinError": "Tham gia thất bại",
     "createdAt": "Ngày tạo",
     "updatedAt": "Ngày cập nhật",
-    "deletedAt": "Ngày xóa"
+    "deletedAt": "Ngày xóa",
+    "updating": "Đang cập nhật...",
+    "deleting": "Đang xóa..."
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
@@ -277,13 +279,15 @@
     "appliedFilters": "Đã áp dụng {length} bộ lọc",
     "viewAllResults": "Xem tất cả kết quả cho \"{keyword}\""
   },
-  "repo": {
-    "repo": "Kho lưu trữ",
+  "repos": {
+    "repos": "Kho lưu trữ",
     "nameRepo": "Tên kho lưu trữ",
     "createRepo": "Tạo kho lưu trữ",
     "createRepoDescription": "Tên phải viết thường, không được chứa ký tự đặc biệt và khoảng trắng",
     "updateRepo": "Cập nhật kho lưu trữ",
     "editRepo": "Chỉnh sửa kho lưu trữ",
-    "deleteRepo": "Xóa kho lưu trữ"
+    "deleteRepo": "Xóa kho lưu trữ",
+    "author": "Tác giả",
+    "name": "Tên"
   }
 }

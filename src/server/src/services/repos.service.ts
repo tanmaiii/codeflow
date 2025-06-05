@@ -7,6 +7,7 @@ import { DB } from '../database';
 import { TopicService } from './topic.service';
 import { ENUM_TYPE_COURSE } from '@/data/enum';
 import { GitHubService } from './github.service';
+import { logger } from '@/utils/logger';
 @Service()
 export class ReposService {
   constructor(private readonly githubService = Container.get(GitHubService), private readonly topicService = Container.get(TopicService)) {}
@@ -22,6 +23,7 @@ export class ReposService {
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     search = '',
+    isAdmin = false,
   ): Promise<{ count: number; rows: Repos[] }> {
     const { count, rows }: { count: number; rows: Repos[] } = await DB.Repos.findAndCountAll({
       limit: pageSize,
@@ -32,6 +34,7 @@ export class ReposService {
       where: {
         [Op.or]: [{ name: { [Op.like]: `%${search}%` } }],
       },
+      paranoid: !isAdmin,
     });
     return { count, rows };
   }
@@ -43,6 +46,7 @@ export class ReposService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     search = '',
     topicId: string,
+    isAdmin = false,
   ): Promise<{ count: number; rows: Repos[] }> {
     const { count, rows }: { count: number; rows: Repos[] } = await DB.Repos.findAndCountAll({
       limit: pageSize,
@@ -54,12 +58,13 @@ export class ReposService {
         [Op.or]: [{ name: { [Op.like]: `%${search}%` } }],
         topicId: topicId,
       },
+      paranoid: !isAdmin,
     });
     return { count, rows };
   }
 
-  public async findById(id: string): Promise<Repos> {
-    const findRepo = await DB.Repos.findByPk(id);
+  public async findById(id: string, isAdmin = false): Promise<Repos> {
+    const findRepo = await DB.Repos.findByPk(id, { paranoid: !isAdmin });
     if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
 
     return findRepo;
@@ -73,12 +78,12 @@ export class ReposService {
   private async generateUniqueRepoName(baseName: string): Promise<string> {
     let repoName = baseName;
     let counter = 1;
-    
+
     while (await this.isRepoNameExists(repoName)) {
       repoName = `${baseName}-${counter}`;
       counter++;
     }
-    
+
     return repoName;
   }
 
@@ -91,9 +96,9 @@ export class ReposService {
     try {
       // Kiểm tra trong database local
       const existingRepo = await DB.Repos.findOne({
-        where: { name: repoName }
+        where: { name: repoName },
       });
-      
+
       if (existingRepo) {
         return true;
       }
@@ -110,13 +115,8 @@ export class ReposService {
 
   public async createRepo(repoData: Partial<RepoCreate>): Promise<Repos> {
     const topic = await this.topicService.findTopicById(repoData.topicId);
-    const defaultRepoName = reposName({ type: topic.course?.type as ENUM_TYPE_COURSE, name: topic?.title, groupName: topic?.groupName });
+    const uniqueRepoName = await this.generateUniqueRepoName(`${repoData?.name || ''}`);
 
-    const baseRepoName = `${defaultRepoName}-${repoData?.name || ''}`;
-    
-    // Tạo tên repository duy nhất
-    const uniqueRepoName = await this.generateUniqueRepoName(baseRepoName);
-    
     // Tạo repo trong GitHub
     const repo = await this.githubService.createRepoInOrg({
       name: uniqueRepoName,
@@ -146,22 +146,36 @@ export class ReposService {
 
   public async updateRepo(id: string, repoData: Partial<RepoUpdate>): Promise<Repos> {
     if (isEmpty(id)) throw new HttpException(400, 'RepoId is empty');
-
-    const findRepo = await DB.Repos.findByPk(id);
+    const findRepo = await this.findById(id);
     if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
+    
+    const uniqueRepoName = await this.generateUniqueRepoName(`${repoData?.name || ''}`);
 
-    await DB.Repos.update(
+    // Cập nhật tên repo trên GitHub
+    const githubRepo = await this.githubService.updateRepoInOrg(findRepo.name, {
+      name: uniqueRepoName,
+    });
+
+    // Cập nhật thông tin repo trong database
+    const [updatedRows] = await DB.Repos.update(
       {
-        ...repoData,
+        name: uniqueRepoName,
+        url: githubRepo.html_url,
       },
       { where: { id } },
     );
 
-    return findRepo;
+    // Kiểm tra xem cập nhật có thành công không
+    if (updatedRows === 0) {
+      throw new HttpException(500, 'Failed to update repo in database');
+    }
+
+    const updatedRepo = await this.findById(id, true);
+    return updatedRepo;
   }
 
   public async deleteRepo(repoId: string): Promise<Repos> {
-    const findRepo: Repos = await DB.Repos.findByPk(repoId);
+    const findRepo: Repos = await this.findById(repoId, true);
     if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
 
     await DB.Repos.destroy({ where: { id: repoId } });
@@ -174,7 +188,11 @@ export class ReposService {
     const findRepo = await DB.Repos.findByPk(id, { paranoid: false });
     if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
 
-    await this.githubService.deleteRepoInOrg(findRepo.name);
+    try {
+      await this.githubService.deleteRepoInOrg(findRepo.name);
+    } catch (error) {
+      logger.error(`[Repos Service] Error deleting repo: ${error}`);
+    }
 
     await DB.Repos.destroy({ force: true, where: { id: id } });
 

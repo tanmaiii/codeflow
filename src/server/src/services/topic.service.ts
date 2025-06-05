@@ -3,7 +3,7 @@ import { Notification } from '@/interfaces/notification.interface';
 import { Topic, TopicCreate } from '@/interfaces/topics.interface';
 import { isEmpty } from '@/utils/util';
 import { HttpException } from '@exceptions/HttpException';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
 import { CourseService } from './courses.service';
@@ -22,6 +22,12 @@ export class TopicService {
     private readonly notificationService = Container.get(NotificationService),
     private readonly courseService = Container.get(CourseService),
   ) {}
+
+  private readonly memberCountLiteral = Sequelize.literal(`(
+    SELECT COUNT(*)
+    FROM topic_members AS tm
+    WHERE tm.topic_id = topics.id
+  )`);
 
   public async findAll(): Promise<Topic[]> {
     return DB.Topics.findAll();
@@ -45,6 +51,11 @@ export class TopicService {
       order: [[sortBy, sortOrder]],
       distinct: true,
       col: 'topics.id',
+      attributes: {
+        include: [
+          [this.memberCountLiteral, 'memberCount'],
+        ],
+      },
       where: {
         ...whereClause,
         ...(status ? { status } : {}),
@@ -79,11 +90,22 @@ export class TopicService {
         ...(status ? { status } : {}),
       },
       col: 'topics.id',
+      attributes: {
+        include: [
+          [this.memberCountLiteral, 'memberCount'],
+        ],
+      },
     });
   }
 
   public async findTopicById(id: string): Promise<Topic> {
-    const topic = await DB.Topics.findByPk(id);
+    const topic = await DB.Topics.findByPk(id, {
+      attributes: {
+        include: [
+          [this.memberCountLiteral, 'memberCount'],
+        ],
+      },
+    });
     if (!topic) throw new HttpException(409, "Topic doesn't exist");
     return topic;
   }
@@ -140,6 +162,10 @@ export class TopicService {
 
     if (tags?.length) {
       await Promise.all(tags.map(tagId => this.tagService.createTopicTag(id, tagId)));
+    }
+
+    if (topicData.authorId !== topic.authorId && members) {
+      members.push(topicData.authorId);
     }
 
     if (members?.length) {

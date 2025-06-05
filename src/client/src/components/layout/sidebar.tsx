@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   Book,
   FolderGit,
+  Github,
   Home,
   Layout,
   LogOut,
@@ -35,6 +36,7 @@ const iconMap: Record<string, LucideIcon> = {
   book: Book,
   project: FolderGit,
   article: Newspaper,
+  repos: Github
 };
 
 const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) => {

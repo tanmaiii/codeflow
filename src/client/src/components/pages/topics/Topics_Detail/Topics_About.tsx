@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/user_store';
 import { utils_CalculateProgress } from '@/utils/date';
 import { IconBrandGithub } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import Topics_Repo_Create from './Topics_Repo_Create';
+import Topics_Repos_Create from './Topics_Repos_Create';
 import useQ_Repos_GetAllByTopic from '@/hooks/query-hooks/Repos/useQ_Repos_GetAllByTopic';
 
 const MAX_REPOS = 3;
@@ -45,15 +45,15 @@ export default function Topics_About({ topic }: Topics_AboutProps) {
           </div>
           {canAddRepo ? (
             <div>
-              <Topics_Repo_Create topicId={topic.id} />
+              <Topics_Repos_Create topicId={topic.id} />
             </div>
           ) : null}
         </div>
         <div>
           {Q_Repos?.data?.length && Q_Repos?.data?.length > 0 ? (
             <div className="flex flex-col gap-2">
-              {Q_Repos.data.map(repo => (
-                <CardRepo key={repo.id} repo={repo} />
+              {Q_Repos.data.map(repos => (
+                <CardRepo key={repos.id} repos={repos} />
               ))}
             </div>
           ) : (

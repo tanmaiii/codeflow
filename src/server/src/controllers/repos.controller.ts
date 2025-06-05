@@ -10,14 +10,17 @@ export class ReposController {
     this.reposService = Container.get(ReposService);
   }
 
-  public getRepos = async (req: Request, res: Response, next: NextFunction) => {
+  public getRepos = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', search } = req.query;
+      const isAdmin = req.user?.role === 'admin';
       const { count, rows } = await this.reposService.findAndCountAllWithPagination(
         Number(page),
         Number(limit),
         String(sortBy),
         order as 'ASC' | 'DESC',
+        String(search ?? ''),
+        isAdmin,
       );
 
       res.status(200).json({
@@ -35,9 +38,10 @@ export class ReposController {
     }
   };
 
-  public getByTopic = async (req: Request, res: Response, next: NextFunction) => {
+  public getByTopic = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      const isAdmin = req.user?.role === 'admin';
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', search = '' } = req.query;
       const { count, rows } = await this.reposService.finAndCountByTopic(
         Number(page),
@@ -46,6 +50,7 @@ export class ReposController {
         order as 'ASC' | 'DESC',
         String(search),
         id,
+        isAdmin,
       );
       res.status(200).json({
         data: rows,
@@ -61,9 +66,10 @@ export class ReposController {
     }
   };
 
-  public getRepoById = async (req: Request, res: Response, next: NextFunction) => {
+  public getRepoById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const repo = await this.reposService.findById(req.params.id);
+      const isAdmin = req.user?.role === 'admin';
+      const repo = await this.reposService.findById(req.params.id, isAdmin);
       res.status(200).json(repo);
     } catch (error) {
       next(error);

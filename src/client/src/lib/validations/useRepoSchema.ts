@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export function useRepoSchema() {
   const t = useTranslations('validate');
-  const tRepo = useTranslations('repo');
+  const tRepo = useTranslations('repos');
   return repoSchema({ t, tRepo });
 }
 

@@ -14,6 +14,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { useUserStore } from '@/stores/user_store';
 
 export default function Courses_Topics_CreateByStudent() {
   const tTopic = useTranslations('topic');
@@ -23,7 +24,7 @@ export default function Courses_Topics_CreateByStudent() {
   const [members, setMembers] = useState<string[]>([]);
   const [nameGroup, setNameGroup] = useState<string>('');
   const router = useRouter();
-
+  const { user } = useUserStore();
   const {
     register,
     handleSubmit,
@@ -83,18 +84,20 @@ export default function Courses_Topics_CreateByStudent() {
         name="groupName"
         onChange={e => setNameGroup(e.target.value)}
       />
-      <MyMultiSelect
-        label={tTopic('members')}
-        name="members"
-        maxLength={Q_Course?.data.maxGroupMembers ?? 3}
-        onChange={value => setMembers(value)}
-        options={
-          Q_Members?.data?.map(member => ({
-            value: member.id,
-            label: member.name,
-          })) ?? []
-        }
-      />
+      {Q_Course?.data?.maxGroupMembers && Q_Course?.data?.maxGroupMembers > 1 && <div className="flex flex-col gap-2">
+        <MyMultiSelect
+          label={tTopic('members')}
+          name="members"
+          maxLength={(Q_Course?.data.maxGroupMembers ?? 3 ) - 1}
+          onChange={value => setMembers(value)}
+          options={
+            Q_Members?.data?.map(member => ({
+              value: member.id,
+              label: member.name,
+            })).filter(member => member?.value !== user?.id) ?? []
+          }
+        />
+      </div>}
       <div className="flex justify-end mt-auto">
         <Button type="submit" className="w-fit" disabled={isSubmitting}>
           {tCommon('create')}

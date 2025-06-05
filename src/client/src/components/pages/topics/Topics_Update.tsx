@@ -21,7 +21,8 @@ import { useForm } from 'react-hook-form';
 export default function Topics_Update() {
   const tTopic = useTranslations('topic');
   const t = useTranslations('common');
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: Q_Topic, isLoading, isError } = useQ_Topic_GetDetail({ id: id as string });
@@ -97,15 +98,15 @@ export default function Topics_Update() {
             error={errors.groupName?.message}
             {...register('groupName')}
           />
-          {Q_Topic?.data?.members && (
+          {Q_Topic?.data?.members && Q_Topic?.data?.course?.maxGroupMembers && Q_Topic?.data?.course?.maxGroupMembers > 1 && (
             <MyMultiSelect
               label={tTopic('members')}
               name="members"
               control={control}
-              maxLength={Q_Topic.data.course?.maxGroupMembers ?? 3}
-              defaultValue={Q_Topic?.data?.members?.map(member => member.userId) ?? []}
+              maxLength={(Q_Topic.data.course?.maxGroupMembers ?? 3) - 1}
+              defaultValue={Q_Topic?.data?.members?.filter(member => member.userId !== user?.id).map(member => member.userId) ?? []}
               options={
-                Q_Members?.data?.map(member => ({
+                Q_Members?.data?.filter(member => member.id !== user?.id).map(member => ({
                   value: member.id,
                   label: member.name,
                 })) ?? []

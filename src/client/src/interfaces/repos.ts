@@ -1,4 +1,5 @@
 import { IBaseEntity } from './common';
+import { ITopic } from './topic';
 import { IUser } from './user';
 
 export interface IRepos extends IBaseEntity {
@@ -9,6 +10,7 @@ export interface IRepos extends IBaseEntity {
   url: string;
   authorId: string;
   author: IUser;
+  topic: ITopic;
 }
 
 export interface IReposCreateDto {

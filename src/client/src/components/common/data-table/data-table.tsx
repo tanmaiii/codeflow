@@ -27,12 +27,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { DataTableToolbar } from './data-table-toolbar';
 import { DataTableViewOptions } from './data-table-view-options';
 import { DataTablePagination } from './data-table-pagination';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -45,6 +46,9 @@ interface DataTableProps<TData, TValue> {
   onPageChange?: (page: number) => void;
   appendToUrl?: boolean;
   className?: string;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  enableLocalSearch?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -59,12 +63,30 @@ export function DataTable<TData, TValue>({
   onPageChange,
   appendToUrl = false,
   className,
+  searchValue: externalSearchValue,
+  onSearchChange,
+  enableLocalSearch = true,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [localSearchValue, setLocalSearchValue] = React.useState('');
   const tTable = useTranslations('table');
+
+  const searchValue = externalSearchValue !== undefined ? externalSearchValue : localSearchValue;
+
+  const handleSearchChange = (value: string) => {
+    if (externalSearchValue !== undefined) {
+      onSearchChange?.(value);
+    } else {
+      setLocalSearchValue(value);
+      if (enableLocalSearch) {
+        table.getColumn(fieldFilter)?.setFilterValue(value);
+      }
+    }
+    onSearchChange?.(value);
+  };
 
   const table = useReactTable({
     data,
@@ -92,7 +114,13 @@ export function DataTable<TData, TValue>({
     <div className={cn('space-y-4', className)}>
       <div className="flex items-center justify-between ">
         <div className="flex items-center space-x-2">
-          {fieldFilter && <DataTableToolbar fieldFilter={fieldFilter} table={table} />}
+          <Input
+            placeholder={`Search ${fieldFilter}`}
+            value={searchValue}
+            onChange={event => handleSearchChange(event.target.value)}
+            className="h-8 w-[150px] lg:w-[250px] rounded-md"
+          />
+          {/* {fieldFilter && <DataTableToolbar fieldFilter={fieldFilter} table={table} />} */}
           {toolbarCustom &&
             (typeof toolbarCustom === 'function' ? toolbarCustom({ table }) : toolbarCustom)}
         </div>
@@ -126,9 +154,7 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                   );
                 })}
-                {renderActions &&  (
-                  <TableHead className="text-center w-[100px]">Actions</TableHead>
-                )}
+                {renderActions && <TableHead className="text-center w-[100px]">Actions</TableHead>}
               </TableRow>
             ))}
           </TableHeader>

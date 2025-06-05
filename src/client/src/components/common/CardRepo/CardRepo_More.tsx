@@ -13,18 +13,18 @@ import MoreDropdown, { DropdownAction } from '../MoreDropdown';
 import CardRepo_Update from './CardRepo_Update';
 
 interface CardRepo_MoreProps {
-  repo: IRepos;
+  repos: IRepos;
   className?: string;
 }
 
-export default function CardRepo_More({ repo, className }: CardRepo_MoreProps) {
+export default function CardRepo_More({ repos, className }: CardRepo_MoreProps) {
   const user = useUserStore();
   const queryClient = useQueryClient();
   const t_common = useTranslations('common');
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
   const onView = () => {
-    window.open(repo.url, '_blank');
+    window.open(repos.url, '_blank');
   };
 
   const onUpdate = () => {
@@ -33,7 +33,7 @@ export default function CardRepo_More({ repo, className }: CardRepo_MoreProps) {
 
   const mutationDelete = useMutation({
     mutationFn: () => {
-      return reposService.delete(repo.id);
+      return reposService.delete(repos.id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['repos'] });
@@ -44,7 +44,7 @@ export default function CardRepo_More({ repo, className }: CardRepo_MoreProps) {
     },
   });
 
-  const isAuthor = user?.user?.id === repo?.authorId;
+  const isAuthor = user?.user?.id === repos?.authorId;
   const isAdmin = user?.user?.role === 'admin';
 
   const actions: DropdownAction[] = [
@@ -91,12 +91,12 @@ export default function CardRepo_More({ repo, className }: CardRepo_MoreProps) {
       <MoreDropdown
         actions={actions}
         className={className}
-        deleteItemName={repo.name}
+        deleteItemName={repos.name}
         onDelete={handleDelete}
         trigger={customTrigger}
       />
       <Dialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
-        <CardRepo_Update repo={repo} />
+        <CardRepo_Update repos={repos} />
       </Dialog>
     </>
   );

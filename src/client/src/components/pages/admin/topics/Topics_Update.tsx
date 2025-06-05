@@ -29,7 +29,8 @@ export default function Topics_Update() {
   const [courseId, setCourseId] = useState<string | null>(null);
   const [members, setMembers] = useState<string[]>([]);
   const queryClient = useQueryClient();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const router = useRouter();
 
   const { data: Q_Topic } = useQ_Topic_GetDetail({ id: id as string });

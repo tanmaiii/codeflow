@@ -67,8 +67,41 @@ export default function (sequelize: Sequelize): typeof ReposModel {
             model: UserModel,
             as: 'author',
           },
-        ]
-      }
+          {
+            model: TopicModel,
+            as: 'topic',
+            paranoid: false, // Hiển thị cả topic đã bị xóa mềm
+          },
+        ],
+      },
+      scopes: {
+        withActiveTopic: {
+          include: [
+            {
+              model: UserModel,
+              as: 'author',
+            },
+            {
+              model: TopicModel,
+              as: 'topic',
+              // Chỉ hiển thị topic chưa bị xóa mềm (paranoid: true - default)
+            },
+          ],
+        },
+        withAllTopics: {
+          include: [
+            {
+              model: UserModel,
+              as: 'author',
+            },
+            {
+              model: TopicModel,
+              as: 'topic',
+              paranoid: false, // Hiển thị cả topic đã bị xóa mềm
+            },
+          ],
+        },
+      },
     },
   );
 

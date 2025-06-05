@@ -2,21 +2,23 @@ import { Button } from '@/components/ui/button';
 import { DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { IRepos } from '@/interfaces/repos';
 import { cn } from '@/lib/utils';
-import TextInput from '../Input/TextInput/TextInput';
-import { RepoSchemaType } from '@/lib/validations/useRepoSchema';
-import { useForm } from 'react-hook-form';
+import { RepoSchemaType, useRepoSchema } from '@/lib/validations/useRepoSchema';
+import reposService from '@/services/repos.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import reposService from '@/services/repos.service';
-import { useRepoSchema } from '@/lib/validations/useRepoSchema';
 import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import TextInput from '../Input/TextInput/TextInput';
+import { Loader2 } from 'lucide-react';
 
-export default function CardRepo_Update({ repo }: { repo: IRepos }) {
+export default function CardRepo_Update({ repos }: { repos: IRepos }) {
   const tCommon = useTranslations('common');
-  const tRepo = useTranslations('repo');
+  const tRepo = useTranslations('repos');
   const queryClient = useQueryClient();
   const schema = useRepoSchema();
+  const closeRef = useRef<HTMLButtonElement>(null);
   const {
     register,
     handleSubmit,
@@ -25,20 +27,29 @@ export default function CardRepo_Update({ repo }: { repo: IRepos }) {
   } = useForm<RepoSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: repo.name,
+      name: repos.name,
     },
   });
+
+  useEffect(() => {
+    reset({
+      name: repos.name,
+    });
+  }, [repos]);
+
+
   const mutation = useMutation({
     mutationFn: async (data: RepoSchemaType) => {
-      await reposService.update(repo.id, {
+      await reposService.update(repos.id, {
         name: data.name,
-        topicId: repo.topicId,
+        topicId: repos.topicId,
       });
     },
     onSuccess: () => {
       toast.success(tCommon('updateSuccess'));
-      queryClient.invalidateQueries({ queryKey: ['repos', repo.topicId, { page: 1, limit: 10 }] });
+      queryClient.invalidateQueries({ queryKey: ['repos'] });
       reset();
+      closeRef.current?.click();
     },
     onError: () => {
       toast.error(tCommon('updateError'));
@@ -58,7 +69,7 @@ export default function CardRepo_Update({ repo }: { repo: IRepos }) {
           error={errors.name?.message}
         />
         <div className="flex justify-end gap-2">
-          <DialogClose asChild>
+          <DialogClose asChild ref={closeRef}>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <Button
@@ -66,7 +77,7 @@ export default function CardRepo_Update({ repo }: { repo: IRepos }) {
             disabled={isSubmitting}
             onClick={handleSubmit(data => mutation.mutate(data))}
           >
-            {tCommon('update')}
+            {mutation.isPending ? <Loader2 className="size-4 animate-spin" /> : tCommon('update')}
           </Button>
         </div>
       </form>

@@ -41,8 +41,6 @@ export const cleanSpecialCharacters = (str: string): string => {
 };
 
 export const reposName = ({ type, name, groupName }: { type: ENUM_TYPE_COURSE; name: string; groupName?: string }) => {
-  logger.info(`${type} ${name} ${groupName}`);
-
   if (!name) {
     throw new Error('Name and groupName are required');
   }

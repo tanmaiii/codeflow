@@ -33,3 +33,10 @@ export enum ENUM_TYPE_NOTIFICATION {
   REJECT_TOPIC = 'REJECT_TOPIC', // Từ chối chủ đề
   SYSTEM = 'SYSTEM', // Hệ thống
 }
+
+export enum ENUM_TYPE_REPOS {
+  MAJOR = 'major',
+  FOUNDATION = 'foundation',
+  THESIS = 'thesis',
+  ELECTIVE = 'elective',
+}

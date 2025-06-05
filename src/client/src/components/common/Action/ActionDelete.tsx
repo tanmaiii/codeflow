@@ -1,9 +1,10 @@
+import { LoadingOverlay } from '@/components/common/Loading';
 import { Button } from '@/components/ui/button';
 import { DialogClose, DialogFooter } from '@/components/ui/dialog';
 import { TextDescription } from '@/components/ui/text';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import ActionModal from './ActionModal';
 interface ActionDeleteProps {
@@ -24,10 +25,13 @@ export default function ActionDelete({
   const t = useTranslations('common');
   const queryClient = useQueryClient();
   const buttonCloseRef = useRef<HTMLButtonElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const mutation = useMutation({
     mutationFn: async () => {
-      return await handleSubmit();
+      setIsLoading(true);
+      await handleSubmit();
+      setIsLoading(false);
     },
     onSuccess: () => {
       toast.success(t('deleteSuccess'));
@@ -40,6 +44,10 @@ export default function ActionDelete({
       onError?.();
     },
   });
+
+  if (isLoading) {
+    return <LoadingOverlay message="deleting..." />;
+  }
 
   return (
     <ActionModal

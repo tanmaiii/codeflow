@@ -1,6 +1,8 @@
 import ActionModal from '@/components/common/Action/ActionModal';
 import TextInput from '@/components/common/Input/TextInput/TextInput';
+import { LoadingOverlay } from '@/components/common/Loading';
 import { Button } from '@/components/ui/button';
+import { IRepos } from '@/interfaces/repos';
 import { RepoSchemaType, useRepoSchema } from '@/lib/validations/useRepoSchema';
 import reposService from '@/services/repos.service';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,13 +13,12 @@ import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-export default function Topics_Repo_Create({ topicId }: { topicId: string }) {
-  const tRepo = useTranslations('repo');
+export default function Repos_Update({ repos }: { repos: IRepos }) {
   const tCommon = useTranslations('common');
+  const tRepos = useTranslations('repos');
+  const schema = useRepoSchema();
   const closeRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
-  const schema = useRepoSchema();
-
   const {
     register,
     handleSubmit,
@@ -25,36 +26,38 @@ export default function Topics_Repo_Create({ topicId }: { topicId: string }) {
     reset,
   } = useForm<RepoSchemaType>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      name: repos.name,
+    },
   });
+
   const mutation = useMutation({
     mutationFn: async (data: RepoSchemaType) => {
-      await reposService.create({
-        topicId,
-        ...data,
+      await reposService.update(repos.id, {
+        name: data.name,
+        topicId: repos.topicId,
       });
     },
     onSuccess: () => {
-      toast.success(tCommon('createSuccess'));
+      toast.success(tCommon('updateSuccess'));
       queryClient.invalidateQueries({ queryKey: ['repos'] });
       reset();
       closeRef.current?.click();
     },
     onError: () => {
-      toast.error(tCommon('createError'));
+      toast.error(tCommon('updateError'));
     },
   });
 
+  if (mutation.isPending) {
+    return <LoadingOverlay message="updating..." />;
+  } 
+
   return (
-    <ActionModal title={tRepo('createRepo')} actionType={'create'} className="max-w-[50vw]">
+    <ActionModal title={tRepos('updateRepo')} actionType={'update'} className="max-w-[50vw]">
       <form onSubmit={handleSubmit(data => mutation.mutate(data))}>
         <div className="flex flex-col gap-2">
-          <TextInput
-            label={tRepo('nameRepo')}
-            className="min-h-[200px]"
-            {...register('name')}
-            error={errors.name?.message}
-            description={tRepo('createRepoDescription')}
-          />
+          <TextInput label={tRepos('name')} {...register('name')} error={errors.name?.message} />
           <div className="flex justify-end gap-2">
             <DialogClose asChild ref={closeRef}>
               <Button type="button" variant="outline">
@@ -62,7 +65,7 @@ export default function Topics_Repo_Create({ topicId }: { topicId: string }) {
               </Button>
             </DialogClose>
             <Button type="submit" disabled={isSubmitting}>
-              {tCommon('create')}
+              {tCommon('update')}
             </Button>
           </div>
         </div>

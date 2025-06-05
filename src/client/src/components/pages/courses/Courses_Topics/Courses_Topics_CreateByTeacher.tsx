@@ -9,21 +9,25 @@ import { ITopic } from '@/interfaces/topic';
 import courseService from '@/services/course.service';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import Courses_Topics_ChoiceTopic from './Courses_Topics_ChoiceTopic';
 import topicService from '@/services/topic.service';
+import { useUserStore } from '@/stores/user_store';
 
 export default function Courses_Topics_CreateByTeacher() {
   const tTopic = useTranslations('topic');
   const tCommon = useTranslations('common');
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const [selectedTopic, setSelectedTopic] = useState<ITopic | null>(null);
   const [groupName, setGroupName] = useState<string>('');
   const [members, setMembers] = useState<string[]>([]);
   const [error, setError] = useState<string>('');
   const { data: Q_Course } = useQ_Course_GetDetail({ id: id as string });
+  const router = useRouter();
+  const { user } = useUserStore();
 
   const mutation = useMutation({
     mutationFn: () => {
@@ -43,6 +47,8 @@ export default function Courses_Topics_CreateByTeacher() {
       toast.success(tCommon('createSuccess'));
       setSelectedTopic(null);
       setGroupName('');
+      setMembers([]);
+      router.back();
     },
     onError: () => {
       toast.error(tCommon('createError'));
@@ -78,20 +84,24 @@ export default function Courses_Topics_CreateByTeacher() {
         name="name"
         onChange={e => setGroupName(e.target.value)}
       />
-      <div className="flex flex-col gap-2">
-        <MyMultiSelect
-          label={tTopic('members')}
-          name="members"
-          maxLength={Q_Course?.data.maxGroupMembers ?? 3}
-          onChange={value => setMembers(value)}
-          options={
-            Q_Members?.data?.map(member => ({
-              value: member.id,
-              label: member.name,
-            })) ?? []
-          }
-        />
-      </div>
+      {Q_Course?.data?.maxGroupMembers && Q_Course?.data?.maxGroupMembers > 1 && (
+        <div className="flex flex-col gap-2">
+          <MyMultiSelect
+            label={tTopic('members')}
+            name="members"
+            maxLength={(Q_Course?.data.maxGroupMembers ?? 3) - 1}
+            onChange={value => setMembers(value)}
+            options={
+              Q_Members?.data
+                ?.map(member => ({
+                  value: member.id,
+                  label: member.name,
+                }))
+                .filter(member => member?.value !== user?.id) ?? []
+            }
+          />
+        </div>
+      )}
       <div className="flex justify-end">
         <Button
           variant="default"

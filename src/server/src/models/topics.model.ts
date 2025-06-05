@@ -93,12 +93,10 @@ export default function (sequelize: Sequelize): typeof TopicModel {
           {
             model: UserModel,
             as: 'author',
-            attributes: ['id', 'name', 'username', 'role', 'avatar'], // Replace with actual attribute names of UserModel
           },
           {
             model: UserModel,
             as: 'teacher',
-            attributes: ['id', 'name', 'username', 'role', 'avatar'], // Replace with actual attribute names of UserModel
           },
           {
             model: TagModel,
