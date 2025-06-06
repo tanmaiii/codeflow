@@ -1,15 +1,14 @@
 'use client';
 
+import { IPost } from "@/interfaces/post";
+import { IComment } from "@/interfaces/comment";
 import Comments from '@/components/common/Comments/Comments';
 import NameTags from '@/components/common/NameTags/NameTags';
-import NoData from '@/components/common/NoData/NoData';
-import PostDetailSkeleton from '@/components/skeletons/post/PostDetailSkeleton';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { IMAGES } from '@/data/images';
 import useQ_Post_GetComments from '@/hooks/query-hooks/Post/useQ_Post_GetComments';
-import useQ_Post_GetDetail from '@/hooks/query-hooks/Post/useQ_Post_GetDetail';
 import apiConfig from '@/lib/api';
 import commentService from '@/services/comment.service';
 import { utils_DateToDDMonth, utils_TimeAgo } from '@/utils/date';
@@ -18,45 +17,53 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import 'highlight.js/styles/github.css'; // Import theme
 import { ArrowLeftIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import SwapperHTML from '../../../common/SwapperHTML/SwapperHTML';
-export default function Post_Detail() {
-  const router = useRouter();
-  const params = useParams();
-  const id = params?.id;
-  const idString = Array.isArray(id) ? id[0] : String(id || '');
-  const quereClient = useQueryClient();
 
-  const { data, error, isLoading } = useQ_Post_GetDetail({ id: idString });
+interface Post_Detail_Props {
+  initialPostData: IPost;
+  initialCommentsData: IComment[];
+  postId: string;
+}
+
+export default function Post_Detail({ 
+  initialPostData, 
+  initialCommentsData, 
+  postId 
+}: Post_Detail_Props) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  // Use SSR data as initial data for React Query
   const { data: commentData } = useQ_Post_GetComments({
-    id: idString,
+    id: postId,
+    options: {
+      initialData: { data: initialCommentsData, message: 'success' }
+    }
   });
 
-  const mutionComment = useMutation({
+  const mutationComment = useMutation({
     mutationFn: (value: string) => {
       const res = commentService.create({
         content: value,
-        postId: data?.data.id,
+        postId: initialPostData.id,
       });
       return res;
     },
     onSuccess: () => {
-      quereClient.invalidateQueries({
-        queryKey: ['post', 'comments', data?.data.id],
+      queryClient.invalidateQueries({
+        queryKey: ['post', 'comments', initialPostData.id],
       });
     },
   });
-
-  if (!idString || isLoading) return <PostDetailSkeleton />;
-  if (error || !data) return <NoData />;
 
   return (
     <Card className="p-0 gap-0 rounded-lg overflow-hidden min-h-[100vh]">
       <div className="relative">
         <Image
           className="w-full max-h-[600px] object-cover rounded-md bg-background-1"
-          src={data.data.thumbnail ? utils_ApiImageToLocalImage(data.data.thumbnail) : IMAGES.DEFAULT_COURSE}
-          alt={data.data.title}
+          src={initialPostData.thumbnail ? utils_ApiImageToLocalImage(initialPostData.thumbnail) : IMAGES.DEFAULT_COURSE}
+          alt={initialPostData.title}
           width={1000}
           height={500}
         />
@@ -71,25 +78,25 @@ export default function Post_Detail() {
       </div>
 
       <div className="p-6">
-        <TextHeading className="text-4xl font-extrabold">{data.data.title}</TextHeading>
-        <NameTags tags={data.data.tags} className="mt-2 mb-4" max={data.data.tags.length} />
+        <TextHeading className="text-4xl font-extrabold">{initialPostData.title}</TextHeading>
+        <NameTags tags={initialPostData.tags} className="mt-2 mb-4" max={initialPostData.tags.length} />
         <div className="flex items-center gap-2 mt-4 mb-2">
           <Image
             className="w-12 h-12 object-cover rounded-full bg-background-1"
             src={
-              data.data.author?.avatar
-                ? utils_ApiImageToLocalImage(data.data.author.avatar)
-                : apiConfig.avatar(data.data.author?.name ?? 'c')
+              initialPostData.author?.avatar
+                ? utils_ApiImageToLocalImage(initialPostData.author.avatar)
+                : apiConfig.avatar(initialPostData.author?.name ?? 'c')
             }
-            alt={data.data.title}
+            alt={initialPostData.title}
             width={40}
             height={40}
           />
           <div>
-            <TextHeading>{data.data.author?.name}</TextHeading>
-            {data.data.createdAt && (
+            <TextHeading>{initialPostData.author?.name}</TextHeading>
+            {initialPostData.createdAt && (
               <TextDescription>
-                {utils_DateToDDMonth(new Date(data.data.createdAt))} - {utils_TimeAgo(new Date(data.data.createdAt))}
+                {utils_DateToDDMonth(new Date(initialPostData.createdAt))} - {utils_TimeAgo(new Date(initialPostData.createdAt))}
               </TextDescription>
             )}
           </div>
@@ -97,13 +104,13 @@ export default function Post_Detail() {
       </div>
 
       <div className="px-6">
-        <SwapperHTML content={data.data.content} />
+        <SwapperHTML content={initialPostData.content} />
       </div>
 
       {commentData?.data && (
         <div className="px-6 mt-6">
           <Comments 
-            onSubmit={value => mutionComment.mutate(value)} 
+            onSubmit={value => mutationComment.mutate(value)} 
             comments={commentData.data} 
           />
         </div>

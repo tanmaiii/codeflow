@@ -17,6 +17,7 @@ import {
   Github,
   Home,
   Layout,
+  LogIn,
   LogOut,
   LucideIcon,
   Newspaper,
@@ -36,7 +37,7 @@ const iconMap: Record<string, LucideIcon> = {
   book: Book,
   project: FolderGit,
   article: Newspaper,
-  repos: Github
+  repos: Github,
 };
 
 const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) => {
@@ -146,57 +147,82 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
       </nav>
 
       <motion.div layout className="p-2 border-t flex flex-col gap-2">
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
-        >
-          <Image
-            src={user?.avatar ?? apiConfig.avatar(user?.name)}
-            alt="avatar.png"
-            width={100}
-            height={100}
-            className={cn(
-              'object-cover circle rounded-full w-8 h-8 max-w-8 max-h-8',
-              collapsed && 'w-full h-full',
-            )}
-          />
-          <AnimatePresence mode="wait">
-            {!collapsed && (
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.2 }}
-                className="flex flex-col justify-center gap-0"
+        {user ? (
+          <>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
+            >
+              <Image
+                src={user?.avatar ?? apiConfig.avatar(user?.name)}
+                alt="avatar.png"
+                width={100}
+                height={100}
+                className={cn(
+                  'object-cover circle rounded-full w-8 h-8 max-w-8 max-h-8',
+                  collapsed && 'w-full h-full',
+                )}
+              />
+              <AnimatePresence mode="wait">
+                {!collapsed && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex flex-col justify-center gap-0"
+                  >
+                    <span className="text-md/3">{user?.name}</span>
+                    <span className="text-sm/4 text-gray-500">
+                      {ROLE_USER.find(item => item.value === user?.role)?.label}
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                href={paths.LOGOUT}
+                className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
               >
-                <span className="text-md/3">{user?.name}</span>
-                <span className="text-sm/4 text-gray-500">
-                  {ROLE_USER.find(item => item.value === user?.role)?.label}
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-          <Link
-            href={paths.LOGOUT}
-            className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
-          >
-            <LogOut className="w-5 h-5" />
-            <AnimatePresence mode="wait">
-              {!collapsed && (
-                <motion.span
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {t('logout')}
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </Link>
-        </motion.div>
+                <LogOut className="w-5 h-5" />
+                <AnimatePresence mode="wait">
+                  {!collapsed && (
+                    <motion.span
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {t('logout')}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </Link>
+            </motion.div>
+          </>
+        ) : (
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <Link
+              href={paths.LOGIN}
+              className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
+            >
+              <LogIn className="w-5 h-5" />
+              <AnimatePresence mode="wait">
+                {!collapsed && (
+                  <motion.span
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {t('signIn')}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </Link>
+          </motion.div>
+        )}
       </motion.div>
     </motion.aside>
   );

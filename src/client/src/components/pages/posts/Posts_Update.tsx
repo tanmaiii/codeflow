@@ -32,7 +32,8 @@ export default function Posts_Update() {
   const schema = usePostSchema();
   const router = useRouter();
   const { localPath } = useH_LocalPath();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
   const t = useTranslations('post');
   const queryClient = useQueryClient();
   const Q_Tag = useQ_Tag_GetAll();

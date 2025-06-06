@@ -5,7 +5,7 @@ import { routing } from './i18n/routing';
 import { IUser } from './interfaces/user';
 const intlMiddleware = createMiddleware(routing);
 
-const publicPaths = ['/login', '/register', '/forgot-password', '/join-org'];
+const publicPaths = ['/login', '/register', '/forgot-password', '/join-org', '/post'];
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get('accessToken');

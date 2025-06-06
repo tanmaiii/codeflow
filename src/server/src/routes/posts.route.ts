@@ -30,6 +30,6 @@ export class PostRoute implements Routes {
     this.router.post(`${this.path}/:id/like`, AuthMiddleware, this.like.createLikePost);
     this.router.delete(`${this.path}/:id/like`, AuthMiddleware, this.like.deleteLikePost);
 
-    this.router.get(`${this.path}/:id/comments`, AuthMiddleware, this.post.getCommentsByPostId);
+    this.router.get(`${this.path}/:id/comments`, this.post.getCommentsByPostId);
   }
 }

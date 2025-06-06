@@ -5,6 +5,9 @@ import CommentInput from "./Comment_Input";
 import { useTranslations } from "next-intl";
 import { useUserStore } from "@/stores/user_store";
 import apiConfig from "@/lib/api";
+import { paths } from "@/data/path";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Commnet_Input_Default({
   onSubmit,
@@ -14,7 +17,17 @@ export default function Commnet_Input_Default({
   const [active, setActive] = useState<boolean>(false);
   const t = useTranslations("comment");
   const { user } = useUserStore();
-
+  const router = useRouter();
+  
+  if(!user){
+    return (
+      <div className="flex flex-col w-full bg-input/20 border rounded-lg p-4 gap-3">
+          <TextDescription>Vui lòng đăng nhập để bình luận</TextDescription>
+          <Button variant="default" onClick={() => router.push(paths.LOGIN)}>Đăng nhập</Button>
+      </div>
+    )
+  }
+  
   return (
     <div className="mt-4">
       {!active ? (
