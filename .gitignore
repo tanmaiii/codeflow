@@ -18,6 +18,7 @@ src/server/.next/
 src/server/out/
 src/server/disc
 src/server/src/logs
+src/server/dist
 
 # production
 src/server/build

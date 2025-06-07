@@ -1,5 +1,4 @@
 import { EmailService } from '@/services/email.service';
-import { ReposService } from '@/services/repos.service';
 import { logger } from '@/utils/logger';
 import { CreateUserDto, CreateUserGithubDto, LoginUserDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
