@@ -1,58 +1,10 @@
 import { getCurrentLocale } from '@/lib/utils';
-
-const monthNamesVi = [
-  'Tháng 1',
-  'Tháng 2',
-  'Tháng 3',
-  'Tháng 4',
-  'Tháng 5',
-  'Tháng 6',
-  'Tháng 7',
-  'Tháng 8',
-  'Tháng 9',
-  'Tháng 10',
-  'Tháng 11',
-  'Tháng 12',
-];
-
-const monthNamesEn = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-interface IIntervals {
-  [key: string]: number;
-}
-
-const intervalsVi: IIntervals = {
-  năm: 31536000,
-  tháng: 2592000,
-  tuần: 604800,
-  ngày: 86400,
-  giờ: 3600,
-  phút: 60,
-  giây: 1,
-};
-
-const intervalsEn: IIntervals = {
-  year: 31536000,
-  month: 2592000,
-  week: 604800,
-  day: 86400,
-  hour: 3600,
-  minute: 60,
-  second: 1,
-};
+import { 
+  MONTH_NAMES_VI, 
+  MONTH_NAMES_EN, 
+  TIME_INTERVALS_VI, 
+  TIME_INTERVALS_EN 
+} from '@/constants/date';
 
 /**
  * Trả về chuỗi ngày tháng năm (Ex: 28-05-2025)
@@ -82,7 +34,7 @@ export function utils_DateToDDMonth(
   const locale = getCurrentLocale() || 'vi';
 
   const month =
-    locale === 'vi' ? monthNamesVi[dateObj.getMonth()] : monthNamesEn[dateObj.getMonth()];
+    locale === 'vi' ? MONTH_NAMES_VI[dateObj.getMonth()] : MONTH_NAMES_EN[dateObj.getMonth()];
   return `${day} ${month}`;
 }
 
@@ -97,7 +49,7 @@ export const utils_TimeAgo = (date: Date | string): string => {
   const seconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
   const locale = getCurrentLocale() || 'vi';
 
-  const intervals = locale === 'vi' ? intervalsVi : intervalsEn;
+  const intervals = locale === 'vi' ? TIME_INTERVALS_VI : TIME_INTERVALS_EN;
 
   for (const key in intervals) {
     const interval = intervals[key];

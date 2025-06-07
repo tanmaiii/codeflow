@@ -1,8 +1,8 @@
 'use client';
 
 import { ColumnDef, Table } from '@tanstack/react-table';
-import { createSelectColumn, createActionColumn } from '../common/data-table/columns';
-import { DataTable } from '../common/data-table/data-table';
+import { createSelectColumn, createActionColumn } from '../common/DataTable/columns';
+import { DataTable } from '../common/DataTable/data-table';
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 

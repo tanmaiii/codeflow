@@ -5,7 +5,8 @@ import { routing } from './i18n/routing';
 import { IUser } from './interfaces/user';
 const intlMiddleware = createMiddleware(routing);
 
-const publicPaths = ['/login', '/register', '/forgot-password', '/join-org', '/post'];
+const publicPaths = ['/login', '/register', '/forgot-password', '/join-org'];
+const publicPathsWithAuth = ['/post']; // Paths that allow both authenticated and unauthenticated users
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get('accessToken');
@@ -27,12 +28,14 @@ export function middleware(req: NextRequest) {
   }
 
   const isPublicPath = publicPaths.some(path => pathname.startsWith(`${localePrefix}${path}`));
+  const isPublicPathWithAuth = publicPathsWithAuth.some(path => pathname.startsWith(`${localePrefix}${path}`));
 
-  if (!token && !isPublicPath && !pathname.startsWith('/api')) {
+  if (!token && !isPublicPath && !isPublicPathWithAuth && !pathname.startsWith('/api')) {
     return NextResponse.redirect(new URL(`${localePrefix}/login`, req.url));
   }
 
-  // Nếu đã có token mà vào login → đá về home
+  // Nếu đã có token mà vào login/register/forgot-password/join-org → đá về home
+  // Nhưng cho phép vào /post
   if (token && isPublicPath) {
     return NextResponse.redirect(new URL(`${localePrefix}/`, req.url));
   }

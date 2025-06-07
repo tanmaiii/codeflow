@@ -27,6 +27,8 @@ import CardPost_More from './CardPost_More';
 import apiConfig from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useUserStore } from '@/stores/user_store';
+import { util_format_number } from '@/utils/common';
 
 interface CardPostProps {
   post: IPost;
@@ -39,9 +41,14 @@ export default function CardPost({ post }: CardPostProps) {
     id: post.id ?? '',
   });
   const router = useRouter();
+  const { user } = useUserStore();
 
   const mutationLike = useMutation({
     mutationFn: async () => {
+      if (!user) {
+        toast.error('Please login to like this post');
+        return;
+      }
       if (uesQ_Post_Like?.data?.data?.isLike) {
         await postService.unlike(post.id ?? '');
         setLikeCount(likeCount - 1);
@@ -118,7 +125,7 @@ export default function CardPost({ post }: CardPostProps) {
               )
             }
             onClick={mutationLike.mutate}
-            value={likeCount.toString() ?? '0'}
+            value={util_format_number(likeCount, 99)}
           />
           <CardPost_Button
             icon={<IconMessage2 size={24} />}

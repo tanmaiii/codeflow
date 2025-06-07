@@ -1,4 +1,4 @@
-import Post_Detail_Layout from '@/components/pages/posts/posts_detail/Post_Detail_Layout';
+import Post_Detail_Layout from '@/components/pages/posts/posts-detail/Post_Detail_Layout';
 import postService from '@/services/post.service';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';

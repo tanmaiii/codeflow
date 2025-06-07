@@ -1,6 +1,6 @@
 import AvatarGroup from '@/components/common/AvatarGroup';
-import { DataTable } from '@/components/common/data-table/data-table';
-import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
+import { DataTable } from '@/components/common/DataTable/data-table';
+import { DataTableColumnHeader } from '@/components/common/DataTable/data-table-column-header';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { paths } from '@/data/path';
@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
-export default function Courses_Topics() {
+export default function CoursesTopics() {
   const t = useTranslations('topic');
   const tCourse = useTranslations('course');
   const [page, setPage] = useState(1);
@@ -102,7 +102,7 @@ export default function Courses_Topics() {
   );
 
   return (
-    <div className="h-full mt-2">
+    <div className="h-full mt-2 ">
       <TextHeading className="mb-4">{tCourse('suggestedTopics')}</TextHeading>
       <DataTable
         columns={columns}

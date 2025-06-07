@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
 import ActionDelete from '@/components/common/Action/ActionDelete';
-import { DataTable } from '@/components/common/data-table/data-table';
+import { DataTable } from '@/components/common/DataTable/data-table';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';

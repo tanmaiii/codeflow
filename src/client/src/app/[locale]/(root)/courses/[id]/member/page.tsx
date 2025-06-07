@@ -1,4 +1,4 @@
-import Courses_Member from '@/components/pages/courses/Courses_Member';
+import Courses_Member from '@/components/pages/courses/course-member';
 
 export default function Page() {
   return <Courses_Member />;

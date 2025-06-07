@@ -1,19 +1,22 @@
+'use client';
 import ActionModal from '@/components/common/Action/ActionModal';
 import TextInput from '@/components/common/Input/TextInput/TextInput';
 import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
+import MySelect from '@/components/common/MySelect';
 import { Button } from '@/components/ui/button';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { IconPlus } from '@tabler/icons-react';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import topicService from '@/services/topic.service';
-import { toast } from 'sonner';
-import { useRef } from 'react';
 import { DialogClose } from '@/components/ui/dialog';
+import { STATUS_TOPIC } from '@/constants/object';
+import { ITopic } from '@/interfaces/topic';
 import { TopicSchemaType, useTopicSchema } from '@/lib/validations/topicSchema';
+import topicService from '@/services/topic.service';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
-export default function Courses_Detail_Topics_Create({ courseId }: { courseId: string }) {
+export default function CoursesDetailTopicsUpdate({ topic }: { topic: ITopic }) {
   const t = useTranslations('common');
   const tTopic = useTranslations('topic');
   const schema = useTopicSchema();
@@ -25,42 +28,39 @@ export default function Courses_Detail_Topics_Create({ courseId }: { courseId: s
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    control,
   } = useForm<TopicSchemaType>({
     resolver: zodResolver(schema),
   });
 
   const mutation = useMutation({
     mutationFn: (data: TopicSchemaType) => {
-      return topicService.create({
-        isCustom: false,
-        status: 'pending',
-        courseId: courseId,
+      return topicService.update(topic.id, {
         ...data,
+        courseId: topic.courseId,
       });
     },
     onSuccess: () => {
-      toast.success(t('createSuccess'));
+      toast.success(t('updateSuccess'));
       reset();
       closeRef.current?.click();
       queryClient.invalidateQueries({ queryKey: ['topics'] });
     },
     onError: () => {
-      toast.error(t('createError'));
+      toast.error(t('updateError'));
     },
   });
 
+  useEffect(() => {
+    reset({
+      ...topic,
+      members: topic.members?.map(member => member.userId),
+      groupName: topic.groupName ?? '',
+    });
+  }, [topic]);
+
   return (
-    <ActionModal
-      title={tTopic('createTopic')}
-      icon={
-        <>
-          <IconPlus className="w-4 h-4" />
-          {tTopic('createTopic')}
-        </>
-      }
-      actionType={'default'}
-      className="max-w-[50vw]"
-    >
+    <ActionModal title={tTopic('updateTopic')} actionType={'update'}>
       <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
         <TextInput label={tTopic('title')} error={errors.title?.message} {...register('title')} />
         <TextareaInput
@@ -68,6 +68,14 @@ export default function Courses_Detail_Topics_Create({ courseId }: { courseId: s
           className="min-h-[200px]"
           error={errors.description?.message}
           {...register('description')}
+        />
+        <MySelect
+          label={tTopic('status')}
+          name="status"
+          options={STATUS_TOPIC}
+          error={errors.status}
+          required={true}
+          control={control}
         />
         <div className="flex justify-end gap-2">
           <DialogClose asChild ref={closeRef}>

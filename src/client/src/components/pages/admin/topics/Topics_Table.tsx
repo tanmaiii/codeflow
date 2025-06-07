@@ -2,8 +2,8 @@
 import ActionDelete from '@/components/common/Action/ActionDelete';
 import ActionIcon from '@/components/common/Action/ActionIcon';
 import AvatarGroup from '@/components/common/AvatarGroup';
-import { DataTable } from '@/components/common/data-table/data-table';
-import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
+import { DataTable } from '@/components/common/DataTable/data-table';
+import { DataTableColumnHeader } from '@/components/common/DataTable/data-table-column-header';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';

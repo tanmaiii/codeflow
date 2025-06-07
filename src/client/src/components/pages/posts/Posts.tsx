@@ -38,7 +38,7 @@ export default function Posts() {
         <div className="flex items-center gap-2 p-2 hover:text-primary cursor-pointer rounded-md text-primary">
           <TextHeading>{t('post')}</TextHeading>
         </div>
-        {!(user?.role === 'user') && (
+        {user && user?.role !== 'user' && (
           <Button
             onClick={() => route.push(localPath(paths.POST_CREATE))}
             variant="outline"

@@ -1,5 +1,5 @@
-import Courses_Detail_Topics from '@/components/pages/courses/Courses_Detail/Courses_Detail_Topics/Courses_Detail_Topics';
+import { CoursesDetailTopicsTable } from '@/components/pages/courses/course-detail/course-detail-topics';
 
 export default function Page() {
-  return <Courses_Detail_Topics />;
+  return <CoursesDetailTopicsTable />;
 }

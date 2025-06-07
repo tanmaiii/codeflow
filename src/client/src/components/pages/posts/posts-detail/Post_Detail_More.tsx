@@ -9,9 +9,11 @@ import apiConfig from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { paths } from '@/data/path';
 import { useParams } from 'next/navigation';
+
 export default function Post_Detail_More() {
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
   const Q_Post = useQ_Post_GetAll({
     params: {
       page: 1,
@@ -24,7 +26,7 @@ export default function Post_Detail_More() {
   if (Q_Post.isLoading) return <TextDescription>Loading...</TextDescription>;
   if (Q_Post.error) return <TextDescription>Error...</TextDescription>;
 
-  if (Q_Post.data?.data.filter(post => post.id !== id).length === 0) return null;
+  if (Q_Post.data?.data.filter(post => post.id !== id?.toString()).length === 0) return null;
 
   return (
     <Card className="p-0">
@@ -54,9 +56,7 @@ export default function Post_Detail_More() {
                       height={100}
                     />
                   </div>
-                  <TextHeading className="text-lg font-medium leading-none line-clamp-2">
-                    {post.title}
-                  </TextHeading>
+                  <TextHeading className="text-md font-medium">{post.title}</TextHeading>
                 </button>
               );
             })}

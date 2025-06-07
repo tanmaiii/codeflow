@@ -1,4 +1,4 @@
-import JoinOrganization from '@/components/pages/auth/JoinOrganization';
+import JoinOrganization from '@/components/pages/auth/join-organization';
 
 export default function Page() {
   return <JoinOrganization />;

@@ -1,5 +1,5 @@
   import ActionDelete from '@/components/common/Action/ActionDelete';
-  import { DataTable } from '@/components/common/data-table/data-table';
+  import { DataTable } from '@/components/common/DataTable/data-table';
   import MemberAvatar from '@/components/ui/member-avatar';
   import TextHeading, { TextDescription } from '@/components/ui/text';
   import { ITopic, ITopicEvaluation } from '@/interfaces/topic';

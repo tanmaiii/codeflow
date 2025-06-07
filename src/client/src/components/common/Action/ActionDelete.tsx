@@ -1,3 +1,4 @@
+'use client';
 import { LoadingOverlay } from '@/components/common/Loading';
 import { Button } from '@/components/ui/button';
 import { DialogClose, DialogFooter } from '@/components/ui/dialog';

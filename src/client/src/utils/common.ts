@@ -3,6 +3,7 @@ import { IStatusObj } from "@/constants/object";
 import { IComment } from "@/interfaces/comment";
 import { getCurrentLocale } from '@/lib/utils';
 
+
 export function util_length_comment(comments: IComment[]): number {
   return comments.length > 0
     ? comments.reduce((total: number, comment: IComment) => {
@@ -148,7 +149,7 @@ export function util_object_to_color(obj: IStatusObj) {
  * @param count - Số lượng thông báo
  * @returns Chuỗi đã format (ví dụ: "5", "9+")
  */
-export function util_format_notification_count(count: number, max: number = 9): string {
+export function util_format_number(count: number, max: number = 9): string {
   return count > max ? `${max}+` : count.toString();
 }
 
@@ -184,6 +185,13 @@ export const cleanSpecialCharacters = (str: string): string => {
     .trim(); // Remove leading and trailing whitespace
 };
 
+/**
+ * Format repository name
+ * @param type - Type of course
+ * @param name - Name of course
+ * @param groupName - Group name of course
+ * @returns Formatted repository name
+ */
 export const util_repos_name = ({ type, name, groupName }: { type: ENUM_TYPE_COURSE; name: string; groupName?: string }) => {
   if (!name) {
     throw new Error('Name and groupName are required');

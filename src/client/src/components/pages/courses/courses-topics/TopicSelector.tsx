@@ -1,7 +1,7 @@
 import ActionModal from '@/components/common/Action/ActionModal';
 import AvatarGroup from '@/components/common/AvatarGroup';
-import { DataTable } from '@/components/common/data-table/data-table';
-import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
+import { DataTable } from '@/components/common/DataTable/data-table';
+import { DataTableColumnHeader } from '@/components/common/DataTable/data-table-column-header';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import { Button } from '@/components/ui/button';
@@ -19,15 +19,16 @@ import Link from 'next/link';
 import { useMemo, useRef, useState } from 'react';
 import { ENUM_STATUS_TOPIC } from '@/constants/enum';
 
-interface Courses_Topics_ChoiceTopicProps {
+interface TopicSelectorProps {
   onSelect: (topic: ITopic) => void;
   courseId: string;
 }
 
-export default function Courses_Topics_ChoiceTopic({
+// Chọn chủ đề
+export default function TopicSelector({
   onSelect,
   courseId,
-}: Courses_Topics_ChoiceTopicProps) {
+}: TopicSelectorProps) {
   const tCommon = useTranslations('common');
   const [page, setPage] = useState(1);
   const closeRef = useRef<HTMLButtonElement>(null);

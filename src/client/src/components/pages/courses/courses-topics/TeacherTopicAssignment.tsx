@@ -12,11 +12,12 @@ import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import Courses_Topics_ChoiceTopic from './Courses_Topics_ChoiceTopic';
+import TopicSelector from './TopicSelector';
 import topicService from '@/services/topic.service';
 import { useUserStore } from '@/stores/user_store';
 
-export default function Courses_Topics_CreateByTeacher() {
+// Đăng ký chủ đề của giáo viên
+export default function TeacherTopicAssignment() {
   const tTopic = useTranslations('topic');
   const tCommon = useTranslations('common');
   const params = useParams();
@@ -62,8 +63,8 @@ export default function Courses_Topics_CreateByTeacher() {
 
   return (
     <div className="flex flex-col gap-3">
-      <Courses_Topics_ChoiceTopic
-        onSelect={item => setSelectedTopic(item)}
+      <TopicSelector
+        onSelect={(item: ITopic) => setSelectedTopic(item)}
         courseId={id as string}
       />
       {error && <TextDescription className="text-red-500">{error}</TextDescription>}

@@ -16,7 +16,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useUserStore } from '@/stores/user_store';
 
-export default function Courses_Topics_CreateByStudent() {
+// Đăng ký chủ đề của sinh viên
+export default function StudentTopicCreation() {
   const tTopic = useTranslations('topic');
   const tCommon = useTranslations('common');
   const schema = useTopicSchema();

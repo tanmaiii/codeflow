@@ -30,11 +30,11 @@ import { cx } from 'class-variance-authority';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import Courses_Summary from './Courses_Summary';
-import Courses_Topics from './Courses_Topics';
+import Courses_Summary from './CoursesSummary';
+import Courses_Topics from './CoursesTopics';
 import { CourseDetailSkeleton } from '@/components/skeletons/course';
 
-export default function Courses_Detail() {
+export default function CoursesDetail() {
   const params = useParams();
   const id = params?.id as string;
   const t = useTranslations('course');

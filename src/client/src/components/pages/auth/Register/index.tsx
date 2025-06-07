@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import LoginWithGitHub from '../LoginWithGitHub';
+import LoginWithGitHub from '../login-with-github';
 
 export default function Register() {
   const t = useTranslations('auth');

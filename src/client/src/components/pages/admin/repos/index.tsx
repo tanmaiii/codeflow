@@ -1,6 +1,6 @@
 'use client';
 import ActionDelete from '@/components/common/Action/ActionDelete';
-import { DataTable } from '@/components/common/data-table/data-table';
+import { DataTable } from '@/components/common/DataTable/data-table';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';

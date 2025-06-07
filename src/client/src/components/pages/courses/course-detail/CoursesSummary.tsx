@@ -15,7 +15,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function Courses_Summary({ course }: { course: ICourse }) {
+// Trang tóm tắt khóa học
+export default function CoursesSummary({ course }: { course: ICourse }) {
   const router = useRouter();
   const { data: members } = useQ_Course_GetMembers({
     id: course.id,

@@ -1,5 +1,5 @@
-import Courses_Topics_Register from '@/components/pages/courses/Courses_Topics/Courses_Topics_Register';
+import TopicRegistration from '@/components/pages/courses/courses-topics/TopicRegistration';
 
 export default function Page() {
-  return <Courses_Topics_Register />;
+  return <TopicRegistration />;
 }

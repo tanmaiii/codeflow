@@ -8,8 +8,8 @@ import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDet
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import Courses_Topics_CreateByStudent from './Courses_Topics_CreateByStudent';
-import Courses_Topics_CreateByTeacher from './Courses_Topics_CreateByTeacher';
+import StudentTopicCreation from './StudentTopicCreation';
+import TeacherTopicAssignment from './TeacherTopicAssignment';
 
 const TYPE_TOPIC = [
   {
@@ -24,7 +24,7 @@ const TYPE_TOPIC = [
   },
 ];
 
-export default function Courses_Topics_Register() {
+export default function TopicRegistration() {
   const tTopic = useTranslations('topic');
   const tCourse = useTranslations('course');
   const params = useParams();
@@ -49,7 +49,7 @@ export default function Courses_Topics_Register() {
           name="type"
         />
 
-        {isCustom ? <Courses_Topics_CreateByStudent /> : <Courses_Topics_CreateByTeacher />}
+        {isCustom ? <StudentTopicCreation /> : <TeacherTopicAssignment />}
       </Card>
     </div>
   );

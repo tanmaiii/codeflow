@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import LoginWithGitHub from '../LoginWithGitHub';
+import LoginWithGitHub from '../login-with-github';
 
 export default function Login() {
   const t = useTranslations('auth');

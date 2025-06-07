@@ -1,10 +1,11 @@
 'use client';
 import ActionDelete from '@/components/common/Action/ActionDelete';
-import { DataTable } from '@/components/common/data-table/data-table';
+import { DataTable } from '@/components/common/DataTable/data-table';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import MemberAvatar from '@/components/ui/member-avatar';
 import { TextDescription } from '@/components/ui/text';
 import { ROLE_USER } from '@/constants/object';
@@ -37,7 +38,11 @@ export default function Courses_Member() {
         header: 'Name',
         accessorKey: 'name',
         cell: ({ row }) => (
-          <MemberAvatar avatar={row.original.avatar ?? ''} id={row.original.id} name={row.original.name} />
+          <MemberAvatar
+            avatar={row.original.avatar ?? ''}
+            id={row.original.id}
+            name={row.original.name}
+          />
         ),
       },
       {
@@ -112,28 +117,30 @@ export default function Courses_Member() {
     );
   };
   return (
-    <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
+    <Card className="p-2 lg:p-6 flex flex-col gap-4 min-h-[calc(100vh-100px)]">
       <TitleHeader title={tCourse('member')} description={tCourse('memberDescription')} onBack />
-      <DataTable
-        fieldFilter="name"
-        showIndexColumn={true}
-        showSelectionColumn={true}
-        pagination={false}
-        columns={columns}
-        data={data?.data || []}
-        toolbarCustom={customToolbar}
-        renderActions={({ row }) => (
-          <>
-            {/* <Users_Update user={row.original} /> */}
-            <ActionDelete
-              deleteKey={row.original.name}
-              handleSubmit={async () => {
-                await userService.delete(row.original.id);
-              }}
-            />
-          </>
-        )}
-      />
+      <div className="min-h-[60vh]">
+        <DataTable
+          fieldFilter="name"
+          showIndexColumn={true}
+          showSelectionColumn={true}
+          pagination={false}
+          columns={columns}
+          data={data?.data || []}
+          toolbarCustom={customToolbar}
+          renderActions={({ row }) => (
+            <>
+              {/* <Users_Update user={row.original} /> */}
+              <ActionDelete
+                deleteKey={row.original.name}
+                handleSubmit={async () => {
+                  await userService.delete(row.original.id);
+                }}
+              />
+            </>
+          )}
+        />
+      </div>
       <div className="my-6">
         <MyPagination
           currentPage={data?.pagination.currentPage || 1}
@@ -141,6 +148,6 @@ export default function Courses_Member() {
           onPageChange={page => setPage(page)}
         />
       </div>
-    </div>
+    </Card>
   );
 }

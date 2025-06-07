@@ -14,7 +14,7 @@ import useQ_Notification_GetAllByUser from '@/hooks/query-hooks/Notification/use
 import { INotification } from '@/interfaces/notification';
 import socketService from '@/services/socket.service';
 import { useUserStore } from '@/stores/user_store';
-import { util_format_notification_count } from '@/utils/common';
+import { util_format_number } from '@/utils/common';
 
 const NOTIFICATION_LIMIT = 10;
 const UNREAD_LIMIT = 100000;
@@ -100,7 +100,7 @@ const NotificationCenter: React.FC = () => {
   const renderUnreadBadge = () => (
     unreadCount > 0 && (
       <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
-        {util_format_notification_count(unreadCount)}
+        {util_format_number(unreadCount)}
       </span>
     )
   );

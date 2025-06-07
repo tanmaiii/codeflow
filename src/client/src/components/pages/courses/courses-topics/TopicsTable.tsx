@@ -1,7 +1,7 @@
 'use client';
 import ActionDelete from '@/components/common/Action/ActionDelete';
-import { DataTable } from '@/components/common/data-table/data-table';
-import { DataTableColumnHeader } from '@/components/common/data-table/data-table-column-header';
+import { DataTable } from '@/components/common/DataTable/data-table';
+import { DataTableColumnHeader } from '@/components/common/DataTable/data-table-column-header';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -27,7 +27,7 @@ import { paths } from '@/data/path';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function Courses_Topics_Table() {
+export default function TopicsTable() {
   const params = useParams();
   const { data: course } = useQ_Course_GetDetail({ id: params?.id as string });
   const t = useTranslations('topic');

@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
-import { label_options, priority_options, status_options } from '@/components/common/data-table/filters';
+import { label_options, priority_options, status_options } from '@/components/common/DataTable/filters';
 import { z } from 'zod';
 
 export const statuses = ['canceled', 'done', 'in-progress', 'todo', 'backlog'] as const;
