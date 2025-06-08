@@ -66,7 +66,7 @@ export function DataTablePagination<TData>({
     }
     
     if (appendToUrl) {
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(searchParams?.toString() || '')
       params.set("page", page.toString())
       router.push(`${pathname}?${params.toString()}`)
     }

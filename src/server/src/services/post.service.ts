@@ -184,6 +184,13 @@ export class PostService {
     return post;
   }
 
+  public async restorePost(id: string): Promise<Post> {
+    const post = await DB.Posts.findByPk(id, { paranoid: false });
+    if (!post) throw new HttpException(409, this.POST_NOT_FOUND);
+    await DB.Posts.restore({ where: { id } });
+    return post;
+  }
+
   private async createPostTags(postId: string, tagIds: string[]): Promise<void> {
     await Promise.all(tagIds.map(tagId => this.tagService.createPostTag(postId, tagId)));
   }

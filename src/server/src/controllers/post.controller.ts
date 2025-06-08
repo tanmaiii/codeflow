@@ -172,6 +172,20 @@ export class PostController {
     }
   };
 
+  public restorePost = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const postId = req.params.id;
+      const restoredPost = await this.post.restorePost(postId);
+
+      res.status(200).json({
+        data: restoredPost,
+        message: 'restored',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getCommentsByPostId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const postId = req.params.id;

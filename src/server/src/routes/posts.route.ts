@@ -22,8 +22,9 @@ export class PostRoute implements Routes {
     this.router.get(`${this.path}/tag/:idTag`, OptionalAuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.post.getPostsByTagId);
     this.router.get(`${this.path}/:id`, OptionalAuthMiddleware, this.post.getPostById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreatePostDto), this.post.createPost);
-    this.router.put(`${this.path}/:id/delete`, AuthMiddleware, this.post.deletePost);
-    this.router.delete(`${this.path}/:id`, AuthMiddleware, this.post.destroyPost);
+    this.router.delete(`${this.path}/:id`, AuthMiddleware, this.post.deletePost);
+    this.router.delete(`${this.path}/:id/force`, AuthMiddleware, this.post.destroyPost);
+    this.router.put(`${this.path}/:id/restore`, AuthMiddleware, this.post.restorePost);
     this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(UpdatePostDto, 'body', true), this.post.updatePost);
 
     this.router.get(`${this.path}/:id/like`, AuthMiddleware, this.like.getLikePost);

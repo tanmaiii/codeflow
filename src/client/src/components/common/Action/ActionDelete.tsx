@@ -14,6 +14,7 @@ interface ActionDeleteProps {
   icon?: React.ReactNode;
   onSuccess?: () => void;
   onError?: () => void;
+  destroy?: boolean;
 }
 
 export default function ActionDelete({
@@ -22,6 +23,7 @@ export default function ActionDelete({
   icon,
   onSuccess,
   onError,
+  destroy = false,
 }: ActionDeleteProps) {
   const t = useTranslations('common');
   const queryClient = useQueryClient();
@@ -53,7 +55,7 @@ export default function ActionDelete({
   return (
     <ActionModal
       actionType={icon ? 'default' : 'delete'}
-      title={t('deleteConfirmTitle')}
+      title={destroy ? t('deleteDestroyConfirmTitle') : t('deleteConfirmTitle')}
       icon={icon}
     >
       <TextDescription className="text-md text-color-1">

@@ -18,6 +18,7 @@ import { IPost } from '@/interfaces/post';
 import postService from '@/services/post.service';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
+import { IconHeart, IconMessage } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
@@ -63,9 +64,19 @@ export default function Posts() {
               height={100}
               className="rounded-sm"
             />
-            <Link className="hover:underline" href={localPath(paths.POST_DETAIL(row.original.id))}>
-              {row.original.title}
-            </Link>
+            <div className="flex flex-col">
+              <Link
+                className="hover:underline"
+                href={localPath(paths.POST_DETAIL(row.original.id))}
+              >
+                {row.original.title}
+              </Link>
+              {row.original.deletedAt && (
+                <span className="text-xs text-red-500 font-semibold">
+                  {tCommon('softDeleted')} {utils_DateToDDMMYYYY(row.original.deletedAt!)}
+                </span>
+              )}
+            </div>
           </div>
         ),
         size: 400,
@@ -82,33 +93,27 @@ export default function Posts() {
         ),
       },
       {
-        header: t('comments'),
-        accessorKey: 'commentCount',
-        cell: ({ row }) => (
-          <TextDescription className="text-color-1">{row.original.commentCount}</TextDescription>
-        ),
-      },
-      {
-        header: t('likes'),
-        accessorKey: 'likeCount',
-        cell: ({ row }) => (
-          <TextDescription className="text-color-1">{row.original.likeCount}</TextDescription>
-        ),
+        header: t('info'),
+        accessorKey: 'deletedAt',
+        cell: ({ row }) => {
+          return (
+            <div className="flex flex-col gap-1">
+              <TextDescription className="flex items-center gap-1">
+                <IconMessage size={14} />
+                {row.original.commentCount}
+              </TextDescription>
+              <TextDescription className="flex items-center gap-1">
+                <IconHeart size={14} />
+                {row.original.likeCount}
+              </TextDescription>
+            </div>
+          );
+        },
       },
       {
         header: tCommon('createdAt'),
         accessorKey: 'createdAt',
         cell: ({ row }) => utils_DateToDDMMYYYY(row.original.createdAt!),
-      },
-      {
-        header: tCommon('updatedAt'),
-        accessorKey: 'updatedAt',
-        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.updatedAt!),
-      },
-      {
-        header: tCommon('deletedAt'),
-        accessorKey: 'deletedAt',
-        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.deletedAt!),
       },
       {
         header: t('status'),
@@ -119,7 +124,7 @@ export default function Posts() {
         },
       },
     ],
-    [localPath, t],
+    [localPath, t, tCommon],
   );
 
   const mutationDelete = useMutation({
@@ -132,6 +137,19 @@ export default function Posts() {
     },
     onError: () => {
       toast.error(tCommon('deleteError'));
+    },
+  });
+
+  const mutationRestore = useMutation({
+    mutationFn: async (id: string) => {
+      await postService.restore(id);
+    },
+    onSuccess: () => {
+      toast.success(tCommon('restoreSuccess'));
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+    onError: () => {
+      toast.error(tCommon('restoreError'));
     },
   });
 
@@ -174,7 +192,7 @@ export default function Posts() {
         showSelectionColumn={true}
         toolbarCustom={customToolbar}
         renderActions={({ row }) => (
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-1">
             <ActionStatus
               handleSubmit={async () =>
                 await postService.updateStatus(row.original.id, !row.original.status)
@@ -185,9 +203,24 @@ export default function Posts() {
               onClick={() => router.push(`/admin/${paths.POST_UPDATE(row.original.id)}`)}
               type="button"
             />
+            {row.original.deletedAt && (
+              <ActionIcon
+                actionType="restore"
+                onClick={() => mutationRestore.mutate(row.original.id)}
+                disabled={mutationRestore.isPending}
+                title={tCommon('restore')}
+              />
+            )}
             <ActionDelete
               deleteKey={row.original.title}
-              handleSubmit={async () => await postService.destroy(row.original.id)}
+              destroy={!!row.original.deletedAt}
+              handleSubmit={async () => {
+                if (!row.original.deletedAt) {
+                  await postService.delete(row.original.id);
+                } else {
+                  await postService.destroy(row.original.id);
+                }
+              }}
             />
           </div>
         )}

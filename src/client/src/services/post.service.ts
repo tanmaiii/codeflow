@@ -37,12 +37,17 @@ class PostService {
   }
 
   async delete(id: string): Promise<ResponseAPIDto<IPost>> {
-    const res = await this.client.put(`/${id}/delete`);
+    const res = await this.client.delete(`/${id}`);
     return res.data;
   }
 
   async destroy(id: string): Promise<ResponseAPIDto<IPost>> {
-    const res = await this.client.delete(`/${id}`);
+    const res = await this.client.delete(`/${id}/force`);
+    return res.data;
+  }
+
+  async restore(id: string): Promise<ResponseAPIDto<IPost>> {
+    const res = await this.client.put(`/${id}/restore`);
     return res.data;
   }
 

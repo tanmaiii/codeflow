@@ -1,8 +1,17 @@
 import { Button } from '@/components/ui/button';
-import { Pencil, Trash, Eye, Plus, CircleCheck } from 'lucide-react';
+import { Pencil, Trash, Eye, Plus, CircleCheck, RotateCcw, Archive } from 'lucide-react';
 import { MyTooltip } from '@/components/common/MyTooltip';
 import { useTranslations } from 'next-intl';
-type ActionIconType = 'update' | 'delete' | 'view' | 'create' | 'default' | 'non-icon' | 'status';
+type ActionIconType =
+  | 'update'
+  | 'delete'
+  | 'view'
+  | 'create'
+  | 'default'
+  | 'non-icon'
+  | 'status'
+  | 'restore'
+  | 'delete-soft';
 
 export interface ActionIconProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   actionType?: ActionIconType;
@@ -25,6 +34,24 @@ export default function ActionIcon({
       </MyTooltip>
     );
   }
+  if (actionType === 'restore') {
+    return (
+      <MyTooltip content={t('restore')}>
+        <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
+          <RotateCcw />
+        </Button>
+      </MyTooltip>
+    );
+  }
+  if (actionType === 'delete') {
+    return (
+      <MyTooltip content={t('delete')}>
+        <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
+          <Trash />
+        </Button>
+      </MyTooltip>
+    );
+  }
   if (actionType === 'status') {
     return (
       <MyTooltip content={t('status')}>
@@ -43,11 +70,11 @@ export default function ActionIcon({
       </MyTooltip>
     );
   }
-  if (actionType === 'delete') {
+  if (actionType === 'delete-soft') {
     return (
-      <MyTooltip content={t('delete')}>
+      <MyTooltip content={t('deleteSoft')}>
         <Button className="text-color-2 hover:text-primary" variant="none" {...props}>
-          <Trash />
+          <Archive />
         </Button>
       </MyTooltip>
     );
