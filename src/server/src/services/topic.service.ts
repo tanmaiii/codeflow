@@ -214,6 +214,14 @@ export class TopicService {
     return topic;
   }
 
+  public async restoreTopic(id: string): Promise<Topic> {
+    const topic = await DB.Topics.findByPk(id, { paranoid: false });
+    if (!topic) throw new HttpException(409, "Topic doesn't exist");
+
+    await DB.Topics.restore({ where: { id } });
+    return topic;
+  }
+
   private buildWhereClause(filters: Record<string, any>): Record<string, any> {
     const whereClause: Record<string, any> = {};
     Object.entries(filters).forEach(([key, value]) => {

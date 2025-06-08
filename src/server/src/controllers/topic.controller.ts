@@ -158,6 +158,16 @@ export class TopicController {
     }
   };
 
+  public restoreTopic = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const topicId = req.params.id;
+      const restoreTopicData: Topic = await this.topic.restoreTopic(topicId);
+      res.status(200).json({ data: restoreTopicData, message: 'restored' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   // Topic Evaluation
   public getTopicEvaluations = async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -29,6 +29,21 @@ class TagService {
     const res = await this.client.put(`/${id}`, data);
     return res.data;
   }
+
+  async delete(id: string): Promise<ResponseAPIDto<ITag>> {
+    const res = await this.client.delete(`/${id}`);
+    return res.data;
+  }
+
+  async destroy(id: string): Promise<ResponseAPIDto<ITag>> {
+    const res = await this.client.delete(`/${id}/force`);
+    return res.data;
+  }
+
+  async restore(id: string): Promise<ResponseAPIDto<ITag>> {
+    const res = await this.client.put(`/${id}/restore`);
+    return res.data;
+  }
 }
 
 export default new TagService() as TagService;

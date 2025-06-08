@@ -111,4 +111,13 @@ export class ReposController {
       next(error);
     }
   };
+
+  public restoreRepo = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const repo = await this.reposService.restoreRepo(req.params.id);
+      res.status(200).json(repo);
+    } catch (error) {
+      next(error);
+    }
+  };
 }

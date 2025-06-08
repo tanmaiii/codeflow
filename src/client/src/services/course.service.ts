@@ -52,12 +52,12 @@ import { AxiosInstance } from 'axios';
     }
 
     async delete(id: string): Promise<ResponseAPIDto<ICourse>> {
-      const res = await this.client.put(`/${id}/delete`);
+      const res = await this.client.delete(`/${id}`);
       return res.data;
     }
 
     async destroy(id: string): Promise<ResponseAPIDto<ICourse>> {
-      const res = await this.client.delete(`/${id}`);
+      const res = await this.client.delete(`/${id}/force`);
       return res.data;
     }
 

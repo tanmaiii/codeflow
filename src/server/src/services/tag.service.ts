@@ -59,6 +59,14 @@ export class TagService {
     return findTag;
   }
 
+  public async restoreTag(tagId: string): Promise<Tag> {
+    const findTag: Tag = await DB.Tags.findByPk(tagId, { paranoid: false });
+    if (!findTag) throw new HttpException(409, "Tag doesn't exist");
+
+    await DB.Tags.restore({ where: { id: tagId } });
+    return findTag;
+  }
+
   public async createCourseTag(courseId: string, tagId: string): Promise<CourseTag> {
     const findTag: Tag = await DB.Tags.findByPk(tagId);
     if (!findTag) throw new HttpException(409, "Tag doesn't exist");

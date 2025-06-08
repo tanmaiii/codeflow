@@ -30,8 +30,8 @@ export class CourseRoute implements Routes {
     // Course management routes (teacher/admin only)
     this.router.post(`${this.path}`, isTeacherOrAdmin, ValidationMiddleware(CreateCourseDto), this.course.createCourse);
     this.router.put(`${this.path}/:id`, isTeacherOrAdmin, ValidationMiddleware(CreateCourseDto, 'body', true), this.course.updateCourse);
-    this.router.put(`${this.path}/:id/delete`, isTeacherOrAdmin, this.course.deleteCourse);
-    this.router.delete(`${this.path}/:id`, isTeacherOrAdmin, this.course.destroyCourse);
+    this.router.delete(`${this.path}/:id`, isTeacherOrAdmin, this.course.deleteCourse);
+    this.router.delete(`${this.path}/:id/force`, isTeacherOrAdmin, this.course.destroyCourse);
 
     // Public routes
     this.router.get(`${this.path}`, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getCourses);

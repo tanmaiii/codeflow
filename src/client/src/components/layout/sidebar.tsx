@@ -22,6 +22,7 @@ import {
   LucideIcon,
   Newspaper,
   Settings,
+  Tags,
   Users,
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -38,6 +39,7 @@ const iconMap: Record<string, LucideIcon> = {
   project: FolderGit,
   article: Newspaper,
   repos: Github,
+  tag: Tags,
 };
 
 const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) => {

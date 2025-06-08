@@ -54,7 +54,17 @@ class TopicService {
   }
 
   async delete(id: string): Promise<ResponseAPIDto<ITopic>> {
-    const res = await this.client.put(`/delete/${id}`);
+    const res = await this.client.delete(`/${id}`);
+    return res.data;
+  }
+
+  async destroy(id: string): Promise<ResponseAPIDto<ITopic>> {
+    const res = await this.client.delete(`/${id}/force`);
+    return res.data;
+  }
+
+  async restore(id: string): Promise<ResponseAPIDto<ITopic>> {
+    const res = await this.client.put(`/${id}/restore`);
     return res.data;
   }
 

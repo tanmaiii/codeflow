@@ -1,13 +1,12 @@
 import { RepoCreate, Repos, RepoUpdate } from '@/interfaces/repos.interface';
-import { isEmpty, reposName, cleanSpecialCharacters } from '@/utils/util';
+import { logger } from '@/utils/logger';
+import { cleanSpecialCharacters, isEmpty } from '@/utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { Op } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
-import { TopicService } from './topic.service';
-import { ENUM_TYPE_COURSE } from '@/data/enum';
 import { GitHubService } from './github.service';
-import { logger } from '@/utils/logger';
+import { TopicService } from './topic.service';
 @Service()
 export class ReposService {
   constructor(private readonly githubService = Container.get(GitHubService), private readonly topicService = Container.get(TopicService)) {}
@@ -196,6 +195,14 @@ export class ReposService {
 
     await DB.Repos.destroy({ force: true, where: { id: id } });
 
+    return findRepo;
+  }
+
+  public async restoreRepo(id: string): Promise<Repos> {
+    const findRepo = await DB.Repos.findByPk(id, { paranoid: false });
+    if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
+
+    await DB.Repos.restore({ where: { id: id } });
     return findRepo;
   }
 }

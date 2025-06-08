@@ -7,6 +7,7 @@ export const paths = {
   USERS: '/users',
   SEARCH: '/search',
   NOTIFICATION: '/notification',
+  TAGS: '/tags',
   TAG: (id: string) => `/tags/${id}`,
 
   TOPICS: '/topics',

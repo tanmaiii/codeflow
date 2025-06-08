@@ -72,4 +72,14 @@ export class TagController {
       next(error);
     }
   };
+
+  public restoreTag = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const tagId = req.params.id;
+      const restoreTagData: Tag = await this.tag.restoreTag(tagId);
+      res.status(200).json({ data: restoreTagData, message: 'restored' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

@@ -21,8 +21,9 @@ export class TopicRoute implements Routes {
     this.router.get(`${this.path}/:userId/user`, ValidationMiddleware(GetTopicAllDto, 'query'), this.topic.getTopicsByUser);
     this.router.get(`${this.path}/:id`, this.topic.getTopicById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateTopicDto), this.topic.createTopic);
-    this.router.put(`${this.path}/delete/:id`, AuthMiddleware, this.topic.deleteTopic);
-    this.router.delete(`${this.path}/:id`, AuthMiddleware, this.topic.destroyTopic);
+    this.router.delete(`${this.path}/:id`, AuthMiddleware, this.topic.deleteTopic);
+    this.router.delete(`${this.path}/:id/force`, AuthMiddleware, this.topic.destroyTopic);
+    this.router.put(`${this.path}/:id/restore`, AuthMiddleware, this.topic.restoreTopic);
     this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(CreateTopicDto, 'body', true), this.topic.updateTopic);
 
     this.router.get(`${this.path}/:id/evaluations`, AuthMiddleware, this.topic.getTopicEvaluations);
