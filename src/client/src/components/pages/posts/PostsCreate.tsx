@@ -22,7 +22,7 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-export default function Posts_Create() {
+export default function PostsCreate() {
   const [file, setFile] = useState<File | null>(null);
   const schema = usePostSchema();
   const router = useRouter();
@@ -67,8 +67,6 @@ export default function Posts_Create() {
       toast.success('Post created successfully');
     },
   });
-
-  
 
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">

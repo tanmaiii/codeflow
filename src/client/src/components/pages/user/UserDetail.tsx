@@ -9,7 +9,7 @@ import { ExternalLink, Pen, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function User_Details({ user }: { user: IUser }) {
+export default function UserDetail({ user }: { user: IUser }) {
   const { data: GitHubUser } = useQ_GitHub_GetUserInfo({
     username: user?.username ?? '',
     options: {

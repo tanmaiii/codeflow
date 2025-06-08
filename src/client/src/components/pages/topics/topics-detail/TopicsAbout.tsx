@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/user_store';
 import { utils_CalculateProgress } from '@/utils/date';
 import { IconBrandGithub } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import Topics_Repos_Create from './Topics_Repos_Create';
+import TopicsReposCreate from './TopicsReposCreate';
 import useQ_Repos_GetAllByTopic from '@/hooks/query-hooks/Repos/useQ_Repos_GetAllByTopic';
 
 const MAX_REPOS = 3;
@@ -17,7 +17,7 @@ interface Topics_AboutProps {
   topic: ITopic;
 }
 
-export default function Topics_About({ topic }: Topics_AboutProps) {
+export default function TopicsAbout({ topic }: Topics_AboutProps) {
   const t = useTranslations('topic');
   const { user } = useUserStore();
   const { data: Q_Repos } = useQ_Repos_GetAllByTopic({
@@ -45,7 +45,7 @@ export default function Topics_About({ topic }: Topics_AboutProps) {
           </div>
           {canAddRepo ? (
             <div>
-              <Topics_Repos_Create topicId={topic.id} />
+              <TopicsReposCreate topicId={topic.id} />
             </div>
           ) : null}
         </div>

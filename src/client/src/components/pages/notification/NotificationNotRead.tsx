@@ -4,7 +4,7 @@ import useQ_Notification_GetAllByUser from '@/hooks/query-hooks/Notification/use
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
-export default function Notification_NotRead() {
+export default function NotificationNotRead() {
   const [page, setPage] = useState(1);
   const t = useTranslations('notification');
 

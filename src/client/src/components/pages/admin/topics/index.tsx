@@ -25,7 +25,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
 
-export default function Topics_Table() {
+export default function Topics() {
   const searchParams = useSearchParams();
   const page = searchParams?.get('page') || 1;
   const t = useTranslations('topic');
@@ -65,22 +65,20 @@ export default function Topics_Table() {
         accessorKey: 'group',
         header: 'Group',
         size: 100,
-        cell: ({ row }) => {
-          return (
-            <AvatarGroup
-              avatars={
-                row.original.members?.map(member => ({
-                  url: member.user?.avatar
-                    ? member.user?.avatar
-                    : apiConfig.avatar(member.user?.name ?? 'c'),
-                  name: member.user?.name ?? 'c',
-                  alt: member.user?.name ?? 'c',
-                })) ?? []
-              }
-              max={3}
-            />
-          );
-        },
+        cell: ({ row }) => (
+          <AvatarGroup
+            avatars={
+              row.original.members?.map(member => ({
+                url: member.user?.avatar
+                  ? member.user?.avatar
+                  : apiConfig.avatar(member.user?.name ?? 'c'),
+                name: member.user?.name ?? 'c',
+                alt: member.user?.name ?? 'c',
+              })) ?? []
+            }
+            max={3}
+          />
+        ),
       },
       {
         header: t('author'),

@@ -1,5 +1,5 @@
-import Topics_Table from '@/components/pages/admin/topics/Topics_Table';
+import Topics from '@/components/pages/admin/topics';
 
 export default function Page() {
-  return <Topics_Table />;
+  return <Topics />;
 }

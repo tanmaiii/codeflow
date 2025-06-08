@@ -29,7 +29,7 @@ export default function CardRepo({ repos }: { repos: IRepos }) {
         </div>
       </div>
       <div className="absolute right-2 top-1/2 -translate-y-1/2 ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-        <CardRepo_More className="bg-white rounded-full" repos={repos} />
+        <CardRepo_More className="bg-white dark:bg-black rounded-full" repos={repos} />
       </div>
     </div>
   );

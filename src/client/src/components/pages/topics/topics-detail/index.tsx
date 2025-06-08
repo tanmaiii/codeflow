@@ -10,13 +10,13 @@ import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { IconCircleCheck, IconPencil, IconSchool } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
-import Topics_About from './Topics_About';
+import TopicsAbout from './TopicsAbout';
 import { useUserStore } from '@/stores/user_store';
 import { Button } from '@/components/ui/button';
 import { paths } from '@/data/path';
 import Link from 'next/link';
-import Topics_Evaluation from './Topics_Evaluation';
-import Topics_Contribute from './Topics_Contribute';
+import TopicsEvaluation from './TopicsEvaluation';
+import TopicsContribute from './TopicsContribute';
 
 export default function Topics_Detail() {
   const params = useParams();
@@ -109,15 +109,15 @@ export default function Topics_Detail() {
           </div>
 
           <div className="flex flex-col gap-6">
-            {dataTopic?.data && <Topics_Evaluation topic={dataTopic?.data} />}
+            {dataTopic?.data && <TopicsEvaluation topic={dataTopic?.data} />}
           </div>
         </Card>
 
-        <Topics_Contribute />
+        <TopicsContribute />
       </div>
       <div className="col-span-12 md:col-span-4 xl:col-span-3 sticky top-20">
         <div className="sticky top-20">
-          {dataTopic?.data && <Topics_About topic={dataTopic?.data} />}
+          {dataTopic?.data && <TopicsAbout topic={dataTopic?.data} />}
         </div>
       </div>
     </div>

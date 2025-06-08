@@ -1,5 +1,5 @@
-import Posts_Create from "@/components/pages/posts/Posts_Create";
+import PostsCreate from "@/components/pages/posts/PostsCreate";
 
 export default function Page() {
-  return <Posts_Create />;
+  return <PostsCreate />;
 }

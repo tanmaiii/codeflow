@@ -16,22 +16,6 @@ export default function Tag() {
 
   const { data: tags } = useQ_Tag_GetAll();
 
-  // const { data: courses } = useQ_Course_GetAllByTag({
-  //   params: {
-  //     page: 1,
-  //     limit: 4,
-  //   },
-  //   tagId: tag?.data?.id || '',
-  // });
-
-  // const { data: posts } = useQ_Post_GetAllByTag({
-  //   params: {
-  //     page: 1,
-  //     limit: 4,
-  //   },
-  //   tagId: tag?.data?.id || '',
-  // });
-
   return (
     <div className="pt-6">
       <div className="">

@@ -1,5 +1,5 @@
-import Posts_Update from "@/components/pages/posts/Posts_Update";
+import PostsUpdate from "@/components/pages/posts/PostsUpdate";
 
 export default function Page() {
-  return <Posts_Update />;
+  return <PostsUpdate />;
 }

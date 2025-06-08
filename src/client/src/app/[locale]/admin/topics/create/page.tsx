@@ -1,5 +1,5 @@
-import Topics_Create from '@/components/pages/admin/topics/Topics_Create';
+import TopicsCreate from '@/components/pages/admin/topics/TopicsCreate';
 
 export default function Page() {
-  return <Topics_Create />;
+  return <TopicsCreate />;
 }

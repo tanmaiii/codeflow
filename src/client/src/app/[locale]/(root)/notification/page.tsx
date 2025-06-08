@@ -1,5 +1,5 @@
 import PageContent from '@/components/layout/PageContent';
-import Notification from '@/components/pages/notification/Notification';
+import Notification from '@/components/pages/notification';
 
 export default function Page() {
   return (

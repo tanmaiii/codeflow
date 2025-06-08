@@ -21,7 +21,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-export default function Topics_Create() {
+export default function TopicsCreate() {
   const tTopic = useTranslations('topic');
   const t = useTranslations('common');
   const schema = useTopicSchema();

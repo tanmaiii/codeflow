@@ -1,10 +1,10 @@
 import PageContent from "@/components/layout/PageContent";
-import Dashboard_Layout from "@/components/pages/dashboard/Dashboard_Layout";
+import DashboardLayout from "@/components/pages/dashboard/DashboardLayout";
 
 export default function Page() {
   return (
     <PageContent>
-      <Dashboard_Layout />
+      <DashboardLayout />
     </PageContent>
   );
 }

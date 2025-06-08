@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslations } from 'next-intl';
-import Notification_All from './Notification_All';
-import Notification_NotRead from './Notification_NotRead';
+import NotificationAll from './NotificationAll';
+import NotificationNotRead from './NotificationNotRead';
 import { useMutation } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
 import notificationService from '@/services/notification.service';
@@ -44,10 +44,10 @@ export default function Notification() {
               <TabsTrigger value="unread">{t('unread')}</TabsTrigger>
             </TabsList>
             <TabsContent value="all" className="flex flex-col gap-2">
-              <Notification_All />
+              <NotificationAll />
             </TabsContent>
             <TabsContent value="unread" className="flex flex-col gap-2">
-              <Notification_NotRead />
+              <NotificationNotRead />
             </TabsContent>
           </Tabs>
         </div>

@@ -1,4 +1,4 @@
-import Post_Detail_Layout from '@/components/pages/posts/posts-detail/Post_Detail_Layout';
+import PostDetailLayout from '@/components/pages/posts/posts-detail';
 import postService from '@/services/post.service';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -85,7 +85,7 @@ export default async function Page({ params }: PageProps) {
     }
 
     return (
-        <Post_Detail_Layout 
+        <PostDetailLayout 
           initialPostData={postResponse.data}
           initialCommentsData={commentsResponse.data || []}
           postId={params.id}

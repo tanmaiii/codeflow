@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
-import Dashboard_CardUser from "./Dashboard_CardUser";
+import Dashboard_CardUser from "./DashboardCardUser";
 
-export default function Dashboard_Layout() {
+export default function DashboardLayout() {
   return (
     <div className="grid gap-5 grid-cols-12 py-2">
       <div className="col-span-9">

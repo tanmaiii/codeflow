@@ -14,10 +14,7 @@ interface DataBatch {
   posts: IPost[];
 }
 
-export default function LoadMore({
-  params,
-  tagId,
-}: {
+interface LoadMoreProps {
   params: {
     page: number;
     sort?: string;
@@ -25,7 +22,9 @@ export default function LoadMore({
     dataTypes?: string[];
   };
   tagId: string;
-}) {
+}
+
+export default function LoadMore({ params, tagId }: LoadMoreProps) {
   const { ref, inView } = useInView();
   const [currentPage, setCurrentPage] = useState(params.page);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,11 +35,22 @@ export default function LoadMore({
   });
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
+  const fetchData = async (type: 'course' | 'post') => {
+    const service = type === 'course' ? courseService : postService;
+    return service.getAllByTag(
+      {
+        ...params,
+        page: currentPage,
+        limit: params.limit,
+      },
+      tagId,
+    );
+  };
+
   const loadMoreData = useCallback(async () => {
     if (isLoading) return;
 
     const { dataTypes = ['course', 'post'] } = params;
-
     const hasCoursesToLoad = dataTypes.includes('course') && currentPage <= totalPages.courses;
     const hasPostsToLoad = dataTypes.includes('post') && currentPage <= totalPages.posts;
 
@@ -49,87 +59,35 @@ export default function LoadMore({
     setIsLoading(true);
 
     try {
-      const promises: (
-        | Promise<PaginatedResponseAPIDto<ICourse[]>>
-        | Promise<PaginatedResponseAPIDto<IPost[]>>
-        | Promise<null>
-      )[] = [];
-
-      if (hasCoursesToLoad) {
-        promises.push(
-          courseService.getAllByTag(
-            {
-              ...params,
-              page: currentPage,
-              limit: params.limit,
-            },
-            tagId,
-          ),
-        );
-      } else {
-        promises.push(Promise.resolve(null));
-      }
-
-      if (hasPostsToLoad) {
-        promises.push(
-          postService.getAllByTag(
-            {
-              ...params,
-              page: currentPage,
-              limit: params.limit,
-            },
-            tagId,
-          ),
-        );
-      } else {
-        promises.push(Promise.resolve(null));
-      }
+      const promises = [
+        hasCoursesToLoad ? fetchData('course') : Promise.resolve(null),
+        hasPostsToLoad ? fetchData('post') : Promise.resolve(null),
+      ];
 
       const [coursesRes, postsRes] = await Promise.allSettled(promises);
+      const newBatch: DataBatch = { courses: [], posts: [] };
 
-      const newBatch: DataBatch = {
-        courses: [],
-        posts: [],
-      };
-
-      if (
-        coursesRes.status === 'fulfilled' &&
-        coursesRes.value !== null &&
-        dataTypes.includes('course')
-      ) {
+      if (coursesRes.status === 'fulfilled' && coursesRes.value && dataTypes.includes('course')) {
         const courseResponse = coursesRes.value as PaginatedResponseAPIDto<ICourse[]>;
         newBatch.courses = courseResponse.data;
-        setTotalPages(prev => ({
-          ...prev,
-          courses: courseResponse.pagination.totalPages,
-        }));
+        setTotalPages(prev => ({ ...prev, courses: courseResponse.pagination.totalPages }));
       }
 
-      if (
-        postsRes.status === 'fulfilled' &&
-        postsRes.value !== null &&
-        dataTypes.includes('post')
-      ) {
+      if (postsRes.status === 'fulfilled' && postsRes.value && dataTypes.includes('post')) {
         const postResponse = postsRes.value as PaginatedResponseAPIDto<IPost[]>;
         newBatch.posts = postResponse.data;
-        setTotalPages(prev => ({
-          ...prev,
-          posts: postResponse.pagination.totalPages,
-        }));
+        setTotalPages(prev => ({ ...prev, posts: postResponse.pagination.totalPages }));
       }
 
       setDataBatches(prev => [...prev, newBatch]);
       setCurrentPage(prev => prev + 1);
-
-      if (!initialLoadDone) {
-        setInitialLoadDone(true);
-      }
+      setInitialLoadDone(true);
     } catch (error) {
-      console.error('Error loading mixed data:', error);
+      console.error('Error loading data:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, currentPage, totalPages.courses, totalPages.posts, params, initialLoadDone]);
+  }, [isLoading, currentPage, totalPages, params, tagId]);
 
   useEffect(() => {
     if (!initialLoadDone && !isLoading) {
@@ -139,11 +97,7 @@ export default function LoadMore({
 
   useEffect(() => {
     if (inView && initialLoadDone && !isLoading) {
-      const delay = 200;
-      const timeoutId = setTimeout(() => {
-        loadMoreData();
-      }, delay);
-
+      const timeoutId = setTimeout(loadMoreData, 200);
       return () => clearTimeout(timeoutId);
     }
   }, [inView, initialLoadDone, isLoading, loadMoreData]);
@@ -152,67 +106,54 @@ export default function LoadMore({
     setCurrentPage(params.page);
     setDataBatches([]);
     setInitialLoadDone(false);
-    setTotalPages({
-      courses: 1,
-      posts: 1,
-    });
+    setTotalPages({ courses: 1, posts: 1 });
   }, [tagId, params.dataTypes?.join(','), params.sort]);
 
   const hasMoreData = () => {
     const { dataTypes = ['course', 'post'] } = params;
-    const hasCoursesToLoad = dataTypes.includes('course') && currentPage <= totalPages.courses;
-    const hasPostsToLoad = dataTypes.includes('post') && currentPage <= totalPages.posts;
-    return hasCoursesToLoad || hasPostsToLoad;
+    return (
+      (dataTypes.includes('course') && currentPage <= totalPages.courses) ||
+      (dataTypes.includes('post') && currentPage <= totalPages.posts)
+    );
   };
 
-  useEffect(() => {
-    console.log(dataBatches);
-  }, [dataBatches]);
+  const renderContent = (batch: DataBatch, batchIndex: number) => (
+    <div key={`batch-${batchIndex}`}>
+      {batch.courses.length > 0 && params.dataTypes?.includes('course') && (
+        <div className="flex flex-col py-2 gap-3 relative mb-6">
+          <TextHeading>Course</TextHeading>
+          <div className="relative grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-4 py-2">
+            {batch.courses.map((course, index) => (
+              <CardCourse key={`course-${batchIndex}-${course.id}-${index}`} course={course} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {batch.posts.length > 0 && params.dataTypes?.includes('post') && (
+        <div className="flex flex-col py-2 gap-3 relative mb-6">
+          <TextHeading>Post</TextHeading>
+          <div className="relative grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-4 py-2">
+            {batch.posts.map((post, index) => (
+              <CardPost key={`post-${batchIndex}-${post.id}-${index}`} post={post} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <>
-      {dataBatches.map((batch, batchIndex) => (
-        <div key={`batch-${batchIndex}`}>
-          {/* Courses Section */}
-          {batch.courses.length > 0 && params.dataTypes?.includes('course') && (
-            <div className="flex flex-col py-2 gap-3 relative mb-6">
-              <TextHeading>Course</TextHeading>
-              <div className="relative grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-4 py-2">
-                {batch.courses.map((course, index) => (
-                  <CardCourse key={`course-${batchIndex}-${course.id}-${index}`} course={course} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Posts Section */}
-          {batch.posts.length > 0 && params.dataTypes?.includes('post') && (
-            <div className="flex flex-col py-2 gap-3 relative mb-6">
-              <TextHeading>Post</TextHeading>
-              <div className="relative grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-4 py-2">
-                {batch.posts.map((post, index) => (
-                  <CardPost key={`post-${batchIndex}-${post.id}-${index}`} post={post} />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+      {dataBatches.map(renderContent)}
 
       {hasMoreData() && (
         <div
           ref={ref}
-          style={{
-            flexBasis: '100%',
-            flexGrow: 1,
-            justifyContent: 'center',
-            alignContent: 'center',
-            display: 'flex',
-            marginTop: '20px',
-          }}
+          className="flex justify-center items-center mt-5 w-full"
         >
           {inView && isLoading && (
-            <button style={{ margin: '0 auto' }}>
+            <button className="mx-auto">
               ...Loading {params.dataTypes?.join(', ') || 'Course, Post'} (Batch{' '}
               {dataBatches.length + 1})
             </button>

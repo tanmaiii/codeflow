@@ -18,7 +18,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
-import Repos_Update from './Repos_Update';
+import Repos_Update from './ReposUpdate';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
 
 export default function Repos() {

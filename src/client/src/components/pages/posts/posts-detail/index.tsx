@@ -1,7 +1,7 @@
-import { IPost } from "@/interfaces/post";
 import { IComment } from "@/interfaces/comment";
-import Post_Detail from "./Post_Detail";
-import Post_Detail_More from "./Post_Detail_More";
+import { IPost } from "@/interfaces/post";
+import PostDetail from "./PostDetail";
+import PostDetailMore from "./PostDetailMore";
 
 interface Post_Detail_Layout_Props {
   initialPostData: IPost;
@@ -9,7 +9,7 @@ interface Post_Detail_Layout_Props {
   postId: string;
 }
 
-export default function Post_Detail_Layout({ 
+export default function PostDetailLayout({ 
   initialPostData, 
   initialCommentsData, 
   postId 
@@ -17,7 +17,7 @@ export default function Post_Detail_Layout({
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mx-auto my-4">
       <div className="col-span-1 md:col-span-8 xl:col-span-9">
-        <Post_Detail 
+        <PostDetail 
           initialPostData={initialPostData}
           initialCommentsData={initialCommentsData}
           postId={postId}
@@ -25,7 +25,7 @@ export default function Post_Detail_Layout({
       </div>
       <div className="hidden md:block col-span-1 md:col-span-4 xl:col-span-3">
         <div className="sticky top-20">
-          <Post_Detail_More />
+          <PostDetailMore />
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
 
-export default function Posts_Table() {
+export default function Posts() {
   const searchParams = useSearchParams();
   const page = searchParams?.get('page') || 1;
   const t = useTranslations('post');

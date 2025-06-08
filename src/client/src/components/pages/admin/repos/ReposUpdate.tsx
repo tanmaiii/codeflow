@@ -1,9 +1,10 @@
 import ActionModal from '@/components/common/Action/ActionModal';
-import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
+import TextInput from '@/components/common/Input/TextInput/TextInput';
+import { LoadingOverlay } from '@/components/common/Loading';
 import { Button } from '@/components/ui/button';
-import { useEvaluationSchema } from '@/lib/validations/evaluationSchema';
-import { evaluationSchemaType } from '@/lib/validations/evaluationSchema';
-import topicService from '@/services/topic.service';
+import { IRepos } from '@/interfaces/repos';
+import { RepoSchemaType, useRepoSchema } from '@/lib/validations/useRepoSchema';
+import reposService from '@/services/repos.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -11,61 +12,52 @@ import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { ITopic, ITopicEvaluation } from '@/interfaces/topic';
 
-export default function Topics_Evaluation_Update({
-  topic,
-  evaluation,
-}: {
-  topic: ITopic;
-  evaluation: ITopicEvaluation;
-}) {
+export default function ReposUpdate({ repos }: { repos: IRepos }) {
   const tCommon = useTranslations('common');
+  const tRepos = useTranslations('repos');
+  const schema = useRepoSchema();
   const closeRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
-  const schema = useEvaluationSchema();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<evaluationSchemaType>({
+  } = useForm<RepoSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      evaluation: evaluation.evaluation,
+      name: repos.name,
     },
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: evaluationSchemaType) => {
-      try {
-        return await topicService.updateEvaluation(topic.id, evaluation.id, data);
-      } catch (error) {
-        throw error;
-      }
+    mutationFn: async (data: RepoSchemaType) => {
+      await reposService.update(repos.id, {
+        name: data.name,
+        topicId: repos.topicId,
+      });
     },
     onSuccess: () => {
       toast.success(tCommon('updateSuccess'));
+      queryClient.invalidateQueries({ queryKey: ['repos'] });
       reset();
       closeRef.current?.click();
-      queryClient.invalidateQueries({ queryKey: ['topic', 'detail', topic.id] });
     },
-    onError: error => {
-      console.error('Error updating evaluation:', error);
+    onError: () => {
       toast.error(tCommon('updateError'));
     },
   });
 
+  if (mutation.isPending) {
+    return <LoadingOverlay message="updating..." />;
+  } 
+
   return (
-    <ActionModal title={'Cập nhật nhận xét'} actionType={'update'} className="max-w-[50vw]">
+    <ActionModal title={tRepos('updateRepo')} actionType={'update'} className="max-w-[50vw]">
       <form onSubmit={handleSubmit(data => mutation.mutate(data))}>
         <div className="flex flex-col gap-2">
-          <TextareaInput
-            label="Nội dung"
-            className="min-h-[200px]"
-            {...register('evaluation')}
-            error={errors.evaluation?.message}
-          />
+          <TextInput label={tRepos('name')} {...register('name')} error={errors.name?.message} />
           <div className="flex justify-end gap-2">
             <DialogClose asChild ref={closeRef}>
               <Button type="button" variant="outline">

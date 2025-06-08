@@ -20,12 +20,12 @@ import { paths } from '@/data/path';
 import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
 import { IUser } from '@/interfaces/user';
 import userService from '@/services/user.service';
-import Users_Create from './Users_Create';
-import Users_Update from './Users_Update';
+import UsersCreate from './UsersCreate';
+import UsersUpdate from './UsersUpdate';
 
 const PAGE_SIZE = 10;
 
-export default function Users_Table() {
+export default function Users() {
   const router = useRouter();
   const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
@@ -102,7 +102,7 @@ export default function Users_Table() {
 
     return (
       <div>
-        <Users_Create />
+        <UsersCreate />
         {selectedRowsCount > 0 && (
           <Button
             variant="destructive"
@@ -129,7 +129,7 @@ export default function Users_Table() {
         toolbarCustom={customToolbar}
         renderActions={({ row }) => (
           <>
-            <Users_Update user={row.original} />
+            <UsersUpdate user={row.original} />
             <ActionDelete
               deleteKey={row.original.name}
               handleSubmit={async () => {

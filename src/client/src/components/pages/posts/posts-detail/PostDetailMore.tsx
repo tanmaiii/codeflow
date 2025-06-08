@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { paths } from '@/data/path';
 import { useParams } from 'next/navigation';
 
-export default function Post_Detail_More() {
+export default function PostDetailMore() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id;

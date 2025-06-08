@@ -25,7 +25,7 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-export default function Posts_Update() {
+export default function PostsUpdate() {
   const [file, setFile] = useState<File | null>(null);
   const [updateThumbnail, setUpdateThumbnail] = useState(false);
   const user = useUserStore();

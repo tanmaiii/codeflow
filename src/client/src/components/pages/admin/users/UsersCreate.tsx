@@ -5,17 +5,18 @@ import MySelect from '@/components/common/MySelect';
 import { Button } from '@/components/ui/button';
 import { DialogClose } from '@/components/ui/dialog';
 import { ROLE_USER } from '@/constants/object';
-import { IUser } from '@/interfaces/user';
-import { UserUpdateSchemaType, useUserSchema } from '@/lib/validations/userSchema';
+import { IUserCreate } from '@/interfaces/user';
+import { UserCreateSchemaType, useUserSchema } from '@/lib/validations/userSchema';
 import userService from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { IconPlus } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-export default function Users_Update({ user }: { user: IUser }) {
+export default function UsersCreate() {
   const tCommon = useTranslations('common');
   const t = useTranslations('users');
   const schema = useUserSchema();
@@ -28,28 +29,22 @@ export default function Users_Update({ user }: { user: IUser }) {
     control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<UserUpdateSchemaType>({
-    resolver: zodResolver(schema.userSchema),
-    defaultValues: user,
+  } = useForm<UserCreateSchemaType>({
+    resolver: zodResolver(schema.userCreateSchema),
   });
 
   // Reset form when user prop changes
   useEffect(() => {
-    reset(user);
-  }, [user, reset]);
+    reset({});
+  }, [reset]);
 
   const mutation = useMutation({
-    mutationFn: (data: UserUpdateSchemaType) => {
-      const updateData = { ...data, id: user.id };
-      if (!updateData.password) {
-        delete updateData.password;
-      }
-      return userService.update(user.id, updateData);
+    mutationFn: (data: IUserCreate) => {
+      return userService.create(data);
     },
     onSuccess: () => {
       toast.success(tCommon('updateSuccess'));
       closeRef.current?.click();
-      // Force refetch to get updated data
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
     onError: () => {
@@ -58,7 +53,16 @@ export default function Users_Update({ user }: { user: IUser }) {
   });
 
   return (
-    <ActionModal title={t('updateUser')} actionType={'update'}>
+    <ActionModal
+      title={t('createUser')}
+      icon={
+        <>
+          <IconPlus className="w-4 h-4" />
+          {t('createUser')}
+        </>
+      }
+      actionType={'default'}
+    >
       <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
         <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />
         <TextInput
@@ -78,7 +82,6 @@ export default function Users_Update({ user }: { user: IUser }) {
         <PasswordInput
           registration={register('password')}
           label={t('password')}
-          description="Để rỗng nếu không có thay đổi"
           error={errors.password?.message}
           {...register('password')}
         />

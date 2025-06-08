@@ -8,11 +8,13 @@
   import { ColumnDef } from '@tanstack/react-table';
   import { useTranslations } from 'next-intl';
   import { useMemo } from 'react';
-  import Topics_Evaluation_Create from './Topics_Evaluation_Create';
-  import Topics_Evaluation_Update from './Topics_Evaluation_Update';
+  import TopicsEvaluationCreate from './TopicsEvaluationCreate';
+  import TopicsEvaluationUpdate from './TopicsEvaluationUpdate';
   import { useUserStore } from '@/stores/user_store';
   import { ROLE } from '@/constants/enum';
-  export default function Topics_Evaluation({ topic }: { topic: ITopic }) {
+
+// Nhận xét chủ đề
+  export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
     const t = useTranslations('topic');
     const { user } = useUserStore();
 
@@ -55,7 +57,7 @@
           pagination={true}
           toolbarCustom={() => {
             if (user?.role === ROLE.ADMIN || user?.role === ROLE.TEACHER) {
-              return <Topics_Evaluation_Create topic={topic} />;
+              return <TopicsEvaluationCreate topic={topic} />;
             }
           }}
           data={
@@ -68,7 +70,7 @@
             if (user?.role === ROLE.ADMIN || user?.role === ROLE.TEACHER) {
               return (
                 <>
-                  <Topics_Evaluation_Update topic={topic} evaluation={row.original} />
+                  <TopicsEvaluationUpdate topic={topic} evaluation={row.original} />
                   <ActionDelete
                     deleteKey={row.original.id}
                     handleSubmit={async () => {

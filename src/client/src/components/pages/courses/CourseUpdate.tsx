@@ -28,7 +28,7 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-export default function Courses_Update() {
+export default function CoursesUpdate() {
   const t = useTranslations('course');
   const tCommon = useTranslations('common');
   const [image, setImage] = useState<File | null>(null);

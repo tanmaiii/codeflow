@@ -1,5 +1,5 @@
-import Posts_Table from '@/components/pages/admin/posts/Posts_Table';
+import Posts from '@/components/pages/admin/posts';
 
 export default function Page() {
-  return <Posts_Table />;
+  return <Posts />;
 }

@@ -1,7 +1,7 @@
 'use client';
 
-import { IPost } from "@/interfaces/post";
-import { IComment } from "@/interfaces/comment";
+import { IPost } from '@/interfaces/post';
+import { IComment } from '@/interfaces/comment';
 import Comments from '@/components/common/Comments/Comments';
 import NameTags from '@/components/common/NameTags/NameTags';
 import { Button } from '@/components/ui/button';
@@ -26,10 +26,10 @@ interface Post_Detail_Props {
   postId: string;
 }
 
-export default function Post_Detail({ 
-  initialPostData, 
-  initialCommentsData, 
-  postId 
+export default function PostDetail({
+  initialPostData,
+  initialCommentsData,
+  postId,
 }: Post_Detail_Props) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -38,8 +38,8 @@ export default function Post_Detail({
   const { data: commentData } = useQ_Post_GetComments({
     id: postId,
     options: {
-      initialData: { data: initialCommentsData, message: 'success' }
-    }
+      initialData: { data: initialCommentsData, message: 'success' },
+    },
   });
 
   const mutationComment = useMutation({
@@ -62,7 +62,11 @@ export default function Post_Detail({
       <div className="relative">
         <Image
           className="w-full max-h-[600px] object-cover rounded-md bg-background-1"
-          src={initialPostData.thumbnail ? utils_ApiImageToLocalImage(initialPostData.thumbnail) : IMAGES.DEFAULT_COURSE}
+          src={
+            initialPostData.thumbnail
+              ? utils_ApiImageToLocalImage(initialPostData.thumbnail)
+              : IMAGES.DEFAULT_COURSE
+          }
           alt={initialPostData.title}
           width={1000}
           height={500}
@@ -79,7 +83,11 @@ export default function Post_Detail({
 
       <div className="p-6">
         <TextHeading className="text-4xl font-extrabold">{initialPostData.title}</TextHeading>
-        <NameTags tags={initialPostData.tags} className="mt-2 mb-4" max={initialPostData.tags.length} />
+        <NameTags
+          tags={initialPostData.tags}
+          className="mt-2 mb-4"
+          max={initialPostData.tags.length}
+        />
         <div className="flex items-center gap-2 mt-4 mb-2">
           <Image
             className="w-12 h-12 object-cover rounded-full bg-background-1"
@@ -96,7 +104,8 @@ export default function Post_Detail({
             <TextHeading>{initialPostData.author?.name}</TextHeading>
             {initialPostData.createdAt && (
               <TextDescription>
-                {utils_DateToDDMonth(new Date(initialPostData.createdAt))} - {utils_TimeAgo(new Date(initialPostData.createdAt))}
+                {utils_DateToDDMonth(new Date(initialPostData.createdAt))} -{' '}
+                {utils_TimeAgo(new Date(initialPostData.createdAt))}
               </TextDescription>
             )}
           </div>
@@ -109,10 +118,7 @@ export default function Post_Detail({
 
       {commentData?.data && (
         <div className="px-6 mt-6">
-          <Comments 
-            onSubmit={value => mutationComment.mutate(value)} 
-            comments={commentData.data} 
-          />
+          <Comments onSubmit={value => mutationComment.mutate(value)} comments={commentData.data} />
         </div>
       )}
     </Card>

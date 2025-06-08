@@ -20,7 +20,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 
-export default function Courses_Table() {
+export default function Courses() {
   const searchParams = useSearchParams();
   const page = searchParams?.get('page') || 1;
   const t = useTranslations('course');

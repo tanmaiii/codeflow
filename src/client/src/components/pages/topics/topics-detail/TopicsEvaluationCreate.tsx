@@ -1,75 +1,72 @@
 import ActionModal from '@/components/common/Action/ActionModal';
-import TextInput from '@/components/common/Input/TextInput/TextInput';
+import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
 import { Button } from '@/components/ui/button';
-import { RepoSchemaType, useRepoSchema } from '@/lib/validations/useRepoSchema';
-import reposService from '@/services/repos.service';
-import { util_repos_name } from '@/utils/common';
+import { ITopic } from '@/interfaces/topic';
+import topicService from '@/services/topic.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogClose } from '@radix-ui/react-dialog';
+import { IconPlus } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
-import { ENUM_TYPE_COURSE } from '@/constants/enum';
-import { LoadingOverlay } from '@/components/common/Loading';
+import { useEvaluationSchema } from '@/lib/validations/evaluationSchema';
+import { evaluationSchemaType } from '@/lib/validations/evaluationSchema';
 
-export default function Topics_Repos_Create({ topicId }: { topicId: string }) {
-  const tRepo = useTranslations('repos');
+export default function TopicsEvaluationCreate({ topic }: { topic: ITopic }) {
   const tCommon = useTranslations('common');
   const closeRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
-  const schema = useRepoSchema();
-  const { data: Q_Topic } = useQ_Topic_GetDetail({ id: topicId });
-
-  const repoName = util_repos_name({
-    type: Q_Topic?.data?.course?.type as ENUM_TYPE_COURSE,
-    name: Q_Topic?.data?.title ?? '',
-    groupName: Q_Topic?.data?.groupName ?? '',
-  });
-
+  const schema = useEvaluationSchema();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<RepoSchemaType>({
+  } = useForm<evaluationSchemaType>({
     resolver: zodResolver(schema),
   });
+
   const mutation = useMutation({
-    mutationFn: async (data: RepoSchemaType) => {
-      await reposService.create({
-        topicId,
-        ...data,
-      });
+    mutationFn: async (data: evaluationSchemaType) => {
+      try {
+        return await topicService.createEvaluation(topic.id, data);
+      } catch (error) {
+        throw error;
+      }
     },
     onSuccess: () => {
       toast.success(tCommon('createSuccess'));
-      queryClient.invalidateQueries({ queryKey: ['repos'] });
       reset();
       closeRef.current?.click();
+      queryClient.invalidateQueries({ queryKey: ['topic', 'detail', topic.id] });
     },
-    onError: () => {
+    onError: error => {
+      console.error('Error creating evaluation:', error);
       toast.error(tCommon('createError'));
     },
   });
 
-  if (mutation.isPending) {
-    return <LoadingOverlay message="creating..." />;
-  }
-
   return (
-    <ActionModal title={tRepo('createRepo')} actionType={'create'} className="max-w-[50vw]">
+    <ActionModal
+      title={'Nhận xét'}
+      icon={
+        <>
+          <IconPlus className="w-4 h-4" />
+          Nhận xét
+        </>
+      }
+      actionType={'default'}
+      className="max-w-[50vw]"
+    >
       <form onSubmit={handleSubmit(data => mutation.mutate(data))}>
         <div className="flex flex-col gap-2">
-          <TextInput
-            label={tRepo('nameRepo')}
+          <TextareaInput
+            label="Nội dung"
             className="min-h-[200px]"
-            defaultValue={`${repoName}-`}
-            {...register('name')}
-            error={errors.name?.message}
-            description={tRepo('createRepoDescription')}
+            {...register('evaluation')}
+            error={errors.evaluation?.message}
           />
           <div className="flex justify-end gap-2">
             <DialogClose asChild ref={closeRef}>

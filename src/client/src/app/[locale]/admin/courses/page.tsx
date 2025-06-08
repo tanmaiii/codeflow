@@ -1,5 +1,5 @@
-import Courses_Table from '@/components/pages/admin/courses/Courses_Table';
+import Courses from '@/components/pages/admin/courses';
 
 export default function Page() {
-  return <Courses_Table />;
+  return <Courses />;
 }
