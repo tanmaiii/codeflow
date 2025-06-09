@@ -20,6 +20,7 @@ import {
   LogIn,
   LogOut,
   LucideIcon,
+  MessageCircle,
   Newspaper,
   Settings,
   Tags,
@@ -40,6 +41,7 @@ const iconMap: Record<string, LucideIcon> = {
   article: Newspaper,
   repos: Github,
   tag: Tags,
+  comment: MessageCircle,
 };
 
 const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) => {

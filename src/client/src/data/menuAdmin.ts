@@ -51,6 +51,12 @@ export const menuAdmin: ILinkItem[] = [
     href: paths.TAGS,
   },
   {
+    en: 'Comments',
+    vi: 'Bình luận',
+    icon: 'comment',
+    href: paths.COMMENTS,
+  },
+  {
     en: 'Settings',
     vi: 'Cài đặt',
     icon: 'settings',

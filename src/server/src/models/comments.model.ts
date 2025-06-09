@@ -15,7 +15,7 @@ export class CommentModel extends Model<Comment, CommentCreationAttributes> impl
   public postIds?: string;
   public courseId?: string;
   public content!: string;
-  public status?: boolean = true; // true for active, false for deleted
+  public status?: boolean; // true for active, false for deleted
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;

@@ -61,6 +61,11 @@ import { AxiosInstance } from 'axios';
       return res.data;
     }
 
+    async restore(id: string): Promise<ResponseAPIDto<ICourse>> {
+      const res = await this.client.post(`/${id}/restore`);
+      return res.data;
+    }
+
     async joinCourse(courseId: string, password: string): Promise<ResponseAPIDto<ICourseEnrollment>> {
       const res = await this.client.post(`/${courseId}/join`, { password });
       return res.data;

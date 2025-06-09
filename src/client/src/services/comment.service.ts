@@ -1,5 +1,5 @@
-import { IComment, ICreatoeCmmentDto } from '@/interfaces/comment';
-import { ResponseAPIDto } from '@/interfaces/common';
+import { IComment, ICommentSimple, ICreatoeCmmentDto } from '@/interfaces/comment';
+import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 
@@ -8,6 +8,11 @@ class CommentService {
 
   constructor() {
     this.client = createHttpClient('comments');
+  }
+
+  async getAll(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<ICommentSimple[]>> {
+    const res = await this.client.get('/', { params });
+    return res.data;
   }
 
   async create(data: ICreatoeCmmentDto): Promise<ResponseAPIDto<IComment>> {
@@ -20,8 +25,23 @@ class CommentService {
     return res.data;
   }
 
+  async updateStatus(id: string, status: boolean) {
+    const res = await this.client.put(`/${id}`, { status });
+    return res.data;
+  }
+
   async delete(id: string) {
     const res = await this.client.delete(`/${id}`);
+    return res.data;
+  }
+
+  async destroy(id: string) {
+    const res = await this.client.delete(`/${id}/force`);
+    return res.data;
+  }
+
+  async restore(id: string) {
+    const res = await this.client.put(`/${id}/restore`);
     return res.data;
   }
 }

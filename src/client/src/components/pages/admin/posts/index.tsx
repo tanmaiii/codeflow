@@ -36,6 +36,7 @@ export default function Posts() {
   const { localPath } = useH_LocalPath();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const search = searchParams?.get('search') || '';
 
   const Q_Posts = useQ_Post_GetAll({
     params: {
@@ -43,6 +44,7 @@ export default function Posts() {
       limit: 10,
       sortBy: 'createdAt',
       order: 'DESC',
+      search: search,
     },
   });
 
@@ -188,11 +190,15 @@ export default function Posts() {
         columns={columns}
         data={Q_Posts.data?.data || []}
         fieldFilter="title"
+        onSearchChange={value => {
+          router.push(`/admin/${paths.POSTS}?page=1&search=${value}`);
+        }}
+        enableLocalSearch={false}
         pagination={false}
         showSelectionColumn={true}
         toolbarCustom={customToolbar}
         renderActions={({ row }) => (
-          <div className="flex justify-center gap-1">
+          <div className="flex">
             <ActionStatus
               handleSubmit={async () =>
                 await postService.updateStatus(row.original.id, !row.original.status)

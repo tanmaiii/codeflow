@@ -68,6 +68,11 @@ class TopicService {
     return res.data;
   }
 
+  async updateStatus(id: string, status: string): Promise<ResponseAPIDto<ITopic>> {
+    const res = await this.client.put(`/${id}`, { status });
+    return res.data;
+  }
+
   async createEvaluation(
     id: string,
     data: ITopicEvaluationCreateDto,

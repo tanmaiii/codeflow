@@ -61,6 +61,7 @@ export class CourseService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     search = '',
     type = '',
+    isAdmin = false,
   ): Promise<{ count: number; rows: Course[] }> {
     const { count, rows } = await DB.Courses.findAndCountAll({
       attributes: {
@@ -70,6 +71,15 @@ export class CourseService {
           [this.topicCountLiteral, 'topicCount'],
         ],
       },
+      include: [
+        {
+          model: DB.Users,
+          as: 'author',
+          attributes: ['id', 'name', 'username', 'avatar'],
+          required: true,
+          paranoid: !isAdmin,
+        },
+      ],
       where: {
         ...(search && { title: { [Op.like]: `%${search}%` } }),
         ...(type && { type }),
@@ -78,7 +88,8 @@ export class CourseService {
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
-      col: 'courses.id',
+      col: 'id',
+      paranoid: !isAdmin,
     });
     return { count, rows };
   }
@@ -163,7 +174,7 @@ export class CourseService {
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
-      col: 'courses.id',
+      col: 'id',
     });
 
     return courses;
@@ -219,8 +230,19 @@ export class CourseService {
     return { count: totalCount, rows: courses };
   }
 
-  public async findCourseById(courseId: string): Promise<Course> {
-    const findCourse: Course = await DB.Courses.findByPk(courseId);
+  public async findCourseById(courseId: string, isAdmin = false): Promise<Course> {
+    const findCourse: Course = await DB.Courses.findByPk(courseId, {
+      include: [
+        {
+          model: DB.Users,
+          as: 'author',
+          attributes: ['id', 'name', 'username', 'avatar'],
+          required: true,
+          paranoid: !isAdmin,
+        },
+      ],
+      paranoid: !isAdmin,
+    });
     if (!findCourse) throw new HttpException(409, "Course doesn't exist");
 
     return findCourse;
@@ -309,6 +331,15 @@ export class CourseService {
     if (!findCourse) throw new HttpException(409, "Course doesn't exist");
 
     await DB.Courses.destroy({ force: true, where: { id: courseId } });
+
+    return findCourse;
+  }
+
+  public async restoreCourse(courseId: string): Promise<Course> { 
+    const findCourse: Course = await DB.Courses.findByPk(courseId, { paranoid: false });
+    if (!findCourse) throw new HttpException(409, "Course doesn't exist");
+
+    await DB.Courses.restore({ where: { id: courseId } });
 
     return findCourse;
   }

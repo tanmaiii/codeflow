@@ -9,7 +9,8 @@ export const paths = {
   NOTIFICATION: '/notification',
   TAGS: '/tags',
   TAG: (id: string) => `/tags/${id}`,
-
+  COMMENTS: '/comments',
+  
   TOPICS: '/topics',
   TOPICS_DETAIL: (id: string) => `/topics/${id}`,
   TOPIC_CREATE: '/topics/create',

@@ -1,3 +1,4 @@
+import { ENUM_USER_ROLE } from '@/data/enum';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import { Topic, TopicCreate, TopicEvaluations } from '@/interfaces/topics.interface';
 import { User } from '@/interfaces/users.interface';
@@ -10,9 +11,10 @@ export class TopicController {
   public topic = Container.get(TopicService);
   public topicEvaluation = Container.get(TopicEvaluationsService);
 
-  public getTopics = async (req: Request, res: Response, next: NextFunction) => {
+  public getTopics = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom, status, search} = req.query;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom, status, search } = req.query;
+      const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
         Number(page),
         Number(limit),
@@ -22,6 +24,7 @@ export class TopicController {
         isCustom !== undefined ? isCustom === 'true' : undefined,
         status as string,
         String(search ?? ''),
+        isAdmin,
       );
 
       res.status(200).json({
@@ -39,9 +42,10 @@ export class TopicController {
     }
   };
 
-  public getTopicsByCourseId = async (req: Request, res: Response, next: NextFunction) => {
+  public getTopicsByCourseId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const courseId = req.params.courseId;
+      const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom, status, search } = req.query;
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
         Number(page),
@@ -52,6 +56,7 @@ export class TopicController {
         isCustom !== undefined ? isCustom === 'true' : undefined,
         status as string,
         String(search ?? ''),
+        isAdmin,
       );
 
       res.status(200).json({
@@ -69,9 +74,10 @@ export class TopicController {
     }
   };
 
-  public getTopicsByUser = async (req: Request, res: Response, next: NextFunction) => {
+  public getTopicsByUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
+      const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', status } = req.query;
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPaginationByUser(
         Number(page),
@@ -80,6 +86,7 @@ export class TopicController {
         order as 'ASC' | 'DESC',
         userId,
         status as string,
+        isAdmin,
       );
 
       res.status(200).json({
@@ -96,11 +103,12 @@ export class TopicController {
       next(error);
     }
   };
-  
-  public getTopicById = async (req: Request, res: Response, next: NextFunction) => {
+
+  public getTopicById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const topicId = req.params.id;
-      const findOneTopicData: Topic = await this.topic.findTopicById(topicId);
+      const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
+      const findOneTopicData: Topic = await this.topic.findTopicById(topicId, isAdmin);
       res.status(200).json({ data: findOneTopicData, message: 'findOne' });
     } catch (error) {
       next(error);
@@ -127,21 +135,27 @@ export class TopicController {
     try {
       const topicId = req.params.id;
       const userData: User = req.user;
+      const isAdmin = userData.role === ENUM_USER_ROLE.ADMIN;
       const topicData: Partial<TopicCreate> = req.body;
-      const updateTopicData: Topic = await this.topic.updateTopic(topicId, {
-        ...topicData,
-        authorId: userData.id,
-      });
+      const updateTopicData: Topic = await this.topic.updateTopic(
+        topicId,
+        {
+          ...topicData,
+          authorId: userData.id,
+        },
+        isAdmin,
+      );
       res.status(200).json({ data: updateTopicData, message: 'updated' });
     } catch (error) {
       next(error);
     }
   };
 
-  public deleteTopic = async (req: Request, res: Response, next: NextFunction) => {
+  public deleteTopic = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const topicId = req.params.id;
-      const deleteTopicData: Topic = await this.topic.deleteTopic(topicId);
+      const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
+      const deleteTopicData: Topic = await this.topic.deleteTopic(topicId, isAdmin);
       res.status(200).json({ data: deleteTopicData, message: 'deleted' });
     } catch (error) {
       next(error);

@@ -29,8 +29,10 @@ export class TopicService {
     WHERE tm.topic_id = topics.id
   )`);
 
-  public async findAll(): Promise<Topic[]> {
-    return DB.Topics.findAll();
+  public async findAll(isAdmin = false): Promise<Topic[]> {
+    return DB.Topics.findAll({
+      paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
+    });
   }
 
   public async findAndCountAllWithPagination(
@@ -42,6 +44,7 @@ export class TopicService {
     isCustom?: boolean,
     status?: string,
     search?: string,
+    isAdmin = false,
   ): Promise<{ count: number; rows: Topic[] }> {
     const whereClause = this.buildWhereClause({ courseId, isCustom });
 
@@ -50,17 +53,27 @@ export class TopicService {
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
-      col: 'topics.id',
+      col: 'id',
       attributes: {
         include: [
           [this.memberCountLiteral, 'memberCount'],
         ],
       },
+      include: [
+        {
+          model: DB.Courses,
+          as: 'course',
+          attributes: ['id', 'title', 'status', 'authorId'],
+          required: true,
+          paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
+        },
+      ],
       where: {
         ...whereClause,
         ...(status ? { status } : {}),
         ...(search ? { title: { [Op.like]: `%${search}%` } } : {}),
       },
+      paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
     });
   }
 
@@ -71,6 +84,7 @@ export class TopicService {
     sortOrder = this.defaultSortOrder,
     userId?: string,
     status?: string,
+    isAdmin = false,
   ): Promise<{ count: number; rows: Topic[] }> {
     // Tìm các topic mà user là thành viên
     const userTopics = await DB.TopicMember.findAll({
@@ -89,22 +103,42 @@ export class TopicService {
         id: topicIds,
         ...(status ? { status } : {}),
       },
-      col: 'topics.id',
+      col: 'id',
       attributes: {
         include: [
           [this.memberCountLiteral, 'memberCount'],
         ],
       },
+      include: [
+        {
+          model: DB.Courses,
+          as: 'course',
+          attributes: ['id', 'title', 'status', 'authorId'],
+          required: true,
+          paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
+        },
+      ],
+      paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
     });
   }
 
-  public async findTopicById(id: string): Promise<Topic> {
+  public async findTopicById(id: string, isAdmin = false): Promise<Topic> {
     const topic = await DB.Topics.findByPk(id, {
       attributes: {
         include: [
           [this.memberCountLiteral, 'memberCount'],
         ],
       },
+      include: [
+        {
+          model: DB.Courses,
+          as: 'course',
+          attributes: ['id', 'title', 'status', 'authorId'],
+          required: true,
+          paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
+        },
+      ],
+      paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
     });
     if (!topic) throw new HttpException(409, "Topic doesn't exist");
     return topic;
@@ -152,10 +186,10 @@ export class TopicService {
     return createdTopic;
   }
 
-  public async updateTopic(id: string, topicData: Partial<TopicCreate>): Promise<Topic> {
+  public async updateTopic(id: string, topicData: Partial<TopicCreate>, isAdmin = false): Promise<Topic> {
     if (isEmpty(id)) throw new HttpException(400, 'TopicId is empty');
 
-    const topic = await this.findTopicById(id);
+    const topic = await this.findTopicById(id, isAdmin);
     const { tags, members, authorId, ...topicDataWithoutTags } = topicData;
 
     await DB.Topics.update(topicDataWithoutTags, { where: { id } });
@@ -200,8 +234,8 @@ export class TopicService {
     return topic;
   }
 
-  public async deleteTopic(topicId: string): Promise<Topic> {
-    const topic = await this.findTopicById(topicId);
+  public async deleteTopic(topicId: string, isAdmin = false): Promise<Topic> {
+    const topic = await this.findTopicById(topicId, isAdmin);
     await DB.Topics.destroy({ where: { id: topicId } });
     return topic;
   }

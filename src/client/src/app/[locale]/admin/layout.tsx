@@ -12,7 +12,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <div className="flex flex-1 mt-14 ">
+      <div className="flex flex-1 mt-14">
         <Sidebar prefix={paths.ADMIN} menu={menuAdmin} />
         <div className="w-full">{children}</div>
       </div>

@@ -22,6 +22,7 @@ import { IUser } from '@/interfaces/user';
 import userService from '@/services/user.service';
 import UsersCreate from './UsersCreate';
 import UsersUpdate from './UsersUpdate';
+import { GithubIcon } from 'lucide-react';
 
 const PAGE_SIZE = 10;
 
@@ -55,13 +56,16 @@ export default function Users() {
           if (!row.original.uid) return row.original.username;
 
           return (
-            <Link
-              className="hover:underline"
-              href={`https://github.com/${row.original.username}`}
-              target="_blank"
-            >
-              <TextDescription className="text-color-1">{row.original.username}</TextDescription>
-            </Link>
+            <div className="flex items-center gap-1">
+              <GithubIcon className="w-4 h-4" />
+              <Link
+                className="hover:underline"
+                href={`https://github.com/${row.original.username}`}
+                target="_blank"
+              >
+                <TextDescription className="text-color-1">{row.original.username}</TextDescription>
+              </Link>
+            </div>
           );
         },
       },

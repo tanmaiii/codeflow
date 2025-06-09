@@ -3,6 +3,7 @@ import { RequestWithUser } from '@/interfaces/auth.interface';
 import { CommentService } from '@/services/comment.service';
 import { CourseEnrollmentService } from '@/services/course_enrollment.service';
 import { CourseService } from '@/services/courses.service';
+import { ENUM_USER_ROLE } from '@/data/enum';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 
@@ -35,9 +36,10 @@ export class CourseController {
     }
   }
 
-  public getCourses = async (req: Request, res: Response, next: NextFunction) => {
+  public getCourses = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', search, type } = req.query;
+      const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
       const { count, rows } = await this.course.findAndCountAllWithPagination(
         Number(page),
         Number(limit),
@@ -45,6 +47,7 @@ export class CourseController {
         order as 'ASC' | 'DESC',
         String(search ?? ''),
         String(type ?? ''),
+        isAdmin,
       );
 
       res.status(200).json({
@@ -144,7 +147,8 @@ export class CourseController {
 
   public getCourseById = async (req: Request, res: Response, next: NextFunction) => {
     await this.handleRequest(req, res, next, async () => {
-      return await this.course.findCourseById(req.params.id);
+      const isAdmin = (req as any).user?.role === ENUM_USER_ROLE.ADMIN;
+      return await this.course.findCourseById(req.params.id, isAdmin);
     });
   };
 
@@ -190,6 +194,12 @@ export class CourseController {
   public destroyCourse = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     await this.handleRequest(req, res, next, async () => {
       return await this.course.destroyCourse(req.params.id);
+    });
+  };
+
+  public restoreCourse = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    await this.handleRequest(req, res, next, async () => {
+      return await this.course.restoreCourse(req.params.id);
     });
   };
 

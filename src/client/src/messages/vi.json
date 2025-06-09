@@ -150,7 +150,8 @@
     "loadMore": "Xem thêm",
     "seeMoreReplys": "Xem thêm {length} trả lời",
     "replyTo": "Trả lời cho",
-    "postComment": "Đăng bình luận"
+    "postComment": "Đăng bình luận",
+    "status": "Trạng thái"
   },
   "course": {
     "course": "Khóa học",

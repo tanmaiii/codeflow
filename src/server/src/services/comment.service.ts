@@ -8,6 +8,8 @@ import { Notification } from '@/interfaces/notification.interface';
 import { NotificationService } from './notification.service';
 import { PostService } from './post.service';
 import { CourseService } from './courses.service';
+import { Op } from 'sequelize';
+import { Course } from '@/interfaces/courses.interface';
 @Service()
 export class CommentService {
   constructor(
@@ -32,6 +34,20 @@ export class CommentService {
     return this.buildCommentTree(allComment);
   }
 
+
+  public async findAndCountAllWithPagination(page = 1, pageSize = 10, search = '', isAdmin = false): Promise<{ count: number; rows: Comment[] }> {
+    const { count, rows } = await DB.Comments.findAndCountAll({
+      order: [['createdAt', 'DESC']],
+      where: {
+        content: { [Op.like]: `%${search}%` },
+      },
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      paranoid: !isAdmin,
+    });
+    return { count, rows };
+  }
+
   public async findCommentById(commentId: string): Promise<Comment> {
     if (isEmpty(commentId)) throw new HttpException(400, 'CommentId is empty');
     const findComment = await DB.Comments.findByPk(commentId);
@@ -42,7 +58,7 @@ export class CommentService {
 
   public async findCommentByCourseId(courseId: string): Promise<Comment[]> {
     if (isEmpty(courseId)) throw new HttpException(400, 'CourseId is empty');
-    const findComment = await DB.Comments.findAll({ where: { courseId } });
+    const findComment = await DB.Comments.findAll({ where: { courseId, status: true } });
     if (!findComment) throw new HttpException(409, "Comment doesn't exist");
 
     // return findComment;
@@ -51,7 +67,7 @@ export class CommentService {
 
   public async findCommentByPostId(postId: string): Promise<Comment[]> {
     if (isEmpty(postId)) throw new HttpException(400, 'PostId is empty');
-    const findComment = await DB.Comments.findAll({ where: { postId }, order: [['createdAt', 'DESC']] });
+    const findComment = await DB.Comments.findAll({ where: { postId, status: true }, order: [['createdAt', 'DESC']] });
     if (!findComment) throw new HttpException(409, "Comment doesn't exist");
 
     // return findComment;
@@ -104,6 +120,24 @@ export class CommentService {
     if (!findComment) throw new HttpException(409, "Comment doesn't exist");
 
     await DB.Comments.destroy({ where: { id: commentId } });
+
+    return findComment;
+  }
+
+  public async destroyComment(commentId: string): Promise<Comment> {
+    const findComment: Comment = await DB.Comments.findByPk(commentId, { paranoid: false });
+    if (!findComment) throw new HttpException(409, "Comment doesn't exist");
+
+    await DB.Comments.destroy({ force: true, where: { id: commentId } });
+
+    return findComment;
+  }
+
+  public async restoreComment(commentId: string): Promise<Comment> {
+    const findComment: Comment = await DB.Comments.findByPk(commentId, { paranoid: false });
+    if (!findComment) throw new HttpException(409, "Comment doesn't exist");
+
+    await DB.Comments.restore({ where: { id: commentId } });
 
     return findComment;
   }

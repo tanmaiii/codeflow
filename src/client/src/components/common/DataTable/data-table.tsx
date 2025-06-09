@@ -144,7 +144,7 @@ export function DataTable<TData, TValue>({
                     />
                   </TableHead>
                 )}
-                {showIndexColumn && <TableHead className="w-[30px] text-center">STT</TableHead>}
+                {showIndexColumn && <TableHead className="w-[20px] text-center">STT</TableHead>}
                 {headerGroup.headers.map(header => {
                   return (
                     <TableHead key={header.id} style={{ width: header.column.getSize() }}>
@@ -154,7 +154,7 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                   );
                 })}
-                {renderActions && <TableHead className="text-center w-[100px]">Actions</TableHead>}
+                {renderActions && <TableHead className="text-center w-[80px]">Actions</TableHead>}
               </TableRow>
             ))}
           </TableHeader>
@@ -173,7 +173,7 @@ export function DataTable<TData, TValue>({
                     </TableCell>
                   )}
                   {showIndexColumn && (
-                    <TableCell className="text-center w-[30px]">
+                    <TableCell className="text-center w-[20px]">
                       {pagination
                         ? table.getState().pagination.pageIndex *
                             table.getState().pagination.pageSize +
@@ -188,7 +188,7 @@ export function DataTable<TData, TValue>({
                     </TableCell>
                   ))}
                   {renderActions && (
-                    <TableCell className="p-2 text-center w-[100px] ">
+                    <TableCell className="p-2 text-center w-[80px]">
                       {renderActions({ row })}
                     </TableCell>
                   )}

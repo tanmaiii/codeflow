@@ -1,5 +1,5 @@
-import Courses_Create from "@/components/pages/courses/Courses_Create";
+import CourseCreate from "@/components/pages/courses/CourseCreate";
 
 export default function Page() {
-  return <Courses_Create />;
+  return <CourseCreate />;
 }

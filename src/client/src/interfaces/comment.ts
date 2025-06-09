@@ -1,4 +1,17 @@
 import { IBaseEntity } from "./common";
+import { IUser } from "./user";
+
+export interface ICommentSimple extends IBaseEntity {
+  id: string;
+  content: string;
+  status: boolean;
+  postId: string;
+  authorId: string;
+  parentId?: string;
+  submissionId?: string;
+  courseId?: string;
+  author?: IUser
+}
 
 export interface IComment extends IBaseEntity {
   id: string;

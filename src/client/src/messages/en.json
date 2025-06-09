@@ -157,7 +157,8 @@
     "loadMore": "See more",
     "seeMoreReplys": "See more {length} replys",
     "replyTo": "Reply to",
-    "postComment": "Post Comment"
+    "postComment": "Post Comment",
+    "status": "Status"
   },
   "course": {
     "course": "Course",
