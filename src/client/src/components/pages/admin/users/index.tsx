@@ -23,8 +23,7 @@ import userService from '@/services/user.service';
 import UsersCreate from './UsersCreate';
 import UsersUpdate from './UsersUpdate';
 import { GithubIcon } from 'lucide-react';
-
-const PAGE_SIZE = 10;
+import TableSkeleton from '@/components/skeletons/TableSkeleton';
 
 export default function Users() {
   const router = useRouter();
@@ -33,10 +32,10 @@ export default function Users() {
   const searchParams = useSearchParams();
   const page = Number(searchParams?.get('page')) || 1;
 
-  const { data } = useQ_User_GetAll({
+  const { data, isLoading } = useQ_User_GetAll({
     params: {
       page,
-      limit: PAGE_SIZE,
+      limit: 12,
     },
   });
 
@@ -119,6 +118,8 @@ export default function Users() {
       </div>
     );
   };
+
+  if (isLoading) return <TableSkeleton />;
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">

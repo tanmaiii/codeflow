@@ -1,4 +1,4 @@
-import { ResponseAPIDto } from "@/interfaces/common";
+import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from "@/interfaces/common";
 import { ITag, ITagCreateDto } from "@/interfaces/tags";
 import createHttpClient from "@/lib/createHttpClient";
 import { AxiosInstance } from "axios";
@@ -12,6 +12,11 @@ class TagService {
 
   async getAll(): Promise<ResponseAPIDto<ITag[]>> {
     const res = await this.client.get("/");
+    return res.data;
+  }
+
+  async getAllPagi(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<ITag[]>> {
+    const res = await this.client.get("/all", { params });
     return res.data;
   }
 

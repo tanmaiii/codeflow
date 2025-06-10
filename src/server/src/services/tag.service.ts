@@ -1,7 +1,9 @@
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
 import { CourseTag, PostTag, Tag, TopicTag } from '@/interfaces/tags.interface';
+import { Op } from 'sequelize';
 import { Service } from 'typedi';
+import { isAdmin } from '../middlewares/auth.middleware';
 
 @Service()
 export class TagService {
@@ -10,11 +12,26 @@ export class TagService {
     return allTag;
   }
 
-  public async findAndCountAllWithPagination(limit: number, offset: number): Promise<{ count: number; rows: Tag[] }> {
+  public async findAndCountAllWithPagination(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    search: string = '',
+    isAdmin: boolean = false,
+  ): Promise<{ count: number; rows: Tag[] }> {
     const { count, rows }: { count: number; rows: Tag[] } = await DB.Tags.findAndCountAll({
-      limit,
-      offset,
-    });
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+      paranoid: isAdmin,
+      where: {
+        [Op.or]: [
+          { name: { [Op.like]: `%${search}%` } },
+          { description: { [Op.like]: `%${search}%` } },
+        ],
+      },
+      });
     return { count, rows };
   }
 

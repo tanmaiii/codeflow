@@ -9,6 +9,7 @@ import TitleHeader from '@/components/layout/TitleHeader';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading from '@/components/ui/text';
 import { STATUS_HIDDEN } from '@/constants/object';
+import { paths } from '@/data/path';
 import useQ_Comments_GetAll from '@/hooks/query-hooks/Comments/useQ_Comments_GetAll';
 import { ICommentSimple } from '@/interfaces/comment';
 import commentService from '@/services/comment.service';
@@ -27,10 +28,12 @@ export default function Comments() {
   const params = useSearchParams();
   const page = params?.get('page') || 1;
   const queryClient = useQueryClient();
-  const { data: Q_Comments } = useQ_Comments_GetAll({
+  const search = params?.get('search') || '';
+  const { data: Q_Comments, isLoading  } = useQ_Comments_GetAll({
     params: {
       page: Number(page),
-      limit: 10,
+      limit: 12,
+      search: search,
     },
   });
 
@@ -93,9 +96,13 @@ export default function Comments() {
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
       <TitleHeader title="Comments" description="Manage your comments" />
       <DataTable
+        isLoading={isLoading}
         showSelectionColumn={true}
         showIndexColumn={true}
         columns={columns}
+        onSearchChange={value => {
+          router.push(`/admin/${paths.COMMENTS}?page=1&search=${value}`);
+        }}
         data={Q_Comments?.data || []}
         pagination={false}
         renderActions={({ row }) => (

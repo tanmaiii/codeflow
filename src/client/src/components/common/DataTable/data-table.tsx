@@ -33,6 +33,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
+import TableSkeleton from '@/components/skeletons/TableSkeleton';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -49,6 +50,7 @@ interface DataTableProps<TData, TValue> {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   enableLocalSearch?: boolean;
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -66,6 +68,7 @@ export function DataTable<TData, TValue>({
   searchValue: externalSearchValue,
   onSearchChange,
   enableLocalSearch = true,
+  isLoading = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -108,6 +111,11 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    initialState: {
+      pagination: {
+        pageSize: pagination ? 10 : data.length || 1000,
+      },
+    },
   });
 
   return (
@@ -127,89 +135,93 @@ export function DataTable<TData, TValue>({
         <DataTableViewOptions table={table} />
       </div>
       <div className="rounded-md border overflow-x-auto">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {showSelectionColumn && (
-                  <TableHead className="w-[30px]">
-                    <Checkbox
-                      checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && 'indeterminate')
-                      }
-                      onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-                      aria-label="Select all"
-                      className="translate-y-[2px]"
-                    />
-                  </TableHead>
-                )}
-                {showIndexColumn && <TableHead className="w-[20px] text-center">STT</TableHead>}
-                {headerGroup.headers.map(header => {
-                  return (
-                    <TableHead key={header.id} style={{ width: header.column.getSize() }}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
-                {renderActions && <TableHead className="text-center w-[80px]">Actions</TableHead>}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody className="h-full">
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, rowIndex) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+        {isLoading ? (
+          <TableSkeleton />
+        ) : (
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map(headerGroup => (
+                <TableRow key={headerGroup.id}>
                   {showSelectionColumn && (
-                    <TableCell className="w-[30px]">
+                    <TableHead className="w-[30px]">
                       <Checkbox
-                        checked={row.getIsSelected()}
-                        onCheckedChange={value => row.toggleSelected(!!value)}
-                        aria-label="Select row"
+                        checked={
+                          table.getIsAllPageRowsSelected() ||
+                          (table.getIsSomePageRowsSelected() && 'indeterminate')
+                        }
+                        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+                        aria-label="Select all"
                         className="translate-y-[2px]"
                       />
-                    </TableCell>
+                    </TableHead>
                   )}
-                  {showIndexColumn && (
-                    <TableCell className="text-center w-[20px]">
-                      {pagination
-                        ? table.getState().pagination.pageIndex *
-                            table.getState().pagination.pageSize +
-                          rowIndex +
-                          1
-                        : rowIndex + 1}
-                    </TableCell>
-                  )}
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id} className="text-sm">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                  {renderActions && (
-                    <TableCell className="p-2 text-center w-[80px]">
-                      {renderActions({ row })}
-                    </TableCell>
-                  )}
+                  {showIndexColumn && <TableHead className="w-[20px] text-center">STT</TableHead>}
+                  {headerGroup.headers.map(header => {
+                    return (
+                      <TableHead key={header.id} style={{ width: header.column.getSize() }}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    );
+                  })}
+                  {renderActions && <TableHead className="text-center w-[80px]">Actions</TableHead>}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={
-                    (showSelectionColumn ? 1 : 0) +
-                    (showIndexColumn ? 1 : 0) +
-                    (renderActions ? columns.length + 1 : columns.length)
-                  }
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody className="h-full">
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row, rowIndex) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                    {showSelectionColumn && (
+                      <TableCell className="w-[30px]">
+                        <Checkbox
+                          checked={row.getIsSelected()}
+                          onCheckedChange={value => row.toggleSelected(!!value)}
+                          aria-label="Select row"
+                          className="translate-y-[2px]"
+                        />
+                      </TableCell>
+                    )}
+                    {showIndexColumn && (
+                      <TableCell className="text-center w-[20px]">
+                        {pagination
+                          ? table.getState().pagination.pageIndex *
+                              table.getState().pagination.pageSize +
+                            rowIndex +
+                            1
+                          : rowIndex + 1}
+                      </TableCell>
+                    )}
+                    {row.getVisibleCells().map(cell => (
+                      <TableCell key={cell.id} className="text-sm">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                    {renderActions && (
+                      <TableCell className="p-2 text-center w-[80px]">
+                        {renderActions({ row })}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={
+                      (showSelectionColumn ? 1 : 0) +
+                      (showIndexColumn ? 1 : 0) +
+                      (renderActions ? columns.length + 1 : columns.length)
+                    }
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </div>
       {pagination && (
         <DataTablePagination table={table} onPageChange={onPageChange} appendToUrl={appendToUrl} />

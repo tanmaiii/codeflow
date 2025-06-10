@@ -297,5 +297,10 @@
     "deleteRepo": "Xóa kho lưu trữ",
     "author": "Tác giả",
     "name": "Tên"
+  },
+  "tag": {
+    "tag": "Thẻ",
+    "name": "Tên",
+    "description": "Mô tả"
   }
 }

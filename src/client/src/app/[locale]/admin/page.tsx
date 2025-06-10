@@ -1,9 +1,5 @@
-
+import Dashboard from '@/components/pages/admin/dashboard';
 
 export default function Page() {
-  return (
-    <div>
-      <h4>Page Admin</h4>
-    </div>
-  );
+  return <Dashboard />;
 }

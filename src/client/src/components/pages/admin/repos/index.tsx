@@ -11,6 +11,7 @@ import useQ_Repos_GetAll from '@/hooks/query-hooks/Repos/useQ_Repos_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { IRepos } from '@/interfaces/repos';
 import reposService from '@/services/repos.service';
+import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
@@ -19,8 +20,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
 import Repos_Update from './ReposUpdate';
-import { utils_DateToDDMMYYYY } from '@/utils/date';
-
+  
 export default function Repos() {
   const searchParams = useSearchParams();
   const page = searchParams?.get('page') || 1;
@@ -34,7 +34,7 @@ export default function Repos() {
   const Q_Repos = useQ_Repos_GetAll({
     params: {
       page: Number(page),
-      limit: 10,
+      limit: 12,
       sortBy: 'createdAt',
       order: 'DESC',
       search: search,
@@ -138,12 +138,13 @@ export default function Repos() {
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
       <TitleHeader title="Repositories" description="Manage your repositories" />
       <DataTable
+        isLoading={Q_Repos.isLoading}
+        enableLocalSearch={false}
         showIndexColumn={true}
         columns={columns}
         onSearchChange={value => {
           router.push(`/admin/${paths.REPOS}?page=1&search=${value}`);
         }}
-        enableLocalSearch={false}
         data={Q_Repos.data?.data || []}
         fieldFilter="name"
         pagination={false}

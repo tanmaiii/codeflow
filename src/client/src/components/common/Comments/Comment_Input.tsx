@@ -31,6 +31,9 @@ export default function Comment_Input({
   const t = useTranslations('comment');
   const { user } = useUserStore();
   const router = useRouter();
+  
+  const MAX_CHARS = 200;
+  const isOverLimit = keyword.length > MAX_CHARS;
   function handleEmojiClick(emoji: string) {
     const input = inputRef.current;
 
@@ -85,7 +88,7 @@ export default function Comment_Input({
           value={keyword}
           onChange={e => setKeyword(e.target.value)}
           placeholder={t('placeholder')}
-          className="border-none focus-visible:ring-0 shadow-none min-h-[100px]"
+          className={`border-none focus-visible:ring-0 shadow-none min-h-[100px] ${isOverLimit ? 'border-red-500' : ''}`}
         />
       </div>
 
@@ -96,8 +99,15 @@ export default function Comment_Input({
           <div className="relative">
             <MyEmojiPicker onSelect={handleEmojiClick} />
           </div>
+          <TextDescription className={`text-sm ${isOverLimit ? 'text-red-500' : 'text-muted-foreground'}`}>
+            {keyword.length}/{MAX_CHARS}
+          </TextDescription>
         </div>
-        <Button variant={'default'} onClick={() => onSubmit(keyword)}>
+        <Button 
+          variant={'default'} 
+          onClick={() => onSubmit(keyword)}
+          disabled={isOverLimit || keyword.trim().length === 0}
+        >
           {t('postComment')}
         </Button>
       </div>

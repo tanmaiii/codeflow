@@ -1,7 +1,5 @@
+import Tags from '@/components/pages/admin/tags';
+
 export default function Page() {
-    return (
-        <div>
-            Enter
-        </div>
-    );
+  return <Tags />;
 }

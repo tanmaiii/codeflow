@@ -5,21 +5,15 @@ export const menuAdmin: ILinkItem[] = [
   {
     en: 'Home',
     vi: 'Trang chủ',
-    icon: 'home',
-    href: paths.HOME,
-  },
-  {
-    en: 'Dashboard',
-    vi: 'Bảng điều khiển',
     icon: 'layout',
-    href: paths.DASHBOARD,
+    href: paths.HOME,
   },
   {
     en: 'Users',
     vi: 'Người dùng',
     icon: 'users',
     href: paths.USERS,
-    },
+  },
   {
     en: 'Courses',
     vi: 'Khóa học',
@@ -35,7 +29,7 @@ export const menuAdmin: ILinkItem[] = [
   {
     en: 'Posts',
     vi: 'Bài viết',
-    icon: "article",
+    icon: 'article',
     href: paths.POSTS,
   },
   {

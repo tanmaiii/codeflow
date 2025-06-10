@@ -41,7 +41,7 @@ export default function Posts() {
   const Q_Posts = useQ_Post_GetAll({
     params: {
       page: Number(page),
-      limit: 10,
+      limit: 12,
       sortBy: 'createdAt',
       order: 'DESC',
       search: search,
@@ -186,10 +186,10 @@ export default function Posts() {
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
       <TitleHeader title="Posts" description="Manage your posts" />
       <DataTable
+        isLoading={Q_Posts.isLoading}
         showIndexColumn={true}
         columns={columns}
         data={Q_Posts.data?.data || []}
-        fieldFilter="title"
         onSearchChange={value => {
           router.push(`/admin/${paths.POSTS}?page=1&search=${value}`);
         }}

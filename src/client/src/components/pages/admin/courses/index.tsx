@@ -14,18 +14,20 @@ import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { ICourse } from '@/interfaces/course';
 import courseService from '@/services/course.service';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
+import { IconPlus } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function Courses() {
   const searchParams = useSearchParams();
   const page = searchParams?.get('page') || 1;
-  const search = searchParams?.get('search') || '';
+  // const search = searchParams?.get('search') || '';
+  const [search, setSearch] = useState('');
   const t = useTranslations('course');
   const tCommon = useTranslations('common');
   const { localPath } = useH_LocalPath();
@@ -35,7 +37,7 @@ export default function Courses() {
   const Q_Courses = useQ_Course_GetAll({
     params: {
       page: Number(page),
-      limit: 10,
+      limit: 12,
       sortBy: 'createdAt',
       order: 'DESC',
       search: search,
@@ -142,6 +144,7 @@ export default function Courses() {
           size="sm"
           className="w-fit"
         >
+          <IconPlus className="w-4 h-4" />
           {tCommon('create')}
         </Button>
         {selectedRowsCount > 0 && (
@@ -161,14 +164,16 @@ export default function Courses() {
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
       <TitleHeader title="Courses" description="Manage your courses" />
       <DataTable
+        isLoading={Q_Courses.isLoading}
+        enableLocalSearch={false}
         showIndexColumn={true}
         columns={columns}
         data={Q_Courses.data?.data || []}
         fieldFilter="title"
         onSearchChange={value => {
-          router.push(`/admin/${paths.COURSES}?page=1&search=${value}`);
+          setSearch(value);
         }}
-        enableLocalSearch={false}
+        searchValue={search}
         pagination={false}
         showSelectionColumn={true}
         toolbarCustom={customToolbar}

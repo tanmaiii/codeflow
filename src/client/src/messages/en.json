@@ -307,5 +307,10 @@
     "deleteRepo": "Delete Repo",
     "author": "Author",
     "name": "Name"
+  },
+  "tag": {
+    "tag": "Tag",
+    "name": "Name",
+    "description": "Description"
   }
 }
