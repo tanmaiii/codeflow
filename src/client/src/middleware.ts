@@ -28,7 +28,9 @@ export function middleware(req: NextRequest) {
   }
 
   const isPublicPath = publicPaths.some(path => pathname.startsWith(`${localePrefix}${path}`));
-  const isPublicPathWithAuth = publicPathsWithAuth.some(path => pathname.startsWith(`${localePrefix}${path}`));
+  const isPublicPathWithAuth = publicPathsWithAuth.some(path =>
+    pathname.startsWith(`${localePrefix}${path}`),
+  );
 
   if (!token && !isPublicPath && !isPublicPathWithAuth && !pathname.startsWith('/api')) {
     return NextResponse.redirect(new URL(`${localePrefix}/login`, req.url));
@@ -36,8 +38,12 @@ export function middleware(req: NextRequest) {
 
   // Nếu đã có token mà vào login/register/forgot-password/join-org → đá về home
   // Nhưng cho phép vào /post
-  if (token && isPublicPath) {
+  if (token && isPublicPath && !isPublicPathWithAuth) {
     return NextResponse.redirect(new URL(`${localePrefix}/`, req.url));
+  }
+
+  if (user && user.role === 'admin' && !pathname.startsWith(`${localePrefix}/`) && isPublicPath) {
+    return NextResponse.redirect(new URL(`${localePrefix}/admin`, req.url));
   }
 
   if (pathname.startsWith(`${localePrefix}/admin`) && (!user || user?.role != 'admin')) {
