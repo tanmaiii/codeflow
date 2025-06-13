@@ -16,6 +16,15 @@ export function middleware(req: NextRequest) {
   const localeMatch = pathname.match(/^\/(en|vi)/);
   const localePrefix = localeMatch ? localeMatch[0] : '/en';
 
+  const isPublicPath = publicPaths.some(path => pathname.startsWith(`${localePrefix}${path}`));
+  const isPublicPathWithAuth = publicPathsWithAuth.some(path =>
+    pathname.startsWith(`${localePrefix}${path}`),
+  );
+
+  if (!token && !isPublicPath && !isPublicPathWithAuth && !pathname.startsWith('/api')) {
+    return NextResponse.redirect(new URL(`${localePrefix}/login`, req.url));
+  }
+
   if (token) {
     try {
       const res = jwtDecode<{
@@ -27,27 +36,19 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  const isPublicPath = publicPaths.some(path => pathname.startsWith(`${localePrefix}${path}`));
-  const isPublicPathWithAuth = publicPathsWithAuth.some(path =>
-    pathname.startsWith(`${localePrefix}${path}`),
-  );
-
-  if (!token && !isPublicPath && !isPublicPathWithAuth && !pathname.startsWith('/api')) {
-    return NextResponse.redirect(new URL(`${localePrefix}/login`, req.url));
-  }
-
   // Nếu đã có token mà vào login/register/forgot-password/join-org → đá về home
-  // Nhưng cho phép vào /post
   if (token && isPublicPath && !isPublicPathWithAuth) {
     return NextResponse.redirect(new URL(`${localePrefix}/`, req.url));
   }
 
-  if (user && user.role === 'admin' && !pathname.startsWith(`${localePrefix}/`) && isPublicPath) {
-    return NextResponse.redirect(new URL(`${localePrefix}/admin`, req.url));
-  }
-
+  // Chặn truy cập /admin nếu không phải admin
   if (pathname.startsWith(`${localePrefix}/admin`) && (!user || user?.role != 'admin')) {
     return NextResponse.redirect(new URL(`${localePrefix}/`, req.url));
+  }
+
+  // Nếu user là admin và đang truy cập trang chủ, tự động redirect sang /admin
+  if (user && user.role === 'admin' && pathname === `${localePrefix}`) {
+    return NextResponse.redirect(new URL(`${localePrefix}/admin`, req.url));
   }
 
   return intlMiddleware(req);
