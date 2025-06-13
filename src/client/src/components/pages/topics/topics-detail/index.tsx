@@ -1,123 +1,177 @@
 'use client';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { TopicListSkeleton } from '@/components/skeletons/topic';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { STATUS_TOPIC } from '@/constants/object';
-import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
-import { getCurrentLocale } from '@/lib/utils';
-import { utils_DateToDDMMYYYY } from '@/utils/date';
-import { IconCircleCheck, IconPencil, IconSchool } from '@tabler/icons-react';
-import { useTranslations } from 'next-intl';
-import { useParams, useRouter } from 'next/navigation';
-import TopicsAbout from './TopicsAbout';
-import { useUserStore } from '@/stores/user_store';
-import { Button } from '@/components/ui/button';
 import { paths } from '@/data/path';
+import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
+import { useUserStore } from '@/stores/user_store';
+import { utils_DateToDDMMYYYY } from '@/utils/date';
+import { IconCalendar, IconCircleCheck, IconFileText, IconPencil, IconSchool, IconStar, IconUser } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import TopicsEvaluation from './TopicsEvaluation';
+import { useParams, useRouter } from 'next/navigation';
+import React from 'react';
+import TopicsAbout from './TopicsAbout';
 import TopicsContribute from './TopicsContribute';
+import TopicsEvaluation from './TopicsEvaluation';
+
+const InfoCard = ({ icon: Icon, label, value, href }: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+  href?: string;
+}) => (
+  <div className="group relative rounded-xl overflow-hidden">
+    <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-gray-800/90 dark:to-gray-800/50 backdrop-blur-sm rounded-xl border border-white/20 dark:border-gray-700/20"></div>
+    <div className="relative p-4 rounded-xl transition-all duration-300">
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600">
+          <Icon className="w-5 h-5 text-white" />
+        </div>
+        <div className="flex-1">
+          <TextDescription className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+            {label}
+          </TextDescription>
+          {href ? (
+            <Link href={href} className="group-hover:text-blue-600 transition-colors">
+              <TextHeading className="text-sm font-semibold">{value}</TextHeading>
+            </Link>
+          ) : (
+            <TextHeading className="text-sm font-semibold">{value}</TextHeading>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 export default function Topics_Detail() {
   const params = useParams();
   const id = params?.id as string;
   const t = useTranslations('topic');
   const { data: dataTopic, isLoading, isError } = useQ_Topic_GetDetail({ id: id as string });
-  const locale = getCurrentLocale() || 'vi';
   const { user } = useUserStore();
   const router = useRouter();
 
   if (isLoading) return <TopicListSkeleton />;
   if (isError) return <div>Error</div>;
 
+  const isLeader = user?.id === dataTopic?.data?.members?.find(member => member.role === 'leader')?.userId;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mx-auto my-4">
-      <div className="flex flex-col col-span-12 gap-6 md:col-span-8 xl:col-span-9">
-        <Card className="flex flex-col gap-4 p-4 lg:p-6 min-h-[90vh]">
-          <div className="flex flex-row items-center justify-between gap-2">
-            <TitleHeader title={`${dataTopic?.data?.title}`} onBack={true} />
-            {user?.id ===
-              dataTopic?.data?.members?.find(member => member.role === 'leader')?.userId && (
-              <Button
-                variant="none"
-                size="sm"
-                onClick={() => router.push(paths.TOPIC_UPDATE(id as string))}
-              >
-                <IconPencil className="size-6" />
-              </Button>
-            )}
-          </div>
+    <div className="min-h-screen p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+          {/* Main Content */}
+          <div className="xl:col-span-8 space-y-8">
+            {/* Header Section */}
+            <div className="relative overflow-hidden rounded-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 opacity-10"></div>
+              <Card className="relative p-0 border-0 bg-gradient-to-br from-white/200 to-white/100 dark:from-gray-800/90 dark:to-gray-800/50 backdrop-blur-sm shadow-xl">
+                <div className="p-8">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex-1">
+                      <TitleHeader title={dataTopic?.data?.title || ''} onBack={true} />
+                    </div>
+                    {isLeader && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.push(paths.TOPIC_UPDATE(id as string))}
+                        className="ml-4 border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300"
+                      >
+                        <IconPencil className="w-4 h-4 mr-2" />
+                        Chỉnh sửa
+                      </Button>
+                    )}
+                  </div>
 
-          {/* Course and Status Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
-            <div className="flex flex-row items-center gap-3">
-              <div className="p-2 bg-color-2/10 rounded-full">
-                <IconSchool className="text-color-2 size-6" />
-              </div>
-              <div className="flex flex-col">
-                <TextDescription className="text-sm text-gray-500">{t('course')}</TextDescription>
-                <Link href={paths.COURSES_DETAIL(dataTopic?.data?.courseId ?? '')}>
-                  <TextHeading className="text-lg">{dataTopic?.data?.course?.title}</TextHeading>
-                </Link>
-              </div>
+                  {/* Course and Status Info */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <InfoCard
+                      icon={IconSchool}
+                      label={t('course')}
+                      value={dataTopic?.data?.course?.title || ''}
+                      href={paths.COURSES_DETAIL(dataTopic?.data?.courseId ?? '')}
+                    />
+                    <InfoCard
+                      icon={IconCircleCheck }
+                      label={t('status')}
+                      value={dataTopic?.data?.status || ''}
+                    />
+                  </div>
+
+                  {/* Description */}
+                  {dataTopic?.data?.description && (
+                    <div className="relative overflow-hidden rounded-xl mb-6">
+                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5"></div>
+                      <div className="relative p-4 border border-white/20 dark:border-gray-700/20 rounded-xl">
+                        <div className="flex items-start gap-3">
+                          <div className="p-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 shadow-md">
+                            <IconFileText className="w-5 h-5 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <TextDescription className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                              {t('description')}
+                            </TextDescription>
+                            <TextHeading className="text-sm leading-relaxed">
+                              {dataTopic?.data?.description}
+                            </TextHeading>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Additional Info Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <InfoCard
+                      icon={IconUser}
+                      label={t('teacher')}
+                      value={dataTopic?.data?.course?.author?.name || ''}
+                    />
+                    <InfoCard
+                      icon={IconCalendar}
+                      label={t('createdAt')}
+                      value={utils_DateToDDMMYYYY(dataTopic?.data?.createdAt || '')}
+                    />
+                  </div>
+                </div>
+              </Card>
             </div>
-            <div className="flex flex-row items-center gap-3">
-              <div className="p-2 bg-color-2/10 rounded-full">
-                <IconCircleCheck className="text-color-2 size-6" />
-              </div>
-              <div className="flex flex-col">
-                <TextDescription className="text-sm text-gray-500">{t('status')}</TextDescription>
-                <TextHeading className="text-lg">
-                  {locale === 'vi'
-                    ? STATUS_TOPIC.find(item => item.value === dataTopic?.data?.status)?.label
-                    : STATUS_TOPIC.find(item => item.value === dataTopic?.data?.status)?.labelEn}
-                </TextHeading>
-              </div>
+
+            {/* Evaluation Section */}
+            <div className="relative overflow-hidden rounded-2xl">
+              {/* <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10"></div> */}
+              <Card className="relative p-8 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-gray-800/90 dark:to-gray-800/50 backdrop-blur-sm shadow-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 shadow-lg">
+                      <IconStar className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <TextHeading className="text-xl font-bold">Đánh giá dự án</TextHeading>
+                      <TextDescription className="text-sm text-gray-600 dark:text-gray-300">
+                        Nhận xét và đánh giá từ giảng viên
+                      </TextDescription>
+                    </div>
+                  </div>
+                  
+                  {dataTopic?.data && <TopicsEvaluation topic={dataTopic?.data} />}
+              </Card>
+            </div>
+
+            {/* Contribution Section */}
+            <TopicsContribute />
+          </div>
+
+          {/* Sidebar */}
+          <div className="xl:col-span-4">
+            <div className="sticky top-8">
+              {dataTopic?.data && <TopicsAbout topic={dataTopic?.data} />}
             </div>
           </div>
-
-          {/* General Information Section */}
-          <div className="flex flex-col gap-4 p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
-            <TextHeading className="text-lg font-semibold border-b pb-2">
-              Thông tin chung
-            </TextHeading>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1 col-span-2">
-                <TextDescription className="text-sm text-gray-500">
-                  {t('description')}
-                </TextDescription>
-                <TextHeading className="text-base">{dataTopic?.data?.description}</TextHeading>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <TextDescription className="text-sm text-gray-500">{t('teacher')}</TextDescription>
-                <TextHeading className="text-base">
-                  {dataTopic?.data?.course?.author?.name}
-                </TextHeading>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <TextDescription className="text-sm text-gray-500">
-                  {t('createdAt')}
-                </TextDescription>
-                <TextHeading className="text-base">
-                  {utils_DateToDDMMYYYY(dataTopic?.data?.createdAt || '')}
-                </TextHeading>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-6">
-            {dataTopic?.data && <TopicsEvaluation topic={dataTopic?.data} />}
-          </div>
-        </Card>
-
-        <TopicsContribute />
-      </div>
-      <div className="col-span-12 md:col-span-4 xl:col-span-3 sticky top-20">
-        <div className="sticky top-20">
-          {dataTopic?.data && <TopicsAbout topic={dataTopic?.data} />}
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ export const ChartWrapper: React.FC<ChartWrapperProps> = ({
   height = '350px',
   className = '',
 }) => (
-  <div className={`bg-background-1 rounded-lg p-6 shadow-sm border border-border ${className}`}>
+  <div className={`bg-background-1 rounded-lg p-4 shadow-sm border border-border ${className}`}>
     <ReactECharts option={option} style={{ height, width: '100%' }} opts={{ renderer: 'svg' }} />
   </div>
 );

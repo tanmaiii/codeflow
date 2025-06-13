@@ -63,7 +63,6 @@ export class TopicService {
         {
           model: DB.Courses,
           as: 'course',
-          attributes: ['id', 'title', 'status', 'authorId'],
           required: true,
           paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
         },
@@ -113,7 +112,6 @@ export class TopicService {
         {
           model: DB.Courses,
           as: 'course',
-          attributes: ['id', 'title', 'status', 'authorId'],
           required: true,
           paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
         },
@@ -133,7 +131,6 @@ export class TopicService {
         {
           model: DB.Courses,
           as: 'course',
-          attributes: ['id', 'title', 'status', 'authorId'],
           required: true,
           paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
         },

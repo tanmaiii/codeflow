@@ -7,7 +7,6 @@ import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import TitleHeader from '@/components/layout/TitleHeader';
 import MemberAvatar from '@/components/ui/member-avatar';
-import TextHeading from '@/components/ui/text';
 import { STATUS_HIDDEN } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Comments_GetAll from '@/hooks/query-hooks/Comments/useQ_Comments_GetAll';
@@ -45,7 +44,7 @@ export default function Comments() {
         cell: ({ row }) => {
           return (
             <div className="flex flex-col">
-              <TextHeading className="text-base font-semibold">{row.original.content}</TextHeading>
+              {row.original.content}
               {row.original.deletedAt && (
                 <span className="text-xs text-red-500 font-semibold">
                   {tCommon('softDeleted')} {utils_DateToDDMMYYYY(row.original.deletedAt!)}
