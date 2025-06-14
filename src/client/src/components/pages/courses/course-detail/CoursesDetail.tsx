@@ -5,6 +5,7 @@ import NameTags from '@/components/common/NameTags/NameTags';
 import NoData from '@/components/common/NoData/NoData';
 import SwapperHTML from '@/components/common/SwapperHTML/SwapperHTML';
 import TitleHeader from '@/components/layout/TitleHeader';
+import { CourseDetailSkeleton } from '@/components/skeletons/course';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
@@ -24,15 +25,21 @@ import {
   utils_TimeRemaining,
 } from '@/utils/date';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
-import { IconCalendar, IconClockHour1, IconPencil, IconUsers } from '@tabler/icons-react';
+import {
+  IconCalendar,
+  IconClockHour1,
+  IconDownload,
+  IconPencil,
+  IconShare,
+  IconUsers,
+} from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { cx } from 'class-variance-authority';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import Courses_Summary from './CoursesSummary';
+import CoursesSummary from './CoursesSummary';
 import Courses_Topics from './CoursesTopics';
-import { CourseDetailSkeleton } from '@/components/skeletons/course';
 
 export default function CoursesDetail() {
   const params = useParams();
@@ -71,184 +78,310 @@ export default function CoursesDetail() {
   if (!dataCourse) return <NoData />;
   if (isError) return <div>Error</div>;
 
+  const courseType = TYPE_COURSE.find(item => item.value === dataCourse.data?.type);
+  const isOwner = user?.id === dataCourse.data?.author?.id;
+  const hasStarted = new Date(dataCourse?.data?.startDate) < new Date();
+  const isRegistrationOpen =
+    new Date(dataCourse?.data?.regStartDate) < new Date() &&
+    new Date(dataCourse?.data?.regEndDate) > new Date();
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mx-auto my-4">
-      <div className="col-span-12 md:col-span-8 xl:col-span-9">
-        <Card className="flex flex-col gap-2 p-4 lg:p-6 min-h-[90vh]">
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-row items-center justify-between gap-2">
-              <TitleHeader
-                title={`${TYPE_COURSE.find(item => item.value === dataCourse.data?.type)?.label}: ${
-                  dataCourse.data?.title
-                }`}
-                onBack={true}
-              />
-              {user?.id === dataCourse.data?.author?.id && (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative max-w-7xl mx-auto px-4 py-12">
+          <div className="flex items-center justify-between mb-6">
+            <TitleHeader title="" onBack={true} className="text-white" />
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
+                <IconShare className="size-5" />
+              </Button>
+              {isOwner && (
                 <Button
-                  variant="none"
+                  variant="ghost"
                   size="sm"
+                  className="text-white hover:bg-white/20"
                   onClick={() => router.push(localPath(paths.COURSE_UPDATE(id)))}
                 >
-                  <IconPencil className="size-6" />
+                  <IconPencil className="size-5" />
                 </Button>
               )}
             </div>
-            <div className="flex items-center gap-2 mt-4 mb-2">
-              <Image
-                className="w-12 h-12 object-cover rounded-full bg-background-1"
-                src={
-                  dataCourse.data?.author?.avatar
-                    ? utils_ApiImageToLocalImage(dataCourse.data?.author?.avatar)
-                    : apiConfig.avatar(dataCourse.data?.author?.name ?? 'c')
-                }
-                alt={dataCourse.data?.title}
-                width={40}
-                height={40}
-              />
-              <div>
-                <TextHeading>{dataCourse.data?.author?.name}</TextHeading>
-                {dataCourse.data?.createdAt && (
-                  <TextDescription>
-                    {utils_DateToDDMonth(dataCourse.data?.createdAt ?? '')} -{' '}
-                    {utils_TimeAgo(dataCourse.data?.createdAt ?? '')}
-                  </TextDescription>
-                )}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 text-sm font-medium mb-4">
+                {courseType?.label}
               </div>
-            </div>
-            <NameTags tags={dataCourse.data?.tags} max={dataCourse.data?.tags.length} />
-            <div className="">
-              {new Date(dataCourse?.data?.startDate) < new Date() && (
-                <div className="flex flex-row items-center rounded-md gap-2 bg-primary/30  p-4 relative overflow-hidden mb-2">
-                  <IconClockHour1 className="text-color-1 size-5" />
-                  <TextHeading>{t('topicDeadline') + ': '}</TextHeading>
-                  <TextDescription className="text-color-1 ">
-                    {utils_DateToDDMMYYYY(dataCourse.data?.topicDeadline)} (
-                    {utils_TimeRemaining(dataCourse.data?.topicDeadline)})
-                  </TextDescription>
-                  <div
-                    className={cx('h-1 bg-input/60 w-full absolute right-0 bottom-0 rounded-md')}
-                  >
-                    <div
-                      className={cx(
-                        'h-1 w-full absolute left-0 bottom-0 rounded-md',
-                        utils_CalculateProgress(
-                          dataCourse.data?.startDate ?? '',
-                          dataCourse.data?.topicDeadline ?? '',
-                        ) >= 90
-                          ? 'bg-red-400'
-                          : ' bg-green-500',
-                      )}
-                      style={{
-                        width: `${utils_CalculateProgress(
-                          dataCourse.data?.startDate ?? '',
-                          dataCourse.data?.topicDeadline ?? '',
-                        )}%`,
-                      }}
-                    />
+              <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+                {dataCourse.data?.title}
+              </h1>
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <Image
+                    className="w-14 h-14 object-cover rounded-full border-2 border-white/30"
+                    src={
+                      dataCourse.data?.author?.avatar
+                        ? utils_ApiImageToLocalImage(dataCourse.data?.author?.avatar)
+                        : apiConfig.avatar(dataCourse.data?.author?.name ?? 'c')
+                    }
+                    alt={dataCourse.data?.title}
+                    width={56}
+                    height={56}
+                  />
+                  <div>
+                    <p className="font-semibold text-lg">{dataCourse.data?.author?.name}</p>
+                    {dataCourse.data?.createdAt && (
+                      <p className="text-white/80 text-sm">
+                        {utils_DateToDDMonth(dataCourse.data?.createdAt ?? '')} -{' '}
+                        {utils_TimeAgo(dataCourse.data?.createdAt ?? '')}
+                      </p>
+                    )}
                   </div>
                 </div>
-              )}
-
-              {new Date(dataCourse?.data?.startDate) > new Date() && (
-                <div className="flex flex-row items-center rounded-md gap-2  bg-primary/30  p-4 relative overflow-hidden">
-                  <IconClockHour1 className="text-color-1 size-5" />
-                  {new Date(dataCourse?.data?.regStartDate) > new Date() && (
-                    <TextHeading>{t('notStartRegister')}</TextHeading>
-                  )}
-                  {new Date(dataCourse?.data?.regStartDate) < new Date() &&
-                    new Date(dataCourse?.data?.regEndDate) > new Date() && (
-                      <>
-                        <TextHeading>{t('regEndDate') + ': '}</TextHeading>
-                        <TextDescription className="text-color-1">{`${utils_DateToDDMMYYYY(
-                          dataCourse.data?.regEndDate,
-                        )} (${utils_TimeRemaining(dataCourse.data?.regEndDate)})`}</TextDescription>
-                        <div
-                          className={cx(
-                            'h-1 bg-input/60 w-full absolute right-0 bottom-0 rounded-md',
-                          )}
-                        >
-                          <div
-                            className={cx(
-                              'h-1 bg-green-500 w-full absolute left-0 bottom-0 rounded-md',
-                            )}
-                            style={{
-                              width: `${utils_CalculateProgress(
-                                dataCourse.data?.regStartDate ?? '',
-                                dataCourse.data?.regEndDate ?? '',
-                              )}%`,
-                            }}
-                          />
-                        </div>
-                      </>
-                    )}
-                  {new Date(dataCourse?.data?.regEndDate) < new Date() && (
-                    <TextHeading>{t('endRegister')}</TextHeading>
-                  )}
-                </div>
-              )}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-                <div className="flex flex-row items-center gap-2">
-                  <IconCalendar className="text-color-2 size-5" />
-                  <TextDescription className="text-md">{t('regStartDate') + ': '}</TextDescription>
-                  <TextHeading>{utils_DateToDDMMYYYY(dataCourse.data?.regStartDate)}</TextHeading>
-                </div>
-                <div className="flex flex-row items-center gap-2">
-                  <IconCalendar className="text-color-2 size-5" />
-                  <TextDescription className="text-md">{t('regEndDate') + ': '}</TextDescription>
-                  <TextHeading>{utils_DateToDDMMYYYY(dataCourse.data?.regEndDate)}</TextHeading>
-                </div>
-                <div className="flex flex-row items-center gap-2">
-                  <IconCalendar className="text-color-2 size-5" />
-                  <TextDescription className="text-md">{t('startDate') + ': '}</TextDescription>
-                  <TextHeading>{utils_DateToDDMMYYYY(dataCourse.data?.startDate)}</TextHeading>
-                </div>
-                <div className="flex flex-row items-center gap-2">
-                  <IconCalendar className="text-color-2 size-5" />
-                  <TextDescription className="text-md">{t('endDate') + ': '}</TextDescription>
-                  <TextHeading>{utils_DateToDDMMYYYY(dataCourse.data?.endDate)}</TextHeading>
-                </div>
-                <div className="flex flex-row items-center gap-2">
-                  <IconClockHour1 className="text-color-2 size-5" />
-                  <TextDescription className="text-md">{t('topicDeadline') + ': '}</TextDescription>
-                  <TextHeading>{utils_DateToDDMMYYYY(dataCourse.data?.topicDeadline)}</TextHeading>
-                </div>
-                <div className="flex flex-row items-center gap-2">
-                  <IconUsers className="text-color-2 size-5" />
-                  <TextDescription className="text-md">
-                    {t('maxGroupMembers') + ': '}
-                  </TextDescription>
-                  <TextHeading>{dataCourse.data?.maxGroupMembers}</TextHeading>
-                </div>
               </div>
             </div>
-            <SwapperHTML content={dataCourse.data?.description ?? ''} />
+
+            <div className="lg:col-span-1">
+              {/* Status Card */}
+              {hasStarted && (
+                <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <IconClockHour1 className="size-6 text-yellow-300" />
+                    <div>
+                      <TextHeading className="text-white">{t('topicDeadline')}</TextHeading>
+                      <TextDescription className="text-white/80">
+                        {utils_DateToDDMMYYYY(dataCourse.data?.topicDeadline)}
+                      </TextDescription>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <TextDescription className="text-white/80">{t('progress')}</TextDescription>
+                      <TextDescription className="text-white/80">
+                        {utils_CalculateProgress(
+                          dataCourse.data?.startDate ?? '',
+                          dataCourse.data?.topicDeadline ?? '',
+                        )}
+                        %
+                      </TextDescription>
+                    </div>
+                    <div className="w-full bg-white/20 rounded-full h-2">
+                      <div
+                        className={cx(
+                          'h-2 rounded-full transition-all duration-500',
+                          utils_CalculateProgress(
+                            dataCourse.data?.startDate ?? '',
+                            dataCourse.data?.topicDeadline ?? '',
+                          ) >= 90
+                            ? 'bg-red-400'
+                            : 'bg-green-400',
+                        )}
+                        style={{
+                          width: `${utils_CalculateProgress(
+                            dataCourse.data?.startDate ?? '',
+                            dataCourse.data?.topicDeadline ?? '',
+                          )}%`,
+                        }}
+                      />
+                    </div>
+                    <p className="text-white/80 text-sm">
+                      {utils_TimeRemaining(dataCourse.data?.topicDeadline)}
+                    </p>
+                  </div>
+                </Card>
+              )}
+
+              {!hasStarted && (
+                <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <IconClockHour1 className="size-6 text-blue-300" />
+                    <div>
+                      <p className="font-semibold text-lg">
+                        {new Date(dataCourse?.data?.regStartDate) > new Date()
+                          ? 'Registration Not Started'
+                          : isRegistrationOpen
+                          ? 'Registration Open'
+                          : 'Registration Closed'}
+                      </p>
+                    </div>
+                  </div>
+                  {isRegistrationOpen && (
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>{t('registrationProgress')}</span>
+                        <span>
+                          {utils_CalculateProgress(
+                            dataCourse.data?.regStartDate ?? '',
+                            dataCourse.data?.regEndDate ?? '',
+                          )}
+                          %
+                        </span>
+                      </div>
+                      <div className="w-full bg-white/20 rounded-full h-2">
+                        <div
+                          className="h-2 bg-green-400 rounded-full transition-all duration-500"
+                          style={{
+                            width: `${utils_CalculateProgress(
+                              dataCourse.data?.regStartDate ?? '',
+                              dataCourse.data?.regEndDate ?? '',
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                      <p className="text-white/80 text-sm">
+                        Ends {utils_DateToDDMMYYYY(dataCourse.data?.regEndDate)}(
+                        {utils_TimeRemaining(dataCourse.data?.regEndDate)})
+                      </p>
+                    </div>
+                  )}
+                </Card>
+              )}
+            </div>
           </div>
-          <div className="flex flex-col">
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Content */}
+          <div className="lg:col-span-2 space-y-8 ">
+            {/* Course Info Cards */}
+            <NameTags
+              className="mt-2 p-4 rounded-sm bg-background-1 mb-6"
+              tags={dataCourse.data?.tags}
+              max={dataCourse.data?.tags.length}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <IconCalendar className="size-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <TextDescription className="text-sm text-gray-600">
+                      {t('registrationPeriod')}
+                    </TextDescription>
+                    <TextHeading className="font-semibold">
+                      {utils_DateToDDMMYYYY(dataCourse.data?.regStartDate)} -{' '}
+                      {utils_DateToDDMMYYYY(dataCourse.data?.regEndDate)}
+                    </TextHeading>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <IconCalendar className="size-5 text-green-600" />
+                  </div>
+                  <div>
+                    <TextDescription className="text-sm text-gray-600">
+                      {t('courseDuration')}
+                    </TextDescription>
+                    <TextHeading className="font-semibold">
+                      {utils_DateToDDMMYYYY(dataCourse.data?.startDate)} -{' '}
+                      {utils_DateToDDMMYYYY(dataCourse.data?.endDate)}
+                    </TextHeading>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-purple-100 rounded-lg">
+                    <IconClockHour1 className="size-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <TextDescription className="text-sm text-gray-600">
+                      {t('topicDeadline')}
+                    </TextDescription>
+                    <TextHeading className="font-semibold">
+                      {utils_DateToDDMMYYYY(dataCourse.data?.topicDeadline)}
+                    </TextHeading>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-orange-100 rounded-lg">
+                    <IconUsers className="size-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <TextDescription className="text-sm text-gray-600">
+                      {t('maxGroupMembers')}
+                    </TextDescription>
+                    <TextHeading className="font-semibold">
+                      {dataCourse.data?.maxGroupMembers}
+                    </TextHeading>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Description */}
+            <Card className="p-8 mb-6">
+              <TextHeading className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
+                {t('description')}
+              </TextHeading>
+              <div className="prose prose-lg max-w-none">
+                <SwapperHTML content={dataCourse.data?.description ?? ''} />
+              </div>
+            </Card>
+
+            {/* Documents */}
             {dataCourse.data?.documents.length > 0 && (
-              <>
-                <TextHeading className="font-bold mb-4">{t('documents')}</TextHeading>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card className="p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <TextHeading className="text-2xl font-bold flex items-center gap-2">
+                    <div className="w-1 h-6 bg-green-600 rounded-full"></div>
+                    {t('documents')}
+                  </TextHeading>
+                  <Button variant="outline" size="sm">
+                    <IconDownload className="size-4" />
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                   {dataCourse.data?.documents?.map(file => (
                     <CardFile key={file.id} file={file} />
                   ))}
                 </div>
-              </>
+              </Card>
             )}
+
+            {/* Topics */}
+            <Card className="p-8">
+              <TextHeading className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <div className="w-1 h-6 bg-purple-600 rounded-full"></div>
+                {t('topics')}
+              </TextHeading>
+              <Courses_Topics />
+            </Card>
+
+            {/* Comments */}
+            <Card className="p-8">
+              {dataComments?.data && (
+                <Comments
+                  onSubmit={value => mutionComment.mutate(value)}
+                  comments={dataComments.data}
+                />
+              )}
+            </Card>
           </div>
-          <Courses_Topics />
-          <div className="flex flex-col gap-2 mt-auto">
-            {dataComments?.data && (
-              <Comments
-                onSubmit={value => mutionComment.mutate(value)}
-                comments={dataComments.data}
-              />
-            )}
+
+          {/* Right Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-20 space-y-6">
+              {dataCourse.data && <CoursesSummary course={dataCourse.data} />}
+            </div>
           </div>
-        </Card>
-      </div>
-      <div className="col-span-12 md:col-span-4 xl:col-span-3 sticky top-20">
-        <div className="sticky top-20">
-          {dataCourse.data && <Courses_Summary course={dataCourse.data} />}
         </div>
       </div>
     </div>

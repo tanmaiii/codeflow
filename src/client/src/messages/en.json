@@ -187,6 +187,8 @@
     "regStartDate": "Registration Start Date",
     "regEndDate": "Registration End Date",
     "topicDeadline": "Topic Deadline",
+    "registrationPeriod": "Registration Period",
+    "courseDuration": "Course Duration",
     "tags": "Tags",
     "type": "Type",
     "cancel": "Cancel",
@@ -211,7 +213,10 @@
     "register": "Register",
     "member": "Member",
     "memberDescription": "Manage your members",
-    "duration": "Duration {weeks} weeks"
+    "duration": "Duration {weeks} weeks",
+    "weeks": "Weeks",
+    "progress": "Progress",
+    "registrationProgress": "Registration Progress"
   },
   "topic": {
     "topic": "Topic",
@@ -247,7 +252,10 @@
     "repository": "Repository",
     "notRegistered": "Not registered",
     "registered": "Registered",
-    "evaluations": "Evaluations"
+    "evaluations": "Evaluations",
+    "noEvaluation": "No evaluation",
+    "noEvaluationDescription": "This topic has no evaluation from the teacher",
+    "evaluation": "Evaluation"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"

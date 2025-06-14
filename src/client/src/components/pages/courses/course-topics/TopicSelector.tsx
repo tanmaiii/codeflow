@@ -1,3 +1,4 @@
+'use client';
 import ActionModal from '@/components/common/Action/ActionModal';
 import AvatarGroup from '@/components/common/AvatarGroup';
 import { DataTable } from '@/components/common/DataTable/data-table';

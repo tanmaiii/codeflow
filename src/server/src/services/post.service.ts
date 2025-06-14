@@ -133,7 +133,10 @@ export class PostService {
   public async findPostById(id: string, isAdmin = false): Promise<Post> {
     const post = await DB.Posts.findByPk(id, {
       attributes: {
-        include: [[this.getCommentCountLiteral(), 'commentCount']],
+        include: [
+          [this.getCommentCountLiteral(), 'commentCount'],
+          [this.getLikeCountLiteral(), 'likeCount'],
+        ],
       },
       paranoid: !isAdmin,
     });

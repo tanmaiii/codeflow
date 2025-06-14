@@ -14,8 +14,8 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import TopicsAbout from './TopicsAbout';
-import TopicsContribute from './TopicsContribute';
-import TopicsEvaluation from './TopicsEvaluation';
+import TopicsContribute from './contribute';
+import TopicsEvaluation from './evaluation/TopicsEvaluation';
 
 const InfoCard = ({ icon: Icon, label, value, href }: {
   icon: React.ComponentType<{ className?: string }>;
@@ -24,14 +24,14 @@ const InfoCard = ({ icon: Icon, label, value, href }: {
   href?: string;
 }) => (
   <div className="group relative rounded-xl overflow-hidden">
-    <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-gray-800/90 dark:to-gray-800/50 backdrop-blur-sm rounded-xl border border-white/20 dark:border-gray-700/20"></div>
+    <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-800/90 dark:to-zinc-800/50 backdrop-blur-sm rounded-xl border border-white/20 dark:border-zinc-700/20"></div>
     <div className="relative p-4 rounded-xl transition-all duration-300">
       <div className="flex items-center gap-3">
         <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600">
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1">
-          <TextDescription className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+          <TextDescription className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">
             {label}
           </TextDescription>
           {href ? (
@@ -68,8 +68,8 @@ export default function Topics_Detail() {
           <div className="xl:col-span-8 space-y-8">
             {/* Header Section */}
             <div className="relative overflow-hidden rounded-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 opacity-10"></div>
-              <Card className="relative p-0 border-0 bg-gradient-to-br from-white/200 to-white/100 dark:from-gray-800/90 dark:to-gray-800/50 backdrop-blur-sm shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-00 via-purple-600 to-pink-600 opacity-10"></div>
+              <Card className="relative p-0 border-0 bg-gradient-to-br from-white/200 to-white/100 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-sm">
                 <div className="p-8">
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex-1">
@@ -106,14 +106,14 @@ export default function Topics_Detail() {
                   {/* Description */}
                   {dataTopic?.data?.description && (
                     <div className="relative overflow-hidden rounded-xl mb-6">
-                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5"></div>
-                      <div className="relative p-4 border border-white/20 dark:border-gray-700/20 rounded-xl">
+                      <div className="absolute inset-0 bg-gradient-to-br dark:from-indigo-500/5 dark:to-purple-500/5"></div>
+                      <div className="relative p-4 border border-white/20 dark:border-zinc-700/20 rounded-xl bg-background-1">
                         <div className="flex items-start gap-3">
                           <div className="p-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 shadow-md">
                             <IconFileText className="w-5 h-5 text-white" />
                           </div>
                           <div className="flex-1">
-                            <TextDescription className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                            <TextDescription className="text-xs text-zinc-500 dark:text-zinc-400 mb-2">
                               {t('description')}
                             </TextDescription>
                             <TextHeading className="text-sm leading-relaxed">
@@ -145,14 +145,14 @@ export default function Topics_Detail() {
             {/* Evaluation Section */}
             <div className="relative overflow-hidden rounded-2xl">
               {/* <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10"></div> */}
-              <Card className="relative p-8 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-gray-800/90 dark:to-gray-800/50 backdrop-blur-sm shadow-xl">
+              <Card className="relative p-8 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-xl">
                   <div className="flex items-center gap-3">
                     <div className="p-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 shadow-lg">
                       <IconStar className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <TextHeading className="text-xl font-bold">Đánh giá dự án</TextHeading>
-                      <TextDescription className="text-sm text-gray-600 dark:text-gray-300">
+                      <TextDescription className="text-sm text-zinc-600 dark:text-zinc-300">
                         Nhận xét và đánh giá từ giảng viên
                       </TextDescription>
                     </div>

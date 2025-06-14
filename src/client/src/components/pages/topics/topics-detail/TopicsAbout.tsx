@@ -9,7 +9,7 @@ import { useUserStore } from '@/stores/user_store';
 import { utils_CalculateProgress } from '@/utils/date';
 import { IconBrandGithub, IconUsers, IconChartBar, IconCode, IconGitBranch } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import TopicsReposCreate from './TopicsReposCreate';
+import TopicsReposCreate from './repository/TopicsReposCreate';
 import useQ_Repos_GetAllByTopic from '@/hooks/query-hooks/Repos/useQ_Repos_GetAllByTopic';
 import { Badge } from '@/components/ui/badge';
 
@@ -33,7 +33,7 @@ const SectionCard = ({
   gradient?: string;
 }) => (
   <div className="group relative overflow-hidden rounded-xl mb-6">
-    <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-gray-800/90 dark:to-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/20 shadow-lg"></div>
+    <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm border border-white/20 dark:border-zinc-700/20 shadow-lg"></div>
     <div className="relative p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
@@ -51,7 +51,7 @@ const SectionCard = ({
 
 const ProgressBar = ({ progress }: { progress: number }) => (
   <div className="relative">
-    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+    <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
       <div 
         className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
         style={{ width: `${progress}%` }}
@@ -70,10 +70,10 @@ const EmptyState = ({ icon: Icon, message }: {
   message: string;
 }) => (
   <div className="flex flex-col items-center justify-center py-8 px-4">
-    <div className="p-4 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-      <Icon className="w-8 h-8 text-gray-400" />
+    <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4">
+      <Icon className="w-8 h-8 text-zinc-400" />
     </div>
-    <TextDescription className="text-center text-gray-500 dark:text-gray-400">
+    <TextDescription className="text-center text-zinc-500 dark:text-zinc-400">
       {message}
     </TextDescription>
   </div>
@@ -102,7 +102,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 opacity-10"></div>
-        <Card className="relative p-0 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-gray-800/90 dark:to-gray-800/50 backdrop-blur-sm shadow-xl">
+        <Card className="relative p-0 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-xl">
           <div className="p-6">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg">
@@ -110,7 +110,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
               </div>
               <div>
                 <TextHeading className="text-xl font-bold">Thông tin dự án</TextHeading>
-                <TextDescription className="text-sm text-gray-600 dark:text-gray-300">
+                <TextDescription className="text-sm text-zinc-600 dark:text-zinc-300">
                   Chi tiết và tiến độ thực hiện
                 </TextDescription>
               </div>
@@ -123,7 +123,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
       <SectionCard
         icon={IconBrandGithub}
         title={t('repository')}
-        gradient="from-gray-800 to-gray-900"
+        gradient="from-zinc-800 to-zinc-900"
         action={canAddRepo ? (
           <div className="relative">
             <TopicsReposCreate topicId={topic.id} />
@@ -139,11 +139,11 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
             ))}
             
             {/* Repository Stats */}
-            <div className="mt-4 p-3 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-700/50 rounded-lg border border-gray-200/50 dark:border-gray-600/50">
+            <div className="mt-4 p-3 bg-gradient-to-r from-zinc-50 to-zinc-100 dark:from-zinc-800/50 dark:to-zinc-700/50 rounded-lg border border-zinc-200/50 dark:border-zinc-600/50">
               <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <IconGitBranch className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-600 dark:text-gray-300">
+                                  <div className="flex items-center gap-2">
+                    <IconGitBranch className="w-4 h-4 text-zinc-500" />
+                    <span className="text-zinc-600 dark:text-zinc-300">
                     {Q_Repos.data.length} / {MAX_REPOS} repositories
                   </span>
                 </div>

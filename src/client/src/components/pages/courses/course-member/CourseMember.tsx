@@ -20,7 +20,7 @@ import { useParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function Courses_Member() {
+export default function CoursesMember() {
   const tCommon = useTranslations('common');
   const tCourse = useTranslations('course');
   const queryClient = useQueryClient();

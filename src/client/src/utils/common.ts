@@ -3,7 +3,6 @@ import { IStatusObj } from "@/constants/object";
 import { IComment } from "@/interfaces/comment";
 import { getCurrentLocale } from '@/lib/utils';
 
-
 export function util_length_comment(comments: IComment[]): number {
   return comments.length > 0
     ? comments.reduce((total: number, comment: IComment) => {
@@ -23,6 +22,26 @@ export function util_length_comment(comments: IComment[]): number {
       }, 0)
     : 0;
 }
+
+/**
+ * Tính thời gian đọc của bài viết dựa theo độ dài của bài viết
+ * @param content Nội dung bài viết
+ * @returns Thời gian đọc ước tính (phút)
+ */
+export function util_CalculateReadingTime(content: string): number {
+  // Giả sử tốc độ đọc trung bình là 200 từ/phút
+  const WORDS_PER_MINUTE = 200;
+  
+  // Đếm số từ trong nội dung
+  const wordCount = content.trim().split(/\s+/).length;
+  
+  // Tính thời gian đọc
+  const readingTime = Math.ceil(wordCount / WORDS_PER_MINUTE);
+  
+  // Trả về ít nhất 1 phút nếu nội dung quá ngắn
+  return Math.max(1, readingTime);
+}
+
 
 /**
  * Lấy label của đối tượng dựa trên value và ngôn ngữ hiện tại

@@ -1,5 +1,8 @@
-import Courses_Member from '@/components/pages/courses/course-member';
+import PageContent from '@/components/layout/PageContent';
+import CourseMember from '@/components/pages/courses/course-member';
 
 export default function Page() {
-  return <Courses_Member />;
+  return <PageContent>
+    <CourseMember />
+  </PageContent>;
 }

@@ -1,20 +1,19 @@
-import React, { useMemo } from 'react';
 import ActionDelete from '@/components/common/Action/ActionDelete';
 import { DataTable } from '@/components/common/DataTable/data-table';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading, { TextDescription } from '@/components/ui/text';
+import { ROLE } from '@/constants/enum';
 import { ITopic, ITopicEvaluation } from '@/interfaces/topic';
 import topicService from '@/services/topic.service';
+import { useUserStore } from '@/stores/user_store';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
+import { IconCalendarTime, IconMessageCircle } from '@tabler/icons-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
 import TopicsEvaluationCreate from './TopicsEvaluationCreate';
 import TopicsEvaluationUpdate from './TopicsEvaluationUpdate';
-import { useUserStore } from '@/stores/user_store';
-import { ROLE } from '@/constants/enum';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { IconMessageCircle, IconCalendarTime, IconStarFilled } from '@tabler/icons-react';
+import TopicsEvaluationView from './TopicsEvaluationView';
 
 // Nhận xét chủ đề
 export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
@@ -38,15 +37,12 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
         header: t('author'),
         accessorKey: 'user.name',
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
             <MemberAvatar
               size={32}
               avatar={row.original.user?.avatar}
               name={row.original.user?.name || ''}
             />
-          </div>
         ),
-        size: 50,
       },
       {
         header: t('evaluations'),
@@ -89,19 +85,22 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
               data={sortedEvaluations}
               showIndexColumn={true}
               renderActions={({ row }) => {
-                if (canManageEvaluations) {
-                  return (
-                    <div className="flex gap-2">
-                      <TopicsEvaluationUpdate topic={topic} evaluation={row.original} />
-                      <ActionDelete
-                        deleteKey={row.original.id}
-                        handleSubmit={async () => {
-                          await topicService.deleteEvaluation(topic.id, row.original.id);
-                        }}
-                      />
-                    </div>
-                  );
-                }
+                return (
+                  <div className="flex justify-center">
+                    <TopicsEvaluationView evaluation={row.original} />
+                    {canManageEvaluations && (
+                      <>
+                        <TopicsEvaluationUpdate topic={topic} evaluation={row.original} />
+                        <ActionDelete
+                          deleteKey={row.original.id}
+                          handleSubmit={async () => {
+                            await topicService.deleteEvaluation(topic.id, row.original.id);
+                          }}
+                        />
+                      </>
+                    )}
+                  </div>
+                );
               }}
             />
           </div>
@@ -111,20 +110,17 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
       {/* Empty state */}
       {sortedEvaluations.length === 0 && (
         <div className="relative overflow-hidden rounded-xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50"></div>
-          <Card className="relative border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl">
-            <div className="p-12 text-center">
-              <div className="p-4 rounded-full bg-gray-100 dark:bg-gray-800 mb-4 inline-block">
-                <IconMessageCircle className="w-8 h-8 text-gray-400" />
-              </div>
-              <TextHeading className="text-lg font-semibold mb-2">Chưa có nhận xét nào</TextHeading>
-              <TextDescription className="text-gray-500 dark:text-gray-400 mb-6">
-                Dự án này chưa có đánh giá từ giảng viên
-              </TextDescription>
-
-              {canManageEvaluations && <TopicsEvaluationCreate topic={topic} />}
+          <div className="p-12 text-center flex flex-col items-center justify-center">
+            <div className="p-4 rounded-full bg-gray-100 dark:bg-gray-800 mb-4 inline-block">
+              <IconMessageCircle className="w-8 h-8 text-gray-400" />
             </div>
-          </Card>
+            <TextHeading className="text-lg font-semibold mb-2">{t('noEvaluation')}</TextHeading>
+            <TextDescription className="text-gray-500 dark:text-gray-400 mb-6">
+              {t('noEvaluationDescription')}
+            </TextDescription>
+
+            {canManageEvaluations && <TopicsEvaluationCreate topic={topic} />}
+          </div>
         </div>
       )}
     </div>
