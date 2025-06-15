@@ -1,7 +1,6 @@
 import { ENUM_TYPE_COURSE } from "@/constants/enum";
 import { IStatusObj } from "@/constants/object";
 import { IComment } from "@/interfaces/comment";
-import { getCurrentLocale } from '@/lib/utils';
 
 export function util_length_comment(comments: IComment[]): number {
   return comments.length > 0
@@ -23,6 +22,10 @@ export function util_length_comment(comments: IComment[]): number {
     : 0;
 }
 
+export function util_remove_html_tags(content: string): string {
+  return content.replace(/<[^>]*>?/g, '');
+}
+
 /**
  * Tính thời gian đọc của bài viết dựa theo độ dài của bài viết
  * @param content Nội dung bài viết
@@ -40,18 +43,6 @@ export function util_CalculateReadingTime(content: string): number {
   
   // Trả về ít nhất 1 phút nếu nội dung quá ngắn
   return Math.max(1, readingTime);
-}
-
-
-/**
- * Lấy label của đối tượng dựa trên value và ngôn ngữ hiện tại
- * @param obj - Mảng đối tượng có value và label
- * @param value - Giá trị value của đối tượng
- * @returns Label của đối tượng
- */
-export function util_get_locale_label(obj: IStatusObj[], value: string): string {
-  const locale = getCurrentLocale();
-  return obj.find((item) => item.value === value)?.[locale === 'en' ? 'labelEn' : 'label'] || ''; 
 }
 
 /**

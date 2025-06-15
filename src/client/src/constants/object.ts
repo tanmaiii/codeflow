@@ -2,170 +2,146 @@ import { ENUM_STATUS_TOPIC, ENUM_TYPE_COURSE, ENUM_TYPE_NOTIFICATION, ROLE } fro
 
 export interface IStatusObj {
   value: string;
-  label: string;
-  labelEn?: string;
+  labelKey: string; // Changed from label to labelKey for i18n
 }
+
+// Utility function to get localized label
+export const getLocalizedLabel = (obj: IStatusObj, t: (key: string) => string): string => {
+  return t(obj.labelKey);
+};
 
 export const STATUS_TOPIC: IStatusObj[] = [
   {
-    value: ENUM_STATUS_TOPIC.PENDING, // Chưa hoàn thành
-    label: 'Chưa duyệt',
-    labelEn: 'Pending',
+    value: ENUM_STATUS_TOPIC.PENDING,
+    labelKey: 'topic.pending',
   },
   {
-    value: ENUM_STATUS_TOPIC.APPROVED, // Đã hoàn thành
-    label: 'Chấp nhận',
-    labelEn: 'Approved',
+    value: ENUM_STATUS_TOPIC.APPROVED,
+    labelKey: 'topic.approved',
   },
   {
-    value: ENUM_STATUS_TOPIC.REJECTED, // Từ chối
-    label: 'Từ chối',
-    labelEn: 'Rejected',
+    value: ENUM_STATUS_TOPIC.REJECTED,
+    labelKey: 'topic.rejected',
   },
 ];
 
 export const STATUS_TOPIC_CUSTOM: IStatusObj[] = [
   {
     value: 'custom',
-    label: 'Đề xuất',
-    labelEn: 'Custom',
+    labelKey: 'topic.custom',
   },
   {
     value: 'suggest',
-    label: 'Gợi ý',
-    labelEn: 'Suggest',
+    labelKey: 'topic.suggest',
   },
 ];
 
 export const STATUS_HIDDEN: IStatusObj[] = [
   {
     value: 'hidden',
-    label: 'Ẩn',
-    labelEn: 'Hidden',
+    labelKey: 'common.hidden',
   },
   {
     value: 'visible',
-    label: 'Hiện',
-    labelEn: 'Visible',
+    labelKey: 'common.visible',
   },
 ];
 
 export const STATUS_COURSE: IStatusObj[] = [
   {
     value: 'not_started',
-    label: 'Chưa bắt đầu',
-    labelEn: 'Not Started',
+    labelKey: 'course.notStarted',
   },
   {
     value: 'started',
-    label: 'Đang diễn ra',
-    labelEn: 'Started',
+    labelKey: 'course.started',
   },
   {
     value: 'finished',
-    label: 'Đã hoàn thành',
-    labelEn: 'Finished',
+    labelKey: 'course.finished',
   },
 ];
 
 export const ROLE_USER: IStatusObj[] = [
   {
     value: ROLE.USER,
-    label: 'Người dùng',
-    labelEn: 'User',
+    labelKey: 'role.user',
   },
   {
     value: ROLE.ADMIN,
-    label: 'Quản trị viên',
-    labelEn: 'Admin',
+    labelKey: 'role.admin',
   },
   {
     value: ROLE.TEACHER,
-    label: 'Giảng viên',
-    labelEn: 'Teacher',
+    labelKey: 'role.teacher',
   },
 ];
 
 export const TYPE_COURSE: IStatusObj[] = [
   {
     value: ENUM_TYPE_COURSE.MAJOR,
-    label: 'Chuyên ngành',
-    labelEn: 'Major',
+    labelKey: 'course.type.major',
   },
   {
     value: ENUM_TYPE_COURSE.FOUNDATION,
-    label: 'Cơ sở ngành',
-    labelEn: 'Foundation',
+    labelKey: 'course.type.foundation',
   },
   {
     value: ENUM_TYPE_COURSE.THESIS,
-    label: 'Khóa luận',
-    labelEn: 'Thesis',
+    labelKey: 'course.type.thesis',
   },
   {
     value: ENUM_TYPE_COURSE.ELECTIVE,
-    label: 'Môn học',
-    labelEn: 'Elective',
+    labelKey: 'course.type.elective',
   },
 ];
 
 export const ROLE_TOPIC: IStatusObj[] = [
   {
     value: 'leader',
-    label: 'Trưởng nhóm',
-    labelEn: 'Leader',
+    labelKey: 'topic.role.leader',
   },
   {
     value: 'member',
-    label: 'Thành viên',
-    labelEn: 'Member',
+    labelKey: 'topic.role.member',
   },
 ];
 
 export const NOTIFICATION_TYPE: IStatusObj[] = [
   {
     value: ENUM_TYPE_NOTIFICATION.TOPIC_EVALUATION,
-    label: 'Đánh giá đề tài',
-    labelEn: 'Topic Evaluation',
+    labelKey: 'notification.type.topicEvaluation',
   },
   {
     value: ENUM_TYPE_NOTIFICATION.COMMENT,
-    label: 'Bình luận mới',
-    labelEn: 'New Comment',
+    labelKey: 'notification.type.comment',
   },
   {
     value: ENUM_TYPE_NOTIFICATION.COMMENT_REPLY,
-    label: 'Trả lời bình luận',
-    labelEn: 'Comment Reply',
+    labelKey: 'notification.type.commentReply',
   },
   {
     value: ENUM_TYPE_NOTIFICATION.LIKE_POST,
-    label: 'Thích bài viết',
-    labelEn: 'Like Post',
+    labelKey: 'notification.type.likePost',
   },
   {
     value: ENUM_TYPE_NOTIFICATION.JOIN_COURSE,
-    label: 'Tham gia khóa học',
-    labelEn: 'Join Course',
+    labelKey: 'notification.type.joinCourse',
   },
   {
     value: ENUM_TYPE_NOTIFICATION.REGISTER_TOPIC,
-    label: 'Đăng ký chủ đề',
-    labelEn: 'Register Topic',
+    labelKey: 'notification.type.registerTopic',
   },
   {
     value: ENUM_TYPE_NOTIFICATION.APPROVE_TOPIC,
-    label: 'Phê duyệt chủ đề',
-    labelEn: 'Approve Topic',
+    labelKey: 'notification.type.approveTopic',
   },
   {
     value: ENUM_TYPE_NOTIFICATION.REJECT_TOPIC,
-    label: 'Từ chối chủ đề',
-    labelEn: 'Reject Topic',
+    labelKey: 'notification.type.rejectTopic',
   },
   {
     value: ENUM_TYPE_NOTIFICATION.SYSTEM,
-    label: 'Hệ thống',
-    labelEn: 'System',
+    labelKey: 'notification.type.system',
   },
 ];

@@ -8,14 +8,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { getCurrentLocale } from '@/lib/utils';
-import { Control, Controller, FieldError, FieldValues, Path, PathValue } from 'react-hook-form';
+import { IStatusObj } from '@/constants/object';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import { Control, Controller, FieldError, FieldValues, Path, PathValue } from 'react-hook-form';
 
 interface MySelectProps<T extends FieldValues = FieldValues> {
   label: string;
-  options: { label: string; value: string; labelEn?: string }[];
+  options: IStatusObj[];
   name: Path<T>;
   control?: Control<T>;
   error?: FieldError;
@@ -38,8 +38,8 @@ export default function MySelect<T extends FieldValues>({
   label,
   onChange,
 }: MySelectProps<T>) {
-  const currentLocale = getCurrentLocale();
-  const t = useTranslations('common');
+  // const currentLocale = getCurrentLocale();
+  const t = useTranslations();
   const [value, setValue] = useState(defaultValue);
 
   useEffect(() => {
@@ -62,13 +62,13 @@ export default function MySelect<T extends FieldValues>({
               disabled={disabled || field.disabled}
             >
               <SelectTrigger className={`w-full !h-13 !rounded-xl ${className}`}>
-                <SelectValue placeholder={`${t('select')} ${label}`} />
+                <SelectValue placeholder={`${t('common.select')} ${label}`} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {options.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      {currentLocale === 'vi' ? option.label : option.labelEn}
+                      {t(option.labelKey)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -85,22 +85,22 @@ export default function MySelect<T extends FieldValues>({
   return (
     <div className="w-full">
       <Label className="mb-2 text-color-2">{label}</Label>
-      <Select 
-        disabled={disabled} 
+      <Select
+        disabled={disabled}
         value={value}
-        onValueChange={(newValue) => {
+        onValueChange={newValue => {
           setValue(newValue);
           onChange?.(newValue);
         }}
       >
         <SelectTrigger className={`w-full !h-13 !rounded-lg ${className}`}>
-          <SelectValue placeholder={`${t('select')} ${label}`} />
+          <SelectValue placeholder={`${t('common.select')} ${label}`} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             {options.map(option => (
               <SelectItem key={option.value} value={option.value}>
-                {currentLocale === 'vi' ? option.label : option.labelEn}
+                {t(option.labelKey)}
               </SelectItem>
             ))}
           </SelectGroup>

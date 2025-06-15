@@ -5,6 +5,7 @@ import NameTags from '@/components/common/NameTags/NameTags';
 import SwapperHTML from '@/components/common/SwapperHTML/SwapperHTML';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import TextHeading, { TextDescription } from '@/components/ui/text';
 import { IMAGES } from '@/data/images';
 import { paths } from '@/data/path';
 import useQ_Post_CheckLike from '@/hooks/query-hooks/Post/useQ_Post_CheckLike';
@@ -90,7 +91,7 @@ export default function PostDetail({
   return (
     <div className="space-y-8">
       {/* Hero Section */}
-      <Card className="p-0 overflow-hidden shadow-xl border-0 bg-white/80 backdrop-blur-sm">
+      <Card className="p-0 overflow-hidden shadow-xl border-0">
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
           <Image
@@ -160,7 +161,7 @@ export default function PostDetail({
       </Card>
 
       {/* Author & Metadata */}
-      <Card className="p-10 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+      <Card className="p-10 shadow-lg border-0">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative">
@@ -178,14 +179,14 @@ export default function PostDetail({
               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white" />
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900">
+              <TextHeading className="text-xl">
                 {initialPostData.author?.name}
-              </h3>
+              </TextHeading>
               {initialPostData.createdAt && (
-                <p className="text-gray-600 text-sm">
+                <TextDescription className="text-sm">
                   {utils_DateToDDMonth(new Date(initialPostData.createdAt))} •{' '}
                   {utils_TimeAgo(new Date(initialPostData.createdAt))}
-                </p>
+                </TextDescription>
               )}
             </div>
           </div>

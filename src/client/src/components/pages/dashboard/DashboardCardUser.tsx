@@ -1,166 +1,218 @@
 'use client';
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { useUserStore } from "@/stores/user_store";
-import { ROLE_USER } from "@/constants/object";
-import { ROLE } from "@/constants/enum";
-import apiConfig from "@/lib/api";
-import { 
-  IconUser, 
-  IconMail, 
-  IconBook, 
-  IconChalkboard, 
-  IconSettings,
-  IconLogout,
+import { DashboardCardUserSkeleton } from '@/components/skeletons';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import TextHeading from '@/components/ui/text';
+import { ROLE } from '@/constants/enum';
+import { ROLE_USER } from '@/constants/object';
+import { paths } from '@/data/path';
+import apiConfig from '@/lib/api';
+import tokenService from '@/services/token.service';
+import { useUserStore } from '@/stores/user_store';
+import {
+  IconActivity,
   IconBell,
-  IconCalendar
-} from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
-import { paths } from "@/data/path";
-import tokenService from "@/services/token.service";
+  IconBook,
+  IconCalendar,
+  IconChalkboard,
+  IconLogout,
+  IconMail,
+  IconSettings,
+  IconShield,
+  IconStar,
+  IconUser,
+} from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+
 export default function DashboardCardUser() {
   const { user, removeUser } = useUserStore();
   const router = useRouter();
+  const tDashboard = useTranslations('dashboard');
+  const t = useTranslations();
 
   const handleLogout = () => {
     tokenService.clearTokens();
     removeUser();
-    router.push("/login");
+    router.push('/login');
   };
 
   if (!user) {
-    return (
-      <Card className="p-4 min-h-[100vh]">
-        <div className="text-center text-muted-foreground">
-          Đang tải thông tin người dùng...
-        </div>
-      </Card>
-    );
+    return <DashboardCardUserSkeleton />;
   }
 
   const userRole = ROLE_USER.find(role => role.value === user.role);
 
+  // Get role-specific styling
+  const getRoleConfig = () => {
+    switch (user.role) {
+      case ROLE.ADMIN:
+        return {
+          badgeVariant: 'destructive' as const,
+          gradientFrom: 'from-red-500',
+          gradientTo: 'to-pink-500',
+          icon: IconShield,
+          accentColor: 'text-red-600',
+        };
+      case ROLE.TEACHER:
+        return {
+          badgeVariant: 'default' as const,
+          gradientFrom: 'from-blue-500',
+          gradientTo: 'to-indigo-500',
+          icon: IconStar,
+          accentColor: 'text-blue-600',
+        };
+      default:
+        return {
+          badgeVariant: 'secondary' as const,
+          gradientFrom: 'from-green-500',
+          gradientTo: 'to-emerald-500',
+          icon: IconUser,
+          accentColor: 'text-green-600',
+        };
+    }
+  };
+
+  const roleConfig = getRoleConfig();
+  const RoleIcon = roleConfig.icon;
+
   return (
-    <Card className="p-6 min-h-[85vh] flex flex-col">
-      {/* User Profile Section */}
-      <div className="flex flex-col items-center space-y-4 mb-6">
-        <Avatar className="w-20 h-20">
-          <AvatarImage 
-            src={user.avatar || apiConfig.avatar(user.name)} 
-            alt={user.name} 
-          />
-          <AvatarFallback className="text-lg">
-            {user.name?.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        
-        <div className="text-center space-y-2">
-          <h3 className="font-semibold text-lg">{user.name}</h3>
-          <Badge 
-            variant={user.role === ROLE.ADMIN ? "destructive" : 
-                    user.role === ROLE.TEACHER ? "default" : "secondary"}
-            className="text-sm"
-          >
-            {userRole?.label || 'Người dùng'}
+    <Card className="shadow-xl p-0 border-0 backdrop-blur-sm overflow-hidden min-h-[90vh]">
+      {/* Header with gradient */}
+      <div
+        className={`h-24 bg-gradient-to-r ${roleConfig.gradientFrom} ${roleConfig.gradientTo} relative`}
+      >
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2">
+          <Avatar className="w-20 h-20 border-4 border-white shadow-lg">
+            <AvatarImage src={user.avatar || apiConfig.avatar(user.name)} alt={user.name} />
+            <AvatarFallback className="text-lg font-semibold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+              {user.name?.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+      </div>
+
+      <CardContent className="pt-12 pb-6 px-6">
+        {/* User Profile Section */}
+        <div className="text-center space-y-3 mb-6">
+          <TextHeading className="text-center flex justify-center w-full">{user.name}</TextHeading>
+          <Badge variant={roleConfig.badgeVariant} className="text-sm font-medium px-3 py-1">
+            <RoleIcon className="h-3 w-3 mr-1" />
+            {userRole?.labelKey ? t(userRole.labelKey) : user.role}
           </Badge>
+
+          <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
+            <IconActivity className="h-4 w-4" />
+            <span>{tDashboard('activeStatus')}</span>
+          </div>
         </div>
-      </div>
 
-      <Separator className="mb-6" />
+        <Separator className="mb-6" />
 
-      {/* User Details */}
-      <div className="space-y-4 mb-6">
-        <div className="flex items-center space-x-3 text-sm">
-          <IconUser className="w-4 h-4 text-muted-foreground" />
-          <span className="text-muted-foreground">Username:</span>
-          <span className="font-medium">{user.username}</span>
+        {/* User Details */}
+        <div className="space-y-4 mb-6">
+          <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+            <div className={`p-2 rounded-full bg-white shadow-sm ${roleConfig.accentColor}`}>
+              <IconUser className="w-4 h-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-muted-foreground">Username</p>
+              <p className="font-medium text-sm truncate">{user.username}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+            <div className={`p-2 rounded-full bg-white shadow-sm ${roleConfig.accentColor}`}>
+              <IconMail className="w-4 h-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-muted-foreground">Email</p>
+              <p className="font-medium text-sm truncate">{user.email}</p>
+            </div>
+          </div>
         </div>
-        
-        <div className="flex items-center space-x-3 text-sm">
-          <IconMail className="w-4 h-4 text-muted-foreground" />
-          <span className="text-muted-foreground">Email:</span>
-          <span className="font-medium text-xs">{user.email}</span>
-        </div>
-      </div>
 
-      <Separator className="mb-6" />
+        <Separator className="mb-6" />
 
-      {/* Quick Actions */}
-      <div className="space-y-3 flex-1">
-        <h4 className="font-medium text-sm text-muted-foreground mb-3">
-          Thao tác nhanh
-        </h4>
-        
-        {/* Common Actions */}
-        <Button 
-          variant="ghost" 
-          className="w-full justify-start" 
-          onClick={() => router.push(paths.COURSES)}
-        >
-          <IconBook className="w-4 h-4 mr-2" />
-          Khóa học
-        </Button>
-        
-        <Button 
-          variant="ghost" 
-          className="w-full justify-start"
-          onClick={() => router.push(paths.NOTIFICATION)}
-        >
-          <IconBell className="w-4 h-4 mr-2" />
-          Thông báo
-        </Button>
+        {/* Quick Actions */}
+        <div className="space-y-2">
+          <TextHeading className="text-sm flex items-center">
+            <IconActivity className="w-4 h-4 mr-2 text-blue-600" />
+            {tDashboard('quickActions')}
+          </TextHeading>
 
-        {/* Teacher/Admin specific actions */}
-        {(user.role === ROLE.TEACHER || user.role === ROLE.ADMIN) && (
-          <>
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start"
-              onClick={() => router.push(paths.TOPICS)}
-            >
-              <IconChalkboard className="w-4 h-4 mr-2" />
-              Quản lý đề tài
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start"
-              onClick={() => router.push(paths.COURSE_CREATE)}
-            >
-              <IconCalendar className="w-4 h-4 mr-2" />
-              Tạo khóa học
-            </Button>
-          </>
-        )}
-
-        {/* Admin specific actions */}
-        {user.role === ROLE.ADMIN && (
-          <Button 
-            variant="ghost" 
-            className="w-full justify-start"
-            onClick={() => router.push(paths.USERS)}
+          {/* Common Actions */}
+          <Button
+            variant="ghost"
+            className="w-full justify-start hover:bg-blue-50 hover:text-blue-700 transition-colors"
+            onClick={() => router.push(paths.COURSES)}
           >
-            <IconSettings className="w-4 h-4 mr-2" />
-            Quản lý người dùng
+            <IconBook className="w-4 h-4 mr-3" />
+            {tDashboard('courses')}
           </Button>
-        )}
-      </div>
 
-      {/* Logout Button */}
-      <div className="mt-auto pt-4">
-        <Separator className="mb-4" />
-        <Button 
-          variant="outline" 
-          className="w-full" 
-          onClick={handleLogout}
-        >
-          <IconLogout className="w-4 h-4 mr-2" />
-          Đăng xuất
-        </Button>
-      </div>
+          <Button
+            variant="ghost"
+            className="w-full justify-start hover:bg-blue-50 hover:text-blue-700 transition-colors"
+            onClick={() => router.push(paths.NOTIFICATION)}
+          >
+            <IconBell className="w-4 h-4 mr-3" />
+            {tDashboard('notifications')}
+          </Button>
+
+          {/* Teacher/Admin specific actions */}
+          {(user.role === ROLE.TEACHER || user.role === ROLE.ADMIN) && (
+            <>
+              <Button
+                variant="ghost"
+                className="w-full justify-start hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                onClick={() => router.push(paths.TOPICS)}
+              >
+                <IconChalkboard className="w-4 h-4 mr-3" />
+                {tDashboard('manageTopics')}
+              </Button>
+
+              <Button
+                variant="ghost"
+                className="w-full justify-start hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                onClick={() => router.push(paths.COURSE_CREATE)}
+              >
+                <IconCalendar className="w-4 h-4 mr-3" />
+                {tDashboard('createCourse')}
+              </Button>
+            </>
+          )}
+
+          {/* Admin specific actions */}
+          {user.role === ROLE.ADMIN && (
+            <Button
+              variant="ghost"
+              className="w-full justify-start hover:bg-red-50 hover:text-red-700 transition-colors"
+              onClick={() => router.push(paths.USERS)}
+            >
+              <IconSettings className="w-4 h-4 mr-3" />
+              {tDashboard('manageUsers')}
+            </Button>
+          )}
+        </div>
+
+        {/* Logout Button */}
+        <div className="mt-8 pt-4">
+          <Separator className="mb-4" />
+          <Button
+            variant="outline"
+            className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors"
+            onClick={handleLogout}
+          >
+            <IconLogout className="w-4 h-4 mr-2" />
+            {tDashboard('logout')}
+          </Button>
+        </div>
+      </CardContent>
     </Card>
   );
 }

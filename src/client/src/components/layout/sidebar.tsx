@@ -26,7 +26,7 @@ import {
   Tags,
   Users,
 } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -47,7 +47,7 @@ const iconMap: Record<string, LucideIcon> = {
 const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) => {
   const Icon = iconMap[item.icon] || Home;
   const { collapsed } = useSidebarStore();
-  const currentLocale = useLocale();
+  const t = useTranslations();
 
   const pathname = usePathname();
   const pathWithoutLocale = pathname?.replace(/^\/(en|vi)/, '');
@@ -82,7 +82,8 @@ const RenderNavItem = ({ item, prefix }: { item: ILinkItem; prefix: string }) =>
               transition={{ duration: 0.2 }}
               className="font-medium"
             >
-              {currentLocale === 'vi' ? item.vi : item.en}
+              {/* {currentLocale === 'vi' ? item.vi : item.en} */}
+              {t(item.labelKey)}
             </motion.span>
           )}
         </AnimatePresence>
@@ -178,7 +179,10 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
                   >
                     <span className="text-md/3">{user?.name}</span>
                     <span className="text-sm/4 text-gray-500">
-                      {ROLE_USER.find(item => item.value === user?.role)?.label}
+                      {(() => {
+                        const roleObj = ROLE_USER.find(item => item.value === user?.role);
+                        return roleObj?.labelKey ? t(roleObj.labelKey) : user?.role;
+                      })()}
                     </span>
                   </motion.div>
                 )}

@@ -44,7 +44,8 @@ import Courses_Topics from './CoursesTopics';
 export default function CoursesDetail() {
   const params = useParams();
   const id = params?.id as string;
-  const t = useTranslations('course');
+  const tCourse = useTranslations('course');
+  const t = useTranslations();
   const router = useRouter();
   const { localPath } = useH_LocalPath();
   const { user } = useUserStore();
@@ -113,7 +114,7 @@ export default function CoursesDetail() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 text-sm font-medium mb-4">
-                {courseType?.label}
+                {courseType?.labelKey ? t(courseType.labelKey) : dataCourse.data?.type}
               </div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                 {dataCourse.data?.title}
@@ -152,7 +153,7 @@ export default function CoursesDetail() {
                   <div className="flex items-center gap-3 mb-4">
                     <IconClockHour1 className="size-6 text-yellow-300" />
                     <div>
-                      <TextHeading className="text-white">{t('topicDeadline')}</TextHeading>
+                      <TextHeading className="text-white">{tCourse('topicDeadline')}</TextHeading>
                       <TextDescription className="text-white/80">
                         {utils_DateToDDMMYYYY(dataCourse.data?.topicDeadline)}
                       </TextDescription>
@@ -160,7 +161,7 @@ export default function CoursesDetail() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <TextDescription className="text-white/80">{t('progress')}</TextDescription>
+                      <TextDescription className="text-white/80">{tCourse('progress')}</TextDescription>
                       <TextDescription className="text-white/80">
                         {utils_CalculateProgress(
                           dataCourse.data?.startDate ?? '',
@@ -212,7 +213,7 @@ export default function CoursesDetail() {
                   {isRegistrationOpen && (
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>{t('registrationProgress')}</span>
+                        <span>{tCourse('registrationProgress')}</span>
                         <span>
                           {utils_CalculateProgress(
                             dataCourse.data?.regStartDate ?? '',
@@ -265,7 +266,7 @@ export default function CoursesDetail() {
                   </div>
                   <div>
                     <TextDescription className="text-sm text-gray-600">
-                      {t('registrationPeriod')}
+                      {tCourse('registrationPeriod')}
                     </TextDescription>
                     <TextHeading className="font-semibold">
                       {utils_DateToDDMMYYYY(dataCourse.data?.regStartDate)} -{' '}
@@ -282,7 +283,7 @@ export default function CoursesDetail() {
                   </div>
                   <div>
                     <TextDescription className="text-sm text-gray-600">
-                      {t('courseDuration')}
+                      {tCourse('courseDuration')}
                     </TextDescription>
                     <TextHeading className="font-semibold">
                       {utils_DateToDDMMYYYY(dataCourse.data?.startDate)} -{' '}
@@ -299,7 +300,7 @@ export default function CoursesDetail() {
                   </div>
                   <div>
                     <TextDescription className="text-sm text-gray-600">
-                      {t('topicDeadline')}
+                      {tCourse('topicDeadline')}
                     </TextDescription>
                     <TextHeading className="font-semibold">
                       {utils_DateToDDMMYYYY(dataCourse.data?.topicDeadline)}
@@ -315,7 +316,7 @@ export default function CoursesDetail() {
                   </div>
                   <div>
                     <TextDescription className="text-sm text-gray-600">
-                      {t('maxGroupMembers')}
+                      {tCourse('maxGroupMembers')}
                     </TextDescription>
                     <TextHeading className="font-semibold">
                       {dataCourse.data?.maxGroupMembers}
@@ -329,7 +330,7 @@ export default function CoursesDetail() {
             <Card className="p-8 mb-6">
               <TextHeading className="text-2xl font-bold mb-6 flex items-center gap-2">
                 <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-                {t('description')}
+                {tCourse('description')}
               </TextHeading>
               <div className="prose prose-lg max-w-none">
                 <SwapperHTML content={dataCourse.data?.description ?? ''} />
@@ -342,7 +343,7 @@ export default function CoursesDetail() {
                 <div className="flex items-center justify-between mb-6">
                   <TextHeading className="text-2xl font-bold flex items-center gap-2">
                     <div className="w-1 h-6 bg-green-600 rounded-full"></div>
-                    {t('documents')}
+                    {tCourse('documents')}
                   </TextHeading>
                   <Button variant="outline" size="sm">
                     <IconDownload className="size-4" />
@@ -360,7 +361,7 @@ export default function CoursesDetail() {
             <Card className="p-8">
               <TextHeading className="text-2xl font-bold mb-6 flex items-center gap-2">
                 <div className="w-1 h-6 bg-purple-600 rounded-full"></div>
-                {t('topics')}
+                {tCourse('topics')}
               </TextHeading>
               <Courses_Topics />
             </Card>

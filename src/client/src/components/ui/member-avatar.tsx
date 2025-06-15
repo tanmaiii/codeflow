@@ -3,6 +3,7 @@ import { ROLE_TOPIC } from '@/constants/object';
 import { paths } from '@/data/path';
 import apiConfig from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -26,6 +27,7 @@ export default function MemberAvatar({
   id,
 }: MemberAvatarProps) {
   const router = useRouter();
+  const t = useTranslations();
   return (
     <div
       onClick={() => {
@@ -49,7 +51,10 @@ export default function MemberAvatar({
         )}
         {role && (
           <TextDescription className="text-xs text-color-2">
-            {ROLE_TOPIC.find(item => item.value === role)?.label}
+            {(() => {
+              const roleObj = ROLE_TOPIC.find(item => item.value === role);
+              return roleObj?.labelKey ? t(roleObj.labelKey) : role;
+            })()}
           </TextDescription>
         )}
       </div>

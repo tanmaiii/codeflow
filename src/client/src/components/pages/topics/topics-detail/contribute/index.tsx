@@ -5,6 +5,7 @@ import ContributionChart from './ContributionChart';
 import MemberCard from './MemberCard';
 import MetricCard from './MetricCard';
 import { getRoleConfig, mockMemberData } from './constants';
+import { useTranslations } from 'next-intl';
 
 export default function TopicsContribute() {
   // Tính toán các metrics tổng hợp
@@ -12,6 +13,7 @@ export default function TopicsContribute() {
   const totalLinesAdded = mockMemberData.reduce((sum, member) => sum + member.linesAdded, 0);
   const totalTasks = mockMemberData.reduce((sum, member) => sum + member.tasksCompleted, 0);
   const averageScore = mockMemberData.reduce((sum, member) => sum + member.score, 0) / mockMemberData.length;
+  const t = useTranslations('topic.contribute');
 
   return (
     <div className="space-y-8">
@@ -25,9 +27,9 @@ export default function TopicsContribute() {
                 <Users className="w-6 h-6 text-white" />
               </div>
               <div>
-                <TextHeading className="text-2xl font-bold">Đóng góp thành viên</TextHeading>
+                <TextHeading className="text-2xl font-bold">{t('title')}</TextHeading>
                 <TextDescription className="text-zinc-600 dark:text-zinc-300">
-                  Thống kê và phân tích hoạt động của từng thành viên trong dự án
+                  {t('description')}
                 </TextDescription>
               </div>
             </div>

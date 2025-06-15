@@ -1,12 +1,13 @@
 'use client';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { TYPE_COURSE } from '@/constants/object';
 import { IMAGES } from '@/data/images';
+import { paths } from '@/data/path';
 import { ICourse } from '@/interfaces/course';
 import apiConfig from '@/lib/api';
-import { getCurrentLocale } from '@/lib/utils';
 import courseService from '@/services/course.service';
 import { useUserStore } from '@/stores/user_store';
 import { utils_TimeAgo } from '@/utils/date';
@@ -14,20 +15,18 @@ import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import NameTags from '../NameTags/NameTags';
 import CardCourse_More from './CardCourse_More';
 import CardCourse_Submit from './CardCourse_Submit';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
-import { paths } from '@/data/path';
-import Link from 'next/link';
 interface CardCourseProps {
   course: ICourse;
 }
 
 export default function CardCourse({ course }: CardCourseProps) {
-  const t = useTranslations('course');
-  const locale = getCurrentLocale();
+  const tCourse = useTranslations('course');
+  const t = useTranslations();
   const { user } = useUserStore();
   const router = useRouter();
 
@@ -57,9 +56,7 @@ export default function CardCourse({ course }: CardCourseProps) {
           />
           <div className="absolute top-1 left-1">
             <Badge variant="default" className="bg-zinc-900/40 text-white">
-              {locale === 'vi'
-                ? TYPE_COURSE.find(type => type.value === course.type)?.label
-                : TYPE_COURSE.find(type => type.value === course.type)?.labelEn}
+              {t(TYPE_COURSE.find(type => type.value === course.type)?.labelKey ?? '')}
             </Badge>
           </div>
           <CardCourse_More
@@ -69,7 +66,10 @@ export default function CardCourse({ course }: CardCourseProps) {
         </div>
       </CardHeader>
       <CardContent className="min-h-[60px] px-4 flex flex-1 flex-col gap-2">
-        <Link href={paths.USER_DETAIL(course?.author?.id ?? '')} className="flex items-center gap-2">
+        <Link
+          href={paths.USER_DETAIL(course?.author?.id ?? '')}
+          className="flex items-center gap-2"
+        >
           <Image
             src={course?.author?.avatar ?? apiConfig.avatar(course?.author?.name ?? 'c')}
             alt={course?.author?.avatar ?? ''}
@@ -92,13 +92,13 @@ export default function CardCourse({ course }: CardCourseProps) {
             className="w-full dark:text-white"
             onClick={() => router.push(paths.COURSES_DETAIL(course.id))}
           >
-            {`${t('view')}`}
+            {`${tCourse('view')}`}
           </Button>
         ) : (
           <CardCourse_Submit courseId={course.id} />
         )}
         <TextDescription>
-          {t('updated')} {utils_TimeAgo(new Date(course.updatedAt ?? ''))}
+          {tCourse('updated')} {utils_TimeAgo(new Date(course.updatedAt ?? ''))}
         </TextDescription>
       </CardFooter>
     </Card>

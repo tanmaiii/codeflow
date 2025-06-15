@@ -2,6 +2,7 @@ export interface ILinkItem {
   vi: string;
   en: string;
   icon: string;
+  labelKey: string;
   href: string;
   role?: string[];
 }

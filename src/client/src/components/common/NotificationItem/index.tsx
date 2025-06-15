@@ -1,13 +1,13 @@
 import TextHeading from '@/components/ui/text';
+import { NOTIFICATION_TYPE } from '@/constants/object';
 import { ENUM_TYPE_NOTIFICATION, INotification } from '@/interfaces/notification';
+import { cn } from '@/lib/utils';
 import notificationService from '@/services/notification.service';
 import { utils_TimeAgo } from '@/utils/date';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import NotificationItem_More from './NotificationItem_More';
-import { cn } from '@/lib/utils';
-import { util_get_locale_label } from '@/utils/common';
-import { NOTIFICATION_TYPE } from '@/constants/object';
+import { useTranslations } from 'next-intl';
 interface NotificationItemProps {
   item?: INotification;
   className?: string;
@@ -49,6 +49,7 @@ const IconNotification = ({ type }: { type: ENUM_TYPE_NOTIFICATION }) => {
 export default function NotificationItem({ item, className }: NotificationItemProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const t = useTranslations();
 
   const mutationRead = useMutation({
     mutationFn: () => {
@@ -82,7 +83,8 @@ export default function NotificationItem({ item, className }: NotificationItemPr
         <div className="space-y-1 flex-1">
           <div className="flex items-center justify-between gap-2">
             <TextHeading lineClamp={1}>
-              {util_get_locale_label(NOTIFICATION_TYPE, item?.type || '')}
+              {/* {util_get_locale_label(NOTIFICATION_TYPE, item?.type || '')} */}
+              {t(NOTIFICATION_TYPE.find(type => type.value === item?.type)?.labelKey ?? '')}
             </TextHeading>
             <span className="text-xs text-muted-foreground whitespace-nowrap">
               {utils_TimeAgo(item?.createdAt || '')}

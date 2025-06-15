@@ -14,13 +14,11 @@ import TeacherTopicAssignment from './TeacherTopicAssignment';
 const TYPE_TOPIC = [
   {
     value: 'teacher',
-    label: 'Giảng viên gợi ý',
-    labelEn: 'Teacher suggestion',
+    labelKey: 'topic.teacherSuggestion',
   },
   {
     value: 'student',
-    label: 'Sinh viên tự chọn',
-    labelEn: 'Student choose',
+    labelKey: 'topic.studentChoose',
   },
 ];
 

@@ -112,7 +112,7 @@ export default function TopicsUpdate() {
               Q_Course.data?.data.map(course => ({
                 value: course.id,
                 label: course.title,
-                labelEn: course.title,
+                labelKey: course.title,
               })) || []
             }
             defaultValue={Q_Course.data?.data[0].id}

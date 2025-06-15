@@ -151,9 +151,9 @@ export default function Topics_Detail() {
                       <IconStar className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <TextHeading className="text-xl font-bold">Đánh giá dự án</TextHeading>
+                      <TextHeading className="text-xl font-bold">{t('evaluation')}</TextHeading>
                       <TextDescription className="text-sm text-zinc-600 dark:text-zinc-300">
-                        Nhận xét và đánh giá từ giảng viên
+                        {t('evaluationDescription')}
                       </TextDescription>
                     </div>
                   </div>

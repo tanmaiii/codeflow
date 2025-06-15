@@ -11,10 +11,12 @@ import { useParams } from 'next/navigation';
 import { TrendingUpIcon, ClockIcon } from 'lucide-react';
 import { utils_TimeAgo } from '@/utils/date';
 import { util_CalculateReadingTime } from '@/utils/common';
+import { useTranslations } from 'next-intl';
 
 export default function PostDetailMore() {
   const router = useRouter();
   const params = useParams();
+  const t = useTranslations();
   const id = params?.id;
   const Q_Post = useQ_Post_GetAll({
     params: {
@@ -67,9 +69,9 @@ export default function PostDetailMore() {
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 p-6 border-b border-blue-100">
         <div className="flex items-center gap-2 mb-2">
           <TrendingUpIcon className="w-5 h-5 text-blue-600" />
-          <TextHeading className="text-xl">Bài viết liên quan</TextHeading>
+          <TextHeading className="text-xl">{t('post.relatedPosts')}</TextHeading>
         </div>
-        <TextDescription>Khám phá thêm những bài viết thú vị khác</TextDescription>
+        <TextDescription>{t('post.exploreMore')}</TextDescription>
       </div>
 
       {/* Posts List */}
@@ -108,7 +110,7 @@ export default function PostDetailMore() {
                   {/* Metadata */}
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <ClockIcon className="w-3 h-3" />
-                    <span>{util_CalculateReadingTime(post.content ?? '')} phút đọc</span>
+                    <span>{util_CalculateReadingTime(post.content ?? '')} {t('post.readTime')}</span>
                     <span>•</span>
                     <span>{utils_TimeAgo(post.createdAt ?? '')}</span>
                   </div>
@@ -122,7 +124,7 @@ export default function PostDetailMore() {
       {/* View more button */}
       <div className="text-center px-4 pb-4">
         <button className="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200 hover:underline">
-          Xem thêm bài viết →
+          {t('post.viewMore')} →
         </button>
       </div>
     </Card>
