@@ -377,7 +377,13 @@
     "contribute": {
       "title": "Đóng góp thành viên",
       "description": "Thống kê và phân tích hoạt động của từng thành viên trong dự án"
-    }
+    },
+    "infoTopic": "Thông tin đề tài",
+    "infoTopicDescription": "Thông tin về đề tài",
+    "completed": "Đã hoàn thành",
+    "remaining": "Còn lại",
+    "totalMembers": "Tổng số thành viên: {count}",
+    "repositories": "kho lưu trữ"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"
@@ -522,5 +528,15 @@
     "user": "Người dùng",
     "admin": "Quản trị viên",
     "teacher": "Giảng viên"
+  },
+  "date": {
+    "justNow": "vừa xong",
+    "ended": "Đã kết thúc",
+    "remaining": "Còn {days} ngày {hours} giờ",
+    "remainingHours": "Còn {hours} giờ {minutes} phút",
+    "remainingMinutes": "Còn {minutes} phút",
+    "daysRemaining": "{days} ngày {hours} giờ còn lại",
+    "hoursRemaining": "{hours} giờ {minutes} phút còn lại",
+    "minutesRemaining": "{minutes} phút còn lại"
   }
 }

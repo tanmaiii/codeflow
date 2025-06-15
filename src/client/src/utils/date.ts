@@ -2,8 +2,12 @@ import { getCurrentLocale } from '@/lib/utils';
 import { 
   MONTH_NAMES_VI, 
   MONTH_NAMES_EN, 
+  MONTH_NAMES_JA,
+  MONTH_NAMES_CP,
   TIME_INTERVALS_VI, 
-  TIME_INTERVALS_EN 
+  TIME_INTERVALS_EN,
+  TIME_INTERVALS_JA,
+  TIME_INTERVALS_CP
 } from '@/constants/date';
 
 /**
@@ -27,14 +31,27 @@ export function utils_DateToDDMMYYYY(date: string | Date): string {
  */
 export function utils_DateToDDMonth(
   date: Date,
-  // locale: "vi" | "en" = "vi"
+  // locale: "vi" | "en" | "ja" | "cp" = "vi"
 ): string {
   const dateObj = new Date(date);
   const day = dateObj.getDate().toString().padStart(2, '0');
   const locale = getCurrentLocale() || 'vi';
 
-  const month =
-    locale === 'vi' ? MONTH_NAMES_VI[dateObj.getMonth()] : MONTH_NAMES_EN[dateObj.getMonth()];
+  let month: string;
+  switch (locale) {
+    case 'en':
+      month = MONTH_NAMES_EN[dateObj.getMonth()];
+      break;
+    case 'ja':
+      month = MONTH_NAMES_JA[dateObj.getMonth()];
+      break;
+    case 'cp':
+      month = MONTH_NAMES_CP[dateObj.getMonth()];
+      break;
+    default:
+      month = MONTH_NAMES_VI[dateObj.getMonth()];
+  }
+  
   return `${day} ${month}`;
 }
 
@@ -49,18 +66,45 @@ export const utils_TimeAgo = (date: Date | string): string => {
   const seconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
   const locale = getCurrentLocale() || 'vi';
 
-  const intervals = locale === 'vi' ? TIME_INTERVALS_VI : TIME_INTERVALS_EN;
+  let intervals: { [key: string]: number };
+  switch (locale) {
+    case 'en':
+      intervals = TIME_INTERVALS_EN;
+      break;
+    case 'ja':
+      intervals = TIME_INTERVALS_JA;
+      break;
+    case 'cp':
+      intervals = TIME_INTERVALS_CP;
+      break;
+    default:
+      intervals = TIME_INTERVALS_VI;
+  }
 
   for (const key in intervals) {
     const interval = intervals[key];
     const count = Math.floor(seconds / interval);
 
     if (count >= 1) {
-      return locale === 'en' ? `${count} ${key}${count > 1 ? 's' : ''}` : `${count} ${key}`;
+      if (locale === 'en') {
+        return `${count} ${key}${count > 1 ? 's' : ''}`;
+      } else {
+        return `${count} ${key}`;
+      }
     }
   }
 
-  return locale === 'en' ? 'just now' : 'vừa xong';
+  // Return localized "just now" text
+  switch (locale) {
+    case 'en':
+      return 'just now';
+    case 'ja':
+      return 'たった今';
+    case 'cp':
+      return 'ឥឡូវនេះ';
+    default:
+      return 'vừa xong';
+  }
 };
 
 /**
@@ -86,9 +130,13 @@ export function utils_CalculateWeeks(startDate: string, endDate: string): number
 /**
  * Trả về chuỗi thời gian còn lại (Ex: Còn 1 ngày 1 giờ)
  * @param endDate Ngày kết thúc
+ * @param t Translation function (optional)
  * @returns chuỗi thời gian còn lại (Ex: Còn 1 ngày 1 giờ)
  */
-export function utils_TimeRemaining(endDate: string): string {
+export function utils_TimeRemaining(
+  endDate: string, 
+  t?: (key: string, params?: Record<string, number>) => string
+): string {
   const end = new Date(endDate);
   const now = new Date();
   const diffTime = end.getTime() - now.getTime();
@@ -96,7 +144,19 @@ export function utils_TimeRemaining(endDate: string): string {
 
   // If the end date has passed
   if (diffTime <= 0) {
-    return locale === 'vi' ? 'Đã kết thúc' : 'Ended';
+    if (t) {
+      return t('date.ended');
+    }
+    switch (locale) {
+      case 'en':
+        return 'Ended';
+      case 'ja':
+        return '終了';
+      case 'cp':
+        return 'បានបញ្ចប់';
+      default:
+        return 'Đã kết thúc';
+    }
   }
 
   // Calculate remaining time
@@ -104,16 +164,51 @@ export function utils_TimeRemaining(endDate: string): string {
   const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
 
+  if (t) {
+    // Use translation keys
+    if (days > 0) {
+      return t('date.remaining', { days, hours });
+    } else if (hours > 0) {
+      return t('date.remainingHours', { hours, minutes });
+    } else {
+      return t('date.remainingMinutes', { minutes });
+    }
+  }
+
+  // Fallback to hardcoded text
   if (days > 0) {
-    return locale === 'vi'
-      ? `Còn ${days} ngày ${hours} giờ`
-      : `${days} days ${hours} hours remaining`;
+    switch (locale) {
+      case 'en':
+        return `${days} days ${hours} hours remaining`;
+      case 'ja':
+        return `残り${days}日${hours}時間`;
+      case 'cp':
+        return `នៅសល់ ${days} ថ្ងៃ ${hours} ម៉ោង`;
+      default:
+        return `Còn ${days} ngày ${hours} giờ`;
+    }
   } else if (hours > 0) {
-    return locale === 'vi'
-      ? `Còn ${hours} giờ ${minutes} phút`
-      : `${hours} hours ${minutes} minutes remaining`;
+    switch (locale) {
+      case 'en':
+        return `${hours} hours ${minutes} minutes remaining`;
+      case 'ja':
+        return `残り${hours}時間${minutes}分`;
+      case 'cp':
+        return `នៅសល់ ${hours} ម៉ោង ${minutes} នាទី`;
+      default:
+        return `Còn ${hours} giờ ${minutes} phút`;
+    }
   } else {
-    return locale === 'vi' ? `Còn ${minutes} phút` : `${minutes} minutes remaining`;
+    switch (locale) {
+      case 'en':
+        return `${minutes} minutes remaining`;
+      case 'ja':
+        return `残り${minutes}分`;
+      case 'cp':
+        return `នៅសល់ ${minutes} នាទី`;
+      default:
+        return `Còn ${minutes} phút`;
+    }
   }
 }
 

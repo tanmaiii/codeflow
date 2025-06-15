@@ -379,7 +379,13 @@
     "contribute": {
       "title": "貢献",
       "description": "各メンバーのプロジェクトでの活動を統計化し分析する"
-    }
+    },
+    "infoTopic": "トピック情報",
+    "infoTopicDescription": "トピックに関する情報",
+    "completed": "完了",
+    "remaining": "残り",
+    "totalMembers": "メンバー数: {count}人",
+    "repositories": "リポジトリ"
   },
   "table": {
     "selectedRows": "{total}行中{length}行を選択"
@@ -524,5 +530,15 @@
     "user": "ユーザー",
     "admin": "管理者",
     "teacher": "教師"
+  },
+  "date": {
+    "justNow": "たった今",
+    "ended": "終了",
+    "remaining": "残り{days}日{hours}時間",
+    "remainingHours": "残り{hours}時間{minutes}分",
+    "remainingMinutes": "残り{minutes}分",
+    "daysRemaining": "残り{days}日{hours}時間",
+    "hoursRemaining": "残り{hours}時間{minutes}分",
+    "minutesRemaining": "残り{minutes}分"
   }
 }

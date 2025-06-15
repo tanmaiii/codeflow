@@ -21,14 +21,14 @@ export default function LocaleSwitcher() {
 
   const handleLocaleChange = (newLocale: string) => {
     setCurrentLocale(newLocale);
-    router.push(`/${newLocale}${pathname?.replace(/^\/(en|vi|ja)/, '')}`);
+    router.push(`/${newLocale}${pathname?.replace(/^\/(en|vi|ja|cp)/, '')}`);
   };
 
   useEffect(() => {
     setCurrentLocale(currentLocale);
   }, [currentLocale]);
 
-  const localeOptions = [
+  const locales = [
     {
       value: 'vi',
       label: 'Tiếng Việt',
@@ -36,7 +36,7 @@ export default function LocaleSwitcher() {
       alt: 'Vietnamese'
     },
     {
-      value: 'en', 
+      value: 'en',
       label: 'English',
       flag: SVGS.EN,
       alt: 'English'
@@ -46,39 +46,51 @@ export default function LocaleSwitcher() {
       label: '日本語',
       flag: SVGS.JA,
       alt: 'Japanese'
+    },
+    {
+      value: 'cp',
+      label: 'ភាសាខ្មែរ',
+      flag: SVGS.CP,
+      alt: 'Khmer'
     }
   ];
 
+  const currentLocaleData = locales.find(locale => locale.value === currentLocale);
+
   return (
     <Select value={currentLocale} onValueChange={handleLocaleChange}>
-      <SelectTrigger className="w-fit h-9 px-3 gap-2 border-none bg-background-2 shadow-none hover:bg-accent">
+      <SelectTrigger className="w-auto border-none shadow-none bg-background-2 hover:bg-accent/50 transition-colors">
         <SelectValue>
           <div className="flex items-center gap-2">
-            <Image 
-              src={localeOptions.find(option => option.value === currentLocale)?.flag} 
-              className="w-4 h-4" 
-              width={16} 
-              height={16} 
-              alt={localeOptions.find(option => option.value === currentLocale)?.alt ?? ''} 
-            />
-            <span className="text-sm">
-              {localeOptions.find(option => option.value === currentLocale)?.value}
-            </span>
+            {currentLocaleData && (
+              <>
+                <Image
+                  src={currentLocaleData.flag}
+                  alt={currentLocaleData.alt}
+                  width={20}
+                  height={14}
+                  className="rounded-sm"
+                />
+                <span className="text-sm font-medium">
+                  {currentLocale.toUpperCase()}
+                </span>
+              </>
+            )}
           </div>
         </SelectValue>
       </SelectTrigger>
-      <SelectContent align="end" className="min-w-[120px]">
-        {localeOptions.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
+      <SelectContent align="end">
+        {locales.map((locale) => (
+          <SelectItem key={locale.value} value={locale.value}>
             <div className="flex items-center gap-2">
-              <Image 
-                src={option.flag} 
-                className="w-4 h-4" 
-                width={16} 
-                height={16} 
-                alt={option.alt} 
+              <Image
+                src={locale.flag}
+                alt={locale.alt}
+                width={20}
+                height={14}
+                className="rounded-sm"
               />
-              <span>{option.label}</span>
+              <span>{locale.label}</span>
             </div>
           </SelectItem>
         ))}

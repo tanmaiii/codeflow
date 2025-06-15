@@ -3,6 +3,7 @@ import logo from "@/assets/images/codeflow.png";
 import EnSVG from "@/assets/svgs/en.svg";
 import ViSVG from "@/assets/svgs/vi.svg";
 import JaSVG from "@/assets/svgs/ja.svg";
+import CpSVG from "@/assets/svgs/cp.svg";
 import dfCourses from "@/assets/images/default-course.png";
 import authbg from "@/assets/images/auth-v1-mask-light.png";
 import err404 from "@/assets/images/5.png";
@@ -33,6 +34,7 @@ export const SVGS = {
   EN: EnSVG,
   VI: ViSVG,
   JA: JaSVG,
+  CP: CpSVG,
   FOLDER: FolderSVG,
   NO_DATA: NoDataSVG
 };

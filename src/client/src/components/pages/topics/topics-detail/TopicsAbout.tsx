@@ -109,9 +109,9 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
                 <IconCode className="w-6 h-6 text-white" />
               </div>
               <div>
-                <TextHeading className="text-xl font-bold">Thông tin dự án</TextHeading>
+                <TextHeading className="text-xl font-bold">{t('infoTopic')}</TextHeading>
                 <TextDescription className="text-sm text-zinc-600 dark:text-zinc-300">
-                  Chi tiết và tiến độ thực hiện
+                  {t('infoTopicDescription')}
                 </TextDescription>
               </div>
             </div>
@@ -144,11 +144,11 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
                                   <div className="flex items-center gap-2">
                     <IconGitBranch className="w-4 h-4 text-zinc-500" />
                     <span className="text-zinc-600 dark:text-zinc-300">
-                    {Q_Repos.data.length} / {MAX_REPOS} repositories
+                    {Q_Repos.data.length} / {MAX_REPOS} {t('repositories')}
                   </span>
                 </div>
                 <Badge variant="outline" className="text-xs">
-                  {MAX_REPOS - Q_Repos.data.length} còn lại
+                  {MAX_REPOS - Q_Repos.data.length} {t('remaining')}
                 </Badge>
               </div>
             </div>
@@ -176,7 +176,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
                 {Math.round(progress)}%
               </div>
               <div className="text-xs text-blue-500 dark:text-blue-300">
-                Hoàn thành
+                {t('completed')}
               </div>
             </div>
             <div className="text-center p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
@@ -184,7 +184,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
                 {100 - Math.round(progress)}%
               </div>
               <div className="text-xs text-purple-500 dark:text-purple-300">
-                Còn lại
+                {t('remaining')}
               </div>
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
                 <div className="flex items-center gap-2">
                   <IconUsers className="w-4 h-4 text-emerald-600" />
                   <span className="text-emerald-700 dark:text-emerald-300">
-                    Tổng cộng {topic.members.length} thành viên
+                    {t('totalMembers', { count: topic.members.length })}
                   </span>
                 </div>
                 <Badge className="bg-emerald-500 text-white text-xs border-0">

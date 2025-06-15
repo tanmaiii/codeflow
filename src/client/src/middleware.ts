@@ -13,7 +13,7 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   let user: IUser | null = null; // Khởi tạo user là null
 
-  const localeMatch = pathname.match(/^\/(en|vi)/);
+  const localeMatch = pathname.match(/^\/(en|vi|ja|cp)/);
   const localePrefix = localeMatch ? localeMatch[0] : '/en';
 
   const isPublicPath = publicPaths.some(path => pathname.startsWith(`${localePrefix}${path}`));

@@ -28,6 +28,36 @@ export const MONTH_NAMES_EN = [
   'December',
 ];
 
+export const MONTH_NAMES_JA = [
+  '1月',
+  '2月',
+  '3月',
+  '4月',
+  '5月',
+  '6月',
+  '7月',
+  '8月',
+  '9月',
+  '10月',
+  '11月',
+  '12月',
+];
+
+export const MONTH_NAMES_CP = [
+  'មករា',
+  'កុម្ភៈ',
+  'មីនា',
+  'មេសា',
+  'ឧសភា',
+  'មិថុនា',
+  'កក្កដា',
+  'សីហា',
+  'កញ្ញា',
+  'តុលា',
+  'វិច្ឆិកា',
+  'ធ្នូ',
+];
+
 export interface ITimeIntervals {
   [key: string]: number;
 }
@@ -50,4 +80,24 @@ export const TIME_INTERVALS_EN: ITimeIntervals = {
   hour: 3600,
   minute: 60,
   second: 1,
+};
+
+export const TIME_INTERVALS_JA: ITimeIntervals = {
+  年: 31536000,
+  ヶ月: 2592000,
+  週間: 604800,
+  日: 86400,
+  時間: 3600,
+  分: 60,
+  秒: 1,
+};
+
+export const TIME_INTERVALS_CP: ITimeIntervals = {
+  ឆ្នាំ: 31536000,
+  ខែ: 2592000,
+  សប្តាហ៍: 604800,
+  ថ្ងៃ: 86400,
+  ម៉ោង: 3600,
+  នាទី: 60,
+  វិនាទី: 1,
 }; 
