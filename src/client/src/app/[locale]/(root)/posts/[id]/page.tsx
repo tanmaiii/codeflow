@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: { id: string; locale: string };
+  params: Promise<{ id: string; locale: string }>;
 }
 
 // Generate static params for popular posts (optional optimization)
@@ -30,7 +30,8 @@ export async function generateStaticParams() {
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
-    const post = await postService.getById(params.id);
+    const resolvedParams = await params;
+    const post = await postService.getById(resolvedParams.id);
     
     if (!post.data) {
       return {
@@ -61,7 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
       keywords: post.data.tags?.map(tag => tag.name).join(', '),
       alternates: {
-        canonical: `/posts/${params.id}`,
+        canonical: `/posts/${resolvedParams.id}`,
       },
     };
   } catch {
@@ -74,10 +75,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params }: PageProps) {
   try {
+    const resolvedParams = await params;
     // Fetch post data and comments in parallel on server-side
     const [postResponse, commentsResponse] = await Promise.all([
-      postService.getById(params.id),
-      postService.comments(params.id).catch(() => ({ data: [] })), // Handle comments error gracefully
+      postService.getById(resolvedParams.id),
+      postService.comments(resolvedParams.id).catch(() => ({ data: [] })), // Handle comments error gracefully
     ]);
 
     if (!postResponse.data) {
@@ -88,7 +90,7 @@ export default async function Page({ params }: PageProps) {
         <PostDetailLayout 
           initialPostData={postResponse.data}
           initialCommentsData={commentsResponse.data || []}
-          postId={params.id}
+          postId={resolvedParams.id}
         />
     );
   } catch (error) {

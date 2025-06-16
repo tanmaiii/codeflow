@@ -67,13 +67,13 @@ export default function TopicsUpdate() {
       groupName: Q_Topic?.data?.groupName,
       status: Q_Topic?.data?.status,
     });
-  }, [Q_Topic]);
+  }, [Q_Topic, reset]);
 
   useEffect(() => {
     if (Q_Topic?.data?.members?.find(member => member.role === 'leader')?.userId !== user?.id) {
       router.push(paths.TOPICS_DETAIL(id as string));
     }
-  }, [Q_Topic]);
+  }, [Q_Topic, user?.id, router, id]);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;

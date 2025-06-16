@@ -125,7 +125,7 @@ export default function CoursesDetailTopicsTable() {
         },
       },
     ],
-    [page, topicsData],
+    [t],
   );
 
   const customToolbar = ({ table }: { table: Table<ITopic> }) => {

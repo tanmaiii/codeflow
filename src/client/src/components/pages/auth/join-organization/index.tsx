@@ -67,7 +67,7 @@ export default function JoinOrganization() {
     }, 5000);
 
     return () => clearInterval(intervalRef.current!);
-  }, [token, attempts]);
+  }, [token, attempts, router, setUser]);
 
   return (
     <div className="flex flex-col gap-4">

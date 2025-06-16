@@ -1,3 +1,4 @@
+import { RequestWithUser } from '@/interfaces/auth.interface';
 import { logger } from '@/utils/logger';
 import { CreateUserDto, UpdateUserDto } from '@dtos/users.dto';
 import { User } from '@interfaces/users.interface';
@@ -29,6 +30,16 @@ export class UserController {
         },
         message: 'findAll',
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getMe = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const findOneUserData: User = await this.user.findUserById(req.user.id);
+
+      res.status(200).json({ data: findOneUserData, message: 'findOne' });
     } catch (error) {
       next(error);
     }

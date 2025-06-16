@@ -98,6 +98,7 @@
     "uploadNewPhoto": "Upload New Photo",
     "photoRequirements": "JPG, GIF or PNG. Max 1MB.",
     "saveChanges": "Save Changes",
+    "cancel": "Cancel",
     "appearanceTitle": "Appearance",
     "appearanceDescription": "Customize the app appearance and language.",
     "theme": "Theme",
@@ -157,7 +158,12 @@
     "passwordMismatch": "Passwords do not match",
     "passwordTooShort": "Password must be at least 8 characters",
     "passwordUpdated": "Password has been changed successfully",
-    "deleteAccountUnavailable": "Delete account feature is temporarily unavailable"
+    "deleteAccountUnavailable": "Delete account feature is temporarily unavailable",
+    "enterFullName": "Enter full name",
+    "enterEmail": "Enter email",
+    "enterPhone": "Enter phone",
+    "enterLocation": "Enter location",
+    "enterBio": "Enter bio"
   },
   "auth": {
     "logout": "Logout",
@@ -401,7 +407,8 @@
     "updateUser": "Update User",
     "editUser": "Edit User",
     "deleteUser": "Delete User",
-    "viewUser": "View User"
+    "viewUser": "View User",
+    "bio": "Bio"
   },
   "notification": {
     "notification": "Notification",

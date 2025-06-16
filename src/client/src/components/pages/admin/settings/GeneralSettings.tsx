@@ -8,7 +8,6 @@ import {
   SelectItem,
   SelectValue,
 } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
 
 interface GeneralSettingsProps {
   settings: {

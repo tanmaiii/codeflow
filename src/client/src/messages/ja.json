@@ -98,6 +98,7 @@
     "uploadNewPhoto": "新しい写真をアップロード",
     "photoRequirements": "JPG、GIF、PNG形式。最大1MB。",
     "saveChanges": "変更を保存",
+    "cancel": "キャンセル",
     "appearanceTitle": "外観",
     "appearanceDescription": "アプリの外観と言語をカスタマイズします。",
     "theme": "テーマ",
@@ -157,7 +158,12 @@
     "passwordMismatch": "パスワードが一致しません",
     "passwordTooShort": "パスワードは8文字以上である必要があります",
     "passwordUpdated": "パスワードが正常に変更されました",
-    "deleteAccountUnavailable": "アカウント削除機能は一時的に利用できません"
+    "deleteAccountUnavailable": "アカウント削除機能は一時的に利用できません",
+    "enterFullName": "氏名を入力",
+    "enterEmail": "メールアドレスを入力",
+    "enterPhone": "電話番号を入力",
+    "enterLocation": "場所を入力",
+    "enterBio": "自己紹介を入力"
   },
   "auth": {
     "logout": "ログアウト",
@@ -400,7 +406,8 @@
     "updateUser": "ユーザーを更新",
     "editUser": "ユーザーを編集",
     "deleteUser": "ユーザーを削除",
-    "viewUser": "ユーザーを表示"
+    "viewUser": "ユーザーを表示",
+    "bio": "自己紹介"
   },
   "notification": {
     "notification": "通知",

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ChartData, TimeRange } from '../types';
 
 export const useChartData = (timeRange: TimeRange) => {
@@ -12,7 +12,7 @@ export const useChartData = (timeRange: TimeRange) => {
     activity: []
   });
 
-  const generateSampleData = () => {
+  const generateSampleData = useCallback(() => {
     const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
     const scores = [];
     const projects = [];
@@ -78,11 +78,11 @@ export const useChartData = (timeRange: TimeRange) => {
       projectStatus,
       activity
     });
-  };
+  }, [timeRange]);
 
   useEffect(() => {
     generateSampleData();
-  }, [timeRange]);
+  }, [generateSampleData]);
 
   return { chartData, generateSampleData };
 }; 

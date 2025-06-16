@@ -1,7 +1,7 @@
 import { TextDescription } from "@/components/ui/text";
 import Image from "next/image";
 import { useState } from "react";
-import CommentInput from "./Comment_Input";
+import CommentInput from "./CommentInput";
 import { useTranslations } from "next-intl";
 import { useUserStore } from "@/stores/user_store";
 import apiConfig from "@/lib/api";
@@ -9,7 +9,7 @@ import { paths } from "@/data/path";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-export default function Commnet_Input_Default({
+export default function CommnetInputDefault({
   onSubmit,
 }: {
   onSubmit: (value: string) => void;

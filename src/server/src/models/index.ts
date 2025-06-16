@@ -15,6 +15,7 @@ import { TopicMemberModel } from './topic_member.mode';
 import { TopicEvaluationsModel } from './topic_evaluations.model';
 import { NotificationModel } from './notification.model';
 import { ReposModel } from './repos.model';
+import { UserSettingsModel } from './user_settings.model';
 
 export const initModels = () => {
   // User Model Relations
@@ -29,6 +30,10 @@ export const initModels = () => {
   UserModel.hasMany(CourseEnrollmentModel, { foreignKey: 'userId', as: 'enrollments' });
   UserModel.hasMany(NotificationModel, { foreignKey: 'authorId', as: 'sentNotifications' });
   UserModel.hasMany(NotificationModel, { foreignKey: 'userId', as: 'receivedNotifications' });
+  UserModel.hasOne(UserSettingsModel, { foreignKey: 'userId', as: 'settings' });
+
+  // UserSettings Model Relations
+  UserSettingsModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
 
   // Course Model Relations
   CourseModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });

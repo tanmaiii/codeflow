@@ -5,9 +5,11 @@ import { Notification } from '@/interfaces/notification.interface';
 import { NotificationModel } from '@/models/notification.model';
 import { Service } from 'typedi';
 import { SocketService } from './socket.service';
+import { EmailService } from './email.service';
+import { UserService } from './users.service';
 @Service()
 export class NotificationService {
-  constructor(private socketService: SocketService) {}
+  constructor(private socketService: SocketService, private emailService: EmailService, private userService: UserService) {}
 
   public async findAll(): Promise<NotificationModel[]> {
     const allNotifications: NotificationModel[] = await DB.Notifications.findAll();
@@ -72,19 +74,22 @@ export class NotificationService {
 
   public async createNotification(notificationData: Partial<Notification>): Promise<Notification> {
     if (notificationData.type === ENUM_TYPE_NOTIFICATION.LIKE_POST) {
-      const post = await DB.Notifications.findOne({ where: { postId: notificationData.postId, authorId: notificationData.authorId} });
+      const post = await DB.Notifications.findOne({ where: { postId: notificationData.postId, authorId: notificationData.authorId } });
       if (post) return;
     }
+    const user = await this.userService.findUserById(notificationData.userId);
 
     const createNotificationData: Notification = await DB.Notifications.create(notificationData);
-    
-    // Emit notification to specific user if userId is provided
+
+    // Gửi notification đến người dùng cụ thể nếu có userId
     if (notificationData.userId) {
       this.socketService.emitNotification(notificationData.userId, createNotificationData);
     } else {
-      // Emit to all users if no specific userId
+      // Nếu không có userId thì gửi đến tất cả người dùng
       this.socketService.emitNotificationToAll(createNotificationData);
     }
+
+    user.email && (this.emailService.sendNotificationEmail(user.email, createNotificationData));
 
     return createNotificationData;
   }

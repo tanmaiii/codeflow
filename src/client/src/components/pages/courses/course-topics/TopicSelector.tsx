@@ -101,7 +101,7 @@ export default function TopicSelector({
         },
       },
     ],
-    [page, topicsData],
+    [],
   );
 
   return (

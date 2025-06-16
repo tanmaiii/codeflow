@@ -3,17 +3,15 @@ import { IUser } from '@/interfaces/user';
 import userService from '@/services/user.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-export default function useQ_User_GetDetail({
+export default function useQ_User_GetMe({
   options,
-  id,
 }: {
   options?: Partial<UseQueryOptions<ResponseAPIDto<IUser>, Error>>;
-  id: string;
 }) {
   const query = useQuery({
-    queryKey: ['user', id],
+    queryKey: ['user', 'me'],
     queryFn: async () => {
-      const res = userService.getById(id);
+      const res = userService.getMe()
       return res;
     },
     ...options,

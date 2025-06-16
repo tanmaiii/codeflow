@@ -57,7 +57,7 @@ export default function CoursesDetailTopicsUpdate({ topic }: { topic: ITopic }) 
       members: topic.members?.map(member => member.userId),
       groupName: topic.groupName ?? '',
     });
-  }, [topic]);
+  }, [topic, reset]);
 
   return (
     <ActionModal title={tTopic('updateTopic')} actionType={'update'}>

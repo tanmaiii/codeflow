@@ -95,7 +95,7 @@ export default function TopicsUpdate() {
     });
     setCourseId(Q_Topic?.data?.courseId ?? null);
     setMembers(Q_Topic?.data?.members?.map(member => member.userId) ?? []);
-  }, [Q_Topic]);
+  }, [Q_Topic, reset]);
 
   return (
     <div className="flex flex-col gap-4 py-10 justify-center items-center mx-auto bg-background-2">

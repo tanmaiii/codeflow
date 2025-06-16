@@ -7,9 +7,10 @@ import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
-import Container, { Service } from 'typedi';
+import { Service } from 'typedi';
 import { GitHubService } from './github.service';
-import { logger } from '@/utils/logger';
+import { UserService } from './users.service';
+import { UserSettingsService } from './user_settings.service';
 
 export const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { user: user };
@@ -24,11 +25,7 @@ export const createCookie = (tokenData: TokenData): string => {
 
 @Service()
 export class AuthService {
-  private readonly github: GitHubService;
-
-  constructor() {
-    this.github = Container.get(GitHubService);
-  }
+  constructor(private githubService: GitHubService, private userService: UserService, private userSettingsService: UserSettingsService) {}
 
   public async createToken(user: User): Promise<TokenData> {
     return createToken(user);
@@ -49,7 +46,7 @@ export class AuthService {
   }): Promise<{ tokenData: TokenData; findUser: User }> {
     const findUser: User = await DB.Users.findOne({ where: { email } });
 
-    const checkUserInOrganization = await this.github.checkUserInOrganization(userBody.login);
+    const checkUserInOrganization = await this.githubService.checkUserInOrganization(userBody.login);
 
     if (findUser) {
       const tokenData = createToken(findUser);
@@ -63,7 +60,7 @@ export class AuthService {
       return { tokenData, findUser };
     }
 
-    if(!checkUserInOrganization) await this.github.inviteUserToOrganization(userBody.login);
+    if (!checkUserInOrganization) await this.githubService.inviteUserToOrganization(userBody.login);
 
     const createUserData: User = await DB.Users.create({
       email: email,
@@ -102,7 +99,7 @@ export class AuthService {
     const findUser: User = await DB.Users.findByPk(id);
     if (!findUser) throw new HttpException(409, `This user ${id} was not found`);
 
-    const checkUserInOrganization = await this.github.checkUserInOrganization(findUser.username);
+    const checkUserInOrganization = await this.githubService.checkUserInOrganization(findUser.username);
 
     if (checkUserInOrganization) {
       findUser.status = ENUM_USER_STATUS.ACTIVE;

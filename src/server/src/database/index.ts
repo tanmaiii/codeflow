@@ -16,6 +16,7 @@ import TopicMemberModel from '@/models/topic_member.mode';
 import TopicTagModel from '@/models/topic_tag.model';
 import TopicModel from '@/models/topics.model';
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER, NODE_ENV } from '@config';
+import UserSettingsModel from '@models/user_settings.model';
 import UserModel from '@models/users.model';
 import Sequelize from 'sequelize';
 
@@ -45,6 +46,7 @@ sequelize.authenticate();
 
 export const DB = {
   Users: UserModel(sequelize),
+  UserSettings: UserSettingsModel(sequelize),
   Posts: PostModel(sequelize),
   Courses: CourseModel(sequelize),
   Topics: TopicModel(sequelize),

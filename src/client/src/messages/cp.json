@@ -98,6 +98,7 @@
     "uploadNewPhoto": "ផ្ទុកឡើងរូបថ្មី",
     "photoRequirements": "JPG, GIF ឬ PNG។ អតិបរមា 1MB។",
     "saveChanges": "រក្សាទុកការផ្លាស់ប្តូរ",
+    "cancel": "បោះបង់",
     "appearanceTitle": "រូបរាង",
     "appearanceDescription": "កំណត់រូបរាង និងភាសារបស់កម្មវិធី។",
     "theme": "ប្រធានបទ",
@@ -157,7 +158,12 @@
     "passwordMismatch": "ពាក្យសម្ងាត់បញ្ជាក់មិនត្រូវគ្នា",
     "passwordTooShort": "ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់ 8 តួអក្សរ",
     "passwordUpdated": "ពាក្យសម្ងាត់ត្រូវបានប្តូរដោយជោគជ័យ",
-    "deleteAccountUnavailable": "មុខងារលុបគណនីមិនអាចប្រើបានបណ្តោះអាសន្ន"
+    "deleteAccountUnavailable": "មុខងារលុបគណនីមិនអាចប្រើបានបណ្តោះអាសន្ន",
+    "enterFullName": "បញ្ចូលឈ្មោះពេញ",
+    "enterEmail": "បញ្ចូលអាសយដ្ឋានអ៊ីមែល",
+    "enterPhone": "បញ្ចូលលេខទូរស័ព្ទ",
+    "enterLocation": "បញ្ចូលទីតារណីមួយៗ",
+    "enterBio": "បញ្ចូលពិពណ៌នារបស់អ្នក"
   },
   "auth": {
     "logout": "ចាកចេញ",
@@ -398,7 +404,8 @@
     "updateUser": "ធ្វើបច្ចុប្បន្នភាពអ្នកប្រើប្រាស់",
     "editUser": "កែសម្រួលអ្នកប្រើប្រាស់",
     "deleteUser": "លុបអ្នកប្រើប្រាស់",
-    "viewUser": "មើលអ្នកប្រើប្រាស់"
+    "viewUser": "មើលអ្នកប្រើប្រាស់",
+    "bio": "ការពិពណ៌នាអំពីខ្លួន"
   },
   "notification": {
     "notification": "ការជូនដំណឹង",

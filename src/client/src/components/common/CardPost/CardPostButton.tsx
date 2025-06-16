@@ -9,7 +9,7 @@ interface CardPostButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   icon: React.ReactElement<{ className?: string }>;
 }
 
-export default function CardPost_Button({
+export default function CardPostButton({
   onClick,
   className,
   value,

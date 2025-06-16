@@ -123,7 +123,7 @@ export default function Topics() {
         },
       },
     ],
-    [localPath, t],
+    [localPath, t, tCommon],
   );
 
   const mutationDelete = useMutation({

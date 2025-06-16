@@ -75,7 +75,7 @@ export default function Comments() {
         },
       },
     ],
-    [],
+    [t, tCommon],
   );
 
   const mutationRestore = useMutation({

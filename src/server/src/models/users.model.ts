@@ -4,7 +4,7 @@ import { ENUM_USER_ROLE, ENUM_USER_STATUS } from '@/data/enum';
 
 export type UserCreationAttributes = Optional<
   User,
-  'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar'
+  'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar' | 'bio'
 >;
 
 export class UserModel extends Model<User, UserCreationAttributes> implements User {
@@ -17,6 +17,7 @@ export class UserModel extends Model<User, UserCreationAttributes> implements Us
   public role!: string;
   public status!: string;
   public avatar!: string;
+  public bio!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -60,6 +61,10 @@ export default function (sequelize: Sequelize): typeof UserModel {
         defaultValue: 'active',
       },
       avatar: {
+        allowNull: true,
+        type: DataTypes.STRING(255),
+      },
+      bio: {
         allowNull: true,
         type: DataTypes.STRING(255),
       },

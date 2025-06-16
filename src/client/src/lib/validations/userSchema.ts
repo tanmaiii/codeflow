@@ -34,10 +34,11 @@ export function useUserSchema() {
   return {
     userSchema: userUpdateSchema({ t, tUser }),
     userCreateSchema: userCreateSchema({ t, tUser }),
+    profileSchema: profileSchema({ t, tUser }),
   };
 }
 
-const userUpdateSchema = ({
+export const userUpdateSchema = ({
   t,
   tUser,
 }: {
@@ -61,5 +62,23 @@ const userCreateSchema = ({
     password: passwordValidation(t),
   });
 
+const profileSchema = ({
+  t,
+  tUser,
+}: {
+  t: ReturnType<typeof useTranslations>;
+  tUser: ReturnType<typeof useTranslations>;
+}) =>
+  z.object({
+    name: z.string({ message: t('required', { field: tUser('name') }) })
+      .min(3, t('minLength', { field: tUser('name'), length: 3 }))
+      .max(50, t('maxLength', { field: tUser('name'), length: 50 })),
+    email: z.string({ message: t('required', { field: tUser('email') }) })
+      .email(t('emailInvalid')),
+    bio: z.string({ message: t('required', { field: tUser('bio') }) })
+      .max(255, t('maxLength', { field: tUser('bio'), length: 255 })).optional(),
+  });
+
+export type ProfileSchemaType = z.infer<ReturnType<typeof profileSchema>>;
 export type UserUpdateSchemaType = z.infer<ReturnType<typeof userUpdateSchema>>;
 export type UserCreateSchemaType = z.infer<ReturnType<typeof userCreateSchema>>;

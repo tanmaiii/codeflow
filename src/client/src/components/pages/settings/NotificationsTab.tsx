@@ -1,33 +1,59 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
-import { Mail, Smartphone } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import useQ_Settings_GetMe from '@/hooks/query-hooks/Settings/useQ_Settings_GetMe';
+import useM_Settings_Update from '@/hooks/query-hooks/Settings/useM_Settings_Update';
+import { Mail, Smartphone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+import { useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
-interface NotificationSettings {
-  emailNotifications: boolean
-  pushNotifications: boolean
-  projectUpdates: boolean
-  securityAlerts: boolean
-  marketingEmails: boolean
-}
+export function NotificationsTab() {
+  const t = useTranslations('settings');
+  const { data: settings, isLoading } = useQ_Settings_GetMe();
+  const queryClient = useQueryClient();
 
-interface NotificationsTabProps {
-  settings: NotificationSettings
-  onSettingChange: (key: string, value: boolean) => void
-}
+  const updateMutation = useM_Settings_Update({
+    options: {
+      onSuccess: () => {
+        toast.success(t('settingsUpdated') || 'Settings updated successfully');
+        queryClient.invalidateQueries({ queryKey: ['settings'] });
+      },
+      onError: error => {
+        console.error('Settings update error:', error);
+        toast.error(t('settingsUpdateError') || 'Failed to update settings');
+      },
+    },
+  });
 
-export function NotificationsTab({ settings, onSettingChange }: NotificationsTabProps) {
-  const t = useTranslations('settings')
-  
+  const handleChange = useCallback(
+    (key: string, value: boolean) => {
+      updateMutation.mutate({ [key]: value });
+    },
+    [updateMutation],
+  );
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('notificationsTitle')}</CardTitle>
+          <CardDescription>{t('notificationsDescription')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8 text-muted-foreground">Loading...</div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>{t('notificationsTitle')}</CardTitle>
-        <CardDescription>
-          {t('notificationsDescription')}
-        </CardDescription>
+        <CardDescription>{t('notificationsDescription')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-4">
@@ -42,8 +68,9 @@ export function NotificationsTab({ settings, onSettingChange }: NotificationsTab
               </div>
             </div>
             <Switch
-              checked={settings.emailNotifications}
-              onCheckedChange={(checked) => onSettingChange("emailNotifications", checked)}
+              checked={settings?.receiveEmail || false}
+              onCheckedChange={checked => handleChange('receiveEmail', checked)}
+              disabled={updateMutation.isPending}
             />
           </div>
 
@@ -54,14 +81,13 @@ export function NotificationsTab({ settings, onSettingChange }: NotificationsTab
               <Smartphone className="h-5 w-5 text-muted-foreground" />
               <div className="space-y-1">
                 <Label>{t('pushNotifications')}</Label>
-                <p className="text-sm text-muted-foreground">
-                  {t('pushNotificationsDescription')}
-                </p>
+                <p className="text-sm text-muted-foreground">{t('pushNotificationsDescription')}</p>
               </div>
             </div>
             <Switch
-              checked={settings.pushNotifications}
-              onCheckedChange={(checked) => onSettingChange("pushNotifications", checked)}
+              checked={settings?.receivePush || false}
+              onCheckedChange={checked => handleChange('receivePush', checked)}
+              disabled={updateMutation.isPending}
             />
           </div>
 
@@ -70,13 +96,11 @@ export function NotificationsTab({ settings, onSettingChange }: NotificationsTab
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <Label>{t('projectUpdates')}</Label>
-              <p className="text-sm text-muted-foreground">
-                {t('projectUpdatesDescription')}
-              </p>
+              <p className="text-sm text-muted-foreground">{t('projectUpdatesDescription')}</p>
             </div>
             <Switch
-              checked={settings.projectUpdates}
-              onCheckedChange={(checked) => onSettingChange("projectUpdates", checked)}
+              checked={settings?.projectUpdates || false}
+              onCheckedChange={checked => handleChange('projectUpdates', checked)}
             />
           </div>
 
@@ -85,32 +109,16 @@ export function NotificationsTab({ settings, onSettingChange }: NotificationsTab
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <Label>{t('securityAlerts')}</Label>
-              <p className="text-sm text-muted-foreground">
-                {t('securityAlertsDescription')}
-              </p>
+              <p className="text-sm text-muted-foreground">{t('securityAlertsDescription')}</p>
             </div>
             <Switch
-              checked={settings.securityAlerts}
-              onCheckedChange={(checked) => onSettingChange("securityAlerts", checked)}
-            />
-          </div>
-
-          <Separator />
-
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <Label>{t('marketingEmails')}</Label>
-              <p className="text-sm text-muted-foreground">
-                {t('marketingEmailsDescription')}
-              </p>
-            </div>
-            <Switch
-              checked={settings.marketingEmails}
-              onCheckedChange={(checked) => onSettingChange("marketingEmails", checked)}
+              checked={settings?.securityAlerts || false}
+              onCheckedChange={checked => handleChange('securityAlerts', checked)}
+              disabled={updateMutation.isPending}
             />
           </div>
         </div>
       </CardContent>
     </Card>
-  )
-} 
+  );
+}

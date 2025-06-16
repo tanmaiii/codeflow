@@ -8,7 +8,7 @@ import { utils_CalculateProgress, utils_DateToDDMMYYYY } from '@/utils/date';
 import { IconCalendar, IconUser } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import MyBadge from '../MyBadge';
-import CardTopic_More from './CardTopic_More';
+import CardTopic_More from './CardTopicMore';
 interface CardTopicProps {
   topic: ITopic;
 }

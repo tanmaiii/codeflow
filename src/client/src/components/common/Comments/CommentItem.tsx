@@ -1,19 +1,19 @@
-import TextHeading, { TextDescription } from "@/components/ui/text";
-import { IconMessage2, IconPointFilled } from "@tabler/icons-react";
-import Image from "next/image";
-import CardPost_Button from "../CardPost/CardPost_Button";
-import CommentInput from "./Comment_Input";
-import { useState } from "react";
-import { IComment } from "@/interfaces/comment";
-import { cx } from "class-variance-authority";
-import { utils_TimeAgo } from "../../../utils/date";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import commentService from "@/services/comment.service";
-import { util_length_comment } from "@/utils/common";
-import { useTranslations } from "next-intl";
-import Comment_More from "./Comment_More";
-import { useUserStore } from "@/stores/user_store";
-import apiConfig from "@/lib/api";
+import TextHeading, { TextDescription } from '@/components/ui/text';
+import { IconMessage2, IconPointFilled } from '@tabler/icons-react';
+import Image from 'next/image';
+import CardPost_Button from '../CardPost/CardPostButton';
+import CommentInput from './CommentInput';
+import { useState } from 'react';
+import { IComment } from '@/interfaces/comment';
+import { cx } from 'class-variance-authority';
+import { utils_TimeAgo } from '../../../utils/date';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import commentService from '@/services/comment.service';
+import { util_length_comment } from '@/utils/common';
+import { useTranslations } from 'next-intl';
+import Comment_More from './CommentMore';
+import { useUserStore } from '@/stores/user_store';
+import apiConfig from '@/lib/api';
 
 interface CommentItemProps {
   comment?: IComment;
@@ -23,7 +23,7 @@ function flattenComments(comments: IComment[]) {
   const flat: IComment[] = [];
 
   function traverse(commentList: IComment[]) {
-    commentList.forEach((comment) => {
+    commentList.forEach(comment => {
       const { replies, ...rest } = comment;
       flat.push({ ...rest, replies: [] }); // đẩy comment cha KHÔNG kèm replies
 
@@ -40,12 +40,11 @@ function flattenComments(comments: IComment[]) {
 
 const MAX_VISIBLE_COMMENTS = 1;
 
-export default function Comment_Item({ comment }: CommentItemProps) {
+export default function CommentItem({ comment }: CommentItemProps) {
   const [reply, setReply] = useState<boolean>(false);
-  const t = useTranslations("comment");
+  const t = useTranslations('comment');
   const [update, setUpdate] = useState<boolean>(false);
-  const [visibleReplies, setVisibleReplies] =
-    useState<number>(MAX_VISIBLE_COMMENTS);
+  const [visibleReplies, setVisibleReplies] = useState<number>(MAX_VISIBLE_COMMENTS);
   const { user } = useUserStore();
   const queryClient = useQueryClient();
 
@@ -63,61 +62,53 @@ export default function Comment_Item({ comment }: CommentItemProps) {
           content: value,
         });
       }
-      throw new Error("Cannot update comment: missing comment ID");
+      throw new Error('Cannot update comment: missing comment ID');
     },
     onSuccess: () => {
       setReply(false);
       setUpdate(false);
       queryClient.invalidateQueries({
-        queryKey: ["post", "comments", comment?.postId],
+        queryKey: ['post', 'comments', comment?.postId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["course", "comments", comment?.courseId],
+        queryKey: ['course', 'comments', comment?.courseId],
       });
     },
   });
 
   const mutionDelete = useMutation({
     mutationFn: async () => {
-      if (!comment?.id)
-        throw new Error("Cannot delete comment: missing comment ID");
+      if (!comment?.id) throw new Error('Cannot delete comment: missing comment ID');
       return commentService.delete(comment.id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["post", "comments", comment?.postId],
+        queryKey: ['post', 'comments', comment?.postId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["course", "comments", comment?.courseId],
+        queryKey: ['course', 'comments', comment?.courseId],
       });
     },
   });
 
   const handleLoadMoreReplies = () => {
-    setVisibleReplies((prev) => prev + MAX_VISIBLE_COMMENTS);
+    setVisibleReplies(prev => prev + MAX_VISIBLE_COMMENTS);
   };
 
-  const visibleRepliesList = comment?.replies
-    ? flattenComments(comment.replies || [])
-    : [];
+  const visibleRepliesList = comment?.replies ? flattenComments(comment.replies || []) : [];
 
-  const flatComments = comment?.replies
-    ? visibleRepliesList.slice(0, visibleReplies)
-    : [];
+  const flatComments = comment?.replies ? visibleRepliesList.slice(0, visibleReplies) : [];
 
   return (
     <div
-      className={cx("flex flex-col w-full rounded-lg", {
+      className={cx('flex flex-col w-full rounded-lg', {
         border: !comment?.parentId,
       })}
     >
       {!update ? (
         <div
-          className={cx("p-3 relative rounded-lg hover:bg-input/20", {
-            "border-b":
-              !comment?.parentId &&
-              comment?.replies &&
-              comment?.replies.length > 0,
+          className={cx('p-3 relative rounded-lg hover:bg-input/20', {
+            'border-b': !comment?.parentId && comment?.replies && comment?.replies.length > 0,
           })}
         >
           <header className="flex z-3 flex-row justify-start items-center gap-2">
@@ -133,16 +124,12 @@ export default function Comment_Item({ comment }: CommentItemProps) {
             <div className="flex items-center gap-2">
               <TextHeading>{comment?.author?.name}</TextHeading>
               <IconPointFilled size={12} />
-              <TextDescription>
-                {utils_TimeAgo(new Date(comment?.createdAt ?? ""))}
-              </TextDescription>
+              <TextDescription>{utils_TimeAgo(new Date(comment?.createdAt ?? ''))}</TextDescription>
             </div>
           </header>
 
-          <div className={cx("mt-1 " + (comment?.parentId ? "ml-12" : ""))}>
-            <TextHeading className="text-md font-normal">
-              {comment?.content}
-            </TextHeading>
+          <div className={cx('mt-1 ' + (comment?.parentId ? 'ml-12' : ''))}>
+            <TextHeading className="text-md font-normal">{comment?.content}</TextHeading>
 
             <div className="flex flex-row items-center gap-2 mt-2">
               <CardPost_Button
@@ -151,19 +138,13 @@ export default function Comment_Item({ comment }: CommentItemProps) {
                 value={
                   comment?.replies && comment?.replies.length > 0
                     ? util_length_comment(comment?.replies).toString()
-                    : ""
+                    : ''
                 }
               />
               <Comment_More
-                onUpdate={
-                  user?.id === comment?.author?.id
-                    ? () => setUpdate(true)
-                    : undefined
-                }
+                onUpdate={user?.id === comment?.author?.id ? () => setUpdate(true) : undefined}
                 onDelete={
-                  user?.id === comment?.author?.id
-                    ? () => mutionDelete.mutate()
-                    : undefined
+                  user?.id === comment?.author?.id ? () => mutionDelete.mutate() : undefined
                 }
               />
             </div>
@@ -175,7 +156,7 @@ export default function Comment_Item({ comment }: CommentItemProps) {
         </div>
       ) : (
         <CommentInput
-          onSubmit={(value) => mutionSubmit.mutate(value)}
+          onSubmit={value => mutionSubmit.mutate(value)}
           turnOff={() => {
             setUpdate(false);
           }}
@@ -185,7 +166,7 @@ export default function Comment_Item({ comment }: CommentItemProps) {
 
       {reply && (
         <CommentInput
-          onSubmit={(comment) => mutionSubmit.mutate(comment)}
+          onSubmit={comment => mutionSubmit.mutate(comment)}
           commentReply={comment}
           turnOff={() => {
             setReply(false);
@@ -195,8 +176,8 @@ export default function Comment_Item({ comment }: CommentItemProps) {
 
       {comment?.replies && (
         <div className="flex flex-col">
-          {flatComments.map((reply) => (
-            <Comment_Item key={reply.id} comment={reply} />
+          {flatComments.map(reply => (
+            <CommentItem key={reply.id} comment={reply} />
           ))}
 
           {visibleReplies < visibleRepliesList.length && (
@@ -204,7 +185,7 @@ export default function Comment_Item({ comment }: CommentItemProps) {
               onClick={handleLoadMoreReplies}
               className="self-start text-sm text-primary hover:underline mt-2 ml-12"
             >
-              {t("seeMoreReplys", {
+              {t('seeMoreReplys', {
                 length: visibleRepliesList.length - visibleReplies,
               })}
             </button>

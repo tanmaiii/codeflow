@@ -116,7 +116,7 @@ export default function TopicsTable() {
         },
       },
     ],
-    [page, topicsData],
+    [],
   );
 
   const customToolbar = ({ table }: { table: Table<ITopic> }) => {

@@ -87,7 +87,7 @@ export default function LoadMore({ params, tagId }: LoadMoreProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, currentPage, totalPages, params, tagId]);
+  }, [isLoading, currentPage, totalPages, params, fetchData]);
 
   useEffect(() => {
     if (!initialLoadDone && !isLoading) {
@@ -107,7 +107,7 @@ export default function LoadMore({ params, tagId }: LoadMoreProps) {
     setDataBatches([]);
     setInitialLoadDone(false);
     setTotalPages({ courses: 1, posts: 1 });
-  }, [tagId, params.dataTypes?.join(','), params.sort]);
+  }, [tagId, params.dataTypes, params.sort, params.page]);
 
   const hasMoreData = () => {
     const { dataTypes = ['course', 'post'] } = params;

@@ -10,14 +10,14 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import MoreDropdown, { DropdownAction } from '../MoreDropdown';
-import CardRepo_Update from './CardRepo_Update';
+import CardRepo_Update from './CardRepoUpdate';
 
 interface CardRepo_MoreProps {
   repos: IRepos;
   className?: string;
 }
 
-export default function CardRepo_More({ repos, className }: CardRepo_MoreProps) {
+export default function CardRepoMore({ repos, className }: CardRepo_MoreProps) {
   const user = useUserStore();
   const queryClient = useQueryClient();
   const t_common = useTranslations('common');

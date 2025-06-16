@@ -4,8 +4,8 @@ import { IComment } from '@/interfaces/comment';
 import { util_length_comment } from '@/utils/common';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import CommentItem from './Comment_Item';
-import CommnetInputDefault from './Commnet_Input_Default';
+import CommentItem from './CommentItem';
+import CommnetInputDefault from './CommnetInputDefault';
 
 interface ICommentsProps {
   comments?: IComment[];

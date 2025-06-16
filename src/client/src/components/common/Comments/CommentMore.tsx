@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { IconTrash } from "@tabler/icons-react";
 import { EllipsisVertical, PenIcon } from "lucide-react";
 import MoreDropdown, { DropdownAction } from "../MoreDropdown";
-import CardPost_Button from "../CardPost/CardPost_Button";
+import CardPost_Button from "../CardPost/CardPostButton";
 
 interface Comment_MoreProps {
   onUpdate?: () => void;
@@ -10,7 +10,7 @@ interface Comment_MoreProps {
   commentContent?: string;
 }
 
-export default function Comment_More({
+export default function CommentMore({
   onUpdate,
   onDelete,
   commentContent,

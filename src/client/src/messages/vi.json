@@ -98,6 +98,7 @@
     "uploadNewPhoto": "Tải lên ảnh mới",
     "photoRequirements": "JPG, GIF hoặc PNG. Tối đa 1MB.",
     "saveChanges": "Lưu thay đổi",
+    "cancel": "Hủy",
     "appearanceTitle": "Giao diện",
     "appearanceDescription": "Tùy chỉnh giao diện và ngôn ngữ của ứng dụng.",
     "theme": "Chủ đề",
@@ -157,7 +158,12 @@
     "passwordMismatch": "Mật khẩu xác nhận không khớp",
     "passwordTooShort": "Mật khẩu phải có ít nhất 8 ký tự",
     "passwordUpdated": "Mật khẩu đã được thay đổi thành công",
-    "deleteAccountUnavailable": "Tính năng xóa tài khoản tạm thời không khả dụng"
+    "deleteAccountUnavailable": "Tính năng xóa tài khoản tạm thời không khả dụng",
+    "enterFullName": "Nhập họ và tên",
+    "enterEmail": "Nhập email",
+    "enterPhone": "Nhập số điện thoại",
+    "enterLocation": "Nhập địa điểm",
+    "enterBio": "Nhập giới thiệu bản thân"
   },
   "auth": {
     "logout": "Đăng xuất",
@@ -398,7 +404,8 @@
     "updateUser": "Cập nhật người dùng",
     "editUser": "Chỉnh sửa người dùng",
     "deleteUser": "Xóa người dùng",
-    "viewUser": "Xem người dùng"
+    "viewUser": "Xem người dùng",
+    "bio": "Giới thiệu bản thân"
   },
   "notification": {
     "notification": "Thông báo",

@@ -98,7 +98,7 @@ export default function CoursesTopics() {
       //     },
       //   },
     ],
-    [page, topicsData],
+    [t],
   );
 
   return (

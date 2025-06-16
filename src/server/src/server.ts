@@ -12,11 +12,13 @@ import { SearchRoute } from './routes/search.route';
 import { TagRoute } from './routes/tags.route';
 import { TopicRoute } from './routes/topic.route';
 import { GitHubRoute } from './routes/github.route';
+import { UserSettingsRoute } from './routes/user_settings.route';
 ValidateEnv();
 
 const app = new App([
   new AuthRoute(),
   new UserRoute(),
+  new UserSettingsRoute(),
   new CourseRoute(),
   new FileRoute(),
   new PostRoute(),

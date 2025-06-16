@@ -14,6 +14,34 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+export const locales = [
+  {
+    value: 'vi',
+    label: 'Tiếng Việt',
+    flag: SVGS.VI,
+    alt: 'Vietnamese'
+  },
+  {
+    value: 'en',
+    label: 'English',
+    flag: SVGS.EN,
+    alt: 'English'
+  },
+  {
+    value: 'ja',
+    label: '日本語',
+    flag: SVGS.JA,
+    alt: 'Japanese'
+  },
+  {
+    value: 'cp',
+    label: 'ភាសាខ្មែរ',
+    flag: SVGS.CP,
+    alt: 'Khmer'
+  }
+];
+
+
 export default function LocaleSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
@@ -27,33 +55,6 @@ export default function LocaleSwitcher() {
   useEffect(() => {
     setCurrentLocale(currentLocale);
   }, [currentLocale]);
-
-  const locales = [
-    {
-      value: 'vi',
-      label: 'Tiếng Việt',
-      flag: SVGS.VI,
-      alt: 'Vietnamese'
-    },
-    {
-      value: 'en',
-      label: 'English',
-      flag: SVGS.EN,
-      alt: 'English'
-    },
-    {
-      value: 'ja',
-      label: '日本語',
-      flag: SVGS.JA,
-      alt: 'Japanese'
-    },
-    {
-      value: 'cp',
-      label: 'ភាសាខ្មែរ',
-      flag: SVGS.CP,
-      alt: 'Khmer'
-    }
-  ];
 
   const currentLocaleData = locales.find(locale => locale.value === currentLocale);
 

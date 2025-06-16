@@ -30,7 +30,7 @@ export default function AuthProvider({
         }
       })();
     }
-  }, [setUser]);
+  }, [setUser, route]);
 
   const {} = useQuery({
     queryKey: ["user_info"],

@@ -1,5 +1,5 @@
-import Topics_Update from '@/components/pages/topics/Topics_Update';
+import TopicsUpdate from '@/components/pages/topics/TopicsUpdate';
 
 export default function Page() {
-  return <Topics_Update />;
+  return <TopicsUpdate />;
 }

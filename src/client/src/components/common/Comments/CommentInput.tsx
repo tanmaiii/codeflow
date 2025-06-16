@@ -20,7 +20,7 @@ interface CommentInputProps {
   value?: string;
 }
 
-export default function Comment_Input({
+export default function CommentInput({
   onSubmit,
   turnOff,
   commentReply,

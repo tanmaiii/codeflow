@@ -1,7 +1,7 @@
 import TextHeading from '@/components/ui/text';
 import { IRepos } from '@/interfaces/repos';
 import { IconBrandGithub, IconCloudX } from '@tabler/icons-react';
-import CardRepo_More from './CardRepo_More';
+import CardRepo_More from './CardRepoMore';
 
 export default function CardRepo({ repos }: { repos: IRepos }) {
   return (

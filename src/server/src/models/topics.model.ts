@@ -1,12 +1,11 @@
-import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { Topic } from '@interfaces/topics.interface';
-import { UserModel } from './users.model';
-import { TagModel } from './tags.model';
 import { ENUM_TOPIC_STATUS } from '@/data/enum';
+import { Topic } from '@interfaces/topics.interface';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { CourseModel } from './courses.model';
-import { TopicMemberModel } from './topic_member.mode';
+import { TagModel } from './tags.model';
 import { TopicEvaluationsModel } from './topic_evaluations.model';
-import { ReposModel } from './repos.model';
+import { TopicMemberModel } from './topic_member.mode';
+import { UserModel } from './users.model';
 type PostCreationAttributes = Optional<
   Topic,
   'id' | 'title' | 'description' | 'courseId' | 'teacherId' | 'authorId' | 'isCustom' | 'status' | 'groupName'

@@ -17,7 +17,7 @@ interface CardPost_MoreProps {
   className?: string;
 }
 
-export default function CardTopic_More({ topic, className }: CardPost_MoreProps) {
+export default function CardTopicMore({ topic, className }: CardPost_MoreProps) {
   const user = useUserStore();
   const router = useRouter();
   const { localPath } = useH_LocalPath();

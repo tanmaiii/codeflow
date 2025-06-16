@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import TextInput from '../Input/TextInput/TextInput';
 import { Loader2 } from 'lucide-react';
 
-export default function CardRepo_Update({ repos }: { repos: IRepos }) {
+export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
   const tCommon = useTranslations('common');
   const tRepo = useTranslations('repos');
   const queryClient = useQueryClient();
@@ -35,7 +35,7 @@ export default function CardRepo_Update({ repos }: { repos: IRepos }) {
     reset({
       name: repos.name,
     });
-  }, [repos]);
+  }, [repos, reset]);
 
 
   const mutation = useMutation({

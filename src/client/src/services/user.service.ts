@@ -20,6 +20,11 @@ class UserService {
     return res.data;
   }
 
+  async getMe(): Promise<ResponseAPIDto<IUser>> {
+    const res = await this.client.get('/me');
+    return res.data;
+  }
+
   async create(data: IUserCreate): Promise<ResponseAPIDto<IUser>> {
     const res = await this.client.post('', data);
     return res.data;

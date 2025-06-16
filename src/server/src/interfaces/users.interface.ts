@@ -8,6 +8,7 @@ export interface User {
   role?: string;
   status?: string;
   avatar?: string;
+  bio?: string;
 }
 
 export interface UserGithub {

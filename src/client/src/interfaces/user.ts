@@ -10,6 +10,7 @@ export interface IUser extends IBaseEntity {
   password?: string;
   status?: 'active' | 'inactive';
   role: string;
+  bio?: string;
 }
 
 export interface IUserCreate {
@@ -18,4 +19,15 @@ export interface IUserCreate {
   email: string;
   password?: string;
   role: string;
+}
+
+
+export interface IUserSettings extends IBaseEntity {
+  userId: string;
+  receiveEmail: boolean;
+  receivePush: boolean;
+  securityAlerts: boolean;
+  projectUpdates: boolean;
+  onlineStatus: boolean;
+  warningLogin: boolean;
 }

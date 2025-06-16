@@ -8,7 +8,6 @@ import MemberAvatar from '@/components/ui/member-avatar';
 import { TextDescription } from '@/components/ui/text';
 import { paths } from '@/data/path';
 import useQ_Repos_GetAll from '@/hooks/query-hooks/Repos/useQ_Repos_GetAll';
-import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { IRepos } from '@/interfaces/repos';
 import reposService from '@/services/repos.service';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
@@ -27,7 +26,6 @@ export default function Repos() {
   const search = searchParams?.get('search') || '';
   const t = useTranslations('repos');
   const tCommon = useTranslations('common');
-  const { localPath } = useH_LocalPath();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -95,7 +93,7 @@ export default function Repos() {
         size: 100,
       },
     ],
-    [localPath, t],
+    [t, tCommon],
   );
 
   const mutationDelete = useMutation({
