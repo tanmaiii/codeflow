@@ -305,6 +305,8 @@
     "update": "ធ្វើបច្ចុប្បន្នភាព",
     "join": "ចូលរួម",
     "maxGroupMembers": "ចំនួនសមាជិកអតិបរមា",
+    "createCourseSuccess": "វគ្គសិក្សាត្រូវបានបង្កើតដោយជោគជ័យ!",
+    "createCourseFailed": "ការបង្កើតវគ្គសិក្សាបានបរាជ័យ!",
     "documents": "ឯកសារ",
     "topics": "ប្រធានបទ",
     "suggestedTopics": "ប្រធានបទស្នើ",
@@ -332,7 +334,15 @@
       "foundation": "មូលដ្ឋានជំនាញ",
       "thesis": "និក្ខេបបទ",
       "elective": "មុខវិជ្ជា"
-    }
+    },
+    "courseExpired": "វគ្គសិក្សាផុតកំណត់",
+    "courseProgress": "ដំណើរការវគ្គសិក្សា",
+    "active": "សកម្ម",
+    "completionRate": "អត្រាបញ្ចប់",
+    "startedWeeksAgo": "បានចាប់ផ្តើម {weeks} សប្តាហ៍មុន",
+    "studentsCompleted": "{count} បានបញ្ចប់",
+    "popularCourse": "វគ្គសិក្សាពេញនិយម",
+    "topEnrollment": "ជាន់លើ 10% នៃការចុះឈ្មោះ"
   },
   "topic": {
     "topic": "ប្រធានបទ",
@@ -353,6 +363,7 @@
     "topicDeleted": "ប្រធានបទត្រូវបានលុបដោយជោគជ័យ!",
     "moreTopics": "មើលប្រធានបទបន្ថែម",
     "author": "អ្នកនិពន្ធ",
+    "time": "ពេលវេលា",
     "teacher": "គ្រូបង្រៀន",
     "typeTopic": "ប្រភេទប្រធានបទ",
     "members": "សមាជិក",

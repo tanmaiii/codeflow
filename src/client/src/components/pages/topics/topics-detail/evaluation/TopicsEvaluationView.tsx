@@ -2,8 +2,11 @@ import ActionModal from '@/components/common/Action/ActionModal';
 import { ITopicEvaluation } from '@/interfaces/topic';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { IconMessageCircle, IconUser, IconCalendarTime } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 export default function TopicsEvaluationView({ evaluation }: { evaluation: ITopicEvaluation }) {
+  const t = useTranslations('topic');
+  
   return (
     <ActionModal
       actionType={'view'}
@@ -16,7 +19,7 @@ export default function TopicsEvaluationView({ evaluation }: { evaluation: ITopi
               <IconMessageCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nhận xét</h3>
+              <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('evaluation')}</h3>
               <p className="text-sm text-slate-600 dark:text-slate-400">{evaluation.evaluation}</p>
             </div>
           </div>
@@ -30,7 +33,7 @@ export default function TopicsEvaluationView({ evaluation }: { evaluation: ITopi
                   <IconUser className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tác giả</h3>
+                  <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('author')}</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">{evaluation.user.name}</p>
                 </div>
               </div>
@@ -43,7 +46,7 @@ export default function TopicsEvaluationView({ evaluation }: { evaluation: ITopi
                   <IconCalendarTime className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Thời gian</h3>
+                  <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('time')}</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">{utils_DateToDDMMYYYY(evaluation.createdAt)}</p>
                 </div>
               </div>

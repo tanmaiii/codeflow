@@ -305,6 +305,8 @@
     "update": "Cập nhật",
     "join": "Tham gia",
     "maxGroupMembers": "Số lượng thành viên tối đa",
+    "createCourseSuccess": "Khóa học đã được tạo thành công!",
+    "createCourseFailed": "Tạo khóa học thất bại!",
     "documents": "Tài liệu",
     "topics": "Đề tài",
     "suggestedTopics": "Đề tài gợi ý",
@@ -332,7 +334,15 @@
       "foundation": "Cơ sở ngành",
       "thesis": "Khóa luận",
       "elective": "Môn học"
-    }
+    },
+    "courseExpired": "Khóa học đã hết hạn",
+    "courseProgress": "Tiến độ khóa học",
+    "active": "Đang hoạt động",
+    "completionRate": "Tỷ lệ hoàn thành",
+    "startedWeeksAgo": "Bắt đầu {weeks} tuần trước",
+    "studentsCompleted": "{count} đã hoàn thành",
+    "popularCourse": "Khóa học phổ biến",
+    "topEnrollment": "Top 10% về lượng đăng ký"
   },
   "topic": {
     "topic": "Đề tài",
@@ -353,6 +363,7 @@
     "topicDeleted": "Đề tài đã được xóa thành công!",
     "moreTopics": "Xem thêm đề tài",
     "author": "Tác giả",
+    "time": "Thời gian",
     "teacher": "Giáo viên",
     "typeTopic": "Loại đề tài",
     "members": "Thành viên",
@@ -460,7 +471,12 @@
     "editRepo": "Chỉnh sửa kho lưu trữ",
     "deleteRepo": "Xóa kho lưu trữ",
     "author": "Tác giả",
-    "name": "Tên"
+    "name": "Tên",
+    "nameSuggest": "Tên gợi ý",
+    "instruction": "Hướng dẫn",
+    "instructionName": "• Tên kho lưu trữ chỉ chứa chữ cái, số và dấu gạch ngang (-)",
+    "instructionNameDescription": "• Không được chứa khoảng trắng hoặc ký tự đặc biệt",
+    "instructionNameSuggest": "• Nên sử dụng tên có ý nghĩa và dễ nhận biết"
   },
   "tag": {
     "tag": "Thẻ",

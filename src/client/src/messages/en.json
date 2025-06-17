@@ -334,7 +334,15 @@
       "foundation": "Foundation",
       "thesis": "Thesis",
       "elective": "Elective"
-    }
+    },
+    "courseExpired": "Course expired",
+    "courseProgress": "Course Progress",
+    "active": "Active",
+    "completionRate": "Completion Rate",
+    "startedWeeksAgo": "Started {weeks} weeks ago",
+    "studentsCompleted": "{count} completed",
+    "popularCourse": "Popular Course",
+    "topEnrollment": "Top 10% in enrollment"
   },
   "topic": {
     "topic": "Topic",
@@ -344,6 +352,7 @@
     "courseId": "Course ID",
     "tags": "Tags",
     "status": "Status",
+    "time": "Time",
     "isCustom": "Is Custom",
     "createTopic": "Create Topic",
     "updateTopic": "Update Topic",
@@ -463,7 +472,13 @@
     "editRepo": "Edit Repo",
     "deleteRepo": "Delete Repo",
     "author": "Author",
-    "name": "Name"
+    "name": "Name",
+    "create": "Create",
+    "nameSuggest": "Name suggest",
+    "instruction": "Instruction",
+    "instructionName": "• Name must be lowercase, no special characters or spaces",
+    "instructionNameDescription": "• Name must be lowercase, no special characters or spaces",
+    "instructionNameSuggest": "• Should use a meaningful and recognizable name"
   },
   "tag": {
     "tag": "Tag",

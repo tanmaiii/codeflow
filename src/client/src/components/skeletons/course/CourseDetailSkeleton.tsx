@@ -27,11 +27,12 @@ export default function CourseDetailSkeleton() {
   return (
     <div className="">
       <div className="mb-8">
-        <div className="h-[300px] border py-10 px-24 flex flex-row justify-between gap-6">
+        <div className="h-[380px] border py-10 px-24 flex flex-row justify-between gap-6">
           <div className="flex flex-col gap-3 w-2/3">
             <Skeleton className="h-10 w-10 rotate-sm" />
-            <Skeleton className="w-full h-10" />
-            <Skeleton className="w-1/3 h-10" />
+            <Skeleton className="w-20 h-8" />
+            <Skeleton className="w-full h-18" />
+            <Skeleton className="w-1/3 h-18" />
             {/* Author Info */}
             <motion.div variants={itemVariants} className="flex items-center gap-3">
               <Skeleton className="w-12 h-12 rounded-full" />

@@ -39,7 +39,12 @@ export default function DashboardStudentView() {
   // Mock statistics - in real app, this would come from API
   const stats: DashboardStats = {
     totalCourses: enrolledCourses?.data?.length || 0,
-    activeCourses: enrolledCourses?.data?.filter((course: ICourse) => course.status).length || 0,
+    activeCourses: enrolledCourses?.data?.filter((course: ICourse) => {
+      const currentDate = new Date();
+      const startDate = new Date(course.startDate);
+      const endDate = new Date(course.endDate);
+      return currentDate >= startDate && currentDate <= endDate;
+    }).length || 0,
     completedTopics: 0, // Would need topics API
     upcomingDeadlines: 0, // Would need deadlines API
   };

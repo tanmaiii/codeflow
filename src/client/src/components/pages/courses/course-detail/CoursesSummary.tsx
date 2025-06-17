@@ -15,7 +15,7 @@ import {
   IconChevronRight,
   IconClockHour1,
   IconTrendingUp,
-  IconUser
+  IconUser,
 } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -40,6 +40,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
   const weeksDuration = utils_CalculateWeeks(course?.startDate ?? '', course?.endDate ?? '');
   const studentsCount = members?.data?.length || 0;
   const topicsCount = topics?.pagination.totalItems || 0;
+  const isExpired = new Date(course.endDate) < new Date();
 
   return (
     <div className="space-y-6">
@@ -49,19 +50,21 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
         <div className="relative h-56 overflow-hidden">
           <Image
             src={
-              course?.thumbnail ? utils_ApiImageToLocalImage(course.thumbnail) : IMAGES.DEFAULT_COURSE
+              course?.thumbnail
+                ? utils_ApiImageToLocalImage(course.thumbnail)
+                : IMAGES.DEFAULT_COURSE
             }
             alt={course.title}
             fill
             className="object-cover transition-transform duration-300 hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          
+
           {/* Course Badge */}
           <div className="absolute top-4 left-4">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm text-xs font-semibold text-gray-800 shadow-sm">
               <IconBook className="size-3 mr-1" />
-              Course
+              {t('course')}
             </div>
           </div>
 
@@ -83,28 +86,46 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
                   <IconClockHour1 className="size-4 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
-              <TextHeading className="text-sm justify-center font-semibold text-blue-900 dark:text-blue-100">{weeksDuration}</TextHeading>
-              <TextDescription className="text-xs text-blue-700 dark:text-blue-300">{t('weeks')}</TextDescription>
+              <TextHeading className="text-sm justify-center font-semibold text-blue-900 dark:text-blue-100">
+                {weeksDuration}
+              </TextHeading>
+              <TextDescription className="text-xs text-blue-700 dark:text-blue-300">
+                {t('weeks')}
+              </TextDescription>
             </div>
 
-            <Link href={paths.COURSE_MEMBER(course.id)} className="text-center p-3 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/80 border border-emerald-200/50 dark:from-emerald-900/30 dark:to-emerald-800/20 dark:border-emerald-700/30 hover:shadow-md transition-all duration-200 hover:scale-105">
+            <Link
+              href={paths.COURSE_MEMBER(course.id)}
+              className="text-center p-3 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/80 border border-emerald-200/50 dark:from-emerald-900/30 dark:to-emerald-800/20 dark:border-emerald-700/30 hover:shadow-md transition-all duration-200 hover:scale-105"
+            >
               <div className="flex justify-center mb-2">
                 <div className="p-2 justify-center bg-emerald-500/10 dark:bg-emerald-400/20 rounded-full">
                   <IconUser className="size-4 text-emerald-600 dark:text-emerald-400" />
                 </div>
               </div>
-              <TextHeading className="text-sm justify-center font-semibold text-emerald-900 dark:text-emerald-100">{studentsCount}</TextHeading>
-              <TextDescription className="text-xs text-emerald-700 dark:text-emerald-300">{t('students')}</TextDescription>
+              <TextHeading className="text-sm justify-center font-semibold text-emerald-900 dark:text-emerald-100">
+                {studentsCount}
+              </TextHeading>
+              <TextDescription className="text-xs text-emerald-700 dark:text-emerald-300">
+                {t('students')}
+              </TextDescription>
             </Link>
 
-            <Link href={paths.COURSE_TOPICS(course.id)} className="text-center p-3 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/80 border border-purple-200/50 dark:from-purple-900/30 dark:to-purple-800/20 dark:border-purple-700/30 hover:shadow-md transition-all duration-200 hover:scale-105">
+            <Link
+              href={paths.COURSE_TOPICS(course.id)}
+              className="text-center p-3 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/80 border border-purple-200/50 dark:from-purple-900/30 dark:to-purple-800/20 dark:border-purple-700/30 hover:shadow-md transition-all duration-200 hover:scale-105"
+            >
               <div className="flex justify-center mb-2">
                 <div className="p-2  bg-purple-500/10 dark:bg-purple-400/20 rounded-full">
                   <IconBook className="size-4 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-              <TextHeading className="text-sm justify-center font-semibold text-purple-900 dark:text-purple-100">{topicsCount}</TextHeading>
-              <TextDescription className="text-xs text-purple-700 dark:text-purple-300">{t('topics')}</TextDescription>
+              <TextHeading className="text-sm justify-center font-semibold text-purple-900 dark:text-purple-100">
+                {topicsCount}
+              </TextHeading>
+              <TextDescription className="text-xs text-purple-700 dark:text-purple-300">
+                {t('topics')}
+              </TextDescription>
             </Link>
           </div>
 
@@ -120,15 +141,21 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
                 <IconChevronRight className="size-4 ml-auto" />
               </Button>
             )}
-            
-            <Button
-              className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 dark:from-emerald-500 dark:to-emerald-600 dark:hover:from-emerald-600 dark:hover:to-emerald-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
-              onClick={() => router.push(paths.COURSE_REGISTER(course.id))}
-            >
-              <IconAward className="size-4 mr-2" />
-              {t('register')}
-              <IconChevronRight className="size-4 ml-auto" />
-            </Button>
+
+            {isExpired ? (
+              <TextDescription className="text-sm text-red-700 dark:text-red-300">
+                {t('courseExpired')}
+              </TextDescription>
+            ) : (
+              <Button
+                className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 dark:from-emerald-500 dark:to-emerald-600 dark:hover:from-emerald-600 dark:hover:to-emerald-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                onClick={() => router.push(paths.COURSE_REGISTER(course.id))}
+              >
+                <IconAward className="size-4 mr-2" />
+                {t('register')}
+                <IconChevronRight className="size-4 ml-auto" />
+              </Button>
+            )}
           </div>
         </div>
       </Card>
@@ -136,29 +163,39 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
       {/* Course Progress Card */}
       <Card className="p-6 bg-gradient-to-br from-indigo-50 via-purple-50/50 to-pink-50/30 dark:from-indigo-900/40 dark:via-purple-900/30 dark:to-pink-900/20 border border-indigo-200/50 dark:border-indigo-700/30 shadow-lg">
         <div className="flex items-center justify-between mb-4">
-          <TextHeading className="font-semibold text-indigo-900 dark:text-indigo-100">Course Progress</TextHeading>
+          <TextHeading className="font-semibold text-indigo-900 dark:text-indigo-100">
+            {t('courseProgress')}
+          </TextHeading>
           <div className="flex items-center gap-1 text-sm text-indigo-600 dark:text-indigo-400 bg-indigo-100/50 dark:bg-indigo-800/30 px-2 py-1 rounded-full">
             <IconTrendingUp className="size-4" />
-            <span className="font-medium">Active</span>
+            <span className="font-medium">{t('active')}</span>
           </div>
         </div>
-        
+
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <TextDescription className="text-sm text-indigo-700 dark:text-indigo-300">Completion Rate</TextDescription>
-            <TextHeading className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">87%</TextHeading>
+            <TextDescription className="text-sm text-indigo-700 dark:text-indigo-300">
+              {t('completionRate')}
+            </TextDescription>
+            <TextHeading className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">
+              87%
+            </TextHeading>
           </div>
-          
+
           <div className="w-full bg-indigo-200/50 dark:bg-indigo-800/30 rounded-full h-3 shadow-inner">
-            <div 
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 h-3 rounded-full shadow-sm transition-all duration-1000 ease-out" 
+            <div
+              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 h-3 rounded-full shadow-sm transition-all duration-1000 ease-out"
               style={{ width: '87%' }}
             />
           </div>
-          
+
           <div className="flex justify-between items-center">
-            <TextDescription className="text-xs text-indigo-600 dark:text-indigo-400">Started {weeksDuration} weeks ago</TextDescription>
-            <TextDescription className="text-xs text-indigo-600 dark:text-indigo-400">{Math.round(87 * studentsCount / 100)} completed</TextDescription>
+            <TextDescription className="text-xs text-indigo-600 dark:text-indigo-400">
+              {t('startedWeeksAgo', { weeks: weeksDuration })}
+            </TextDescription>
+            <TextDescription className="text-xs text-indigo-600 dark:text-indigo-400">
+              {t('studentsCompleted', { count: Math.round((87 * studentsCount) / 100) })}
+            </TextDescription>
           </div>
         </div>
       </Card>
@@ -170,8 +207,12 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
             <IconAward className="size-5 text-amber-600 dark:text-amber-400" />
           </div>
           <div>
-            <TextHeading className="font-semibold text-amber-900 dark:text-amber-100">Popular Course</TextHeading>
-            <TextDescription className="text-sm text-amber-700 dark:text-amber-300">Top 10% in enrollment</TextDescription>
+            <TextHeading className="font-semibold text-amber-900 dark:text-amber-100">
+              {t('popularCourse')}
+            </TextHeading>
+            <TextDescription className="text-sm text-amber-700 dark:text-amber-300">
+              {t('topEnrollment')}
+            </TextDescription>
           </div>
         </div>
       </Card>

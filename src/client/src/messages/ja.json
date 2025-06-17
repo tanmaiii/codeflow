@@ -333,7 +333,15 @@
       "foundation": "基礎",
       "thesis": "論文",
       "elective": "選択"
-    }
+    },
+    "courseExpired": "コース期限切れ",
+    "courseProgress": "コース進捗",
+    "active": "アクティブ",
+    "completionRate": "完了率",
+    "startedWeeksAgo": "{weeks}週間前に開始",
+    "studentsCompleted": "{count}人完了",
+    "popularCourse": "人気コース",
+    "topEnrollment": "登録数上位10%"
   },
   "topic": {
     "topic": "トピック",
@@ -355,6 +363,7 @@
     "moreTopics": "もっとトピックを見る",
     "thumbnail": "サムネイル",
     "author": "作成者",
+    "time": "時間",
     "teacher": "教師",
     "typeTopic": "トピックタイプ",
     "members": "メンバー",
