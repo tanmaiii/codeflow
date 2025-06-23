@@ -30,5 +30,7 @@ export class GitHubRoute implements Routes {
     this.router.post(`${this.path}/orgs/invitations`, this.github.inviteUserToOrganization);
 
     this.router.get(`${this.path}/orgs/members`, this.github.getOrganizationMembers);
+
+    this.router.post(`${this.path}/webhook`, this.github.handleWebhookCommit);
   }
 }

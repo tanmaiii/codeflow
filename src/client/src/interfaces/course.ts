@@ -22,7 +22,9 @@ export interface ICourse extends IBaseEntity {
   topicDeadline: string;
   status: boolean;
   maxGroupMembers: number;
+  topicCount: number;
   documents: IDocument[];
+  enrollmentCount: number;
   tags: ITag[];
   author?: IUser;
   type: string;

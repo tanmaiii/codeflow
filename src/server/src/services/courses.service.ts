@@ -108,6 +108,7 @@ export class CourseService {
       attributes: {
         include: [
           [this.commentCountLiteral, 'commentCount'],
+          [this.topicCountLiteral, 'topicCount'],
           [this.enrollmentCountLiteral, 'enrollmentCount'],
         ],
       },

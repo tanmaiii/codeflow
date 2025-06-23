@@ -202,7 +202,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
             {topic.members?.map(member => (
               <div 
                 key={member.id} 
-                className="group p-3 rounded-lg bg-gradient-to-r from-white/50 to-white/20 dark:from-gray-700/50 dark:to-gray-700/20 border border-white/20 dark:border-gray-600/20 transition-all duration-200 hover:bg-white/70 dark:hover:bg-gray-700/70 hover:scale-[1.02]"
+                className="group p-3 rounded-lg bg-gradient-to-r from-zinc-50 to-zinc-100 dark:from-zinc-800/50 dark:to-zinc-700/50 border border-zinc-200/50 dark:border-zinc-600/50 transition-all duration-200 hover:bg-zinc-100 dark:hover:bg-zinc-700/70 hover:scale-[1.02]"
               >
                 <MemberAvatar
                   avatar={member?.user?.avatar}

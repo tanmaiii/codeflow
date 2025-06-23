@@ -3,7 +3,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
 import { GitHubRequestBody } from '@interfaces/github.interface';
 import { GitHubService } from '@services/github.service';
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 
 export class GitHubController {
@@ -139,6 +139,95 @@ export class GitHubController {
       res.status(200).json({ data: members, message: 'github-organization-members' });
     } catch (error) {
       next(error);
+    }
+  };
+
+  /**
+   * Xử lý webhook commit
+  */
+  public handleWebhookCommit = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { body } = req;
+      const signature = req.headers['x-hub-signature-256'] as string;
+      
+      // Verify webhook signature for security
+      // if (!this.github.verifyWebhookSignature(body, signature)) {
+      //   throw new HttpException(401, 'Invalid webhook signature');
+      // }
+
+      // Handle different webhook events
+      const event = req.headers['x-github-event'] as string;
+      
+      if (event === 'push') {
+        const { repository, commits, ref } = body;
+        
+        logger.info(`[GitHub Webhook] Push event received for repository: ${repository.full_name}`);
+        logger.info(`[GitHub Webhook] Branch: ${ref}, Commits count: ${commits.length}`);
+        
+        // Process commits
+        for (const commit of commits) {
+          await this.processCommit(commit, repository);
+        }
+        
+        res.status(200).json({ message: 'Webhook processed successfully' });
+      } else {
+        logger.info(`[GitHub Webhook] Unhandled event type: ${event}`);
+        res.status(200).json({ message: 'Event ignored' });
+      }
+    } catch (error) {
+      logger.error(`[GitHub Webhook] Error processing webhook: ${error}`);
+      next(error);
+    }
+  };
+
+  private async processCommit(commit: any, repository: any) {
+    try {
+      const commitData = {
+        sha: commit.id,
+        message: commit.message,
+        author: commit.author.name,
+        email: commit.author.email,
+        timestamp: commit.timestamp,
+        repository: repository.full_name,
+        branch: repository.default_branch,
+        added: commit.added || [],
+        modified: commit.modified || [],
+        removed: commit.removed || []
+      };
+
+      logger.info(`[GitHub Webhook] Processing commit: ${commitData.sha}`);
+      
+      // Here you can add your business logic to process the commit
+      // For example:
+      // - Update database with commit information
+      // - Trigger notifications
+      // - Update progress tracking
+      // - Send notifications to team members
+      
+      // Example: Save commit to database (implement based on your needs)
+      // await this.commitService.saveCommit(commitData);
+      
+      // Example: Update topic progress if commit is related to a topic
+      // await this.updateTopicProgress(commitData);
+      
+    } catch (error) {
+      logger.error(`[GitHub Webhook] Error processing commit ${commit.id}: ${error}`);
+    }
+  }
+
+  private updateTopicProgress = async (commitData: any) => {
+    try {
+      // Find topic by repository name
+      // const topic = await this.topicService.findByRepository(commitData.repository);
+      
+      // if (topic) {
+      //   // Update progress based on commit activity
+      //   await this.topicService.updateProgress(topic.id, commitData);
+      // }
+      
+      logger.info(`[GitHub Webhook] Topic progress updated for commit: ${commitData.sha}`);
+    } catch (error) {
+      logger.error(`[GitHub Webhook] Error updating topic progress: ${error}`);
     }
   };
 }
