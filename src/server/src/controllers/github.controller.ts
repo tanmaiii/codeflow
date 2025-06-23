@@ -7,7 +7,11 @@ import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 
 export class GitHubController {
-  public github = Container.get(GitHubService);
+  public github: GitHubService;
+
+  constructor() {
+    this.github = Container.get(GitHubService);
+  }
 
   /**
    * Get GitHub user information
@@ -149,13 +153,13 @@ export class GitHubController {
     try {
       const { body } = req;
       const signature = req.headers['x-hub-signature-256'] as string;
-      
-      // Verify webhook signature for security
-      // if (!this.github.verifyWebhookSignature(body, signature)) {
-      //   throw new HttpException(401, 'Invalid webhook signature');
-      // }
 
-      // Handle different webhook events
+      // Xác thực chữ ký từ webhook
+      if (!signature || !this.github.verifyWebhookSignature(signature)) {
+        throw new HttpException(401, 'Invalid webhook signature');
+      }
+
+      // Kiểm tra sự kiện từ webhook
       const event = req.headers['x-github-event'] as string;
       
       if (event === 'push') {
@@ -164,7 +168,9 @@ export class GitHubController {
         logger.info(`[GitHub Webhook] Push event received for repository: ${repository.full_name}`);
         logger.info(`[GitHub Webhook] Branch: ${ref}, Commits count: ${commits.length}`);
         
-        // Process commits
+        //TODO: Xử lý commit
+        //TODO: Lưu vào cơ sở dữ liệu
+        //TODO: Gửi thông báo
         for (const commit of commits) {
           await this.processCommit(commit, repository);
         }

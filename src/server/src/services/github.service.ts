@@ -3,7 +3,7 @@ import { logger } from '@utils/logger';
 import axios from 'axios';
 import { env } from 'process';
 import { Service } from 'typedi';
-import { join } from 'path';
+import crypto from 'crypto';
 
 @Service()
 export class GitHubService {
@@ -14,6 +14,19 @@ export class GitHubService {
     Authorization: `Bearer ${env.GITHUB_TOKEN}`,
     Accept: 'application/vnd.github+json',
   };
+
+  public async verifyWebhookSignature(signature: string): Promise<boolean> {
+    try {
+      logger.info(`[GitHub Service] Verifying webhook signature: ${signature} ${process.env.GITHUB_WEBHOOK_SECRET}`);
+      const hmac = crypto.createHmac('sha256', process.env.GITHUB_WEBHOOK_SECRET);
+      hmac.update(signature);
+      const calculatedSignature = hmac.digest('hex');
+      return calculatedSignature === signature;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error verifying webhook signature: ${error.message}`);
+      throw error;
+    }
+  }
 
   /**
    * Lấy thông tin user từ GitHub
@@ -251,6 +264,42 @@ export class GitHubService {
     } catch (error) {
       logger.error(`[GitHub Service] Error getting organization members: ${error.message}`);
       throw error;
+    }
+  }
+
+  /**
+   * Tạo webhook commit trên repository
+   * @param repoName Tên repository
+   * @param webhookUrl URL của webhook
+   * @returns Webhook đã tạo
+   */
+  public async createWebhookCommit(repoName: string, webhookUrl: string) {
+    try {
+      const response = await axios.post(`${this.baseUrl}/repos/${this.organization}/${repoName}/hooks`, {
+        url: webhookUrl,
+        content_type: 'json',
+        secret: process.env.GITHUB_WEBHOOK_SECRET,
+      }, {
+        headers: this.headers,
+      }); 
+      return response.data;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error creating webhook commit: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Xử lý webhook commit
+   * @param body
+   * @param signature
+   * @returns
+   */
+  public async handleWebhookCommit(body: any, signature: string): Promise<void> {
+    try {
+    
+    } catch (error) {
+
     }
   }
 }
