@@ -148,7 +148,7 @@ export class GitHubController {
 
   /**
    * Xử lý webhook commit
-  */
+   */
   public handleWebhookCommit = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { body } = req;
@@ -161,20 +161,20 @@ export class GitHubController {
 
       // Kiểm tra sự kiện từ webhook
       const event = req.headers['x-github-event'] as string;
-      
+
       if (event === 'push') {
         const { repository, commits, ref } = body;
-        
+
         logger.info(`[GitHub Webhook] Push event received for repository: ${repository.full_name}`);
         logger.info(`[GitHub Webhook] Branch: ${ref}, Commits count: ${commits.length}`);
-        
+
         //TODO: Xử lý commit
         //TODO: Lưu vào cơ sở dữ liệu
         //TODO: Gửi thông báo
         for (const commit of commits) {
           await this.processCommit(commit, repository);
         }
-        
+
         res.status(200).json({ message: 'Webhook processed successfully' });
       } else {
         logger.info(`[GitHub Webhook] Unhandled event type: ${event}`);
@@ -198,24 +198,23 @@ export class GitHubController {
         branch: repository.default_branch,
         added: commit.added || [],
         modified: commit.modified || [],
-        removed: commit.removed || []
+        removed: commit.removed || [],
       };
 
       logger.info(`[GitHub Webhook] Processing commit: ${commitData.sha}`);
-      
+
       // Here you can add your business logic to process the commit
       // For example:
       // - Update database with commit information
       // - Trigger notifications
       // - Update progress tracking
       // - Send notifications to team members
-      
+
       // Example: Save commit to database (implement based on your needs)
       // await this.commitService.saveCommit(commitData);
-      
+
       // Example: Update topic progress if commit is related to a topic
       // await this.updateTopicProgress(commitData);
-      
     } catch (error) {
       logger.error(`[GitHub Webhook] Error processing commit ${commit.id}: ${error}`);
     }
@@ -225,12 +224,12 @@ export class GitHubController {
     try {
       // Find topic by repository name
       // const topic = await this.topicService.findByRepository(commitData.repository);
-      
+
       // if (topic) {
       //   // Update progress based on commit activity
       //   await this.topicService.updateProgress(topic.id, commitData);
       // }
-      
+
       logger.info(`[GitHub Webhook] Topic progress updated for commit: ${commitData.sha}`);
     } catch (error) {
       logger.error(`[GitHub Webhook] Error updating topic progress: ${error}`);
