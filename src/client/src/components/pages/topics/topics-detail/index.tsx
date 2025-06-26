@@ -4,6 +4,7 @@ import { TopicListSkeleton } from '@/components/skeletons/topic';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
+import { STATUS_TOPIC } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
 import { useUserStore } from '@/stores/user_store';
@@ -51,6 +52,7 @@ export default function Topics_Detail() {
   const params = useParams();
   const id = params?.id as string;
   const t = useTranslations('topic');
+  const tAll = useTranslations();
   const { data: dataTopic, isLoading, isError } = useQ_Topic_GetDetail({ id: id as string });
   const { user } = useUserStore();
   const router = useRouter();
@@ -61,7 +63,7 @@ export default function Topics_Detail() {
   const isLeader = user?.id === dataTopic?.data?.members?.find(member => member.role === 'leader')?.userId;
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-2 md:p-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
           {/* Main Content */}
@@ -70,7 +72,7 @@ export default function Topics_Detail() {
             <div className="relative overflow-hidden rounded-2xl">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-00 via-purple-600 to-pink-600 opacity-10"></div>
               <Card className="relative p-0 border-0 bg-gradient-to-br from-white/200 to-white/100 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-sm">
-                <div className="p-8">
+                <div className="p-4 md:p-8">
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex-1">
                       <TitleHeader title={dataTopic?.data?.title || ''} onBack={true} />
@@ -83,7 +85,6 @@ export default function Topics_Detail() {
                         className="ml-4 border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300"
                       >
                         <IconPencil className="w-4 h-4 mr-2" />
-                        Chỉnh sửa
                       </Button>
                     )}
                   </div>
@@ -99,7 +100,8 @@ export default function Topics_Detail() {
                     <InfoCard
                       icon={IconCircleCheck }
                       label={t('status')}
-                      value={dataTopic?.data?.status || ''}
+                      // value={dataTopic?.data?.status || ''}
+                      value={tAll(STATUS_TOPIC.find(item => item.value === dataTopic?.data?.status)!.labelKey)}
                     />
                   </div>
 
@@ -145,7 +147,7 @@ export default function Topics_Detail() {
             {/* Evaluation Section */}
             <div className="relative overflow-hidden rounded-2xl">
               {/* <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10"></div> */}
-              <Card className="relative p-8 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-xl">
+              <Card className="relative p-4 md:p-8 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-xl">
                   <div className="flex items-center gap-3">
                     <div className="p-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 shadow-lg">
                       <IconStar className="w-6 h-6 text-white" />

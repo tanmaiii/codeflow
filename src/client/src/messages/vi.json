@@ -21,6 +21,8 @@
     "close": "Đóng",
     "delete": "Xóa",
     "create": "Tạo",
+    "reset": "Làm mới",
+    "test": "Kiểm tra",
     "restore": "Khôi phục",
     "deleteSoft": "Xóa mềm",
     "view": "Xem",
@@ -163,7 +165,14 @@
     "enterEmail": "Nhập email",
     "enterPhone": "Nhập số điện thoại",
     "enterLocation": "Nhập địa điểm",
-    "enterBio": "Nhập giới thiệu bản thân"
+    "enterBio": "Nhập giới thiệu bản thân",
+    "ai": "AI",
+    "aiDescription": "Cấu hình cài đặt AI",
+    "general": "Tổng quan",
+    "generalDescription": "Cấu hình cài đặt tổng quan",
+    "aiApiKey": "API Key",
+    "aiReviewPromptTemplate": "Mẫu prompt đánh giá AI",
+    "aiReviewPromptTemplateDescription": "Prompt này sẽ được gửi đến AI cùng với code diff. Tùy chỉnh để nhận được loại phản hồi mà bạn muốn."
   },
   "auth": {
     "logout": "Đăng xuất",

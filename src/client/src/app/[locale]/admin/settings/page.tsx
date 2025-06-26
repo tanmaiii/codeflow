@@ -1,5 +1,10 @@
-import Settings from "@/components/pages/admin/settings";
+import PageContent from '@/components/layout/PageContent';
+import Settings from '@/components/pages/admin/settings';
 
 export default function Page() {
-  return <Settings />;
+  return (
+    <PageContent>
+      <Settings />
+    </PageContent>
+  );
 }

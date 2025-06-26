@@ -21,7 +21,7 @@ export default function TopicsContribute() {
       <div className="relative overflow-hidden rounded-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 opacity-10"></div>
         <Card className="relative p-0 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-800/90 dark:to-zinc-800/50 backdrop-blur-sm shadow-xl">
-          <div className="p-8">
+          <div className="p-4 md:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg">
                 <Users className="w-6 h-6 text-white" />
@@ -77,7 +77,7 @@ export default function TopicsContribute() {
       <div className="relative overflow-hidden rounded-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-zinc-100 dark:from-zinc-800/50 dark:to-zinc-900/50"></div>
         <Card className="relative p-0 border-0 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm shadow-xl">
-          <div className="p-8">
+          <div className="p-4 md:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 rounded-xl bg-gradient-to-r from-slate-600 to-zinc-700 shadow-lg">
                 <TrendingUp className="w-6 h-6 text-white" />
@@ -98,7 +98,7 @@ export default function TopicsContribute() {
       <div className="relative overflow-hidden rounded-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-zinc-950/20 dark:to-zinc-950/20"></div>
         <Card className="relative p-0 border-0 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm shadow-xl">
-          <div className="p-8">
+          <div className="p-4 md:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg">
                 <Users className="w-6 h-6 text-white" />

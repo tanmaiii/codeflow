@@ -22,6 +22,8 @@
     "delete": "Delete",
     "update": "Update",
     "create": "Create",
+    "reset": "Reset",
+    "test": "Test",
     "restore": "Restore",
     "deleteSoft": "Delete Soft",
     "view": "View",
@@ -163,7 +165,14 @@
     "enterEmail": "Enter email",
     "enterPhone": "Enter phone",
     "enterLocation": "Enter location",
-    "enterBio": "Enter bio"
+    "enterBio": "Enter bio",
+    "ai": "AI",
+    "aiDescription": "AI settings",
+    "general": "General",
+    "generalDescription": "General settings",
+    "aiApiKey": "API Key",
+    "aiReviewPromptTemplate": "AI review prompt template",
+    "aiReviewPromptTemplateDescription": "This prompt will be sent to the AI along with the code diff. Customize it to get the type of feedback you want."
   },
   "auth": {
     "logout": "Logout",

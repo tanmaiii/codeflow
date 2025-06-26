@@ -15,6 +15,7 @@ import { TopicMemberModel } from './topic_member.mode';
 import { TopicEvaluationsModel } from './topic_evaluations.model';
 import { NotificationModel } from './notification.model';
 import { ReposModel } from './repos.model';
+import { SystemSettingsModel } from './system_settings.model';
 import { UserSettingsModel } from './user_settings.model';
 
 export const initModels = () => {

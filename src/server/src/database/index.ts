@@ -10,6 +10,7 @@ import PostTagModel from '@/models/post_tag.model';
 import PostModel from '@/models/posts.model';
 import ReposModel from '@/models/repos.model';
 import SubmissionModel from '@/models/submissions.model';
+import SystemSettingsModel from '@/models/system_settings.model';
 import TagModel from '@/models/tags.model';
 import TopicEvaluationsModel from '@/models/topic_evaluations.model';
 import TopicMemberModel from '@/models/topic_member.mode';
@@ -63,6 +64,7 @@ export const DB = {
   TopicMember: TopicMemberModel(sequelize),
   TopicEvaluations: TopicEvaluationsModel(sequelize),
   Notifications: NotificationModel(sequelize),
+  SystemSettings: SystemSettingsModel(sequelize),
   sequelize,
 };
 

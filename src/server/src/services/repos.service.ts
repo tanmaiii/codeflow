@@ -147,7 +147,7 @@ export class ReposService {
     if (isEmpty(id)) throw new HttpException(400, 'RepoId is empty');
     const findRepo = await this.findById(id);
     if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
-    
+
     const uniqueRepoName = await this.generateUniqueRepoName(`${repoData?.name || ''}`);
 
     // Cập nhật tên repo trên GitHub
