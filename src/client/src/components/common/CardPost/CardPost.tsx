@@ -6,7 +6,10 @@ import { paths } from '@/data/path';
 import useQ_Post_CheckLike from '@/hooks/query-hooks/Post/useQ_Post_CheckLike';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { IPost } from '@/interfaces/post';
+import apiConfig from '@/lib/api';
 import postService from '@/services/post.service';
+import { useUserStore } from '@/stores/user_store';
+import { util_format_number } from '@/utils/common';
 import { utils_DateToDDMonth, utils_TimeAgo } from '@/utils/date';
 import {
   IconArrowBigUpLine,
@@ -16,19 +19,16 @@ import {
 } from '@tabler/icons-react';
 import { useMutation } from '@tanstack/react-query';
 import { Dot } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { utils_ApiImageToLocalImage } from '../../../utils/image';
+import MyImage from '../MyImage';
 import NameTags from '../NameTags/NameTags';
 import Tooltip from '../Tooltip/Tooltip';
 import CardPost_Button from './CardPostButton';
 import CardPost_More from './CardPostMore';
-import apiConfig from '@/lib/api';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { useUserStore } from '@/stores/user_store';
-import { util_format_number } from '@/utils/common';
 
 interface CardPostProps {
   post: IPost;
@@ -76,12 +76,13 @@ export default function CardPost({ post }: CardPostProps) {
             className="flex items-center justify-between gap-2 cursor-pointer rounded-full "
           >
             <Tooltip tooltip={post?.author?.name ?? ''}>
-              <Image
+              <MyImage  
                 className="w-8 h-8 rounded-full"
-                src={post?.author?.avatar ?? apiConfig.avatar(post?.author?.name ?? 'c')}
+                src={post?.author?.avatar ? post?.author?.avatar : apiConfig.avatar(post?.author?.name ?? 'c')}
                 alt="Google"
                 width={100}
                 height={100}
+                defaultSrc={apiConfig.avatar(post?.author?.name ?? 'c')}
               />
             </Tooltip>
             <CardPost_More className="group-hover/item:opacity-100 opacity-0" post={post} />
@@ -105,14 +106,13 @@ export default function CardPost({ post }: CardPostProps) {
           </div>
         </div>
         <div className="flex items-center gap-2 mt-2">
-          <Image
+          <MyImage
             className="w-full h-[160px] object-cover rounded-md bg-background-1"
-            src={
-              post?.thumbnail ? utils_ApiImageToLocalImage(post.thumbnail) : IMAGES.DEFAULT_COURSE
-            }
+            src={utils_ApiImageToLocalImage(post.thumbnail)}
             alt="Google"
             width={140}
             height={140}
+            defaultSrc={IMAGES.DEFAULT_COURSE.src}
           />
         </div>
         <div className="mt-2 flex items-center justify-between">

@@ -6,11 +6,6 @@
     "auditLog": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\.0edc6f0a0c8b51b5254c9ab6f614576a207976f4-audit.json",
     "files": [
         {
-            "date": 1748019745193,
-            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-05-24.log",
-            "hash": "b9f292a4d9c066a73135018790c45b89d570a2f217d6a579ac0e1e023454fada"
-        },
-        {
             "date": 1748107187631,
             "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-05-25.log",
             "hash": "901670e734383c9428a5cfc4f7d0585b5598d9e2883f1642d9712e8df3956404"
@@ -154,6 +149,11 @@
             "date": 1750957327400,
             "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-06-27.log",
             "hash": "ca29c1c2d53c5912feceba48ac00a99eb754e45e2f5d314440fcbca8747fe764"
+        },
+        {
+            "date": 1751046466690,
+            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-06-28.log",
+            "hash": "989b58b183d28fba1be6722475177036647a0f4ffd9bec9db3e630ecac681223"
         }
     ],
     "hashType": "sha256"

@@ -9,13 +9,13 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet'; // bảo vệ header
 import hpp from 'hpp'; // bảo vệ header
+import { createServer } from 'http';
 import morgan from 'morgan'; // log request
 import path from 'path';
 import 'reflect-metadata';
+import { Server } from 'socket.io';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
 import { Container } from 'typedi';
 import { SocketService } from './services/socket.service';
 
@@ -46,7 +46,7 @@ export class App {
         origin: process.env.FRONTEND_URL || 'http://localhost:3000',
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: true,
-        allowedHeaders: ['Content-Type', 'Authorization']
+        allowedHeaders: ['Content-Type', 'Authorization'],
       },
       path: '/socket.io',
       transports: ['websocket', 'polling'],
@@ -55,8 +55,8 @@ export class App {
       connectTimeout: 45000,
       allowUpgrades: true,
       perMessageDeflate: {
-        threshold: 2048
-      }
+        threshold: 2048,
+      },
     });
 
     // Initialize SocketService

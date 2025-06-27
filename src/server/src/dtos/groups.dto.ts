@@ -16,11 +16,8 @@ export class CreateGroupDto {
   public members: string[];
 }
 
-
 export class AddMemberToGroupDto {
   @IsString()
   @Length(36)
   public userId: string;
 }
-
-

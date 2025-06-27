@@ -24,18 +24,15 @@ export class CreateUserDto {
   @MaxLength(32)
   public password: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  public uid: string;
-
-  @IsString()
-  @IsNotEmpty()
   public role: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   public status: string;
 
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   public avatar: string;

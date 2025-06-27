@@ -39,11 +39,10 @@ export class UpdateNotificationDto {
   @IsString()
   @IsOptional()
   public link?: string;
-} 
+}
 
 export class GetAllNotificationsDto extends GetAllQueryDto {
   @IsOptional()
   @IsEnum(['true', 'false'])
   public isRead?: string;
 }
-

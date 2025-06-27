@@ -1,6 +1,7 @@
 'use client';
 
 import Comments from '@/components/common/Comments/Comments';
+import MyImage from '@/components/common/MyImage';
 import NameTags from '@/components/common/NameTags/NameTags';
 import SwapperHTML from '@/components/common/SwapperHTML/SwapperHTML';
 import { Button } from '@/components/ui/button';
@@ -23,7 +24,6 @@ import { IconBookmark, IconBookmarkFilled, IconShare } from '@tabler/icons-react
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import 'highlight.js/styles/github.css'; // Import theme
 import { ArrowLeftIcon, HeartIcon } from 'lucide-react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -94,8 +94,7 @@ export default function PostDetail({
       <Card className="p-0 overflow-hidden shadow-xl border-0">
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-          <Image
-            className="w-full h-[400px] md:h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
+          <MyImage
             src={
               initialPostData.thumbnail
                 ? utils_ApiImageToLocalImage(initialPostData.thumbnail)
@@ -105,6 +104,7 @@ export default function PostDetail({
             width={1200}
             height={500}
             priority
+            defaultSrc={IMAGES.DEFAULT_COURSE.src}
           />
 
           {/* Navigation & Actions */}
@@ -165,7 +165,7 @@ export default function PostDetail({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <Image
+              <MyImage
                 className="w-16 h-16 object-cover rounded-full ring-4 ring-blue-100 shadow-md"
                 src={
                   initialPostData.author?.avatar
@@ -175,13 +175,12 @@ export default function PostDetail({
                 alt={initialPostData.author?.name || 'Author'}
                 width={64}
                 height={64}
+                defaultSrc={apiConfig.avatar(initialPostData.author?.name ?? 'c')}
               />
               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white" />
             </div>
             <div>
-              <TextHeading className="text-xl">
-                {initialPostData.author?.name}
-              </TextHeading>
+              <TextHeading className="text-xl">{initialPostData.author?.name}</TextHeading>
               {initialPostData.createdAt && (
                 <TextDescription className="text-sm">
                   {utils_DateToDDMonth(new Date(initialPostData.createdAt))} •{' '}

@@ -22,11 +22,11 @@ import { IconHeart, IconMessage } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
+import MyImage from '@/components/common/MyImage';
 
 export default function Posts() {
   const searchParams = useSearchParams();
@@ -55,7 +55,7 @@ export default function Posts() {
         accessorKey: 'title',
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
-            <Image
+            <MyImage  
               src={
                 row.original.thumbnail
                   ? utils_ApiImageToLocalImage(row.original.thumbnail)
@@ -65,6 +65,7 @@ export default function Posts() {
               width={100}
               height={100}
               className="rounded-sm"
+              defaultSrc={IMAGES.DEFAULT_POST.src}
             />
             <div className="flex flex-col">
               <Link

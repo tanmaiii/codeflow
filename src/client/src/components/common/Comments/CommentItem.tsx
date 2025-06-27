@@ -1,6 +1,5 @@
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { IconMessage2, IconPointFilled } from '@tabler/icons-react';
-import Image from 'next/image';
 import CardPost_Button from '../CardPost/CardPostButton';
 import CommentInput from './CommentInput';
 import { useState } from 'react';
@@ -14,6 +13,7 @@ import { useTranslations } from 'next-intl';
 import Comment_More from './CommentMore';
 import { useUserStore } from '@/stores/user_store';
 import apiConfig from '@/lib/api';
+import MyImage from '../MyImage';
 
 interface CommentItemProps {
   comment?: IComment;
@@ -113,12 +113,13 @@ export default function CommentItem({ comment }: CommentItemProps) {
         >
           <header className="flex z-3 flex-row justify-start items-center gap-2">
             <div className="w-10 h-10 min-h-10 min-w-10 z-2 relative">
-              <Image
+              <MyImage
                 src={comment?.author?.avatar ?? apiConfig.avatar(comment?.author?.name ?? 'c')}
                 alt="logo"
                 width={40}
                 height={40}
                 className="w-full h-full object-cover rounded-lg"
+                defaultSrc={apiConfig.avatar(comment?.author?.name ?? 'c')}
               />
             </div>
             <div className="flex items-center gap-2">

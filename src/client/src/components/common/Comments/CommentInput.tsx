@@ -6,12 +6,12 @@ import apiConfig from '@/lib/api';
 import { useUserStore } from '@/stores/user_store';
 import { IconX } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { useRef, useState } from 'react';
 import SectionDivider from '../SectionDivider/SectionDivider';
 import MyEmojiPicker from './MyEmojiPicker';
 import { paths } from '@/data/path';
 import { useRouter } from 'next/navigation';
+import MyImage from '../MyImage';
   
 interface CommentInputProps {
   onSubmit: (comment: string) => void;
@@ -75,12 +75,13 @@ export default function CommentInput({
 
       <div className="flex items-start gap-2 mb-4 p-4">
         <div className="w-10 h-10 min-h-10 min-w-10 ">
-          <Image
+          <MyImage
             src={user?.avatar ?? apiConfig.avatar(user?.name ?? 'c')}
             alt="logo"
             width={40}
             height={40}
             className="w-full h-full object-cover rounded-lg"
+            defaultSrc={apiConfig.avatar(user?.name ?? 'c')}
           />
         </div>
         <Textarea

@@ -34,4 +34,4 @@ export class SetSettingValueDto {
   @IsOptional()
   @IsIn(['text', 'json', 'number', 'boolean'])
   public type?: string;
-} 
+}

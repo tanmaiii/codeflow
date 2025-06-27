@@ -16,7 +16,6 @@ export enum ENUM_USER_STATUS {
   SUSPENDED = 'suspended', // Tạm ngưng
 }
 
-
 export enum ENUM_TYPE_NOTIFICATION {
   TOPIC_EVALUATION = 'TOPIC_EVALUATION', // Đánh giá chủ đề
   COMMENT = 'COMMENT', // Bình luận
@@ -28,7 +27,6 @@ export enum ENUM_TYPE_NOTIFICATION {
   REJECT_TOPIC = 'REJECT_TOPIC', // Từ chối chủ đề
   SYSTEM = 'SYSTEM', // Hệ thống
 }
-
 
 export enum ENUM_TYPE_COURSE {
   MAJOR = 'major', // Chuyên ngành

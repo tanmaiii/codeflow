@@ -1,26 +1,26 @@
-import { IsInt, IsOptional, IsPositive, IsIn, IsString, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsIn, IsInt, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class GetAllQueryDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @IsPositive()
-  page: number = 1;
+  page = 1;
 
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @IsPositive()
-  limit?: number;
+  limit? = 10;
 
   @IsOptional()
   @IsString()
-  sortBy: string = 'created_at';
+  sortBy = 'created_at';
 
   @IsOptional()
   @IsIn(['ASC', 'DESC'])
-  order?: 'ASC' | 'DESC' = 'DESC';
+  order: 'ASC' | 'DESC' = 'DESC';
 
   @IsOptional()
   @IsString()

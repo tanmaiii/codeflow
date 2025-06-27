@@ -14,9 +14,9 @@ import { utils_TimeAgo } from '@/utils/date';
 import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import MyImage from '../MyImage';
 import NameTags from '../NameTags/NameTags';
 import CardCourse_More from './CardCourse_More';
 import CardCourse_Submit from './CardCourse_Submit';
@@ -43,16 +43,13 @@ export default function CardCourse({ course }: CardCourseProps) {
     <Card className="w-full gap-4 pt-3 overflow-hidden group">
       <CardHeader className="px-3">
         <div className="relative">
-          <Image
-            src={
-              course?.thumbnail
-                ? utils_ApiImageToLocalImage(course.thumbnail)
-                : IMAGES.DEFAULT_COURSE
-            }
-            alt={course?.thumbnail ?? ''}
+          <MyImage
+            src={utils_ApiImageToLocalImage(course.thumbnail)}
+            alt={course?.title ?? 'Course thumbnail'}
             width={200}
             height={160}
             className="object-cover w-full h-[120px] rounded-md cursor-pointer"
+            defaultSrc={IMAGES.DEFAULT_COURSE.src}
           />
           <div className="absolute top-1 left-1">
             <Badge variant="default" className="bg-zinc-900/40 text-white">
@@ -70,12 +67,13 @@ export default function CardCourse({ course }: CardCourseProps) {
           href={paths.USER_DETAIL(course?.author?.id ?? '')}
           className="flex items-center gap-2"
         >
-          <Image
-            src={course?.author?.avatar ?? apiConfig.avatar(course?.author?.name ?? 'c')}
-            alt={course?.author?.avatar ?? ''}
+          <MyImage
+            src={course?.author?.avatar ? course?.author?.avatar : apiConfig.avatar(course?.author?.name ?? 'c')}
+            alt={course?.author?.name ?? ''}
             width={100}
             height={100}
             className="object-cover w-6 h-6 circle rounded-full"
+            defaultSrc={apiConfig.avatar(course?.author?.name ?? 'c')}
           />
           <TextDescription className="text-primary line-clamp-1 ">
             {course?.author?.name}

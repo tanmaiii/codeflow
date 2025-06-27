@@ -2,7 +2,6 @@
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { IMAGES } from '@/data/images';
-import Image from 'next/image';
 import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
 import apiConfig from '@/lib/api';
 import { useRouter } from 'next/navigation';
@@ -12,6 +11,7 @@ import { TrendingUpIcon, ClockIcon } from 'lucide-react';
 import { utils_TimeAgo } from '@/utils/date';
 import { util_CalculateReadingTime } from '@/utils/common';
 import { useTranslations } from 'next-intl';
+import MyImage from '@/components/common/MyImage';
 
 export default function PostDetailMore() {
   const router = useRouter();
@@ -89,7 +89,7 @@ export default function PostDetailMore() {
                 {/* Thumbnail */}
                 <div className="relative flex-shrink-0">
                   <div className="w-14 h-14 rounded-sm overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 shadow-md group-hover:shadow-lg transition-shadow duration-300">
-                    <Image
+                    <MyImage
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                       src={
                         post?.thumbnail ? apiConfig.imageUrl(post.thumbnail) : IMAGES.DEFAULT_COURSE
@@ -97,6 +97,7 @@ export default function PostDetailMore() {
                       alt={post.title}
                       width={80}
                       height={80}
+                      defaultSrc={IMAGES.DEFAULT_COURSE.src}
                     />
                   </div>
                 </div>

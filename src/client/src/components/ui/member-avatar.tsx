@@ -4,8 +4,8 @@ import { paths } from '@/data/path';
 import apiConfig from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import MyImage from '../common/MyImage';
 
 interface MemberAvatarProps {
   avatar?: string;
@@ -37,12 +37,13 @@ export default function MemberAvatar({
       }}
       className={cn('flex flex-row cursor-pointer items-center gap-2', className)}
     >
-      <Image
+      <MyImage
         src={!avatar ? apiConfig.avatar(name) : avatar}
         alt={name}
         width={size}
         height={size}
         className={`rounded-full`}
+        defaultSrc={apiConfig.avatar(name)}
       />
       <div className="flex flex-col">
         <TextDescription className="text-color-1">{name}</TextDescription>
