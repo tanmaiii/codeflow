@@ -1,6 +1,7 @@
 'use client';
 import CardFile from '@/components/common/CardFile/CardFile';
 import Comments from '@/components/common/Comments/Comments';
+import MyImage from '@/components/common/MyImage';
 import NameTags from '@/components/common/NameTags/NameTags';
 import NoData from '@/components/common/NoData/NoData';
 import SwapperHTML from '@/components/common/SwapperHTML/SwapperHTML';
@@ -24,7 +25,6 @@ import {
   utils_TimeAgo,
   utils_TimeRemaining,
 } from '@/utils/date';
-import { utils_ApiImageToLocalImage } from '@/utils/image';
 import {
   IconCalendar,
   IconClockHour1,
@@ -36,7 +36,6 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { cx } from 'class-variance-authority';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import CoursesSummary from './CoursesSummary';
 import Courses_Topics from './CoursesTopics';
@@ -122,16 +121,17 @@ export default function CoursesDetail() {
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <Image
+                  <MyImage
                     className="w-14 h-14 object-cover rounded-full border-2 border-white/30"
                     src={
                       dataCourse.data?.author?.avatar
-                        ? utils_ApiImageToLocalImage(dataCourse.data?.author?.avatar)
+                        ? dataCourse.data?.author?.avatar
                         : apiConfig.avatar(dataCourse.data?.author?.name ?? 'c')
                     }
                     alt={dataCourse.data?.title}
                     width={56}
                     height={56}
+                    defaultSrc={apiConfig.avatar(dataCourse.data?.author?.name ?? 'c')}
                   />
                   <div>
                     <p className="font-semibold text-lg">{dataCourse.data?.author?.name}</p>
@@ -161,7 +161,9 @@ export default function CoursesDetail() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <TextDescription className="text-white/80">{tCourse('progress')}</TextDescription>
+                      <TextDescription className="text-white/80">
+                        {tCourse('progress')}
+                      </TextDescription>
                       <TextDescription className="text-white/80">
                         {utils_CalculateProgress(
                           dataCourse.data?.startDate ?? '',

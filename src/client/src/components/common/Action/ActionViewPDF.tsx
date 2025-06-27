@@ -5,7 +5,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface ActionViewPDFProps {
   trigger: React.ReactNode;
@@ -14,7 +14,34 @@ interface ActionViewPDFProps {
 }
 
 export default function ActionViewPDF({ trigger, title, file }: ActionViewPDFProps) {
-  const fileUrl = file ? URL.createObjectURL(file) : '';
+  const [fileUrl, setFileUrl] = useState<string>('');
+  const [isValidFile, setIsValidFile] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (file) {
+      // Kiểm tra file có phải là PDF không
+      if (file.type === 'application/pdf') {
+        const url = URL.createObjectURL(file);
+        setFileUrl(url);
+        setIsValidFile(true);
+      } else {
+        setIsValidFile(false);
+      }
+    } else {
+      setIsValidFile(false);
+    }
+
+    // Cleanup URL khi component unmount
+    return () => {
+      if (fileUrl) {
+        URL.revokeObjectURL(fileUrl);
+      }
+    };
+  }, [file]);
+
+  if (!isValidFile) {
+    return null; // Không hiển thị gì nếu file không hợp lệ
+  }
 
   return (
     <Dialog>

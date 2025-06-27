@@ -1,3 +1,4 @@
+import MyImage from '@/components/common/MyImage';
 import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import useQ_GitHub_GetUserInfo from '@/hooks/query-hooks/Github/useQ_GitHub_GetUserInfo';
@@ -6,7 +7,6 @@ import apiConfig from '@/lib/api';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { IconMail, IconUsersGroup } from '@tabler/icons-react';
 import { ExternalLink, Pen, Star } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function UserDetail({ user }: { user: IUser }) {
@@ -28,7 +28,7 @@ export default function UserDetail({ user }: { user: IUser }) {
         </div>
         <div className="flex items-center gap-2 bg-background-1 rounded-xl w-full">
           <div className="flex items-center gap-2 w-[120px] h-[120px] justify-center">
-            <Image
+            <MyImage  
               src={user?.avatar ?? apiConfig.avatar(user?.name)}
               alt={user?.avatar ?? ''}
               className="object-cover w-full h-full circle rounded-xl"

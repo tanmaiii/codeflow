@@ -1,3 +1,4 @@
+import MyImage from '@/components/common/MyImage';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
@@ -18,7 +19,6 @@ import {
   IconUser,
 } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -48,7 +48,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
       <Card className="overflow-hidden p-0 border-0 shadow-lg bg-white dark:bg-gray-900">
         {/* Course Image with Overlay */}
         <div className="relative h-56 overflow-hidden">
-          <Image
+          <MyImage
             src={
               course?.thumbnail
                 ? utils_ApiImageToLocalImage(course.thumbnail)
@@ -56,6 +56,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
             }
             alt={course.title}
             fill
+            defaultSrc={IMAGES.DEFAULT_COURSE.src}
             className="object-cover transition-transform duration-300 hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />

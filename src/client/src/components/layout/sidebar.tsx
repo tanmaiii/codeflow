@@ -30,6 +30,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import MyImage from '../common/MyImage';
 
 const iconMap: Record<string, LucideIcon> = {
   layout: Layout,
@@ -158,7 +159,7 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
               whileHover={{ scale: 1.02 }}
               className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
             >
-              <Image
+              <MyImage
                 src={user?.avatar ?? apiConfig.avatar(user?.name)}
                 alt="avatar.png"
                 width={100}
@@ -167,6 +168,7 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
                   'object-cover circle rounded-full w-8 h-8 max-w-8 max-h-8',
                   collapsed && 'w-full h-full',
                 )}
+                defaultSrc={apiConfig.avatar(user?.name ?? 'c')}
               />
               <AnimatePresence mode="wait">
                 {!collapsed && (

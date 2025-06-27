@@ -1,13 +1,13 @@
-import { TextDescription } from "@/components/ui/text";
-import Image from "next/image";
-import { useState } from "react";
-import CommentInput from "./CommentInput";
-import { useTranslations } from "next-intl";
-import { useUserStore } from "@/stores/user_store";
-import apiConfig from "@/lib/api";
-import { paths } from "@/data/path";
 import { Button } from "@/components/ui/button";
+import { TextDescription } from "@/components/ui/text";
+import { paths } from "@/data/path";
+import apiConfig from "@/lib/api";
+import { useUserStore } from "@/stores/user_store";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import MyImage from "../MyImage";
+import CommentInput from "./CommentInput";
 
 export default function CommnetInputDefault({
   onSubmit,
@@ -37,12 +37,13 @@ export default function CommnetInputDefault({
         >
           <div className="flex items-center gap-2 p-3 cursor-pointer">
             <div className="w-10 h-10 min-h-10 min-w-10 ">
-              <Image
+              <MyImage
                 src={user?.avatar ?? apiConfig.avatar(user?.name ?? "c")} 
                 alt="logo"
                 width={40}
                 height={40}
                 className="w-full h-full object-cover rounded-lg"
+                defaultSrc={apiConfig.avatar(user?.name ?? "c")}
               />
             </div>
             <div className="flex items-center gap-2">

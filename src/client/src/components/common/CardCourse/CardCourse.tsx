@@ -69,7 +69,7 @@ export default function CardCourse({ course }: CardCourseProps) {
         >
           <MyImage
             src={course?.author?.avatar ? course?.author?.avatar : apiConfig.avatar(course?.author?.name ?? 'c')}
-            alt={course?.author?.name ?? ''}
+            alt={course?.author?.avatar ?? ''}
             width={100}
             height={100}
             className="object-cover w-6 h-6 circle rounded-full"
