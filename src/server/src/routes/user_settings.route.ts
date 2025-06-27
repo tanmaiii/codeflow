@@ -43,12 +43,7 @@ export class UserSettingsRoute implements Routes {
     this.router.get(`${this.path}/me`, AuthMiddleware, this.userSettingsController.getMyUserSettings);
 
     // User routes - Cập nhật settings của user hiện tại
-    this.router.put(
-      `${this.path}/me`,
-      AuthMiddleware,
-      ValidationMiddleware(UpdateUserSettingsDto),
-      this.userSettingsController.updateMyUserSettings,
-    );
+    this.router.put(`${this.path}/me`, AuthMiddleware, ValidationMiddleware(UpdateUserSettingsDto), this.userSettingsController.updateMyUserSettings);
 
     // User routes - Reset settings của user hiện tại về default
     this.router.post(`${this.path}/reset`, AuthMiddleware, this.userSettingsController.resetMyUserSettings);
@@ -56,7 +51,7 @@ export class UserSettingsRoute implements Routes {
     // Utility routes - Kiểm tra email preference
     this.router.get(`${this.path}/check/email/:userId`, AuthMiddleware, this.userSettingsController.checkCanReceiveEmail);
 
-    // Utility routes - Kiểm tra push notification preference  
+    // Utility routes - Kiểm tra push notification preference
     this.router.get(`${this.path}/check/push/:userId`, AuthMiddleware, this.userSettingsController.checkCanReceivePush);
 
     // Admin routes - Lấy tất cả user settings (Admin only - kiểm tra trong controller)
@@ -66,12 +61,7 @@ export class UserSettingsRoute implements Routes {
     this.router.post(`${this.path}/reset/:userId`, AuthMiddleware, this.userSettingsController.resetUserSettings);
 
     // Admin routes - Bulk update settings cho nhiều users (Admin only - kiểm tra trong controller)
-    this.router.put(
-      `${this.path}/bulk`,
-      AuthMiddleware,
-      ValidationMiddleware(BulkUpdateDto),
-      this.userSettingsController.bulkUpdateSettings,
-    );
+    this.router.put(`${this.path}/bulk`, AuthMiddleware, ValidationMiddleware(BulkUpdateDto), this.userSettingsController.bulkUpdateSettings);
 
     // Generic routes - Lấy user settings theo ID
     this.router.get(`${this.path}/:id`, AuthMiddleware, this.userSettingsController.getUserSettingsById);
@@ -80,20 +70,10 @@ export class UserSettingsRoute implements Routes {
     this.router.get(`${this.path}/user/:userId`, AuthMiddleware, this.userSettingsController.getUserSettingsByUserId);
 
     // Generic routes - Tạo user settings mới
-    this.router.post(
-      `${this.path}`,
-      AuthMiddleware,
-      ValidationMiddleware(CreateUserSettingsDto),
-      this.userSettingsController.createUserSettings,
-    );
+    this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateUserSettingsDto), this.userSettingsController.createUserSettings);
 
     // Generic routes - Cập nhật user settings theo ID
-    this.router.put(
-      `${this.path}/:id`,
-      AuthMiddleware,
-      ValidationMiddleware(UpdateUserSettingsDto),
-      this.userSettingsController.updateUserSettings,
-    );
+    this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(UpdateUserSettingsDto), this.userSettingsController.updateUserSettings);
 
     // Generic routes - Cập nhật user settings theo userId
     this.router.put(
@@ -106,4 +86,4 @@ export class UserSettingsRoute implements Routes {
     // Generic routes - Xóa user settings
     this.router.delete(`${this.path}/:id`, AuthMiddleware, this.userSettingsController.deleteUserSettings);
   }
-} 
+}

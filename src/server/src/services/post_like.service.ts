@@ -1,7 +1,7 @@
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
 import { Notification } from '@/interfaces/notification.interface';
-import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { Post, PostLike } from '@/interfaces/posts.interface';
 import { Service } from 'typedi';
 import { NotificationService } from './notification.service';
@@ -25,7 +25,7 @@ export class PostLikeService {
       where: { postId: postLikeData.postId, userId: postLikeData.userId },
     });
     if (findPostLike) throw new HttpException(409, 'Post like already exists');
-    
+
     DB.PostLike.create(postLikeData);
     const post = await DB.Posts.findOne({ where: { id: postLikeData.postId } });
 

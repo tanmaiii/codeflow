@@ -66,4 +66,4 @@ export class SocketService {
     logger.info(`[🚀SOCKET🚀] Emitting notification to all users`);
     this.io.emit('new_notification', notification);
   }
-} 
+}

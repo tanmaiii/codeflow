@@ -1,9 +1,9 @@
+import { ENUM_TYPE_COURSE } from '@/data/enum';
 import { Course } from '@/interfaces/courses.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { CourseDocumentModel } from './course_documents.model';
 import { TagModel } from './tags.model';
 import { UserModel } from './users.model';
-import { ENUM_TYPE_COURSE, ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 
 export type CourseCreationAttributes = Optional<
   Course,

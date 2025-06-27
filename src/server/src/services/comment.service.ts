@@ -1,22 +1,17 @@
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+import { Notification } from '@/interfaces/notification.interface';
+import { Op } from 'sequelize';
 import { Service } from 'typedi';
 import { DB } from '../database';
 import { HttpException } from '../exceptions/HttpException';
 import { Comment } from '../interfaces/comments.interface';
 import { isEmpty } from '../utils/util';
-import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
-import { Notification } from '@/interfaces/notification.interface';
+import { CourseService } from './courses.service';
 import { NotificationService } from './notification.service';
 import { PostService } from './post.service';
-import { CourseService } from './courses.service';
-import { Op } from 'sequelize';
-import { Course } from '@/interfaces/courses.interface';
 @Service()
 export class CommentService {
-  constructor(
-    private notificationService: NotificationService,
-    private postService: PostService,
-    private courseService: CourseService,
-  ) {}
+  constructor(private notificationService: NotificationService, private postService: PostService, private courseService: CourseService) {}
 
   public buildCommentTree = (comments, parentId = null) => {
     return comments
@@ -33,7 +28,6 @@ export class CommentService {
     });
     return this.buildCommentTree(allComment);
   }
-
 
   public async findAndCountAllWithPagination(page = 1, pageSize = 10, search = '', isAdmin = false): Promise<{ count: number; rows: Comment[] }> {
     const { count, rows } = await DB.Comments.findAndCountAll({

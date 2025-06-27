@@ -315,4 +315,4 @@ export class UserSettingsController {
       next(error);
     }
   };
-} 
+}

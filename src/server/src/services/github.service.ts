@@ -1,9 +1,9 @@
 import { GitHubContent, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
 import { logger } from '@utils/logger';
 import axios from 'axios';
+import crypto from 'crypto';
 import { env } from 'process';
 import { Service } from 'typedi';
-import crypto from 'crypto';
 
 @Service()
 export class GitHubService {
@@ -79,7 +79,6 @@ export class GitHubService {
       throw error;
     }
   }
-
 
   public async deleteRepoInOrg(repoName: string): Promise<GitHubRepository> {
     try {
@@ -212,7 +211,6 @@ export class GitHubService {
     }
   }
 
-
   public async collaborateRepo(repoName: string, username: string): Promise<void> {
     try {
       const response = await axios.put(
@@ -220,7 +218,7 @@ export class GitHubService {
         {},
         {
           headers: this.headers,
-        }
+        },
       );
       return response.data;
     } catch (error) {
@@ -275,13 +273,17 @@ export class GitHubService {
    */
   public async createWebhookCommit(repoName: string, webhookUrl: string) {
     try {
-      const response = await axios.post(`${this.baseUrl}/repos/${this.organization}/${repoName}/hooks`, {
-        url: webhookUrl,
-        content_type: 'json',
-        secret: process.env.GITHUB_WEBHOOK_SECRET,
-      }, {
-        headers: this.headers,
-      }); 
+      const response = await axios.post(
+        `${this.baseUrl}/repos/${this.organization}/${repoName}/hooks`,
+        {
+          url: webhookUrl,
+          content_type: 'json',
+          secret: process.env.GITHUB_WEBHOOK_SECRET,
+        },
+        {
+          headers: this.headers,
+        },
+      );
       return response.data;
     } catch (error) {
       logger.error(`[GitHub Service] Error creating webhook commit: ${error.message}`);
@@ -297,9 +299,6 @@ export class GitHubService {
    */
   public async handleWebhookCommit(body: any, signature: string): Promise<void> {
     try {
-    
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 }

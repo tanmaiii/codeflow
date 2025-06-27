@@ -12,7 +12,7 @@ import { UserSettingsService } from './user_settings.service';
 @Service()
 export class EmailService {
   private transporter: nodemailer.Transporter;
-  private userSettingsService: UserSettingsService; 
+  private userSettingsService: UserSettingsService;
 
   constructor() {
     this.transporter = nodemailer.createTransport({
@@ -62,17 +62,17 @@ export class EmailService {
    * @param options Tùy chọn bổ sung cho template
    */
   public async sendNotificationEmail(
-    to: string, 
+    to: string,
     notification: Notification,
     options?: {
       appName?: string;
       baseUrl?: string;
       logoUrl?: string;
       companyAddress?: string;
-    }
+    },
   ): Promise<void> {
     try {
-      const canReceiveEmail = await this.userSettingsService.canReceiveEmail(notification.userId);  
+      const canReceiveEmail = await this.userSettingsService.canReceiveEmail(notification.userId);
       if (!canReceiveEmail) {
         return;
       }
@@ -81,7 +81,7 @@ export class EmailService {
         appName: options?.appName || 'CodeFlow',
         baseUrl: options?.baseUrl || process.env.FRONTEND_URL || 'http://localhost:3000',
         logoUrl: options?.logoUrl || '',
-        companyAddress: options?.companyAddress || 'TVU'
+        companyAddress: options?.companyAddress || 'TVU',
       });
 
       await this.sendEmail({
@@ -89,7 +89,7 @@ export class EmailService {
         subject: notification.title || 'Thông báo mới từ CodeFlow',
         html,
         // Thêm text fallback cho email clients không support HTML
-        text: `${notification.title}\n\n${notification.message}\n\nTruy cập: ${notification.link}`
+        text: `${notification.title}\n\n${notification.message}\n\nTruy cập: ${notification.link}`,
       });
 
       logger.info(`Notification email sent successfully to ${to} for notification type: ${notification.type}`);

@@ -1,11 +1,11 @@
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { DB } from '@/database';
 import { HttpException } from '@/exceptions/HttpException';
-import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { Notification } from '@/interfaces/notification.interface';
 import { NotificationModel } from '@/models/notification.model';
 import { Service } from 'typedi';
-import { SocketService } from './socket.service';
 import { EmailService } from './email.service';
+import { SocketService } from './socket.service';
 import { UserService } from './users.service';
 @Service()
 export class NotificationService {
@@ -89,7 +89,7 @@ export class NotificationService {
       this.socketService.emitNotificationToAll(createNotificationData);
     }
 
-    user.email && (this.emailService.sendNotificationEmail(user.email, createNotificationData));
+    user.email && this.emailService.sendNotificationEmail(user.email, createNotificationData);
 
     return createNotificationData;
   }

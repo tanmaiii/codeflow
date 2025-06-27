@@ -27,7 +27,7 @@ export class TagController {
         String(sortBy),
         order as 'ASC' | 'DESC',
         req.query.search as string,
-        isAdmin,  
+        isAdmin,
       );
       res.status(200).json({
         data: rows,

@@ -35,7 +35,7 @@ export default function (sequelize: Sequelize): typeof PostLikeModel {
           model: 'posts',
           key: 'id',
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
     },
     {

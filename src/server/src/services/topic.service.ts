@@ -55,9 +55,7 @@ export class TopicService {
       distinct: true,
       col: 'id',
       attributes: {
-        include: [
-          [this.memberCountLiteral, 'memberCount'],
-        ],
+        include: [[this.memberCountLiteral, 'memberCount']],
       },
       include: [
         {
@@ -104,9 +102,7 @@ export class TopicService {
       },
       col: 'id',
       attributes: {
-        include: [
-          [this.memberCountLiteral, 'memberCount'],
-        ],
+        include: [[this.memberCountLiteral, 'memberCount']],
       },
       include: [
         {
@@ -123,9 +119,7 @@ export class TopicService {
   public async findTopicById(id: string, isAdmin = false): Promise<Topic> {
     const topic = await DB.Topics.findByPk(id, {
       attributes: {
-        include: [
-          [this.memberCountLiteral, 'memberCount'],
-        ],
+        include: [[this.memberCountLiteral, 'memberCount']],
       },
       include: [
         {

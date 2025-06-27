@@ -13,7 +13,7 @@ export class PostLikeController {
       const userId = req.user.id;
 
       const findPostLike = await this.like.findPostLikeById(postId, userId);
-      
+
       res.status(200).json({
         data: {
           isLike: findPostLike ? true : false,

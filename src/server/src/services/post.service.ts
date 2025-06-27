@@ -5,7 +5,6 @@ import { Op, Sequelize } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
 import { TagService } from './tag.service';
-import { Course } from '@/interfaces/courses.interface';
 
 @Service()
 export class PostService {

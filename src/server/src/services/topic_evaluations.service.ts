@@ -53,9 +53,7 @@ export class TopicEvaluationsService {
     const members = await this.topicMemberService.findTopicMembersByTopicId(topicEvaluationData.topicId);
 
     const userId =
-      members.find(member => member.role === 'leader')?.userId ||
-      (members.length > 0 && members[0].userId) || 
-      topicEvaluationData.userId;
+      members.find(member => member.role === 'leader')?.userId || (members.length > 0 && members[0].userId) || topicEvaluationData.userId;
 
     // Tạo thông báo cho leader
     const notificationData: Notification = {

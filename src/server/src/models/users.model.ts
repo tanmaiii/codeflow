@@ -1,11 +1,8 @@
-import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { User } from '@interfaces/users.interface';
 import { ENUM_USER_ROLE, ENUM_USER_STATUS } from '@/data/enum';
+import { User } from '@interfaces/users.interface';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
-export type UserCreationAttributes = Optional<
-  User,
-  'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar' | 'bio'
->;
+export type UserCreationAttributes = Optional<User, 'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar' | 'bio'>;
 
 export class UserModel extends Model<User, UserCreationAttributes> implements User {
   public id!: string;

@@ -1,17 +1,17 @@
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { HttpException } from '@/exceptions/HttpException';
 import { Course, CourseCreate, CourseEnrollment } from '@/interfaces/courses.interface';
+import { Notification } from '@/interfaces/notification.interface';
+import { User } from '@/interfaces/users.interface';
 import { DB } from '@database';
 import { compare, hash } from 'bcrypt';
 import { Op, Sequelize } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { CourseDocumentService } from './course_document.service';
 import { CourseEnrollmentService } from './course_enrollment.service';
-import { TagService } from './tag.service';
 import { NotificationService } from './notification.service';
-import { Notification } from '@/interfaces/notification.interface';
-import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+import { TagService } from './tag.service';
 import { UserService } from './users.service';
-import { User } from '@/interfaces/users.interface';
 
 @Service()
 export class CourseService {
@@ -153,7 +153,7 @@ export class CourseService {
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     tagId: string,
-  ): Promise<{ count: number; rows: Course[] }> { 
+  ): Promise<{ count: number; rows: Course[] }> {
     const courses = await DB.Courses.findAndCountAll({
       attributes: {
         include: [
@@ -162,15 +162,17 @@ export class CourseService {
           [this.topicCountLiteral, 'topicCount'],
         ],
       },
-      include: [{
-        model: DB.Tags,
-        as: 'tags',
-        where: { id: tagId },
-        required: true,
-        through: {
-          attributes: [] // Exclude CourseTag attributes from result
-        }
-      }],
+      include: [
+        {
+          model: DB.Tags,
+          as: 'tags',
+          where: { id: tagId },
+          required: true,
+          through: {
+            attributes: [], // Exclude CourseTag attributes from result
+          },
+        },
+      ],
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
@@ -192,11 +194,11 @@ export class CourseService {
     // First get course IDs that have the specified tag
     const courseTagsResult = await DB.CourseTag.findAll({
       where: { tagId },
-      attributes: ['courseId']
+      attributes: ['courseId'],
     });
-    
+
     const courseIds = courseTagsResult.map(ct => ct.courseId);
-    
+
     if (courseIds.length === 0) {
       return { count: 0, rows: [] };
     }
@@ -214,15 +216,17 @@ export class CourseService {
         ],
       },
       where: {
-        id: { [Op.in]: courseIds }
+        id: { [Op.in]: courseIds },
       },
-      include: [{
-        model: DB.Tags,
-        as: 'tags',
-        through: {
-          attributes: []
-        }
-      }],
+      include: [
+        {
+          model: DB.Tags,
+          as: 'tags',
+          through: {
+            attributes: [],
+          },
+        },
+      ],
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
@@ -336,7 +340,7 @@ export class CourseService {
     return findCourse;
   }
 
-  public async restoreCourse(courseId: string): Promise<Course> { 
+  public async restoreCourse(courseId: string): Promise<Course> {
     const findCourse: Course = await DB.Courses.findByPk(courseId, { paranoid: false });
     if (!findCourse) throw new HttpException(409, "Course doesn't exist");
 
@@ -350,8 +354,8 @@ export class CourseService {
     const courseTagsData = await DB.CourseTag.findAll({
       include: [
         { model: DB.Courses, as: 'course', attributes: ['id', 'title'] },
-        { model: DB.Tags, as: 'tag', attributes: ['id', 'name'] }
-      ]
+        { model: DB.Tags, as: 'tag', attributes: ['id', 'name'] },
+      ],
     });
     return courseTagsData;
   }

@@ -17,8 +17,8 @@ export class TagService {
     pageSize = 10,
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
-    search: string = '',
-    isAdmin: boolean = false,
+    search = '',
+    isAdmin = false,
   ): Promise<{ count: number; rows: Tag[] }> {
     const { count, rows }: { count: number; rows: Tag[] } = await DB.Tags.findAndCountAll({
       limit: pageSize,
@@ -26,12 +26,9 @@ export class TagService {
       order: [[sortBy, sortOrder]],
       paranoid: isAdmin,
       where: {
-        [Op.or]: [
-          { name: { [Op.like]: `%${search}%` } },
-          { description: { [Op.like]: `%${search}%` } },
-        ],
+        [Op.or]: [{ name: { [Op.like]: `%${search}%` } }, { description: { [Op.like]: `%${search}%` } }],
       },
-      });
+    });
     return { count, rows };
   }
 

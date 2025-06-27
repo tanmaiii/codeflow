@@ -62,7 +62,7 @@ export default function (sequelize: Sequelize): typeof UserSettingsModel {
         defaultValue: true,
       },
       warningLogin: {
-        allowNull: false,   
+        allowNull: false,
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },

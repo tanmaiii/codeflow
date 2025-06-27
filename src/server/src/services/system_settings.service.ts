@@ -58,7 +58,7 @@ export class SystemSettingsService {
   // Helper methods for specific setting types
   public async getSettingValue(key: string): Promise<any> {
     const setting = await this.findSettingByKey(key);
-    
+
     switch (setting.type) {
       case 'json':
         return JSON.parse(setting.value);
@@ -71,9 +71,9 @@ export class SystemSettingsService {
     }
   }
 
-  public async setSettingValue(key: string, value: any, type: string = 'text'): Promise<SystemSettings> {
+  public async setSettingValue(key: string, value: any, type: string): Promise<SystemSettings> {
     let stringValue: string;
-    
+
     switch (type) {
       case 'json':
         stringValue = JSON.stringify(value);
@@ -93,4 +93,4 @@ export class SystemSettingsService {
       return await this.createSetting({ key, value: stringValue, type });
     }
   }
-} 
+}

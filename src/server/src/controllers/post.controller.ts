@@ -56,7 +56,7 @@ export class PostController {
   public getPostsByTagId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
-    
+
       const { count, rows } = await this.post.findPostByTagIdAlternative(
         Number(page),
         Number(limit),

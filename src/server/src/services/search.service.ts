@@ -13,7 +13,7 @@ export class SearchService {
     const [courses, topics, posts] = await Promise.all([
       this.Course.findAndCountAllWithPagination(page, pageSize, sortBy, sortOrder, search, type),
       this.Topic.findAndCountAllWithPagination(page, pageSize, sortBy, sortOrder, search),
-      this.Post.findAndCountAllWithPagination(page, pageSize, sortBy, sortOrder, search)
+      this.Post.findAndCountAllWithPagination(page, pageSize, sortBy, sortOrder, search),
     ]);
 
     return [...courses.rows, ...topics.rows, ...posts.rows];

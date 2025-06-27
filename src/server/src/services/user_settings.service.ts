@@ -219,10 +219,7 @@ export class UserSettingsService {
   /**
    * Bulk update settings cho nhiều users
    */
-  public async bulkUpdateSettings(
-    userIds: string[],
-    settingsData: UpdateUserSettingsDto,
-  ): Promise<{ updated: number; failed: string[] }> {
+  public async bulkUpdateSettings(userIds: string[], settingsData: UpdateUserSettingsDto): Promise<{ updated: number; failed: string[] }> {
     const results = {
       updated: 0,
       failed: [] as string[],
@@ -239,4 +236,4 @@ export class UserSettingsService {
 
     return results;
   }
-} 
+}

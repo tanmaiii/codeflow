@@ -23,12 +23,7 @@ export class CommentController {
     try {
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', search, type } = req.query;
       const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
-      const { count, rows } = await this.comment.findAndCountAllWithPagination(
-        Number(page),
-        Number(limit),
-        String(search ?? ''),
-        isAdmin,
-      );
+      const { count, rows } = await this.comment.findAndCountAllWithPagination(Number(page), Number(limit), String(search ?? ''), isAdmin);
 
       res.status(200).json({
         data: rows,
@@ -90,7 +85,7 @@ export class CommentController {
     } catch (error) {
       next(error);
     }
-  };  
+  };
 
   public destroyComment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
