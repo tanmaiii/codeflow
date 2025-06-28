@@ -1,7 +1,7 @@
 import { SystemSettings } from '@/interfaces/system_settings.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
-export type SystemSettingsCreationAttributes = Optional<SystemSettings, 'id'>;
+export type SystemSettingsCreationAttributes = Optional<SystemSettings, 'key' | 'value' | 'type'>;
 
 export class SystemSettingsModel extends Model<SystemSettings, SystemSettingsCreationAttributes> implements SystemSettings {
   public id!: string;
@@ -16,15 +16,10 @@ export class SystemSettingsModel extends Model<SystemSettings, SystemSettingsCre
 export default function (sequelize: Sequelize): typeof SystemSettingsModel {
   SystemSettingsModel.init(
     {
-      id: {
-        primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-      },
       key: {
+        primaryKey: true,
         allowNull: false,
         type: DataTypes.STRING(255),
-        unique: true,
       },
       value: {
         allowNull: false,

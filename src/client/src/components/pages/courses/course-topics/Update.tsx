@@ -16,7 +16,7 @@ import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-export default function CoursesDetailTopicsUpdate({ topic }: { topic: ITopic }) {
+export default function CourseTopicsUpdate({ topic }: { topic: ITopic }) {
   const t = useTranslations('common');
   const tTopic = useTranslations('topic');
   const schema = useTopicSchema();

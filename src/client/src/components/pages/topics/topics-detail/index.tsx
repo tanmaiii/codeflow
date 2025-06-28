@@ -71,7 +71,7 @@ export default function Topics_Detail() {
             {/* Header Section */}
             <div className="relative overflow-hidden rounded-2xl">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-00 via-purple-600 to-pink-600 opacity-10"></div>
-              <Card className="relative p-0 border-0 bg-gradient-to-br from-white/200 to-white/100 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-sm">
+              <Card className="relative p-0 border-0 bg-gradient-to-br from-white/200 to-white/100 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-2xl">
                 <div className="p-4 md:p-8">
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex-1">

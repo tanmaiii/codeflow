@@ -101,3 +101,25 @@ export interface GitHubContent {
 export interface GitHubRequestBody {
   accessToken: string;
 } 
+
+export interface GitHubCommit {
+  id: string;
+  tree_id: string;
+  distinct: boolean; // true: commit mới, false: commit cũ
+  message: string;
+  timestamp: string;
+  url: string;
+  author: {
+    name: string;
+    email: string;
+    username: string;
+  };
+  committer: {
+    name: string;
+    email: string;
+    username: string;
+  };
+  added: string[]; // file mới  
+  removed: string[]; // file bị xóa
+  modified: string[]; // file bị sửa
+}

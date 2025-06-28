@@ -62,11 +62,7 @@ export default function TopicsReposCreate({ topicId }: { topicId: string }) {
   }
 
   return (
-    <ActionModal
-      title={tRepo('createRepo')}
-      actionType={'create'}
-      className="max-w-[600px]"
-    >
+    <ActionModal title={tRepo('createRepo')} actionType={'create'} className="max-w-[600px]">
       <div className="space-y-6 p-2">
         <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="space-y-6">
           {/* Repository Info */}
@@ -113,10 +109,7 @@ export default function TopicsReposCreate({ topicId }: { topicId: string }) {
                 {tCommon('cancel')}
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>

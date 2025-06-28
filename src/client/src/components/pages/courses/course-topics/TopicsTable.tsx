@@ -26,6 +26,8 @@ import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import { paths } from '@/data/path';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import CourseTopicsUpdate from './Update';
+import CourseTopicsCreate from './Create';
 
 export default function TopicsTable() {
   const params = useParams();
@@ -126,6 +128,7 @@ export default function TopicsTable() {
     return (
       <div className="flex items-center space-x-2">
         {/* <Courses_Detail_Topics_Create courseId={id as string} /> */}
+        <CourseTopicsCreate courseId={params?.id as string} />
         {selectedRowsCount > 0 && (
           <Button variant="destructive" size="sm" onClick={() => mutation.mutate(selectedRowsData)}>
             {`${tCommon('delete')} (${selectedRowsCount})`}
@@ -155,6 +158,7 @@ export default function TopicsTable() {
               type="button"
             />
             {/* <Courses_Detail_Topics_Update topic={row.original} /> */}
+            <CourseTopicsUpdate topic={row.original} />
             <ActionDelete
               deleteKey={row.original.title}
               handleSubmit={async () => {

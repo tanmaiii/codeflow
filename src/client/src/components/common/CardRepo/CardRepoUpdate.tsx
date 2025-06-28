@@ -6,12 +6,12 @@ import { RepoSchemaType, useRepoSchema } from '@/lib/validations/useRepoSchema';
 import reposService from '@/services/repos.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import TextInput from '../Input/TextInput/TextInput';
-import { Loader2 } from 'lucide-react';
 
 export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
   const tCommon = useTranslations('common');
@@ -37,7 +37,6 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
     });
   }, [repos, reset]);
 
-
   const mutation = useMutation({
     mutationFn: async (data: RepoSchemaType) => {
       await reposService.update(repos.id, {
@@ -55,6 +54,10 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
       toast.error(tCommon('updateError'));
     },
   });
+
+  // if (mutation.isPending) {
+  //   return <LoadingOverlay message="updating..." />;
+  // }
 
   return (
     <DialogContent className={cn('px-4')}>

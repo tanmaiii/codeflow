@@ -1,5 +1,7 @@
 import { initModels } from '@/models';
 import CommentModel from '@/models/comments.model';
+import CommitReviewsModel from '@/models/commit_review';
+import CommitsModel from '@/models/commits.model';
 import CourseDocument from '@/models/course_documents.model';
 import CourseEnrollmentModel from '@/models/course_enrollment.model';
 import CourseTagModel from '@/models/course_tag.model';
@@ -65,6 +67,8 @@ export const DB = {
   TopicEvaluations: TopicEvaluationsModel(sequelize),
   Notifications: NotificationModel(sequelize),
   SystemSettings: SystemSettingsModel(sequelize),
+  Commits: CommitsModel(sequelize),
+  CommitReviews: CommitReviewsModel(sequelize),
   sequelize,
 };
 

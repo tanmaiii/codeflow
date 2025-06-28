@@ -338,6 +338,7 @@
     "notStarted": "Chưa bắt đầu",
     "started": "Đang diễn ra",
     "finished": "Đã hoàn thành",
+    "typeCourse": "Loại khóa học",
     "type": {
       "major": "Chuyên ngành",
       "foundation": "Cơ sở ngành",
@@ -351,7 +352,10 @@
     "startedWeeksAgo": "Bắt đầu {weeks} tuần trước",
     "studentsCompleted": "{count} đã hoàn thành",
     "popularCourse": "Khóa học phổ biến",
-    "topEnrollment": "Top 10% về lượng đăng ký"
+    "topEnrollment": "Top 10% về lượng đăng ký",
+    "registrationNotStarted": "Chưa bắt đầu đăng ký",
+    "registrationOpen": "Đã bắt đầu đăng ký",
+    "registrationClosed": "Đã hết hạn đăng ký"
   },
   "topic": {
     "topic": "Đề tài",

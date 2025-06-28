@@ -338,6 +338,7 @@
     "notStarted": "Not Started",
     "started": "Started",
     "finished": "Finished",
+    "typeCourse": "Type course",
     "type": {
       "major": "Major",
       "foundation": "Foundation",
@@ -351,7 +352,10 @@
     "startedWeeksAgo": "Started {weeks} weeks ago",
     "studentsCompleted": "{count} completed",
     "popularCourse": "Popular Course",
-    "topEnrollment": "Top 10% in enrollment"
+    "topEnrollment": "Top 10% in enrollment",
+    "registrationNotStarted": "Registration not started",
+    "registrationOpen": "Registration open",
+    "registrationClosed": "Registration closed"
   },
   "topic": {
     "topic": "Topic",

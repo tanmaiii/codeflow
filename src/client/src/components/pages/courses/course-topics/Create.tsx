@@ -14,7 +14,7 @@ import { useRef } from 'react';
 import { DialogClose } from '@/components/ui/dialog';
 import { TopicSchemaType, useTopicSchema } from '@/lib/validations/topicSchema';
 
-export default function CoursesDetailTopicsCreate({ courseId }: { courseId: string }) {
+export default function CourseTopicsCreate({ courseId }: { courseId: string }) {
   const t = useTranslations('common');
   const tTopic = useTranslations('topic');
   const schema = useTopicSchema();

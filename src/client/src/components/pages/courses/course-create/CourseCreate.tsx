@@ -82,7 +82,7 @@ export default function CoursesCreate() {
       toast.success(tCommon('createSuccess'));
     },
     onError: () => {
-      toast.error(tCommon('createFailed'));
+      toast.error(tCommon('createError'));
     },
   });
 
@@ -154,7 +154,7 @@ export default function CoursesCreate() {
 
           <Card className="p-4">
             <MySelect
-              label={t('type')}
+              label={t('typeCourse')}
               name="type"
               control={control}
               error={errors.type?.message ? errors.type : undefined}

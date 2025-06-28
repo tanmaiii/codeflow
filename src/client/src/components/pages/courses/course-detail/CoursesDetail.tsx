@@ -201,28 +201,28 @@ export default function CoursesDetail() {
               {!hasStarted && (
                 <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <IconClockHour1 className="size-6 text-blue-300" />
+                    <IconClockHour1 className="size-6 text-white" />
                     <div>
-                      <p className="font-semibold text-lg">
+                      <TextHeading className='text-white'>
                         {new Date(dataCourse?.data?.regStartDate) > new Date()
-                          ? 'Registration Not Started'
+                          ? tCourse('registrationNotStarted')
                           : isRegistrationOpen
-                          ? 'Registration Open'
-                          : 'Registration Closed'}
-                      </p>
+                          ? tCourse('registrationOpen')
+                          : tCourse('registrationClosed')}
+                      </TextHeading>
                     </div>
                   </div>
                   {isRegistrationOpen && (
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>{tCourse('registrationProgress')}</span>
-                        <span>
+                        <TextDescription className="text-white/80">{tCourse('registrationProgress')}</TextDescription>
+                        <TextDescription className="text-white/80">
                           {utils_CalculateProgress(
                             dataCourse.data?.regStartDate ?? '',
                             dataCourse.data?.regEndDate ?? '',
                           )}
                           %
-                        </span>
+                        </TextDescription>
                       </div>
                       <div className="w-full bg-white/20 rounded-full h-2">
                         <div

@@ -69,6 +69,14 @@ export class ReposService {
     return findRepo;
   }
 
+  public async findRepoByRepositoryName(repositoryName: string): Promise<Repos> {
+    logger.info(`[Repos Service] Finding repo by repository name: ${repositoryName}`);
+    const findRepo = await DB.Repos.findOne({ where: { name: repositoryName } });
+    if (!findRepo) throw new HttpException(409, "Repo doesn't exist");
+
+    return findRepo;
+  }
+
   /**
    * Tạo tên repository duy nhất bằng cách kiểm tra trong database và GitHub
    * @param baseName Tên gốc của repository

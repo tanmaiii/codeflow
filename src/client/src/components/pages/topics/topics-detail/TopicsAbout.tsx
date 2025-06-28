@@ -7,7 +7,13 @@ import { ITopic } from '@/interfaces/topic';
 
 import { useUserStore } from '@/stores/user_store';
 import { utils_CalculateProgress } from '@/utils/date';
-import { IconBrandGithub, IconUsers, IconChartBar, IconCode, IconGitBranch } from '@tabler/icons-react';
+import {
+  IconBrandGithub,
+  IconUsers,
+  IconChartBar,
+  IconCode,
+  IconGitBranch,
+} from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import TopicsReposCreate from './repository/TopicsReposCreate';
 import useQ_Repos_GetAllByTopic from '@/hooks/query-hooks/Repos/useQ_Repos_GetAllByTopic';
@@ -19,12 +25,12 @@ interface Topics_AboutProps {
   topic: ITopic;
 }
 
-const SectionCard = ({ 
-  icon: Icon, 
-  title, 
-  children, 
+const SectionCard = ({
+  icon: Icon,
+  title,
+  children,
   action,
-  gradient = "from-blue-500 to-purple-600"
+  gradient = 'from-blue-500 to-purple-600',
 }: {
   icon: React.ComponentType<{ className?: string }>;
   title: string;
@@ -52,20 +58,18 @@ const SectionCard = ({
 const ProgressBar = ({ progress }: { progress: number }) => (
   <div className="relative">
     <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
-      <div 
+      <div
         className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
         style={{ width: `${progress}%` }}
       />
     </div>
-    <div className="absolute bottom-[calc(100%+6px)] left-1/2 transform -translate-x-1/2" style={{ left: `${progress}%` }}>
-      <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs px-2 py-1 border-0">
-        {progress}%
-      </Badge>
-    </div>
   </div>
 );
 
-const EmptyState = ({ icon: Icon, message }: {
+const EmptyState = ({
+  icon: Icon,
+  message,
+}: {
   icon: React.ComponentType<{ className?: string }>;
   message: string;
 }) => (
@@ -124,26 +128,31 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
         icon={IconBrandGithub}
         title={t('repository')}
         gradient="from-zinc-800 to-zinc-900"
-        action={canAddRepo ? (
-          <div className="relative">
-            <TopicsReposCreate topicId={topic.id} />
-          </div>
-        ) : null}
+        action={
+          canAddRepo ? (
+            <div className="relative">
+              <TopicsReposCreate topicId={topic.id} />
+            </div>
+          ) : null
+        }
       >
         {Q_Repos?.data?.length && Q_Repos?.data?.length > 0 ? (
           <div className="space-y-3">
             {Q_Repos.data.map(repos => (
-              <div key={repos.id} className="transform transition-all duration-200 hover:scale-[1.02]">
+              <div
+                key={repos.id}
+                className="transform transition-all duration-200 hover:scale-[1.02]"
+              >
                 <CardRepo repos={repos} />
               </div>
             ))}
-            
+
             {/* Repository Stats */}
             <div className="mt-4 p-3 bg-gradient-to-r from-zinc-50 to-zinc-100 dark:from-zinc-800/50 dark:to-zinc-700/50 rounded-lg border border-zinc-200/50 dark:border-zinc-600/50">
               <div className="flex items-center justify-between text-sm">
-                                  <div className="flex items-center gap-2">
-                    <IconGitBranch className="w-4 h-4 text-zinc-500" />
-                    <span className="text-zinc-600 dark:text-zinc-300">
+                <div className="flex items-center gap-2">
+                  <IconGitBranch className="w-4 h-4 text-zinc-500" />
+                  <span className="text-zinc-600 dark:text-zinc-300">
                     {Q_Repos.data.length} / {MAX_REPOS} {t('repositories')}
                   </span>
                 </div>
@@ -154,38 +163,27 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
             </div>
           </div>
         ) : (
-          <EmptyState 
-            icon={IconBrandGithub}
-            message={t('notRegistered')}
-          />
+          <EmptyState icon={IconBrandGithub} message={t('notRegistered')} />
         )}
       </SectionCard>
 
       {/* Progress Section */}
-      <SectionCard
-        icon={IconChartBar}
-        title={t('progress')}
-        gradient="from-blue-500 to-cyan-500"
-      >
+      <SectionCard icon={IconChartBar} title={t('progress')} gradient="from-blue-500 to-cyan-500">
         <div className="space-y-4">
           <ProgressBar progress={progress} />
-          
+
           <div className="grid grid-cols-2 gap-4 pt-2">
             <div className="text-center p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
               <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                 {Math.round(progress)}%
               </div>
-              <div className="text-xs text-blue-500 dark:text-blue-300">
-                {t('completed')}
-              </div>
+              <div className="text-xs text-blue-500 dark:text-blue-300">{t('completed')}</div>
             </div>
             <div className="text-center p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
               <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                 {100 - Math.round(progress)}%
               </div>
-              <div className="text-xs text-purple-500 dark:text-purple-300">
-                {t('remaining')}
-              </div>
+              <div className="text-xs text-purple-500 dark:text-purple-300">{t('remaining')}</div>
             </div>
           </div>
         </div>
@@ -200,8 +198,8 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
         {topic.members && topic.members?.length > 0 ? (
           <div className="space-y-3">
             {topic.members?.map(member => (
-              <div 
-                key={member.id} 
+              <div
+                key={member.id}
                 className="group p-3 rounded-lg bg-gradient-to-r from-zinc-50 to-zinc-100 dark:from-zinc-800/50 dark:to-zinc-700/50 border border-zinc-200/50 dark:border-zinc-600/50 transition-all duration-200 hover:bg-zinc-100 dark:hover:bg-zinc-700/70 hover:scale-[1.02]"
               >
                 <MemberAvatar
@@ -211,7 +209,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
                 />
               </div>
             ))}
-            
+
             {/* Member Stats */}
             <div className="mt-4 p-3 bg-gradient-to-r from-emerald-50 to-green-100 dark:from-emerald-950/20 dark:to-green-950/20 rounded-lg border border-emerald-200/50 dark:border-emerald-600/30">
               <div className="flex items-center justify-between text-sm">
@@ -228,10 +226,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
             </div>
           </div>
         ) : (
-          <EmptyState 
-            icon={IconUsers}
-            message={t('notRegistered')}
-          />
+          <EmptyState icon={IconUsers} message={t('notRegistered')} />
         )}
       </SectionCard>
     </div>

@@ -1,16 +1,25 @@
+import { CommitCreate } from '@/interfaces/commits.interface';
+import { CommitService } from '@/services/commit.service';
+import { ReposService } from '@/services/repos.service';
+import { UserService } from '@/services/users.service';
 import { logger } from '@/utils/logger';
 import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
-import { GitHubRequestBody } from '@interfaces/github.interface';
+import { GitHubCommit, GitHubRepository, GitHubRequestBody } from '@interfaces/github.interface';
 import { GitHubService } from '@services/github.service';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 
 export class GitHubController {
   public github: GitHubService;
-
+  public commitService: CommitService;
+  public userService: UserService;
+  public reposService: ReposService;
   constructor() {
     this.github = Container.get(GitHubService);
+    this.commitService = Container.get(CommitService);
+    this.userService = Container.get(UserService);
+    this.reposService = Container.get(ReposService);
   }
 
   /**
@@ -148,7 +157,9 @@ export class GitHubController {
 
   /**
    * Xử lý webhook commit
+   * TODO: Xử lý commit
    */
+  // TODO: Xử lý Webhook commit
   public handleWebhookCommit = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { body } = req;
@@ -168,9 +179,6 @@ export class GitHubController {
         logger.info(`[GitHub Webhook] Push event received for repository: ${repository.full_name}`);
         logger.info(`[GitHub Webhook] Branch: ${ref}, Commits count: ${commits.length}`);
 
-        //TODO: Xử lý commit
-        //TODO: Lưu vào cơ sở dữ liệu
-        //TODO: Gửi thông báo
         for (const commit of commits) {
           await this.processCommit(commit, repository);
         }
@@ -186,53 +194,27 @@ export class GitHubController {
     }
   };
 
-  private async processCommit(commit: any, repository: any) {
+  private async processCommit(commit: GitHubCommit, repository: GitHubRepository) {
     try {
-      const commitData = {
-        sha: commit.id,
+      // logger.info(`[GitHub Webhook] Processing commit: ${JSON.stringify(commit)}`);
+      // logger.info(`[GitHub Webhook] Processing repository: ${JSON.stringify(repository)}`);
+
+      const user = await this.userService.findUserByUsername(commit.author.username);
+      if (!user) throw new HttpException(404, 'User not found');
+
+      const repo = await this.reposService.findRepoByRepositoryName(repository.name);
+      if (!repo) throw new HttpException(404, 'Repo not found');
+
+      const commitData: CommitCreate = {
+        repoId: repo.id,
+        commitHash: commit.id,
         message: commit.message,
-        author: commit.author.name,
-        email: commit.author.email,
-        timestamp: commit.timestamp,
-        repository: repository.full_name,
-        branch: repository.default_branch,
-        added: commit.added || [],
-        modified: commit.modified || [],
-        removed: commit.removed || [],
+        authorId: user.id,
+        url: commit.url,
       };
-
-      logger.info(`[GitHub Webhook] Processing commit: ${commitData.sha}`);
-
-      // Here you can add your business logic to process the commit
-      // For example:
-      // - Update database with commit information
-      // - Trigger notifications
-      // - Update progress tracking
-      // - Send notifications to team members
-
-      // Example: Save commit to database (implement based on your needs)
-      // await this.commitService.saveCommit(commitData);
-
-      // Example: Update topic progress if commit is related to a topic
-      // await this.updateTopicProgress(commitData);
+      this.commitService.createCommit(commitData);
     } catch (error) {
       logger.error(`[GitHub Webhook] Error processing commit ${commit.id}: ${error}`);
     }
   }
-
-  private updateTopicProgress = async (commitData: any) => {
-    try {
-      // Find topic by repository name
-      // const topic = await this.topicService.findByRepository(commitData.repository);
-
-      // if (topic) {
-      //   // Update progress based on commit activity
-      //   await this.topicService.updateProgress(topic.id, commitData);
-      // }
-
-      logger.info(`[GitHub Webhook] Topic progress updated for commit: ${commitData.sha}`);
-    } catch (error) {
-      logger.error(`[GitHub Webhook] Error updating topic progress: ${error}`);
-    }
-  };
 }
