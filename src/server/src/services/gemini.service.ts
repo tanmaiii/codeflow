@@ -1,25 +1,84 @@
+import { ENUM_TYPE_SYSTEM_SETTINGS } from '@/data/enum';
 import { CodeEvaluationRequest, CodeEvaluationResponse, EvaluationPromptData, GeminiConfig } from '@/interfaces/gemini.interface';
+import { logger } from '@/utils/logger';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Service } from 'typedi';
+import Container, { Service } from 'typedi';
+import { SystemSettingsService } from './system_settings.service';
 
 @Service()
 export class GeminiService {
-  private config: GeminiConfig;
-  private genAi: GoogleGenerativeAI;
+  private config: GeminiConfig | null = null;
+  private genAi: GoogleGenerativeAI | null = null;
+  private tokenCache: {
+    token: string;
+    cachedAt: number;
+    ttl: number; // Time to live in milliseconds
+  } | null = null;
 
-  constructor() {
-    this.init();
-  }
+  public SystemSettings = Container.get(SystemSettingsService);
 
-  private async init() {
-    this.config = {
-      apiKey: process.env.GEMINI_TOKEN,
-      model: 'gemini-1.5-flash',
-      maxTokens: 8192,
-      temperature: 0.7,
+  /**
+   * Lấy token với cache TTL
+   */
+  private async getTokenWithCache(): Promise<string> {
+    const now = Date.now();
+    const cacheTTL = 5 * 60 * 1000; // 5 phút cache
+
+    // Kiểm tra cache còn hiệu lực không
+    if (this.tokenCache && now - this.tokenCache.cachedAt < this.tokenCache.ttl) {
+      return this.tokenCache.token;
+    }
+
+    // Lấy token mới từ database
+    const systemSettings = await this.SystemSettings.findSettingByKey(ENUM_TYPE_SYSTEM_SETTINGS.GEMINI_TOKEN);
+
+    if (!systemSettings.value || systemSettings.value === '') {
+      throw new Error('Gemini token is not set');
+    }
+
+    // Cập nhật cache
+    this.tokenCache = {
+      token: systemSettings.value,
+      cachedAt: now,
+      ttl: cacheTTL,
     };
 
-    this.genAi = new GoogleGenerativeAI(this.config.apiKey);
+    logger.info(`[Gemini Service] Token refreshed from database`);
+    return systemSettings.value;
+  }
+
+  /**
+   * Lấy hoặc tạo config với token mới nhất
+   */
+  private async getConfig(): Promise<{ config: GeminiConfig; genAi: GoogleGenerativeAI }> {
+    const token = await this.getTokenWithCache();
+
+    // Nếu token thay đổi hoặc chưa có config, tạo mới
+    if (!this.config || !this.genAi || this.config.apiKey !== token) {
+      this.config = {
+        apiKey: token,
+        model: 'gemini-1.5-flash',
+        maxTokens: 8192,
+        temperature: 0.7,
+      };
+
+      this.genAi = new GoogleGenerativeAI(this.config.apiKey);
+      logger.info(`[Gemini Service] Config updated with new token`);
+    }
+
+    return { config: this.config, genAi: this.genAi };
+  }
+
+  /**
+   * Manually refresh token và config
+   */
+  public async refreshConfig(): Promise<void> {
+    this.tokenCache = null; // Clear cache
+    this.config = null;
+    this.genAi = null;
+
+    await this.getConfig(); // Reload config
+    logger.info(`[Gemini Service] Config manually refreshed`);
   }
 
   /**
@@ -28,11 +87,13 @@ export class GeminiService {
    * @returns The generated text
    */
   public async generateText(prompt: string) {
-    const model = this.genAi.getGenerativeModel({
-      model: this.config.model,
+    const { config, genAi } = await this.getConfig();
+
+    const model = genAi.getGenerativeModel({
+      model: config.model,
       generationConfig: {
-        maxOutputTokens: this.config.maxTokens,
-        temperature: this.config.temperature,
+        maxOutputTokens: config.maxTokens,
+        temperature: config.temperature,
       },
     });
     const result = await model.generateContent(prompt);
@@ -44,6 +105,8 @@ export class GeminiService {
    */
   public async evaluateCode(request: CodeEvaluationRequest) {
     try {
+      const { config, genAi } = await this.getConfig();
+
       const prompt = this.buildEvaluationPrompt({
         code: request.code,
         language: request.language,
@@ -52,11 +115,11 @@ export class GeminiService {
         criteria: request.evaluationCriteria,
       });
 
-      const model = this.genAi.getGenerativeModel({
-        model: this.config.model,
+      const model = genAi.getGenerativeModel({
+        model: config.model,
         generationConfig: {
-          maxOutputTokens: this.config.maxTokens,
-          temperature: this.config.temperature,
+          maxOutputTokens: config.maxTokens,
+          temperature: config.temperature,
         },
       });
 
@@ -67,6 +130,14 @@ export class GeminiService {
       // Parse và validate response
       const evaluation = this.parseEvaluationResponse(text);
       return evaluation;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async evaluateCommitGithub(commit: string) {
+    try {
+      const { config, genAi } = await this.getConfig();
     } catch (error) {
       throw error;
     }
@@ -125,6 +196,7 @@ Hãy đánh giá theo format JSON chính xác sau (Trả lời bằng tiếng vi
 Lưu ý: Chỉ trả về JSON hợp lệ, không có text thêm.`;
   }
 
+  // Hàm này dùng để parse json response từ Gemini
   private parseEvaluationResponse(text: string): CodeEvaluationResponse {
     try {
       // Loại bỏ markdown code blocks nếu có

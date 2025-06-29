@@ -2,7 +2,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { useTranslations } from 'next-intl';
@@ -12,7 +11,6 @@ export default function AiSettings() {
   const t = useTranslations('settings');
   const tCommon = useTranslations('common');
   const [aiApiKey, setAiApiKey] = useState('');
-  const [prompt, setPrompt] = useState('');
 
   return (
     <Card>
@@ -56,7 +54,7 @@ export default function AiSettings() {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <div className="flex flex-row gap-2 items-center border-b pb-2 mb-2">
             <div className="bg-yellow-100 rounded-xl py-2 px-2.5 w-fit">💬</div>
             <TextHeading className="text-lg font-bold">AI Review Prompt Template</TextHeading>
@@ -74,7 +72,7 @@ export default function AiSettings() {
             />
             <TextDescription>{t('aiReviewPromptTemplateDescription')}</TextDescription>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex flex-row gap-2 items-center justify-end">
           <Button variant="outline" className="w-fit">

@@ -1,3 +1,4 @@
+import { CodeEvaluationDto } from '@/dtos/gemini.dto';
 import { GeminiService } from '@/services/gemini.service';
 import { NextFunction, Request, Response } from 'express';
 import Container, { Service } from 'typedi';
@@ -18,9 +19,21 @@ export class GeminiController {
 
   public evaluateCode = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { code, language, exerciseDescription, requirements, evaluationCriteria } = req.body;
+      const { code, language, exerciseDescription, requirements, evaluationCriteria } = req.body as CodeEvaluationDto;
       const result = await this.gemini.evaluateCode({ code, language, exerciseDescription, requirements, evaluationCriteria });
       res.status(200).json({ data: result });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public refreshConfig = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await this.gemini.refreshConfig();
+      res.status(200).json({
+        message: 'Gemini config refreshed successfully',
+        timestamp: new Date().toISOString(),
+      });
     } catch (error) {
       next(error);
     }
@@ -47,10 +60,7 @@ export class GeminiController {
       const result = await this.gemini.evaluateCode(testData);
 
       res.status(200).json({
-        data: {
-          Input: testData,
-          output: result,
-        },
+        data: result,
         message: 'Test evaluate code success',
       });
     } catch (error) {

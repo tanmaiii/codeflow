@@ -34,3 +34,7 @@ export enum ENUM_TYPE_COURSE {
   ELECTIVE = 'elective', // Môn học
   THESIS = 'thesis', // Khóa luận
 }
+
+export enum ENUM_TYPE_SYSTEM_SETTINGS {
+  GEMINI_TOKEN = 'gemini_token', // Gemini
+}
