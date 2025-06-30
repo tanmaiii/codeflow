@@ -273,12 +273,22 @@ export class GitHubService {
    */
   public async createWebhookCommit(repoName: string, webhookUrl: string) {
     try {
+      // The payload sent to GitHub API for creating a webhook is incorrect.
+      // It should be an object with a "config" property, and "content_type" should be "json" (not 'json'), and the event types should be specified.
+      // Reference: https://docs.github.com/en/rest/webhooks/repos?apiVersion=2022-11-28#create-a-repository-webhook
+
       const response = await axios.post(
         `${this.baseUrl}/repos/${this.organization}/${repoName}/hooks`,
         {
-          url: webhookUrl,
-          content_type: 'json',
-          secret: process.env.GITHUB_WEBHOOK_SECRET,
+          name: 'web',
+          active: true,
+          events: ['push'], // You can customize events as needed
+          config: {
+            url: webhookUrl,
+            content_type: 'json',
+            secret: process.env.GITHUB_WEBHOOK_SECRET,
+            insecure_ssl: '0', // '0' means SSL verification enabled
+          },
         },
         {
           headers: this.headers,

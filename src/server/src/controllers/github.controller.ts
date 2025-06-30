@@ -155,6 +155,17 @@ export class GitHubController {
     }
   };
 
+  public addWebhookCommit = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { repoName, webhookUrl } = req.body;
+      logger.info(`[GitHub Controller] repoName: ${repoName}, webhookUrl: ${webhookUrl}`);
+      await this.github.createWebhookCommit(repoName, webhookUrl);
+      res.status(200).json({ message: 'Webhook added successfully' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   /**
    * Xử lý webhook commit
    * TODO: Xử lý commit

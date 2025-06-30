@@ -17,7 +17,5 @@ export class GeminiRoute implements Routes {
   private initializeRoutes() {
     this.router.post(`${this.path}/text`, AuthMiddleware, this.gemini.generateText);
     this.router.post(`${this.path}/evaluate`, AuthMiddleware, ValidationMiddleware(CodeEvaluationDto), this.gemini.evaluateCode);
-    this.router.post(`${this.path}/refresh-config`, AuthMiddleware, this.gemini.refreshConfig);
-    this.router.get(`${this.path}/test`, AuthMiddleware, this.gemini.testEvaluateCode);
   }
 }

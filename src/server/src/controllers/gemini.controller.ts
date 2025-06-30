@@ -27,20 +27,10 @@ export class GeminiController {
     }
   };
 
-  public refreshConfig = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.gemini.refreshConfig();
-      res.status(200).json({
-        message: 'Gemini config refreshed successfully',
-        timestamp: new Date().toISOString(),
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
 
   public testEvaluateCode = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      
       const sampleCode = `
         function fibonacci(n) {
           if (n <= 1) return n;

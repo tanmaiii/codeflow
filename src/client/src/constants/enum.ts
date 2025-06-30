@@ -40,3 +40,7 @@ export enum ENUM_TYPE_REPOS {
   THESIS = 'thesis',
   ELECTIVE = 'elective',
 }
+
+export enum ENUM_TYPE_SYSTEM_SETTINGS {
+  GEMINI_TOKEN = 'gemini_token', // Gemini
+}

@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 import { cx } from 'class-variance-authority';
 import { EyeIcon, EyeOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -13,7 +14,7 @@ interface FormFieldProps extends React.ComponentProps<'input'> {
   id?: string;
   type?: string;
   placeholder?: string;
-  registration: UseFormRegisterReturn;
+  registration?: UseFormRegisterReturn;
   error?: string;
 }
 
@@ -23,13 +24,14 @@ export default function PasswordInput({
   id,
   registration,
   error,
+  className,
   ...props
 }: FormFieldProps) {
   const t = useTranslations('common');
   const [isOff, setIsOff] = useState<boolean>(false);
 
   return (
-    <div className="space-y-1">
+    <div className={cn('space-y-1', className)}>
       {label && (
         <Label htmlFor={id} className="mb-2 text-color-2">
           {label}

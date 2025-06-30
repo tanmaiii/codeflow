@@ -1,8 +1,7 @@
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, Palette } from 'lucide-react';
+import { Palette } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import AiSettings from './AiTab';
 
 export default function Settings() {
   const t = useTranslations('settings');
@@ -14,17 +13,17 @@ export default function Settings() {
       <div className="flex flex-col items-center justify-center">
         <Tabs defaultValue="ai" className="space-y-6 max-w-3xl w-full gap-0">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="ai" className="flex items-center gap-2">
+            {/* <TabsTrigger value="ai" className="flex items-center gap-2">
               <Brain className="h-4 w-4" />
               {t('ai')}
-            </TabsTrigger>
+            </TabsTrigger> */}
             <TabsTrigger value="general" className="flex items-center gap-2">
               <Palette className="h-4 w-4" />
               {t('general')}
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="ai" className="space-y-6 ">
-            <AiSettings />
+          <TabsContent value="ai" className="space-y-6 "> 
+            {/* <AiSettings /> */}
           </TabsContent>
         </Tabs>
       </div>
