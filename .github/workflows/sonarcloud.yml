@@ -1,4 +1,4 @@
-name: SonarCloud
+name: SonarCloud Analysis
 
 on:
   push:
@@ -6,14 +6,16 @@ on:
     paths:
       - 'src/server/**'
   pull_request:
+    types: [opened, synchronize, reopened]
     paths:
       - 'src/server/**'
+  workflow_dispatch:
 
 jobs:
   sonarcloud:
-    name: SonarCloud Analysis
+    name: SonarCloud Scan
     runs-on: ubuntu-latest
-
+    
     defaults:
       run:
         working-directory: src/server
@@ -21,14 +23,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
 
       - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
