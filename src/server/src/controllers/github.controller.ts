@@ -155,6 +155,9 @@ export class GitHubController {
     }
   };
 
+  /**
+   * Thêm webhook commit
+   */
   public addWebhookCommit = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { repoName, webhookUrl } = req.body;
@@ -168,7 +171,6 @@ export class GitHubController {
 
   /**
    * Xử lý webhook commit
-   * TODO: Xử lý commit
    */
   // TODO: Xử lý Webhook commit
   public handleWebhookCommit = async (req: Request, res: Response, next: NextFunction) => {
@@ -228,4 +230,18 @@ export class GitHubController {
       logger.error(`[GitHub Webhook] Error processing commit ${commit.id}: ${error}`);
     }
   }
+
+  /**
+   * Xử lý ngôn ngữ của repository
+   */
+  public processCommitLanguage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { repoName } = req.params;
+      const language = await this.github.detectRepoLanguage(repoName);
+
+      res.status(200).json({ data: language, message: 'github-commit-language' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

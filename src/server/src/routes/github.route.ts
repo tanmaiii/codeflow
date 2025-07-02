@@ -36,5 +36,7 @@ export class GitHubRoute implements Routes {
     this.router.post(`${this.path}/webhook`, this.github.handleWebhookCommit);
 
     this.router.post(`${this.path}/add-webhook`, ValidationMiddleware(AddWebHookDto, 'body'), this.github.addWebhookCommit);
+
+    this.router.get(`${this.path}/repos/:repoName/language`, this.github.processCommitLanguage);
   }
 }

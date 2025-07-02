@@ -51,7 +51,7 @@ export default function DashboardLayoutDashboard() {
 
   return (
     <div className="min-h-screen b">
-      <div className="container mx-auto">
+      <div className="mx-auto">
         <div className="grid gap-6 lg:grid-cols-12">
           {/* Main Content */}
           <div className="lg:col-span-8 xl:col-span-9">

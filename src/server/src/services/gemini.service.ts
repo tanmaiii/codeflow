@@ -79,7 +79,6 @@ export class GeminiService {
 
   public async evaluateCommitGithub(commit: string) {
     try {
-    
     } catch (error) {
       throw error;
     }

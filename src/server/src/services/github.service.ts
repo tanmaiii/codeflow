@@ -296,7 +296,7 @@ export class GitHubService {
       );
       return response.data;
     } catch (error) {
-      logger.error(`[GitHub Service] Error creating webhook commit: ${error.message}`);
+      logger.error(`[GitHub Service] Error creating webhook commit: ${webhookUrl}`);
       throw error;
     }
   }
@@ -310,5 +310,30 @@ export class GitHubService {
   public async handleWebhookCommit(body: any, signature: string): Promise<void> {
     try {
     } catch (error) {}
+  }
+
+  /**
+   * Xác định ngôn ngữ của repository bằng cách lấy danh sách các file trong repository
+   * @param repoName Tên repository
+   * @returns Ngôn ngữ của repository
+   */
+  public async detectRepoLanguage(repoName: string): Promise<string> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/repos/${this.organization}/${repoName}/languages`, {
+        headers: this.headers,
+      });
+
+      const languages = response.data;
+      const sorted = Object.entries(languages).sort((a: [string, number], b: [string, number]) => b[1] - a[1]);
+      const mainLanguage = sorted.length > 0 ? sorted[0][0] : 'Unknown';
+
+      if (mainLanguage === 'Unknown') {
+        return '';
+      }
+      return mainLanguage;
+    } catch (error) {
+      logger.error(`[GitHub Service] Error detecting repository language: ${error.message}`);
+      throw error;
+    }
   }
 }

@@ -27,10 +27,8 @@ export class GeminiController {
     }
   };
 
-
   public testEvaluateCode = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      
       const sampleCode = `
         function fibonacci(n) {
           if (n <= 1) return n;
