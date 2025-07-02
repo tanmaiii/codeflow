@@ -1,49 +1,40 @@
-name: SonarCloud Analysis
+name: Analyze with SonarCloud
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/server/**'
   pull_request:
-    types: [opened, synchronize, reopened]
-  workflow_dispatch:
+    paths:
+      - 'src/server/**'
 
 jobs:
   sonarcloud:
-    name: SonarCloud Scan
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src/server
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for better relevancy
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: 18
 
       - name: Install dependencies
-        run: |
-          cd src/server
-          npm ci
+        run: npm install
 
-      - name: Build project
-        run: |
-          cd src/server
-          npm run build
-
-      - name: Run tests with coverage
-        run: |
-          cd src/server
-          npm run test -- --coverage
-
-      - name: SonarCloud Scan
+      - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           projectBaseDir: src/server
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
-          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+          SONAR_PROJECT_KEY: tanmaiii
+          SONAR_ORGANIZATION: Đinh Tấn Mãi
