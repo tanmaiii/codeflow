@@ -3,8 +3,6 @@ name: SonarCloud Analysis
 on:
   push:
     branches: [main]
-    paths:
-      - 'src/server/**'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
