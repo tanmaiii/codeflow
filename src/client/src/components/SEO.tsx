@@ -19,7 +19,7 @@ const SEO: React.FC<SEOProps> = ({
   twitterCard = 'summary_large_image',
 }) => {
   const router = useRouter();
-  const canonicalUrl = `https://your-domain.com${router.asPath}`;
+  const canonicalUrl = `https://your-domain.com123${router.asPath}`;
 
   return (
     <Head>

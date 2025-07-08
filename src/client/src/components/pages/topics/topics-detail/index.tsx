@@ -9,7 +9,15 @@ import { paths } from '@/data/path';
 import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
 import { useUserStore } from '@/stores/user_store';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
-import { IconCalendar, IconCircleCheck, IconFileText, IconPencil, IconSchool, IconStar, IconUser } from '@tabler/icons-react';
+import {
+  IconCalendar,
+  IconCircleCheck,
+  IconFileText,
+  IconPencil,
+  IconSchool,
+  IconStar,
+  IconUser,
+} from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -18,7 +26,12 @@ import TopicsAbout from './TopicsAbout';
 import TopicsContribute from './contribute';
 import TopicsEvaluation from './evaluation/TopicsEvaluation';
 
-const InfoCard = ({ icon: Icon, label, value, href }: {
+const InfoCard = ({
+  icon: Icon,
+  label,
+  value,
+  href,
+}: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: string;
@@ -60,7 +73,8 @@ export default function Topics_Detail() {
   if (isLoading) return <TopicListSkeleton />;
   if (isError) return <div>Error</div>;
 
-  const isLeader = user?.id === dataTopic?.data?.members?.find(member => member.role === 'leader')?.userId;
+  const isLeader =
+    user?.id === dataTopic?.data?.members?.find(member => member.role === 'leader')?.userId;
 
   return (
     <div className="min-h-screen p-2 md:p-6">
@@ -82,9 +96,9 @@ export default function Topics_Detail() {
                         variant="outline"
                         size="sm"
                         onClick={() => router.push(paths.TOPIC_UPDATE(id as string))}
-                        className="ml-4 border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300"
+                        className="border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300"
                       >
-                        <IconPencil className="w-4 h-4 mr-2" />
+                        <IconPencil className="w-4 h-4" />
                       </Button>
                     )}
                   </div>
@@ -98,10 +112,11 @@ export default function Topics_Detail() {
                       href={paths.COURSES_DETAIL(dataTopic?.data?.courseId ?? '')}
                     />
                     <InfoCard
-                      icon={IconCircleCheck }
+                      icon={IconCircleCheck}
                       label={t('status')}
-                      // value={dataTopic?.data?.status || ''}
-                      value={tAll(STATUS_TOPIC.find(item => item.value === dataTopic?.data?.status)!.labelKey)}
+                      value={tAll(
+                        STATUS_TOPIC.find(item => item.value === dataTopic?.data?.status)!.labelKey,
+                      )}
                     />
                   </div>
 
@@ -148,19 +163,19 @@ export default function Topics_Detail() {
             <div className="relative overflow-hidden rounded-2xl">
               {/* <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10"></div> */}
               <Card className="relative p-4 md:p-8 border-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-900/90 dark:to-zinc-900/50 backdrop-blur-sm shadow-xl">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 shadow-lg">
-                      <IconStar className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <TextHeading className="text-xl font-bold">{t('evaluation')}</TextHeading>
-                      <TextDescription className="text-sm text-zinc-600 dark:text-zinc-300">
-                        {t('evaluationDescription')}
-                      </TextDescription>
-                    </div>
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 shadow-lg">
+                    <IconStar className="w-6 h-6 text-white" />
                   </div>
-                  
-                  {dataTopic?.data && <TopicsEvaluation topic={dataTopic?.data} />}
+                  <div>
+                    <TextHeading className="text-xl font-bold">{t('evaluation')}</TextHeading>
+                    <TextDescription className="text-sm text-zinc-600 dark:text-zinc-300">
+                      {t('evaluationDescription')}
+                    </TextDescription>
+                  </div>
+                </div>
+
+                {dataTopic?.data && <TopicsEvaluation topic={dataTopic?.data} />}
               </Card>
             </div>
 

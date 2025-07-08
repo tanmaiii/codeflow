@@ -4,7 +4,6 @@ import { Card } from '@/components/ui/card';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { ITopic } from '@/interfaces/topic';
-
 import { useUserStore } from '@/stores/user_store';
 import { utils_CalculateProgress } from '@/utils/date';
 import {
