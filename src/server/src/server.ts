@@ -15,6 +15,7 @@ import { TopicRoute } from './routes/topic.route';
 import { GitHubRoute } from './routes/github.route';
 import { UserSettingsRoute } from './routes/user_settings.route';
 import { GeminiRoute } from './routes/gemini.route';
+import { SonarRoute } from './routes/sonar.route';
 ValidateEnv();
 
 const app = new App([
@@ -33,6 +34,7 @@ const app = new App([
   new SearchRoute(),
   new ReposRoute(),
   new GeminiRoute(),
+  new SonarRoute(),
 ]);
 
 app.listen();
