@@ -121,7 +121,7 @@ export class App {
     const options = {
       swaggerDefinition: {
         info: {
-          title: 'REST API',
+          title: 'CodeFlow API',
           version: '1.0.0',
           description: 'CodeFlow API',
         },
