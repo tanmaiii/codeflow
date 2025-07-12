@@ -1,4 +1,5 @@
 'use client';
+import MyImage from '@/components/common/MyImage';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import TextHeading, { TextDescription } from '@/components/ui/text';
@@ -12,9 +13,8 @@ import { utils_ApiImageToLocalImage } from '@/utils/image';
 import { cx } from 'class-variance-authority';
 import { ChevronLeft, Search as SearchICon, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 export default function HeaderSearch() {
@@ -22,11 +22,11 @@ export default function HeaderSearch() {
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
   const [keyword, setKeyword] = useState('');
-  const t = useTranslations('search');  
+  const t = useTranslations('search');
   const searchParams = useSearchParams();
-  const k = searchParams?.get('keyword')
+  const k = searchParams?.get('keyword');
   const pathname = usePathname();
-  
+
   // Debounce the keyword with 300ms delay
   const debouncedKeyword = useDebounce(keyword, 300);
 
@@ -84,12 +84,11 @@ export default function HeaderSearch() {
   useEffect(() => {
     if (k) {
       setKeyword(k);
-    }else{
+    } else {
       setKeyword('');
     }
   }, [k, pathname]);
 
-  
   useEffect(() => {
     setIsFocused(false);
   }, [pathname]);
@@ -99,13 +98,15 @@ export default function HeaderSearch() {
       <div
         className={cx(
           'flex items-center bg-background-2 dark:bg-background-1  p-2 h-11',
-          isFocused ? keyword ? 'border rounded-t-lg' : 'rounded-lg' : 'rounded-lg',
+          isFocused ? (keyword ? 'border rounded-t-lg' : 'rounded-lg') : 'rounded-lg',
         )}
       >
-        <SearchICon className={cx(
-          'text-color-2 transition-colors',
-          isSearching && 'animate-pulse text-primary'
-        )} />
+        <SearchICon
+          className={cx(
+            'text-color-2 transition-colors',
+            isSearching && 'animate-pulse text-primary',
+          )}
+        />
         <input
           type="text"
           placeholder="Search..."
@@ -125,7 +126,10 @@ export default function HeaderSearch() {
           className="ml-2 p-1 focus:outline-none w-100 placeholder:text-color-2 placeholder:text-sm"
         />
         {keyword && (
-          <button className='text-color-2 cursor-pointer hover:text-color-1' onClick={() => setKeyword('')}>
+          <button
+            className="text-color-2 cursor-pointer hover:text-color-1"
+            onClick={() => setKeyword('')}
+          >
             <X size={16} />
           </button>
         )}
@@ -133,7 +137,7 @@ export default function HeaderSearch() {
       <div
         className={cx(
           'absolute top-[100%] left-0 w-full bg-background-1 shadow-lg rounded-b-lg p-2 border',
-          isFocused ? keyword ? 'block' : 'hidden' : 'hidden',
+          isFocused ? (keyword ? 'block' : 'hidden') : 'hidden',
         )}
       >
         <ScrollArea className="h-72 w-full rounded-md">
@@ -143,7 +147,7 @@ export default function HeaderSearch() {
               <div className="text-sm text-gray-500">{t('searching')}</div>
             </div>
           )}
-          
+
           {/* Show results only when not searching and have debounced keyword */}
           {!isSearching && debouncedKeyword && (
             <>
@@ -221,9 +225,10 @@ export default function HeaderSearch() {
               )}
             </>
           )}
-          
+
           {/* Show "View All" only when there's a keyword (original or debounced) */}
-          {(keyword || debouncedKeyword) && (courses?.data?.length || posts?.data?.length || topics?.data?.length) ? (
+          {(keyword || debouncedKeyword) &&
+          (courses?.data?.length || posts?.data?.length || topics?.data?.length) ? (
             <Button
               variant="text"
               className="w-full justify-start mt-2"
@@ -238,16 +243,17 @@ export default function HeaderSearch() {
               </TextHeading>
             </Button>
           ) : null}
-          
+
           {/* Show empty state when no results and not searching */}
-          {!isSearching && debouncedKeyword && 
-           (!courses?.data?.length && !posts?.data?.length && !topics?.data?.length) && (
-            <div className="flex items-center justify-center py-8">
-              <div className="text-sm text-gray-500">
-                {t('noResults')} 
+          {!isSearching &&
+            debouncedKeyword &&
+            !courses?.data?.length &&
+            !posts?.data?.length &&
+            !topics?.data?.length && (
+              <div className="flex items-center justify-center py-8">
+                <div className="text-sm text-gray-500">{t('noResults')}</div>
               </div>
-            </div>
-          )}
+            )}
         </ScrollArea>
       </div>
     </div>
@@ -269,7 +275,7 @@ const Item = ({
     <Link href={item.link}>
       <div className="flex items-center gap-2 p-2 hover:bg-primary/20 cursor-pointer rounded-xl">
         <div className="w-10 h-10 min-w-10 min-h-10 bg-background-1 rounded-md">
-          <Image
+          <MyImage
             src={item.image ? utils_ApiImageToLocalImage(item.image) : IMAGES.DEFAULT_COURSE}
             alt="logo"
             width={40}
@@ -278,7 +284,9 @@ const Item = ({
           />
         </div>
         <div className="flex flex-col">
-          <TextHeading lineClamp={1} className="text-md font-semibold text-color-1">{item.title}</TextHeading>
+          <TextHeading lineClamp={1} className="text-md font-semibold text-color-1">
+            {item.title}
+          </TextHeading>
           <TextDescription lineClamp={1}>{item.description}</TextDescription>
         </div>
       </div>

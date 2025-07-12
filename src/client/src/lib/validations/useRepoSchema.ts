@@ -21,6 +21,9 @@ const repoSchema = ({
       .max(255, {
         message: t('maxLength', { field: tRepo('nameRepo'), length: 255 }),
       }),
+    language: z
+      .string({ message: t('required', { field: tRepo('language') }) })
+      .min(1, { message: t('selectMin', { field: tRepo('language'), length: 1 }) }),
   });
 
 export type RepoSchemaType = z.infer<ReturnType<typeof useRepoSchema>>;

@@ -3,7 +3,7 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { UserModel } from './users.model';
 import { TopicModel } from './topics.model';
 
-type ReposCreationAttributes = Optional<Repos, 'id' | 'name' | 'url' | 'courseId' | 'topicId' | 'authorId'>;
+type ReposCreationAttributes = Optional<Repos, 'id' | 'name' | 'url' | 'courseId' | 'topicId' | 'authorId' | 'language'>;
 
 export class ReposModel extends Model<Repos, ReposCreationAttributes> implements Repos {
   public id: string;
@@ -12,6 +12,7 @@ export class ReposModel extends Model<Repos, ReposCreationAttributes> implements
   public courseId: string;
   public topicId: string;
   public authorId: string;
+  public language: string;
 }
 
 export default function (sequelize: Sequelize): typeof ReposModel {
@@ -53,6 +54,10 @@ export default function (sequelize: Sequelize): typeof ReposModel {
           model: 'users',
           key: 'id',
         },
+      },
+      language: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {

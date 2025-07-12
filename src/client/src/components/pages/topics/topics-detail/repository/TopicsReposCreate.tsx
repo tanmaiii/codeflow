@@ -1,8 +1,9 @@
 import ActionModal from '@/components/common/Action/ActionModal';
 import TextInput from '@/components/common/Input/TextInput/TextInput';
 import { LoadingOverlay } from '@/components/common/Loading';
+import MySelect from '@/components/common/MySelect';
 import { Button } from '@/components/ui/button';
-import { ENUM_TYPE_COURSE } from '@/constants/enum';
+import { ENUM_LANGUAGE, ENUM_TYPE_COURSE } from '@/constants/enum';
 import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
 import { RepoSchemaType, useRepoSchema } from '@/lib/validations/useRepoSchema';
 import reposService from '@/services/repos.service';
@@ -33,6 +34,7 @@ export default function TopicsReposCreate({ topicId }: { topicId: string }) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<RepoSchemaType>({
@@ -72,9 +74,22 @@ export default function TopicsReposCreate({ topicId }: { topicId: string }) {
               <TextInput
                 label={tRepo('nameRepo')}
                 defaultValue={`${repoName}-`}
-                {...register('name')}
+                name="name"
+                registration={register('name')}
                 error={errors.name?.message}
                 description={tRepo('createRepoDescription')}
+              />
+              <MySelect
+                label={tRepo('language')}
+                name="language"
+                options={Object.values(ENUM_LANGUAGE).map(item => ({
+                  value: item,
+                  labelKey: item,
+                }))}
+                isTranslate={false}
+                control={control}
+                error={errors.language}
+                required={true}
               />
             </div>
           </div>

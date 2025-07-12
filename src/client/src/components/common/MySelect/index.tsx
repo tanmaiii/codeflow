@@ -24,6 +24,7 @@ interface MySelectProps<T extends FieldValues = FieldValues> {
   required?: boolean;
   className?: string;
   onChange?: (value: string) => void;
+  isTranslate?: boolean;
 }
 
 export default function MySelect<T extends FieldValues>({
@@ -37,6 +38,7 @@ export default function MySelect<T extends FieldValues>({
   className = '',
   label,
   onChange,
+  isTranslate = true,
 }: MySelectProps<T>) {
   // const currentLocale = getCurrentLocale();
   const t = useTranslations();
@@ -58,17 +60,18 @@ export default function MySelect<T extends FieldValues>({
           render={({ field }) => (
             <Select
               value={field.value}
+              required={required}
               onValueChange={field.onChange}
               disabled={disabled || field.disabled}
             >
-              <SelectTrigger className={`w-full !h-13 !rounded-xl ${className}`}>
+              <SelectTrigger className={`w-full !h-13 !rounded-xl bg-background-1 ${className}`}>
                 <SelectValue placeholder={`${t('common.select')} ${label}`} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {options.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      {t(option.labelKey)}
+                      {isTranslate ? t(option.labelKey) : option.labelKey}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -88,6 +91,7 @@ export default function MySelect<T extends FieldValues>({
       <Select
         disabled={disabled}
         value={value}
+        required={required}
         onValueChange={newValue => {
           setValue(newValue);
           onChange?.(newValue);

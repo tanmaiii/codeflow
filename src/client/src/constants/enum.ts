@@ -44,3 +44,18 @@ export enum ENUM_TYPE_REPOS {
 export enum ENUM_TYPE_SYSTEM_SETTINGS {
   GEMINI_TOKEN = 'gemini_token', // Gemini
 }
+
+export enum ENUM_LANGUAGE {
+  PHP = 'Php', // PHP
+  HTML = 'Html', // HTML
+  PYTHON = 'Python', // Python
+  JAVA = 'Java', // Java
+  DOTNET = 'Dotnet', // .NET
+  NODEJS = 'Nodejs', // NodeJS
+  JAVASCRIPT = 'Javascript', // JavaScript
+  TYPESCRIPT = 'Typescript', // TypeScript
+  C = 'C', // C
+  CPP = 'Cpp', // C++
+  SQL = 'Sql', // SQL
+  CSHARP = 'Csharp', // C#
+}

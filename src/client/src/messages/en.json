@@ -228,7 +228,8 @@
     "dateAfter": "{firstField} must be after {secondField}",
     "fileMaxSize": "File size must be less than {length}",
     "fileMaxFiles": "You can only upload {length} files",
-    "fileNotAccepted": "File type is not accepted, only accept {field}"
+    "fileNotAccepted": "File type is not accepted, only accept {field}",
+    "selectMin": "{field} must have at least {length} choices"
   },
   "post": {
     "post": "Post",
@@ -486,6 +487,7 @@
     "deleteRepo": "Delete Repo",
     "author": "Author",
     "name": "Name",
+    "language": "Language",
     "create": "Create",
     "nameSuggest": "Name suggest",
     "instruction": "Instruction",

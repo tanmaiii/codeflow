@@ -7,7 +7,7 @@ import { Service } from 'typedi';
 @Service()
 export class SonarService {
   private baseUrl = 'https://sonarcloud.io/api';
-  private organization = 'dinhtanmai';
+  private organization = 'organization-codeflow';
 
   private headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -24,10 +24,12 @@ export class SonarService {
       const response = await axios.post(`${this.baseUrl}/projects/create`, formData, {
         headers: this.headers,
         auth: {
-          username: process.env.SONAR_TOKEN || '',
+          username: process.env.SONAR_ORG_TOKEN || '',
           password: '',
         },
       });
+
+      logger.info(`[Sonar Service] Created project: ${JSON.stringify(response.data, null, 2)}`);
 
       return response.data;
     } catch (err: any) {

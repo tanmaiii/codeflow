@@ -13,7 +13,6 @@ export class ReposService {
 
   /**
    * Lấy tất cả repository từ database.
-   * @returns Danh sách tất cả repository.
    */
   public async findAll(): Promise<Repos[]> {
     return DB.Repos.findAll();
@@ -21,7 +20,6 @@ export class ReposService {
 
   /**
    * Lấy danh sách repository có phân trang, tìm kiếm, sắp xếp.
-   * @returns Đối tượng gồm tổng số lượng và danh sách repository
    */
   public async findAndCountAllWithPagination(
     page = 1,
@@ -46,7 +44,6 @@ export class ReposService {
 
   /**
    * Lấy danh sách repository theo topic, có phân trang, tìm kiếm, sắp xếp.
-   * @returns Đối tượng gồm tổng số lượng và danh sách repository
    */
   public async finAndCountByTopic(
     page = 1,
@@ -96,7 +93,18 @@ export class ReposService {
   private async generateUniqueRepoName(baseName: string): Promise<string> {
     let repoName = baseName;
     let counter = 1;
+
+    // Kiểm tra xem tên gốc đã có số phía sau chưa
+    const numberMatch = repoName.match(/-(\d+)$/);
+    if (numberMatch) {
+      // Nếu đã có số, tách ra và bắt đầu từ số đó + 1
+      const baseNameWithoutNumber = repoName.replace(/-\d+$/, '');
+      counter = parseInt(numberMatch[1]) + 1;
+      repoName = `${baseNameWithoutNumber}-${counter}`;
+    }
+
     while (await this.isRepoNameExists(repoName)) {
+      const baseName = repoName.replace(/-\d+$/, '');
       repoName = `${baseName}-${counter++}`;
     }
     return repoName;
@@ -136,6 +144,8 @@ export class ReposService {
       auto_init: true,
     });
 
+    await this.githubService.createBasicWorkflow(uniqueRepoName, repoData.language);
+
     // Tạo webhook cho repo, nếu có lỗi thì chỉ log lỗi, không throw để các bước sau vẫn thực hiện
     try {
       await this.githubService.createWebhookCommit(uniqueRepoName, `${process.env.WEBHOOK_URL}/github/webhook`);
@@ -153,10 +163,11 @@ export class ReposService {
     // Lưu repo vào database
     return DB.Repos.create({
       url: repo.html_url,
-      name: uniqueRepoName,
-      topicId: repoData.topicId,
       courseId: topic.courseId,
-      authorId: repoData.authorId || '',
+      topicId: topic.id,
+      authorId: repoData.authorId,
+      name: uniqueRepoName,
+      language: repoData.language,
     });
   }
 
@@ -174,7 +185,14 @@ export class ReposService {
     const githubRepo = await this.githubService.updateRepoInOrg(repo.name, { name: uniqueRepoName });
 
     // Cập nhật thông tin repo trong database
-    const [updatedRows] = await DB.Repos.update({ name: uniqueRepoName, url: githubRepo.html_url }, { where: { id } });
+    const [updatedRows] = await DB.Repos.update(
+      {
+        name: uniqueRepoName,
+        url: githubRepo.html_url,
+        language: repoData.language,
+      },
+      { where: { id } },
+    );
 
     if (updatedRows === 0) throw new HttpException(500, 'Failed to update repo in database');
 

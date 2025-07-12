@@ -33,7 +33,9 @@ const courseSchema = ({
         }),
       thumbnail: z.string().optional().nullable(),
       tags: z.array(z.string({ message: t('required', { field: tCourse('tags') }) })),
-      type: z.string({ message: t('required', { field: tCourse('typeCourse') }) }),
+      type: z
+        .string({ message: t('required', { field: tCourse('typeCourse') }) })
+        .min(1, { message: t('selectMin', { field: tCourse('typeCourse'), length: 1 }) }),
       regStartDate: z.date({ message: t('required', { field: tCourse('regStartDate') }) }),
       regEndDate: z.date({ message: t('required', { field: tCourse('regEndDate') }) }),
       startDate: z.date({ message: t('required', { field: tCourse('startDate') }) }),

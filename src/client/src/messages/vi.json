@@ -228,7 +228,8 @@
     "dateAfter": "{firstField} phải sau {secondField}",
     "fileMaxSize": "Kích thước tập tin phải nhỏ hơn {length}",
     "fileMaxFiles": "Bạn chỉ có thể tải lên {length} tập tin",
-    "fileNotAccepted": "Định dạng tập tin không được chấp nhận, chỉ chấp nhận {field}"
+    "fileNotAccepted": "Định dạng tập tin không được chấp nhận, chỉ chấp nhận {field}",
+    "selectMin": "{field} phải có ít nhất {length} lựa chọn"
   },
   "post": {
     "post": "Bài viết",
@@ -485,6 +486,7 @@
     "deleteRepo": "Xóa kho lưu trữ",
     "author": "Tác giả",
     "name": "Tên",
+    "language": "Ngôn ngữ",
     "nameSuggest": "Tên gợi ý",
     "instruction": "Hướng dẫn",
     "instructionName": "• Tên kho lưu trữ chỉ chứa chữ cái, số và dấu gạch ngang (-)",

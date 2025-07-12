@@ -12,6 +12,8 @@ import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import TextInput from '../Input/TextInput/TextInput';
+import { ENUM_LANGUAGE } from '@/constants/enum';
+import MySelect from '../MySelect';
 
 export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
   const tCommon = useTranslations('common');
@@ -22,12 +24,14 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<RepoSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: repos.name,
+      language: repos.language,
     },
   });
 
@@ -41,6 +45,7 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
     mutationFn: async (data: RepoSchemaType) => {
       await reposService.update(repos.id, {
         name: data.name,
+        language: data.language,
         topicId: repos.topicId,
       });
     },
@@ -70,6 +75,19 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
           {...register('name')}
           description={tRepo('createRepoDescription')}
           error={errors.name?.message}
+        />
+        <MySelect
+          label={tRepo('language')}
+          name="language"
+          options={Object.values(ENUM_LANGUAGE).map(item => ({
+            value: item,
+            labelKey: item,
+          }))}
+          defaultValue={repos.language}
+          isTranslate={false}
+          control={control}
+          error={errors.language}
+          required={true}
         />
         <div className="flex justify-end gap-2">
           <DialogClose asChild ref={closeRef}>
