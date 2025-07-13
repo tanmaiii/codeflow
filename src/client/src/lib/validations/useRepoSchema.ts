@@ -24,6 +24,9 @@ const repoSchema = ({
     language: z
       .string({ message: t('required', { field: tRepo('language') }) })
       .min(1, { message: t('selectMin', { field: tRepo('language'), length: 1 }) }),
+    framework: z
+      .string({ message: t('required', { field: tRepo('framework') }) })
+      .min(1, { message: t('selectMin', { field: tRepo('framework'), length: 1 }) }),
   });
 
 export type RepoSchemaType = z.infer<ReturnType<typeof useRepoSchema>>;

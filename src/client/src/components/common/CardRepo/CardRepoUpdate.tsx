@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { LANGUAGE_TYPE } from '@/constants/object';
 import { IRepos } from '@/interfaces/repos';
 import { cn } from '@/lib/utils';
 import { RepoSchemaType, useRepoSchema } from '@/lib/validations/useRepoSchema';
@@ -8,11 +9,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import TextInput from '../Input/TextInput/TextInput';
-import { ENUM_LANGUAGE } from '@/constants/enum';
 import MySelect from '../MySelect';
 
 export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
@@ -27,17 +27,44 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
     control,
     formState: { errors, isSubmitting },
     reset,
+    watch,
+    setValue,
   } = useForm<RepoSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: repos.name,
       language: repos.language,
+      framework: repos.framework,
     },
   });
+
+  // Watch language field to filter framework options
+  const selectedLanguage = watch('language');
+
+  // Calculate framework options based on selected language
+  const frameworkOptions = useMemo(() => {
+    if (!selectedLanguage || !repos.language) return [];
+    const frameworks = LANGUAGE_TYPE[selectedLanguage as keyof typeof LANGUAGE_TYPE];
+    return (
+      frameworks?.map(item => ({
+        value: item,
+        labelKey: item,
+      })) || []
+    );
+  }, [selectedLanguage]);
+
+  // Reset framework when language changes
+  useEffect(() => {
+    if (selectedLanguage) {
+      setValue('framework', '');
+    }
+  }, [selectedLanguage, setValue]);
 
   useEffect(() => {
     reset({
       name: repos.name,
+      language: repos.language,
+      framework: repos.framework,
     });
   }, [repos, reset]);
 
@@ -46,6 +73,7 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
       await reposService.update(repos.id, {
         name: data.name,
         language: data.language,
+        framework: data.framework,
         topicId: repos.topicId,
       });
     },
@@ -59,10 +87,6 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
       toast.error(tCommon('updateError'));
     },
   });
-
-  // if (mutation.isPending) {
-  //   return <LoadingOverlay message="updating..." />;
-  // }
 
   return (
     <DialogContent className={cn('px-4')}>
@@ -79,14 +103,22 @@ export default function CardRepoUpdate({ repos }: { repos: IRepos }) {
         <MySelect
           label={tRepo('language')}
           name="language"
-          options={Object.values(ENUM_LANGUAGE).map(item => ({
+          options={Object.keys(LANGUAGE_TYPE).map(item => ({
             value: item,
             labelKey: item,
           }))}
-          defaultValue={repos.language}
           isTranslate={false}
           control={control}
           error={errors.language}
+          required={true}
+        />
+        <MySelect
+          label={tRepo('framework')}
+          name="framework"
+          options={frameworkOptions}
+          isTranslate={false}
+          control={control}
+          error={errors.framework}
           required={true}
         />
         <div className="flex justify-end gap-2">

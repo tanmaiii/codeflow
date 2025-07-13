@@ -8,6 +8,7 @@ import { RequestWithUser } from '@interfaces/auth.interface';
 import { GitHubCommit, GitHubRepository, GitHubRequestBody } from '@interfaces/github.interface';
 import { GitHubService } from '@services/github.service';
 import { NextFunction, Request, Response } from 'express';
+import { stringify } from 'querystring';
 import { Container } from 'typedi';
 
 export class GitHubController {
@@ -185,6 +186,11 @@ export class GitHubController {
 
       // Kiểm tra sự kiện từ webhook
       const event = req.headers['x-github-event'] as string;
+
+      if (event === 'workflow_run') {
+        const { workflow_run } = body;
+        logger.info(`[GitHub Webhook] Workflow run event received for repository: ${stringify(workflow_run)}`);
+      }
 
       if (event === 'push') {
         const { repository, commits, ref } = body;

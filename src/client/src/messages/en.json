@@ -488,6 +488,7 @@
     "author": "Author",
     "name": "Name",
     "language": "Language",
+    "framework": "Framework",
     "create": "Create",
     "nameSuggest": "Name suggest",
     "instruction": "Instruction",

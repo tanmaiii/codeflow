@@ -1,3 +1,11 @@
+import { expressWorkflow } from '../templates/workflow/express_workflow';
+import { templateNodejs } from '../templates/workflow/template_nodejs';
+import { workflowProperties } from '../templates/workflow/workflow_propeties';
+import { nestjsWorkflow } from '../templates/workflow/nestjs_workflow';
+import { reactWorkflow } from '../templates/workflow/react_workflow';
+import { djangoWorkflow } from '../templates/workflow/django_workflow';
+import { nextjsWorkflow } from '../templates/workflow/nextjs_workflow';
+
 export enum ENUM_TOPIC_STATUS {
   PENDING = 'pending', // Trạng thái chờ duyệt
   APPROVED = 'approved', // Trạng thái đã duyệt
@@ -40,16 +48,22 @@ export enum ENUM_TYPE_SYSTEM_SETTINGS {
 }
 
 export enum ENUM_LANGUAGE {
-  PHP = 'Php', // PHP
-  HTML = 'Html', // HTML
+  JAVASCRIPT_TYPESCRIPT = 'Javascript/Typescript', // JavaScript/TypeScript
   PYTHON = 'Python', // Python
   JAVA = 'Java', // Java
   DOTNET = 'Dotnet', // .NET
-  NODEJS = 'Nodejs', // NodeJS
-  JAVASCRIPT = 'Javascript', // JavaScript
-  TYPESCRIPT = 'Typescript', // TypeScript
-  C = 'C', // C
-  CPP = 'Cpp', // C++
-  SQL = 'Sql', // SQL
-  CSHARP = 'Csharp', // C#
+  STATIC = 'Static', // Static
+}
+
+export enum ENUM_FRAMEWORK {
+  REACT = 'React', // React
+  EXPRESS = 'Express', // Express
+  NEXTJS = 'Nextjs', // Nextjs
+  NODEJS = 'Nodejs', // Nodejs
+  NESTJS = 'Nestjs', // Nestjs
+  DJANGO = 'Django', // Django
+  FLASK = 'Flask', // Flask
+  SPRING_BOOT = 'Spring Boot', // Spring Boot
+  ASP_NET = 'ASP.NET', // ASP.NET
+  HTML = 'HTML', // HTML
 }

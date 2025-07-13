@@ -6,10 +6,15 @@ import { Op } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
 import { GitHubService } from './github.service';
+import { SonarService } from './sonar.service';
 import { TopicService } from './topic.service';
 @Service()
 export class ReposService {
-  constructor(private readonly githubService = Container.get(GitHubService), private readonly topicService = Container.get(TopicService)) {}
+  constructor(
+    private readonly githubService = Container.get(GitHubService),
+    private readonly topicService = Container.get(TopicService),
+    private readonly sonarService = Container.get(SonarService),
+  ) {}
 
   /**
    * Lấy tất cả repository từ database.
@@ -144,7 +149,7 @@ export class ReposService {
       auto_init: true,
     });
 
-    await this.githubService.createBasicWorkflow(uniqueRepoName, repoData.language);
+    await this.githubService.createBasicWorkflow(uniqueRepoName, repoData.language, repoData.framework);
 
     // Tạo webhook cho repo, nếu có lỗi thì chỉ log lỗi, không throw để các bước sau vẫn thực hiện
     try {
@@ -168,6 +173,7 @@ export class ReposService {
       authorId: repoData.authorId,
       name: uniqueRepoName,
       language: repoData.language,
+      framework: repoData.framework,
     });
   }
 
@@ -190,6 +196,7 @@ export class ReposService {
         name: uniqueRepoName,
         url: githubRepo.html_url,
         language: repoData.language,
+        framework: repoData.framework,
       },
       { where: { id } },
     );
@@ -221,6 +228,12 @@ export class ReposService {
       await this.githubService.deleteRepoInOrg(repo.name);
     } catch (error) {
       logger.error(`[Repos Service] Error deleting repo: ${error}`);
+    }
+
+    try {
+      await this.sonarService.deleteProject(repo.name);
+    } catch (error) {
+      logger.error(`[Repos Service] Error deleting project: ${error}`);
     }
 
     await DB.Repos.destroy({ force: true, where: { id } });

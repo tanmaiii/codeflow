@@ -6,6 +6,7 @@ export interface Repos {
   topicId: string;
   authorId: string;
   language: string;
+  framework: string;
 }
 
 export interface RepoCreate {
@@ -13,6 +14,7 @@ export interface RepoCreate {
   topicId: string;
   authorId: string;
   language: string;
+  framework: string;
 }
 
 export interface RepoUpdate {
@@ -20,4 +22,5 @@ export interface RepoUpdate {
   name: string;
   url: string;
   language: string;
+  framework: string;
 }

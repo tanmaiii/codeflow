@@ -11,6 +11,7 @@ export interface IRepos extends IBaseEntity {
   authorId: string;
   author: IUser;
   language: string;
+  framework: string;
   topic: ITopic;
 }
 
@@ -18,10 +19,12 @@ export interface IReposCreateDto {
   name: string;
   topicId: string;
   language: string;
+  framework: string;
 }
 
 export interface IReposUpdateDto {
   name: string;
   language: string;
   topicId: string;
+  framework: string;
 }

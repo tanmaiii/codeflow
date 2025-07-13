@@ -1,5 +1,5 @@
-export function templateNodejs() {
-  return `name: SonarCloud Analysis
+export function djangoWorkflow() {
+  return `name: SonarCloud Analysis - Django
 
 on:
   push:
@@ -14,30 +14,31 @@ jobs:
   sonarcloud:
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          python-version: '3.9'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Build project
-        run: npm run build
+      - name: Run tests
+        run: python manage.py test
+        continue-on-error: true
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
-
-`;
+  `;
 }

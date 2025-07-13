@@ -7,6 +7,8 @@ import Container, { Service } from 'typedi';
 import { templateNodejs } from '@/templates/workflow/template_nodejs';
 import { workflowProperties } from '@/templates/workflow/workflow_propeties';
 import { SonarService } from './sonar.service';
+import { workflowTemplates } from '@/templates/workflow';
+import { stringify } from 'querystring';
 
 @Service()
 export class GitHubService {
@@ -277,21 +279,17 @@ export class GitHubService {
    */
   public async createWebhookCommit(repoName: string, webhookUrl: string) {
     try {
-      // The payload sent to GitHub API for creating a webhook is incorrect.
-      // It should be an object with a "config" property, and "content_type" should be "json" (not 'json'), and the event types should be specified.
-      // Reference: https://docs.github.com/en/rest/webhooks/repos?apiVersion=2022-11-28#create-a-repository-webhook
-
       const response = await axios.post(
         `${this.baseUrl}/repos/${this.organization}/${repoName}/hooks`,
         {
           name: 'web',
           active: true,
-          events: ['push'], // You can customize events as needed
+          events: ['push', 'workflow_run'], // Nhận khi có push hoặc workflow_run
           config: {
             url: webhookUrl,
             content_type: 'json',
             secret: process.env.GITHUB_WEBHOOK_SECRET,
-            insecure_ssl: '0', // '0' means SSL verification enabled
+            insecure_ssl: '0',
           },
         },
         {
@@ -301,7 +299,8 @@ export class GitHubService {
       return response.data;
     } catch (error) {
       logger.error(`[GitHub Service] Error creating webhook commit: ${webhookUrl}`);
-      throw error;
+      logger.error(`[GitHub Service] Error creating webhook commit: ${stringify(error.response.data)}`);
+      throw error.response.data;
     }
   }
 
@@ -397,36 +396,24 @@ export class GitHubService {
    * Tạo workflow cơ bản cho CI/CD
    * @param repoName Tên repository
    * @param language Ngôn ngữ lập trình chính của repository
+   * @param framework Framework của repository
    * @returns Thông tin commit đã tạo
    */
-  public async createBasicWorkflow(repoName: string, language: string): Promise<any> {
+  public async createBasicWorkflow(repoName: string, language: string, framework: string): Promise<any> {
     try {
       let workflowContent = '';
       let workflowPropertiesContent = '';
 
       const sonarData = await this.sonarService.createProject(repoName);
 
-      switch (language.toLowerCase()) {
-        case 'javascript':
-        case 'typescript':
-          workflowContent = templateNodejs();
-          workflowPropertiesContent = workflowProperties({
-            organization: 'organization-codeflow',
-            projectKey: sonarData.project.key,
-          });
-          break;
-        // case 'python':
-        //   workflowContent = this.getPythonWorkflow();
-        //   break;
-        // case 'java':
-        //   workflowContent = this.getJavaWorkflow();
-        //   break;
-        // case 'go':
-        //   workflowContent = this.getGoWorkflow();
-        //   break;
-        // default:
-        //   workflowContent = this.getGenericWorkflow();
-      }
+      workflowContent = workflowTemplates[language][framework]();
+
+      logger.info(`[GitHub Service] Workflow content: ${workflowContent}`);
+
+      workflowPropertiesContent = workflowProperties({
+        organization: 'organization-codeflow',
+        projectKey: sonarData.project.key,
+      });
 
       await this.pushCode(repoName, 'ci', workflowContent, '.github/workflows/ci.yml');
       await this.pushCode(repoName, 'sonar', workflowPropertiesContent, 'sonar-project.properties');

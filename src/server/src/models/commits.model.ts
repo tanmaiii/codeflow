@@ -31,6 +31,7 @@ export default function (sequelize: Sequelize): typeof CommitsModel {
           model: 'repos',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
       commitHash: {
         allowNull: false,
@@ -47,6 +48,7 @@ export default function (sequelize: Sequelize): typeof CommitsModel {
           model: 'users',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
       url: {
         allowNull: false,

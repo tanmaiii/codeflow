@@ -3,7 +3,8 @@ import TextInput from '@/components/common/Input/TextInput/TextInput';
 import { LoadingOverlay } from '@/components/common/Loading';
 import MySelect from '@/components/common/MySelect';
 import { Button } from '@/components/ui/button';
-import { ENUM_LANGUAGE, ENUM_TYPE_COURSE } from '@/constants/enum';
+import { ENUM_TYPE_COURSE } from '@/constants/enum';
+import { LANGUAGE_TYPE } from '@/constants/object';
 import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
 import { RepoSchemaType, useRepoSchema } from '@/lib/validations/useRepoSchema';
 import reposService from '@/services/repos.service';
@@ -13,7 +14,7 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { IconBrandGithub } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useRef } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -37,9 +38,34 @@ export default function TopicsReposCreate({ topicId }: { topicId: string }) {
     control,
     formState: { errors, isSubmitting },
     reset,
+    watch,
+    setValue,
   } = useForm<RepoSchemaType>({
     resolver: zodResolver(schema),
   });
+
+  // Watch language field to filter framework options
+  const selectedLanguage = watch('language');
+
+  // Calculate framework options based on selected language
+  const frameworkOptions = useMemo(() => {
+    if (!selectedLanguage) return [];
+
+    const frameworks = LANGUAGE_TYPE[selectedLanguage as keyof typeof LANGUAGE_TYPE];
+    return (
+      frameworks?.map(item => ({
+        value: item,
+        labelKey: item,
+      })) || []
+    );
+  }, [selectedLanguage]);
+
+  // Reset framework when language changes
+  useEffect(() => {
+    if (selectedLanguage) {
+      setValue('framework', '');
+    }
+  }, [selectedLanguage, setValue]);
 
   const mutation = useMutation({
     mutationFn: async (data: RepoSchemaType) => {
@@ -70,7 +96,7 @@ export default function TopicsReposCreate({ topicId }: { topicId: string }) {
           {/* Repository Info */}
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-slate-100 dark:from-gray-800/50 dark:to-slate-900/50 rounded-xl -z-10"></div>
-            <div className="relative p-4 border border-gray-200/50 dark:border-gray-700/50 rounded-xl">
+            <div className="relative p-4 border border-gray-200/50 dark:border-gray-700/50 rounded-xl gap-2 flex flex-col">
               <TextInput
                 label={tRepo('nameRepo')}
                 defaultValue={`${repoName}-`}
@@ -82,13 +108,23 @@ export default function TopicsReposCreate({ topicId }: { topicId: string }) {
               <MySelect
                 label={tRepo('language')}
                 name="language"
-                options={Object.values(ENUM_LANGUAGE).map(item => ({
+                options={Object.keys(LANGUAGE_TYPE).map(item => ({
                   value: item,
                   labelKey: item,
                 }))}
                 isTranslate={false}
                 control={control}
                 error={errors.language}
+                required={true}
+              />
+              <MySelect
+                label={tRepo('framework')}
+                name="framework"
+                options={frameworkOptions}
+                isTranslate={false}
+                control={control}
+                error={errors.framework}
+                disabled={!selectedLanguage}
                 required={true}
               />
             </div>

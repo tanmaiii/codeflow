@@ -33,13 +33,31 @@ export class SonarService {
 
       return response.data;
     } catch (err: any) {
-      if (err.response?.data) {
-        logger.error(`❌ Failed: ${JSON.stringify(err.response.data, null, 2)}`);
-        throw new HttpException(500, err.response.data);
-      } else {
-        logger.error(`❌ Error: ${err.message}`);
-        throw new HttpException(500, err.message);
-      }
+      logger.error(`[Sonar Service] Failed: ${JSON.stringify(err.response.data, null, 2)}`);
+      throw new HttpException(500, err.response.data);
+    }
+  }
+
+  public async deleteProject(projectName: string) {
+    try {
+      const response = await axios.post(
+        `${this.baseUrl}/projects/delete`,
+        {
+          project: projectName,
+        },
+        {
+          headers: this.headers,
+          auth: {
+            username: process.env.SONAR_ORG_TOKEN || '',
+            password: '',
+          },
+        },
+      );
+      logger.info(`[Sonar Service] Deleted project: ${JSON.stringify(response.data, null, 2)}`);
+      return response.data;
+    } catch (err: any) {
+      logger.error(`[Sonar Service] Failed: ${JSON.stringify(err.response.data, null, 2)}`);
+      throw new HttpException(500, err.response.data);
     }
   }
 }

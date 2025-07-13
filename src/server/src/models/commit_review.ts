@@ -55,6 +55,7 @@ export default function (sequelize: Sequelize): typeof CommitReviewsModel {
     },
     {
       sequelize,
+      paranoid: true,
       modelName: 'commit_reviews',
       tableName: 'commit_reviews',
       timestamps: true,

@@ -1,5 +1,5 @@
-export function templateNodejs() {
-  return `name: SonarCloud Analysis
+export function nextjsWorkflow() {
+  return `name: SonarCloud Analysis - Next.js
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
   sonarcloud:
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,14 +30,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        run: npm test
+        continue-on-error: true
+
       - name: Build project
         run: npm run build
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
-
-`;
+  `;
 }

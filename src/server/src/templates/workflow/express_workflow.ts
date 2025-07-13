@@ -1,5 +1,6 @@
-export function templateNodejs() {
-  return `name: SonarCloud Analysis
+export function expressWorkflow() {
+  return `
+  name: SonarCloud Analysis
 
 on:
   push:
@@ -14,7 +15,7 @@ jobs:
   sonarcloud:
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,14 +31,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build project
-        run: npm run build
+      - name: Type check(only for typescript)
+        run: |
+          if [ -f tsconfig.json ]; then
+            npx tsc --noEmit
+          else
+            echo "No typescript project"
+          fi
+
+      - name: Run tests (optional)
+        run: npm test
+        continue-on-error: true
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
-
-`;
+  `;
 }

@@ -487,6 +487,7 @@
     "author": "Tác giả",
     "name": "Tên",
     "language": "Ngôn ngữ",
+    "framework": "Framework",
     "nameSuggest": "Tên gợi ý",
     "instruction": "Hướng dẫn",
     "instructionName": "• Tên kho lưu trữ chỉ chứa chữ cái, số và dấu gạch ngang (-)",

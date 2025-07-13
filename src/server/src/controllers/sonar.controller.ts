@@ -14,7 +14,22 @@ export class SonarController {
     try {
       const { name } = req.body;
       const project = await this.sonarService.createProject(name);
-      res.status(201).json(project);
+      res.status(201).json({
+        message: 'create sonar project success',
+        data: project,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public deleteProject = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { name } = req.body;
+      await this.sonarService.deleteProject(name);
+      res.status(200).json({
+        message: 'delete sonar project success',
+      });
     } catch (error) {
       next(error);
     }
