@@ -146,7 +146,7 @@ export class ReposService {
       description: cleanSpecialCharacters(topic.description || ''),
       private: false,
       team_id: null,
-      auto_init: true,
+      // auto_init: true,
     });
 
     await this.githubService.createBasicWorkflow(uniqueRepoName, repoData.language, repoData.framework);
@@ -163,6 +163,12 @@ export class ReposService {
       if (member.user?.uid && member.user?.username) {
         await this.githubService.collaborateRepo(uniqueRepoName, member.user.username);
       }
+    }
+
+    try {
+      await this.githubService.renameBranchMainToMaster(uniqueRepoName);
+    } catch (error) {
+      logger.error(`[Repos Service] Error renaming branch main to master for repo ${uniqueRepoName}: ${error}`);
     }
 
     // Lưu repo vào database

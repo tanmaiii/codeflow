@@ -65,5 +65,6 @@ export enum ENUM_FRAMEWORK {
   FLASK = 'Flask', // Flask
   SPRING_BOOT = 'Spring Boot', // Spring Boot
   ASP_NET = 'ASP.NET', // ASP.NET
+  // Static
   HTML = 'HTML', // HTML
 }

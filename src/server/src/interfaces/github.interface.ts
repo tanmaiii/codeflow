@@ -100,7 +100,7 @@ export interface GitHubContent {
 
 export interface GitHubRequestBody {
   accessToken: string;
-} 
+}
 
 export interface GitHubCommit {
   id: string;
@@ -119,7 +119,7 @@ export interface GitHubCommit {
     email: string;
     username: string;
   };
-  added: string[]; // file mới  
+  added: string[]; // file mới
   removed: string[]; // file bị xóa
   modified: string[]; // file bị sửa
 }

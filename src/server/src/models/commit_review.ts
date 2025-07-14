@@ -1,7 +1,10 @@
 import { CommitReviews, ReviewType } from '@/interfaces/commits.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
-export type CommitReviewsCreationAttributes = Optional<CommitReviews, 'id' | 'commitId' | 'reviewType' | 'score' | 'reviewerId' | 'feedback' | 'summary'>;
+export type CommitReviewsCreationAttributes = Optional<
+  CommitReviews,
+  'id' | 'commitId' | 'reviewType' | 'score' | 'reviewerId' | 'feedback' | 'summary'
+>;
 
 export class CommitReviewsModel extends Model<CommitReviews, CommitReviewsCreationAttributes> implements CommitReviews {
   public id!: string;

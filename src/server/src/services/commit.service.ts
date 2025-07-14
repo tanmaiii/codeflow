@@ -2,7 +2,6 @@ import { DB } from '@/database';
 import { CommitCreate, Commits, CommitUpdate } from '@/interfaces/commits.interface';
 import Container, { Service } from 'typedi';
 import { ReposService } from './repos.service';
-import { HttpException } from '@/exceptions/HttpException';
 import { UserService } from './users.service';
 
 @Service()

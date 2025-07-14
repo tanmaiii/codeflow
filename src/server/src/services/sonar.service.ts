@@ -1,4 +1,5 @@
 import { HttpException } from '@/exceptions/HttpException';
+import { SonarMeasures } from '@/interfaces/sonar.ineterface';
 import { logger } from '@/utils/logger';
 import axios from 'axios';
 import qs from 'qs';
@@ -13,6 +14,12 @@ export class SonarService {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
+  private auth = {
+    username: process.env.SONAR_ORG_TOKEN || '',
+    password: '',
+  };
+
+  // Tạo project trên sonar để lấy key
   public async createProject(projectName: string) {
     try {
       const formData = qs.stringify({
@@ -23,10 +30,7 @@ export class SonarService {
 
       const response = await axios.post(`${this.baseUrl}/projects/create`, formData, {
         headers: this.headers,
-        auth: {
-          username: process.env.SONAR_ORG_TOKEN || '',
-          password: '',
-        },
+        auth: this.auth,
       });
 
       logger.info(`[Sonar Service] Created project: ${JSON.stringify(response.data, null, 2)}`);
@@ -38,6 +42,7 @@ export class SonarService {
     }
   }
 
+  // Xóa project trên sonar
   public async deleteProject(projectName: string) {
     try {
       const response = await axios.post(
@@ -47,13 +52,40 @@ export class SonarService {
         },
         {
           headers: this.headers,
-          auth: {
-            username: process.env.SONAR_ORG_TOKEN || '',
-            password: '',
-          },
+          auth: this.auth,
         },
       );
       logger.info(`[Sonar Service] Deleted project: ${JSON.stringify(response.data, null, 2)}`);
+      return response.data;
+    } catch (err: any) {
+      logger.error(`[Sonar Service] Failed: ${JSON.stringify(err.response.data, null, 2)}`);
+      throw new HttpException(500, err.response.data);
+    }
+  }
+
+  // Lấy measures của project trên sonar
+  public async getMeasures(projectKey: string): Promise<SonarMeasures> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/measures/component`, {
+        params: {
+          component: projectKey,
+          metricKeys: [
+            'alert_status',
+            'bugs',
+            'code_smells',
+            'vulnerabilities',
+            'coverage',
+            'duplicated_lines_density',
+            'reliability_rating',
+            'security_rating',
+          ].join(','),
+        },
+        headers: this.headers,
+        auth: this.auth,
+      });
+
+      logger.info(`[Sonar Service] Measures: ${JSON.stringify(response.data, null, 2)}`);
+
       return response.data;
     } catch (err: any) {
       logger.error(`[Sonar Service] Failed: ${JSON.stringify(err.response.data, null, 2)}`);

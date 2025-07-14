@@ -1,5 +1,6 @@
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import { SonarService } from '@/services/sonar.service';
+import { logger } from '@/utils/logger';
 import { NextFunction, Response } from 'express';
 import Container, { Service } from 'typedi';
 
@@ -29,6 +30,20 @@ export class SonarController {
       await this.sonarService.deleteProject(name);
       res.status(200).json({
         message: 'delete sonar project success',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getMeasures = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { name } = req.params;
+      logger.info(`[Sonar Controller] Measures: ${name}`);
+      const measures = await this.sonarService.getMeasures(name);
+      res.status(200).json({
+        message: 'get sonar measures success',
+        data: measures,
       });
     } catch (error) {
       next(error);

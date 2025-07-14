@@ -1,14 +1,14 @@
+import { workflowTemplates } from '@/templates/workflow';
+import { workflowProperties } from '@/templates/workflow/workflow_propeties';
 import { GitHubContent, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
 import { logger } from '@utils/logger';
 import axios from 'axios';
 import crypto from 'crypto';
 import { env } from 'process';
-import Container, { Service } from 'typedi';
-import { templateNodejs } from '@/templates/workflow/template_nodejs';
-import { workflowProperties } from '@/templates/workflow/workflow_propeties';
-import { SonarService } from './sonar.service';
-import { workflowTemplates } from '@/templates/workflow';
 import { stringify } from 'querystring';
+import Container, { Service } from 'typedi';
+import { SonarService } from './sonar.service';
+import { readmeTemplate } from '@/templates/readme.templates';
 
 @Service()
 export class GitHubService {
@@ -79,9 +79,38 @@ export class GitHubService {
       const response = await axios.post(`${this.baseUrl}/orgs/${this.organization}/repos`, repoData, {
         headers: this.headers,
       });
+
       return response.data;
     } catch (error) {
       logger.error(`[GitHub Service] Error creating repository: ${error.message}`);
+      throw error;
+    }
+  }
+
+  public async renameBranchMainToMaster(repoName: string): Promise<void> {
+    try {
+      // Đổi main thành master
+      await axios.post(
+        `${this.baseUrl}/repos/${this.organization}/${repoName}/branches/main/rename`,
+        {
+          new_name: 'master',
+        },
+        {
+          headers: this.headers,
+        },
+      );
+      // Đặt default branch là master
+      await axios.patch(
+        `${this.baseUrl}/repos/${this.organization}/${repoName}`,
+        {
+          default_branch: 'master',
+        },
+        {
+          headers: this.headers,
+        },
+      );
+    } catch (error) {
+      logger.error(`[GitHub Service] Error renaming branch: ${error.message}`);
       throw error;
     }
   }
@@ -371,7 +400,7 @@ export class GitHubService {
       const body: any = {
         message: `Add/Update ${message}`,
         content: contentBase64,
-        branch: 'main', // hoặc 'master' tùy thuộc vào default branch
+        branch: 'main',
       };
 
       // If file exists, include sha for update
@@ -415,6 +444,7 @@ export class GitHubService {
         projectKey: sonarData.project.key,
       });
 
+      await this.pushCode(repoName, 'readme', readmeTemplate(repoName), 'README.md');
       await this.pushCode(repoName, 'ci', workflowContent, '.github/workflows/ci.yml');
       await this.pushCode(repoName, 'sonar', workflowPropertiesContent, 'sonar-project.properties');
       return true;

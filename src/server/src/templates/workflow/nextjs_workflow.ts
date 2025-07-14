@@ -4,9 +4,7 @@ export function nextjsWorkflow() {
 on:
   push:
     branches:
-      - main
       - master
-      - develop
   pull_request:
     types: [opened, synchronize, reopened]
 
