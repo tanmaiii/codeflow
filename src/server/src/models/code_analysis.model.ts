@@ -4,7 +4,7 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 export type CodeAnalysisCreationAttributes = Optional<
   CodeAnalysis,
   | 'id'
-  | 'repoId'
+  | 'reposId'
   | 'branch'
   | 'commitSha'
   | 'qualityGate'
@@ -20,7 +20,7 @@ export type CodeAnalysisCreationAttributes = Optional<
 
 export class CodeAnalysisModel extends Model<CodeAnalysis, CodeAnalysisCreationAttributes> implements CodeAnalysis {
   public id!: string;
-  public repoId!: string;
+  public reposId!: string;
   public branch!: string;
   public commitSha!: string;
   public qualityGate!: string;
@@ -45,9 +45,9 @@ export default function (sequelize: Sequelize): typeof CodeAnalysisModel {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      repoId: {
+      reposId: {
         allowNull: false,
-        type: DataTypes.STRING(255),
+        type: DataTypes.UUID,
         references: {
           model: 'repos',
           key: 'id',

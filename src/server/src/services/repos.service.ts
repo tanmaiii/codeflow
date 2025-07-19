@@ -215,12 +215,12 @@ export class ReposService {
   /**
    * Xóa mềm repository (chỉ xóa trong database, không xóa trên GitHub).
    */
-  public async deleteRepo(repoId: string): Promise<Repos> {
-    const repo = await this.findById(repoId, true);
+  public async deleteRepo(reposId: string): Promise<Repos> {
+    const repo = await this.findById(reposId, true);
     if (!repo) throw new HttpException(409, "Repo doesn't exist");
 
-    await DB.Repos.destroy({ where: { id: repoId } });
-    return DB.Repos.findByPk(repoId);
+    await DB.Repos.destroy({ where: { id: reposId } });
+    return DB.Repos.findByPk(reposId);
   }
 
   /**

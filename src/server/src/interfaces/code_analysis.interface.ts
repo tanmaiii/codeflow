@@ -1,6 +1,6 @@
 export interface CodeAnalysis {
   id: string;
-  repoId: string;
+  reposId: string;
   branch: string;
   commitSha: string; // commit sha của branch
   qualityGate: string; // chất lượng mã

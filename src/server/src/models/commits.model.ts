@@ -1,11 +1,11 @@
 import { Commits } from '@/interfaces/commits.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
-export type CommitsCreationAttributes = Optional<Commits, 'id' | 'repoId' | 'commitHash' | 'message' | 'authorId' | 'url'>;
+export type CommitsCreationAttributes = Optional<Commits, 'id' | 'reposId' | 'commitHash' | 'message' | 'authorId' | 'url'>;
 
 export class CommitsModel extends Model<Commits, CommitsCreationAttributes> implements Commits {
   public id!: string;
-  public repoId!: string;
+  public reposId!: string;
   public commitHash!: string;
   public message!: string;
   public authorId!: string;
@@ -24,7 +24,7 @@ export default function (sequelize: Sequelize): typeof CommitsModel {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      repoId: {
+      reposId: {
         allowNull: false,
         type: DataTypes.UUID,
         references: {

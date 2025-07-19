@@ -225,7 +225,7 @@ export class GitHubController {
       if (!repo) throw new HttpException(404, 'Repo not found');
 
       const commitData: CommitCreate = {
-        repoId: repo.id,
+        reposId: repo.id,
         commitHash: commit.id,
         message: commit.message,
         authorId: user.id,

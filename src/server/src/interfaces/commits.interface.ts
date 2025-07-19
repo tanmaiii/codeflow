@@ -1,6 +1,6 @@
 export interface Commits {
   id: string;
-  repoId: string;
+  reposId: string;
   commitHash: string;
   message: string;
   authorId: string;
@@ -23,7 +23,7 @@ export enum ReviewType {
 }
 
 export interface CommitCreate {
-  repoId: string;
+  reposId: string;
   commitHash: string;
   message: string;
   authorId: string;
@@ -31,7 +31,7 @@ export interface CommitCreate {
 }
 
 export interface CommitUpdate {
-  repoId: string;
+  reposId: string;
   commitHash: string;
   message: string;
   authorId: string;

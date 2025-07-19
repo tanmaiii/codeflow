@@ -6,21 +6,6 @@
     "auditLog": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\.0edc6f0a0c8b51b5254c9ab6f614576a207976f4-audit.json",
     "files": [
         {
-            "date": 1749402000418,
-            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-06-09.log",
-            "hash": "f9e7e4507fed1d15b363df6e463e4e16c6858fafa28abbe65c83b46fb39d9cd3"
-        },
-        {
-            "date": 1749488548160,
-            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-06-10.log",
-            "hash": "f27c923deba2e326fb7210b77f315b9af022ac392b21a4a7d4aee085fe1f09e6"
-        },
-        {
-            "date": 1749574891411,
-            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-06-11.log",
-            "hash": "e2fadc4f8da9e99f71220960f5b31c9dd3d20d072bd6e6ae25939c3d648933db"
-        },
-        {
             "date": 1749730756862,
             "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-06-12.log",
             "hash": "182ddeb2c85a2eb3f9fea6196fa30eb7c9798c6de78f53791c77f20a2f1d5f13"
@@ -154,6 +139,21 @@
             "date": 1752427351852,
             "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-07-14.log",
             "hash": "62bf4224d06254406ec33da7282ccc455ed27e064932910463639816417da8b4"
+        },
+        {
+            "date": 1752661658642,
+            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-07-16.log",
+            "hash": "261431a78901a291c84b1d05d053a1e82db556d24b702083ba741e05d111cea3"
+        },
+        {
+            "date": 1752846705956,
+            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-07-18.log",
+            "hash": "009a0b92c67a78f02fe65a6ea764059d1fd4123b446e345ba6e385b25562e8c3"
+        },
+        {
+            "date": 1752861537306,
+            "name": "D:\\Workspace\\DoAnTotNghiep\\codeflow\\src\\server\\src\\logs\\debug\\2025-07-19.log",
+            "hash": "389c1958b840949a2896cffbc065e1350837c65e6481b41fda234aeb1a3a1eeb"
         }
     ],
     "hashType": "sha256"

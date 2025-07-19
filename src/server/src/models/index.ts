@@ -1,22 +1,22 @@
-import { CourseModel } from './courses.model';
-import { PostModel } from './posts.model';
-import { UserModel } from './users.model';
-import { TagModel } from './tags.model';
-import { CourseTagModel } from './course_tag.model';
-import { PostTagModel } from './post_tag.model';
+import { CodeAnalysisModel } from './code_analysis.model';
 import { CommentModel } from './comments.model';
-import { SubmissionModel } from './submissions.model';
-import { TopicModel } from './topics.model';
-import { TopicTagModel } from './topic_tag.model';
 import { CourseDocumentModel } from './course_documents.model';
-import { PostLikeModel } from './post_like.model';
 import { CourseEnrollmentModel } from './course_enrollment.model';
-import { TopicMemberModel } from './topic_member.mode';
-import { TopicEvaluationsModel } from './topic_evaluations.model';
+import { CourseTagModel } from './course_tag.model';
+import { CourseModel } from './courses.model';
 import { NotificationModel } from './notification.model';
+import { PostLikeModel } from './post_like.model';
+import { PostTagModel } from './post_tag.model';
+import { PostModel } from './posts.model';
 import { ReposModel } from './repos.model';
-import { SystemSettingsModel } from './system_settings.model';
+import { SubmissionModel } from './submissions.model';
+import { TagModel } from './tags.model';
+import { TopicEvaluationsModel } from './topic_evaluations.model';
+import { TopicMemberModel } from './topic_member.mode';
+import { TopicTagModel } from './topic_tag.model';
+import { TopicModel } from './topics.model';
 import { UserSettingsModel } from './user_settings.model';
+import { UserModel } from './users.model';
 
 export const initModels = () => {
   // User Model Relations
@@ -108,6 +108,10 @@ export const initModels = () => {
   ReposModel.hasMany(NotificationModel, { foreignKey: 'reposId', as: 'notifications' });
   ReposModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
   ReposModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
+  ReposModel.hasMany(CodeAnalysisModel, { foreignKey: 'reposId', as: 'codeAnalyses' });
+
+  // CodeAnalysis Model Relations
+  CodeAnalysisModel.belongsTo(ReposModel, { foreignKey: 'reposId', as: 'repos' });
 };
 
-export { CourseModel, UserModel, PostModel, TagModel, PostLikeModel };
+export { CodeAnalysisModel, CourseModel, PostLikeModel, PostModel, TagModel, UserModel };

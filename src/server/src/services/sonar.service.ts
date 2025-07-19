@@ -92,4 +92,21 @@ export class SonarService {
       throw new HttpException(500, err.response.data);
     }
   }
+
+  public async getProject(projectKey: string) {
+    try {
+      const response = await axios.get(`${this.baseUrl}/projects/search`, {
+        params: {
+          project: projectKey,
+        },
+      });
+
+      logger.info(`[Sonar Service] Project: ${JSON.stringify(response.data, null, 2)}`);
+
+      return response.data;
+    } catch (err: any) {
+      logger.error(`[Sonar Service] Failed: ${JSON.stringify(err.response.data, null, 2)}`);
+      throw new HttpException(500, err.response.data);
+    }
+  }
 }

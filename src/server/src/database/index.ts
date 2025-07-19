@@ -1,4 +1,5 @@
 import { initModels } from '@/models';
+import CodeAnalysisModel from '@/models/code_analysis.model';
 import CommentModel from '@/models/comments.model';
 import CommitReviewsModel from '@/models/commit_review';
 import CommitsModel from '@/models/commits.model';
@@ -69,6 +70,7 @@ export const DB = {
   SystemSettings: SystemSettingsModel(sequelize),
   Commits: CommitsModel(sequelize),
   CommitReviews: CommitReviewsModel(sequelize),
+  CodeAnalysis: CodeAnalysisModel(sequelize),
   sequelize,
 };
 
