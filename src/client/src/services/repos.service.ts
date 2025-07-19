@@ -27,6 +27,11 @@ class ReposService {
     return res.data;
   }
 
+  public async getDetail(id: string): Promise<ResponseAPIDto<IRepos>> {
+    const res = await this.client.get(`/${id}`);
+    return res.data;
+  }
+
   async create(data: IReposCreateDto): Promise<ResponseAPIDto<IRepos>> {
     const res = await this.client.post('/', data);
     return res.data;

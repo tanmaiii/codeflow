@@ -10,6 +10,9 @@ export const paths = {
   TAGS: '/tags',
   TAG: (id: string) => `/tags/${id}`,
   COMMENTS: '/comments',
+
+  REPOS: '/repos',
+  REPOS_DETAIL: (id: string) => `/repos/${id}`,
   
   TOPICS: '/topics',
   TOPICS_DETAIL: (id: string) => `/topics/${id}`,
@@ -20,8 +23,6 @@ export const paths = {
   POST_CREATE: '/posts/create',
   POST_UPDATE: (id: string) => `/posts/${id}/update`,
   POST_DETAIL: (id: string) => `/posts/${id}`,
-
-  REPOS: '/repos',
 
   COURSES: '/courses',
   COURSES_DETAIL: (id: string) => `/courses/${id}`,

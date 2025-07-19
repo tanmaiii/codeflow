@@ -70,7 +70,10 @@ export class ReposController {
     try {
       const isAdmin = req.user?.role === 'admin';
       const repo = await this.reposService.findById(req.params.id, isAdmin);
-      res.status(200).json(repo);
+      res.status(200).json({
+        data: repo,
+        message: 'Find repos by id',
+      });
     } catch (error) {
       next(error);
     }

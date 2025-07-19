@@ -494,7 +494,10 @@
     "instruction": "Instruction",
     "instructionName": "• Name must be lowercase, no special characters or spaces",
     "instructionNameDescription": "• Name must be lowercase, no special characters or spaces",
-    "instructionNameSuggest": "• Should use a meaningful and recognizable name"
+    "instructionNameSuggest": "• Should use a meaningful and recognizable name",
+    "topic": "Topic",
+    "statusTopic": "Status",
+    "viewGithub": "View on Github"
   },
   "tag": {
     "tag": "Tag",

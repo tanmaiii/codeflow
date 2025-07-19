@@ -5,10 +5,10 @@ import { IUser } from './user';
 export interface IRepos extends IBaseEntity {
   id: string;
   name: string;
-  description: string;
   topicId: string;
   url: string;
   authorId: string;
+  courseId: string;
   author: IUser;
   language: string;
   framework: string;

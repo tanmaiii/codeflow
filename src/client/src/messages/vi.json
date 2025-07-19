@@ -1,4 +1,4 @@
-{ 
+{
   "path": {
     "home": "Trang chủ",
     "users": "Người dùng",
@@ -392,7 +392,7 @@
     "repository": "Kho lưu trữ",
     "notRegistered": "Chưa được đăng ký",
     "registered": "Đã được đăng ký",
-    "evaluations": "Đánh giá",  
+    "evaluations": "Đánh giá",
     "evaluationDescription": "Nhận xét và đánh giá từ giảng viên",
     "noEvaluation": "Chưa có đánh giá",
     "noEvaluationDescription": "Đề tài này chưa có đánh giá từ giảng viên",
@@ -492,7 +492,10 @@
     "instruction": "Hướng dẫn",
     "instructionName": "• Tên kho lưu trữ chỉ chứa chữ cái, số và dấu gạch ngang (-)",
     "instructionNameDescription": "• Không được chứa khoảng trắng hoặc ký tự đặc biệt",
-    "instructionNameSuggest": "• Nên sử dụng tên có ý nghĩa và dễ nhận biết"
+    "instructionNameSuggest": "• Nên sử dụng tên có ý nghĩa và dễ nhận biết",
+    "topic": "Đề tài",
+    "statusTopic": "Trạng thái",
+    "viewGithub": "Xem trên Github"
   },
   "tag": {
     "tag": "Thẻ",
