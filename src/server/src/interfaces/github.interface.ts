@@ -6,6 +6,21 @@ export interface GitHubRepositoryCreate {
   team_id?: number;
 }
 
+export interface GithubMeta {
+  id: number;
+  name: string;
+  commits: number;
+  stars: number;
+  pull_requests_open: number;
+  pull_requests_closed: number;
+  pull_requests_merged: number;
+  forks: number;
+  issues: number;
+  created_at: string;
+  updated_at: string;
+  pushed_at: string;
+}
+
 export interface GitHubRepository {
   id: number;
   name: string;
@@ -82,6 +97,29 @@ export interface GitHubUser {
   following: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface GitHubContributor {
+  login: string; // Tên đăng nhập GitHub
+  id: number; // ID duy nhất của người dùng
+  node_id: string; // Node ID trong GraphQL
+  avatar_url: string; // URL ảnh đại diện
+  gravatar_id: string; // ID Gravatar
+  url: string; // URL API của người dùng
+  html_url: string; // URL trang GitHub của người dùng
+  followers_url: string; // URL API danh sách người theo dõi
+  following_url: string; // URL API danh sách đang theo dõi
+  gists_url: string; // URL API danh sách gist
+  starred_url: string; // URL API danh sách repo đã star
+  subscriptions_url: string; // URL API danh sách subscription
+  organizations_url: string; // URL API danh sách tổ chức
+  repos_url: string; // URL API danh sách repository
+  events_url: string; // URL API danh sách sự kiện
+  received_events_url: string; // URL API danh sách sự kiện nhận được
+  type: string; // Loại tài khoản (User/Organization)
+  user_view_type: string; // Loại hiển thị người dùng
+  site_admin: boolean; // Có phải admin site không
+  contributions: number; // Số lượng đóng góp
 }
 
 export interface GitHubContent {

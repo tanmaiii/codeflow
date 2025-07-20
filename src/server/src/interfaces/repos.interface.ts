@@ -7,6 +7,7 @@ export interface Repos {
   authorId: string;
   language: string;
   framework: string;
+  sonarKey: string;
 }
 
 export interface RepoCreate {

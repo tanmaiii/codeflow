@@ -24,13 +24,6 @@ export default function ReposDetail() {
     id: id,
   });
 
-  // Calculate stats
-  const pullRequestStats = {
-    open: pullRequests.filter(pr => pr.status === 'open').length,
-    merged: pullRequests.filter(pr => pr.status === 'merged').length,
-    closed: pullRequests.filter(pr => pr.status === 'closed').length,
-  };
-
   if (isLoading) return <div>Loading...</div>;
   if (!dataRepos) return <NoData />;
   if (isError) return <div>Error</div>;
@@ -83,13 +76,7 @@ export default function ReposDetail() {
           )}
 
           {/* Repository Stats */}
-          <RepositoryStats
-            pullRequests={pullRequestStats}
-            totalCommits={commits.length}
-            createdAt={repos.createdAt}
-            updatedAt={repos.updatedAt}
-            deletedAt={repos.deletedAt || undefined}
-          />
+          <RepositoryStats repoName={dataRepos.data?.name ?? ''} />
 
           {/* Quick Actions */}
           <QuickActions
@@ -104,32 +91,6 @@ export default function ReposDetail() {
     </div>
   );
 }
-
-// Mock data for prototype
-const repos = {
-  id: '1',
-  name: 'awesome-react-project',
-  description: 'A comprehensive React project with modern features and best practices',
-  language: 'TypeScript',
-  framework: 'React',
-  url: 'https://github.com/user/awesome-react-project',
-  createdAt: '2024-01-15T00:00:00Z',
-  updatedAt: '2024-12-15T00:00:00Z',
-  deletedAt: null,
-  author: {
-    id: 'author1',
-    email: 'john.doe@example.com',
-    name: 'John Doe',
-    avatar: 'https://github.com/johndoe.png',
-    bio: 'Full-stack developer passionate about React and TypeScript',
-  },
-  topic: {
-    id: 'topic1',
-    title: 'Modern Web Development',
-    description: 'Building scalable web applications with React ecosystem',
-    status: 'active' as const,
-  },
-};
 
 // Mock Pull Requests data
 const pullRequests = [

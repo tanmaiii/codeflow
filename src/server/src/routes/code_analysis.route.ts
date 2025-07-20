@@ -1,0 +1,21 @@
+import { GetAllQueryDto } from '@/dtos/common.dto';
+import { AuthMiddleware } from '@/middlewares/auth.middleware';
+import { ValidationMiddleware } from '@/middlewares/validation.middleware';
+import { CodeAnalysisController } from '@controllers/code_analysis.controller';
+import { Routes } from '@interfaces/routes.interface';
+import { Router } from 'express';
+
+export class CodeAnalysisRoute implements Routes {
+  public path = '/code-analysis';
+  public router = Router();
+  public codeAnalysis = new CodeAnalysisController();
+
+  constructor() {
+    this.initializeRoutes();
+  }
+
+  private initializeRoutes() {
+    this.router.get(`${this.path}`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.codeAnalysis.getCodeAnalyses);
+    this.router.get(`${this.path}/:id`, AuthMiddleware, this.codeAnalysis.getCodeAnalysisByRepoId);
+  }
+}

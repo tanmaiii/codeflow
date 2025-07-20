@@ -1,4 +1,5 @@
-import { CodeAnalysisModel } from './code_analysis.model';
+  import { CodeAnalysisModel } from './code_analysis.model';
+import { CodeAnalysisMetricsModel } from './code_analysis_metrics.model';
 import { CommentModel } from './comments.model';
 import { CourseDocumentModel } from './course_documents.model';
 import { CourseEnrollmentModel } from './course_enrollment.model';
@@ -112,6 +113,10 @@ export const initModels = () => {
 
   // CodeAnalysis Model Relations
   CodeAnalysisModel.belongsTo(ReposModel, { foreignKey: 'reposId', as: 'repos' });
+  CodeAnalysisModel.hasMany(CodeAnalysisMetricsModel, { foreignKey: 'codeAnalysisId', as: 'metrics' });
+
+  // CodeAnalysisMetrics Model Relations
+  CodeAnalysisMetricsModel.belongsTo(CodeAnalysisModel, { foreignKey: 'codeAnalysisId', as: 'codeAnalysis' });
 };
 
 export { CodeAnalysisModel, CourseModel, PostLikeModel, PostModel, TagModel, UserModel };

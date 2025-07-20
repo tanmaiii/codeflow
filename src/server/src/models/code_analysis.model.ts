@@ -1,21 +1,15 @@
 import { CodeAnalysis } from '@/interfaces/code_analysis.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { TopicModel } from './topics.model';
+import { ReposModel } from './repos.model';
+import { CodeAnalysisMetricsModel } from './code_analysis_metrics.model';
 
 export type CodeAnalysisCreationAttributes = Optional<
   CodeAnalysis,
   | 'id'
-  | 'reposId'
-  | 'branch'
-  | 'commitSha'
-  | 'qualityGate'
-  | 'bugs'
-  | 'vulnerabilities'
-  | 'codeSmells'
-  | 'coverage'
-  | 'duplicatedLinesDensity'
-  | 'securityRating'
-  | 'linesOfCode'
-  | 'url'
+  | 'status'
+  | 'analyzedAt'
+  | 'workflowRunId'
 >;
 
 export class CodeAnalysisModel extends Model<CodeAnalysis, CodeAnalysisCreationAttributes> implements CodeAnalysis {
@@ -23,15 +17,10 @@ export class CodeAnalysisModel extends Model<CodeAnalysis, CodeAnalysisCreationA
   public reposId!: string;
   public branch!: string;
   public commitSha!: string;
-  public qualityGate!: string;
-  public bugs!: number;
-  public vulnerabilities!: number;
-  public codeSmells!: number;
-  public coverage!: number;
-  public duplicatedLinesDensity!: number;
-  public securityRating!: number;
-  public linesOfCode!: number;
-  public url!: string;
+  public status!: string;
+  public analyzedAt!: Date;
+  public workflowRunId!: string;
+
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -62,39 +51,15 @@ export default function (sequelize: Sequelize): typeof CodeAnalysisModel {
         allowNull: false,
         type: DataTypes.STRING(255),
       },
-      qualityGate: {
+      status: {
         allowNull: false,
         type: DataTypes.STRING(255),
       },
-      bugs: {
+      analyzedAt: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.DATE,
       },
-      vulnerabilities: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      codeSmells: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      coverage: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      duplicatedLinesDensity: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      securityRating: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      linesOfCode: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      url: {
+      workflowRunId: {
         allowNull: false,
         type: DataTypes.STRING(255),
       },
@@ -104,6 +69,18 @@ export default function (sequelize: Sequelize): typeof CodeAnalysisModel {
       modelName: 'CodeAnalysis',
       tableName: 'code_analysis',
       timestamps: true,
+      defaultScope: {
+        include: [
+          {
+            model: ReposModel,
+            as: 'repos',
+          },
+          {
+            model: CodeAnalysisMetricsModel,
+            as: 'metrics',
+          },
+        ],
+      },
     },
   );
   return CodeAnalysisModel;

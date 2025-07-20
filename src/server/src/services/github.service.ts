@@ -1,487 +1,111 @@
-import { workflowTemplates } from '@/templates/workflow';
-import { workflowProperties } from '@/templates/workflow/workflow_propeties';
-import { GitHubContent, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
-import { logger } from '@utils/logger';
-import axios from 'axios';
-import crypto from 'crypto';
-import { env } from 'process';
-import { stringify } from 'querystring';
+import { GitHubContent, GithubMeta, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
 import Container, { Service } from 'typedi';
-import { SonarService } from './sonar.service';
-import { readmeTemplate } from '@/templates/readme.templates';
+import {
+  GitHubUserService,
+  GitHubRepositoryService,
+  GitHubContentService,
+  GitHubWebhookService,
+  GitHubWorkflowService,
+} from './github';
 
 @Service()
 export class GitHubService {
-  private baseUrl = 'https://api.github.com';
-  private organization = process.env.GITHUB_ORGANIZATION || 'organization-codeflow';
-  private readonly sonarService = Container.get(SonarService);
+  private readonly userService = Container.get(GitHubUserService);
+  private readonly repositoryService = Container.get(GitHubRepositoryService);
+  private readonly contentService = Container.get(GitHubContentService);
+  private readonly webhookService = Container.get(GitHubWebhookService);
+  private readonly workflowService = Container.get(GitHubWorkflowService);
 
-  private headers = {
-    Authorization: `Bearer ${env.GITHUB_TOKEN}`,
-    Accept: 'application/vnd.github+json',
-  };
-
+  // Webhook methods
   public async verifyWebhookSignature(signature: string): Promise<boolean> {
-    try {
-      logger.info(`[GitHub Service] Verifying webhook signature: ${signature} ${process.env.GITHUB_WEBHOOK_SECRET}`);
-      const hmac = crypto.createHmac('sha256', process.env.GITHUB_WEBHOOK_SECRET);
-      hmac.update(signature);
-      const calculatedSignature = hmac.digest('hex');
-      return calculatedSignature === signature;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error verifying webhook signature: ${error.message}`);
-      throw error;
-    }
+    return this.webhookService.verifyWebhookSignature(signature);
   }
 
-  /**
-   * Lấy thông tin user từ GitHub
-   * @param accessToken GitHub access token
-   * @returns GitHub user information
-   */
+  public async createWebhookCommit(repoName: string, webhookUrl: string) {
+    return this.webhookService.createWebhookCommit(repoName, webhookUrl);
+  }
+
+  public async handleWebhookCommit(body: any, signature: string): Promise<void> {
+    return this.webhookService.handleWebhookCommit(body, signature);
+  }
+
+  // User methods
   public async getUserInfo(accessToken: string): Promise<GitHubUser> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/user`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/vnd.github.v3+json',
-        },
-      });
-      logger.info(`[GitHub Service] User info: ${response.data}`);
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error getting user info: ${error.message}`);
-      throw error;
-    }
+    return this.userService.getUserInfo(accessToken);
   }
 
   public async getUserInfoByUsername(username: string): Promise<GitHubUser> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/users/${username}`, {
-        headers: this.headers,
-      });
-      logger.info(`[GitHub Service] User info: ${response.data}`);
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error getting user info: ${error.message}`);
-      throw error;
-    }
+    return this.userService.getUserInfoByUsername(username);
   }
 
-  /**
-   * Tạo repository mới trên GitHub
-   * @param repoData Thông tin repository
-   * @returns Thông tin repository đã tạo
-   */
-  public async createRepoInOrg(repoData: Partial<GitHubRepositoryCreate>): Promise<GitHubRepository> {
-    try {
-      logger.info(`[GitHub Service] Creating repository: ${JSON.stringify(repoData)} ${this.baseUrl}/orgs/${this.organization}/repos`);
-      const response = await axios.post(`${this.baseUrl}/orgs/${this.organization}/repos`, repoData, {
-        headers: this.headers,
-      });
+  public async inviteUserToOrganization(username: string): Promise<void> {
+    return this.userService.inviteUserToOrganization(username);
+  }
 
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error creating repository: ${error.message}`);
-      throw error;
-    }
+  public async checkUserInOrganization(username: string): Promise<boolean> {
+    return this.userService.checkUserInOrganization(username);
+  }
+
+  public async getOrganizationMembers(): Promise<GitHubUser[]> {
+    return this.userService.getOrganizationMembers();
+  }
+
+  // Repository methods
+  public async getRepoInfo(repoName: string): Promise<GithubMeta> {
+    return this.repositoryService.infoRepo(repoName);
+  }
+
+  public async createRepoInOrg(repoData: Partial<GitHubRepositoryCreate>): Promise<GitHubRepository> {
+    return this.repositoryService.createRepoInOrg(repoData);
   }
 
   public async renameBranchMainToMaster(repoName: string): Promise<void> {
-    try {
-      // Đổi main thành master
-      await axios.post(
-        `${this.baseUrl}/repos/${this.organization}/${repoName}/branches/main/rename`,
-        {
-          new_name: 'master',
-        },
-        {
-          headers: this.headers,
-        },
-      );
-      // Đặt default branch là master
-      await axios.patch(
-        `${this.baseUrl}/repos/${this.organization}/${repoName}`,
-        {
-          default_branch: 'master',
-        },
-        {
-          headers: this.headers,
-        },
-      );
-    } catch (error) {
-      logger.error(`[GitHub Service] Error renaming branch: ${error.message}`);
-      throw error;
-    }
+    return this.repositoryService.renameBranchMainToMaster(repoName);
   }
 
   public async deleteRepoInOrg(repoName: string): Promise<GitHubRepository> {
-    try {
-      logger.info(`[GitHub Service] Deleting repository: ${repoName} ${this.baseUrl}/repos/${this.organization}/${repoName}`);
-      const response = await axios.delete(`${this.baseUrl}/repos/${this.organization}/${repoName}`, {
-        headers: this.headers,
-      });
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error deleting repository: ${error.message}`);
-      throw error;
-    }
+    return this.repositoryService.deleteRepoInOrg(repoName);
   }
 
   public async updateRepoInOrg(repoName: string, repoData: Partial<GitHubRepositoryCreate>): Promise<GitHubRepository> {
-    try {
-      logger.info(`[GitHub Service] Updating repository: ${repoName} ${this.baseUrl}/repos/${this.organization}/${repoName}`);
-      const response = await axios.patch(`${this.baseUrl}/repos/${this.organization}/${repoName}`, repoData, {
-        headers: this.headers,
-      });
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error updating repository: ${error.message}`);
-      throw error;
-    }
+    return this.repositoryService.updateRepoInOrg(repoName, repoData);
   }
 
-  /**
-   * Lấy danh sách repository từ GitHub
-   * @param accessToken GitHub access token
-   * @param username GitHub username
-   * @returns Danh sách repository
-   */
   public async getUserRepositories(username: string): Promise<GitHubRepository[]> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/users/${username}/repos`, {
-        headers: this.headers,
-        params: {
-          sort: 'updated',
-          per_page: 100,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error getting user repositories: ${error.message}`);
-      throw error;
-    }
+    return this.repositoryService.getUserRepositories(username);
   }
 
-  /**
-   * Lấy chi tiết repository từ GitHub
-   * @param accessToken GitHub access token
-   * @param owner Repository owner
-   * @param repo Repository name
-   * @returns Chi tiết repository
-   */
   public async getRepository(owner: string, repo: string): Promise<GitHubRepository> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/repos/${owner}/${repo}`, {
-        headers: this.headers,
-      });
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error getting repository: ${error.message}`);
-      throw error;
-    }
-  }
-
-  /**
-   * Lấy nội dung repository từ GitHub
-   * @param accessToken GitHub access token
-   * @param owner Repository owner
-   * @param repo Repository name
-   * @param path Đường dẫn đến file hoặc thư mục
-   * @returns Nội dung repository
-   */
-  public async getRepositoryContents(owner: string, repo: string, path: string): Promise<GitHubContent | GitHubContent[]> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/repos/${owner}/${repo}/contents/${path}`, {
-        headers: this.headers,
-      });
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error getting repository contents: ${error.message}`);
-      throw error;
-    }
-  }
-
-  /**
-   * Mời user vào tổ chức GitHub
-   * @param username GitHub username
-   */
-  public async inviteUserToOrganization(username: string): Promise<void> {
-    try {
-      const userResp = await axios.get(`https://api.github.com/users/${username}`, {
-        headers: this.headers,
-      });
-      const userId = userResp.data.id;
-
-      const response = await axios.post(
-        `${this.baseUrl}/orgs/${this.organization}/invitations`,
-        {
-          invitee_id: userId,
-          role: 'direct_member',
-        },
-        {
-          headers: this.headers,
-        },
-      );
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error inviting user to organization: ${error.message}`);
-      throw error;
-    }
-  }
-
-  /**
-   * Kiểm tra xem user có tồn tại trong tổ chức GitHub hay không
-   * @param username GitHub username
-   * @returns true nếu user tồn tại trong tổ chức, false nếu ngược lại
-   */
-  public async checkUserInOrganization(username: string): Promise<boolean> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/orgs/${this.organization}/members/${username}`, {
-        headers: this.headers,
-      });
-      return response.status === 204;
-    } catch (error) {
-      return false;
-    }
+    return this.repositoryService.getRepository(owner, repo);
   }
 
   public async collaborateRepo(repoName: string, username: string): Promise<void> {
-    try {
-      const response = await axios.put(
-        `${this.baseUrl}/repos/${this.organization}/${repoName}/collaborators/${username}`,
-        {},
-        {
-          headers: this.headers,
-        },
-      );
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error collaborating repo: ${error.message}`);
-      throw error;
-    }
+    return this.repositoryService.collaborateRepo(repoName, username);
   }
 
-  /**
-   * Kiểm tra xem repository có tồn tại trong tổ chức hay không
-   * @param repoName Tên repository cần kiểm tra
-   * @returns true nếu repository tồn tại, false nếu không
-   */
   public async checkRepoExists(repoName: string): Promise<boolean> {
-    try {
-      await axios.get(`${this.baseUrl}/repos/${this.organization}/${repoName}`, {
-        headers: this.headers,
-      });
-      return true;
-    } catch (error) {
-      // Nếu repository không tồn tại, GitHub API sẽ trả về lỗi 404
-      if (error.response && error.response.status === 404) {
-        return false;
-      }
-      // Nếu có lỗi khác, log và coi như repository đã tồn tại để an toàn
-      logger.error(`[GitHub Service] Error checking repository existence: ${error.message}`);
-      return true;
-    }
+    return this.repositoryService.checkRepoExists(repoName);
   }
 
-  /**
-   * Lấy danh sách thành viên tổ chức GitHub
-   * @returns Danh sách thành viên tổ chức
-   */
-  public async getOrganizationMembers(): Promise<GitHubUser[]> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/orgs/${this.organization}/members`, {
-        headers: this.headers,
-      });
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error getting organization members: ${error.message}`);
-      throw error;
-    }
+  // Content methods
+  public async getRepositoryContents(owner: string, repo: string, path: string): Promise<GitHubContent | GitHubContent[]> {
+    return this.contentService.getRepositoryContents(owner, repo, path);
   }
 
-  /**
-   * Tạo webhook commit trên repository
-   * @param repoName Tên repository
-   * @param webhookUrl URL của webhook
-   * @returns Webhook đã tạo
-   */
-  public async createWebhookCommit(repoName: string, webhookUrl: string) {
-    try {
-      const response = await axios.post(
-        `${this.baseUrl}/repos/${this.organization}/${repoName}/hooks`,
-        {
-          name: 'web',
-          active: true,
-          events: ['push', 'workflow_run'], // Nhận khi có push hoặc workflow_run
-          config: {
-            url: webhookUrl,
-            content_type: 'json',
-            secret: process.env.GITHUB_WEBHOOK_SECRET,
-            insecure_ssl: '0',
-          },
-        },
-        {
-          headers: this.headers,
-        },
-      );
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error creating webhook commit: ${webhookUrl}`);
-      logger.error(`[GitHub Service] Error creating webhook commit: ${stringify(error.response.data)}`);
-      throw error.response.data;
-    }
-  }
-
-  /**
-   * Xử lý webhook commit
-   * @param body
-   * @param signature
-   * @returns
-   */
-  public async handleWebhookCommit(body: any, signature: string): Promise<void> {
-    try {
-    } catch (error) {}
-  }
-
-  /**
-   * Xác định ngôn ngữ của repository bằng cách lấy danh sách các file trong repository
-   * @param repoName Tên repository
-   * @returns Ngôn ngữ của repository
-   */
-  public async detectRepoLanguage(repoName: string): Promise<string> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/repos/${this.organization}/${repoName}/languages`, {
-        headers: this.headers,
-      });
-
-      const languages = response.data;
-      const sorted = Object.entries(languages).sort((a: [string, number], b: [string, number]) => b[1] - a[1]);
-      const mainLanguage = sorted.length > 0 ? sorted[0][0] : 'Unknown';
-
-      if (mainLanguage === 'Unknown') {
-        return '';
-      }
-      return mainLanguage;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error detecting repository language: ${error.message}`);
-      throw error;
-    }
-  }
-
-  //
-
-  /**
-   * Tạo và push GitHub Actions workflow vào repository
-   * @param repoName Tên repository
-   * @param workflowName Tên file workflow (không bao gồm .yml)
-   * @param workflowContent Nội dung workflow YAML
-   * @returns Thông tin commit đã tạo
-   */
   public async pushCode(repoName: string, message: string, content: string, path: string): Promise<any> {
-    try {
-      // Encode workflow content to base64
-      const contentBase64 = Buffer.from(content).toString('base64');
-
-      // Check if file already exists
-      let sha: string | undefined;
-      try {
-        const existingFile = await axios.get(`${this.baseUrl}/repos/${this.organization}/${repoName}/contents/${path}`, {
-          headers: this.headers,
-        });
-        sha = existingFile.data.sha;
-      } catch (error) {
-        // File doesn't exist, which is fine
-        if (error.response && error.response.status !== 404) {
-          throw error;
-        }
-      }
-
-      const body: any = {
-        message: `Add/Update ${message}`,
-        content: contentBase64,
-        branch: 'main',
-      };
-
-      // If file exists, include sha for update
-      if (sha) {
-        body.sha = sha;
-      }
-
-      logger.info(`[GitHub Service] Pushing workflow: ${message} to ${repoName}`);
-
-      const response = await axios.put(`${this.baseUrl}/repos/${this.organization}/${repoName}/contents/${path}`, body, {
-        headers: this.headers,
-      });
-
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error pushing workflow: ${error.message}`);
-      throw error;
-    }
+    return this.contentService.pushCode(repoName, message, content, path);
   }
 
-  /**
-   * Tạo workflow cơ bản cho CI/CD
-   * @param repoName Tên repository
-   * @param language Ngôn ngữ lập trình chính của repository
-   * @param framework Framework của repository
-   * @returns Thông tin commit đã tạo
-   */
+  public async detectRepoLanguage(repoName: string): Promise<string> {
+    return this.contentService.detectRepoLanguage(repoName);
+  }
+
+  // Workflow methods
   public async createBasicWorkflow(repoName: string, language: string, framework: string): Promise<any> {
-    try {
-      let workflowContent = '';
-      let workflowPropertiesContent = '';
-
-      const sonarData = await this.sonarService.createProject(repoName);
-
-      workflowContent = workflowTemplates[language][framework]();
-
-      logger.info(`[GitHub Service] Workflow content: ${workflowContent}`);
-
-      workflowPropertiesContent = workflowProperties({
-        organization: 'organization-codeflow',
-        projectKey: sonarData.project.key,
-      });
-
-      await this.pushCode(repoName, 'readme', readmeTemplate(repoName), 'README.md');
-      await this.pushCode(repoName, 'ci', workflowContent, '.github/workflows/ci.yml');
-      await this.pushCode(repoName, 'sonar', workflowPropertiesContent, 'sonar-project.properties');
-      return true;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error creating basic workflow: ${error.message}`);
-      throw error;
-    }
+    return this.workflowService.createBasicWorkflow(repoName, language, framework);
   }
 
-  /**
-   * Xóa workflow khỏi repository
-   * @param repoName Tên repository
-   * @param workflowName Tên file workflow
-   * @returns Thông tin commit đã tạo
-   */
   public async deleteWorkflow(repoName: string, workflowName: string): Promise<any> {
-    try {
-      const path = `.github/workflows/${workflowName}.yml`;
-
-      // Get file SHA
-      const existingFile = await axios.get(`${this.baseUrl}/repos/${this.organization}/${repoName}/contents/${path}`, {
-        headers: this.headers,
-      });
-
-      const response = await axios.delete(`${this.baseUrl}/repos/${this.organization}/${repoName}/contents/${path}`, {
-        headers: this.headers,
-        data: {
-          message: `Delete ${workflowName} workflow`,
-          sha: existingFile.data.sha,
-          branch: 'main',
-        },
-      });
-
-      return response.data;
-    } catch (error) {
-      logger.error(`[GitHub Service] Error deleting workflow: ${error.message}`);
-      throw error;
-    }
+    return this.workflowService.deleteWorkflow(repoName, workflowName);
   }
 }

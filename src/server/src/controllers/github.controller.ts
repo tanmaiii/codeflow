@@ -1,14 +1,16 @@
+import { CodeAnalysisCreate, CodeAnalysisMetrics } from '@/interfaces/code_analysis.interface';
 import { CommitCreate } from '@/interfaces/commits.interface';
+import CodeAnalysisService from '@/services/code_analysis.service';
 import { CommitService } from '@/services/commit.service';
 import { ReposService } from '@/services/repos.service';
+import { SonarService } from '@/services/sonar.service';
 import { UserService } from '@/services/users.service';
 import { logger } from '@/utils/logger';
 import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
-import { GitHubCommit, GitHubRepository, GitHubRequestBody } from '@interfaces/github.interface';
+import { PushEvent, WorkflowRunEvent } from '@octokit/webhooks-types';
 import { GitHubService } from '@services/github.service';
 import { NextFunction, Request, Response } from 'express';
-import { stringify } from 'querystring';
 import { Container } from 'typedi';
 
 export class GitHubController {
@@ -16,30 +18,16 @@ export class GitHubController {
   public commitService: CommitService;
   public userService: UserService;
   public reposService: ReposService;
+  public sonarService: SonarService;
+  public codeAnalysisService: CodeAnalysisService;
   constructor() {
     this.github = Container.get(GitHubService);
     this.commitService = Container.get(CommitService);
     this.userService = Container.get(UserService);
     this.reposService = Container.get(ReposService);
+    this.sonarService = Container.get(SonarService);
+    this.codeAnalysisService = Container.get(CodeAnalysisService);
   }
-
-  /**
-   * Get GitHub user information
-   */
-  public getUserInfo = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-    try {
-      const { accessToken } = req.body as GitHubRequestBody;
-
-      if (!accessToken) {
-        throw new HttpException(400, 'Access token is required');
-      }
-
-      const userData = await this.github.getUserInfo(accessToken);
-      res.status(200).json({ data: userData, message: 'github-user-info' });
-    } catch (error) {
-      next(error);
-    }
-  };
 
   public getUserInfoByUsername = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
@@ -56,101 +44,20 @@ export class GitHubController {
     }
   };
 
-  /**
-   * Get repositories for a GitHub user
-   */
-  public getUserRepositories = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-    try {
-      const { accessToken } = req.body as GitHubRequestBody;
-      const { username } = req.params;
-
-      if (!accessToken) {
-        throw new HttpException(400, 'Access token is required');
-      }
-
-      if (!username) {
-        throw new HttpException(400, 'Username is required');
-      }
-
-      const repositories = await this.github.getUserRepositories(accessToken);
-      res.status(200).json({ data: repositories, message: 'github-user-repositories' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  /**
-   * Get repository details
-   */
-  public getRepository = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-    try {
-      const { accessToken } = req.body as GitHubRequestBody;
-      const { owner, repo } = req.params;
-
-      if (!accessToken) {
-        throw new HttpException(400, 'Access token is required');
-      }
-
-      if (!owner || !repo) {
-        throw new HttpException(400, 'Owner and repo are required');
-      }
-
-      const repository = await this.github.getRepository(accessToken, owner);
-      res.status(200).json({ data: repository, message: 'github-repository' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  /**
-   * Get repository contents
-   */
-  public getRepositoryContents = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-    try {
-      const { accessToken } = req.body as GitHubRequestBody;
-      const { owner, repo } = req.params;
-      const { path = '' } = req.query;
-
-      if (!accessToken) {
-        throw new HttpException(400, 'Access token is required');
-      }
-
-      if (!owner || !repo) {
-        throw new HttpException(400, 'Owner and repo are required');
-      }
-
-      const contents = await this.github.getRepositoryContents(owner, repo, path as string);
-      res.status(200).json({ data: contents, message: 'github-repository-contents' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public inviteUserToOrganization = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-    try {
-      const username = req.body.username;
-
-      logger.info(`[GitHub Controller] username: ${username}`);
-
-      if (!username) {
-        throw new HttpException(400, 'Username is required');
-      }
-
-      if (!username) {
-        throw new HttpException(400, 'Organization and username are required');
-      }
-
-      await this.github.inviteUserToOrganization(username);
-      res.status(200).json({ message: 'github-invite-user-to-organization' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
   public getOrganizationMembers = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const members = await this.github.getOrganizationMembers();
       res.status(200).json({ data: members, message: 'github-organization-members' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getRepoInfo = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { repoName } = req.params;
+      const repoInfo = await this.github.getRepoInfo(repoName);
+      res.status(200).json({ data: repoInfo, message: 'github-repo-info' });
     } catch (error) {
       next(error);
     }
@@ -188,12 +95,27 @@ export class GitHubController {
       const event = req.headers['x-github-event'] as string;
 
       if (event === 'workflow_run') {
-        const { workflow_run } = body;
-        logger.info(`[GitHub Webhook] Workflow run event received for repository: ${stringify(workflow_run)}`);
+        const workflowEvent = body as WorkflowRunEvent;
+        const { workflow_run } = workflowEvent;
+
+        logger.info(`[GitHub Webhook] Workflow run event received. Status: ${workflow_run.status}, Conclusion: ${workflow_run.conclusion}`);
+
+        // Kiểm tra nếu workflow run đã completed
+        if (workflow_run.status === 'completed') {
+          logger.info(`[GitHub Webhook] Workflow run completed for repository: ${workflow_run.repository.full_name}`);
+          logger.info(`[GitHub Webhook] Workflow conclusion: ${workflow_run.conclusion}`);
+
+          // Xử lý logic khi workflow hoàn thành
+          await this.processWorkflowCompletion(workflow_run);
+        }
+
+        res.status(200).json({ message: 'Workflow run webhook processed successfully' });
+        return;
       }
 
       if (event === 'push') {
-        const { repository, commits, ref } = body;
+        const pushEvent = body as PushEvent;
+        const { repository, commits, ref } = pushEvent;
 
         logger.info(`[GitHub Webhook] Push event received for repository: ${repository.full_name}`);
         logger.info(`[GitHub Webhook] Branch: ${ref}, Commits count: ${commits.length}`);
@@ -213,10 +135,63 @@ export class GitHubController {
     }
   };
 
-  private async processCommit(commit: GitHubCommit, repository: GitHubRepository) {
+  // Xử lý khi workflow run hoàn thành
+  private async processWorkflowCompletion(workflow_run: WorkflowRunEvent['workflow_run']) {
+    try {
+      logger.info(`[GitHub Webhook] Processing workflow completion: ${workflow_run.name}`);
+
+      const repo = await this.reposService.findRepoByRepositoryName(workflow_run.repository.name);
+
+      if (!repo) {
+        logger.warn(`[GitHub Webhook] Repository not found: ${workflow_run.repository.name}`);
+        return;
+      }
+
+      const sonarAnalysis = await this.sonarService.getMeasures(repo.sonarKey);
+
+      if (sonarAnalysis.component.measures.length === 0) {
+        logger.warn(`[GitHub Webhook] Sonar analysis not found: ${workflow_run.repository.name}`);
+        return;
+      }
+
+      const codeAnalysis: CodeAnalysisCreate = {
+        reposId: repo.id,
+        branch: workflow_run.head_branch,
+        commitSha: workflow_run.head_sha,
+        status: workflow_run.conclusion,
+        workflowRunId: workflow_run.id.toString(),
+        analyzedAt: new Date(),
+      };
+
+      const newCodeAnalysis = await this.codeAnalysisService.createCodeAnalysis(codeAnalysis);
+
+      for (const measure of sonarAnalysis.component.measures) {
+        const codeAnalysisMetrics: CodeAnalysisMetrics = {
+          codeAnalysisId: newCodeAnalysis.id,
+          name: measure.metric,
+          value: measure.value,
+          bestValue: measure.bestValue,
+        };
+        await this.codeAnalysisService.createCodeAnalysisMetrics(codeAnalysisMetrics);
+      }
+
+      return;
+    } catch (error) {
+      logger.error(`[GitHub Webhook] Error processing workflow completion: ${error}`);
+    }
+  }
+
+  // Lưu commit
+  private async processCommit(commit: PushEvent['commits'][0], repository: PushEvent['repository']) {
     try {
       // logger.info(`[GitHub Webhook] Processing commit: ${JSON.stringify(commit)}`);
       // logger.info(`[GitHub Webhook] Processing repository: ${JSON.stringify(repository)}`);
+
+      // Kiểm tra nếu author.username tồn tại
+      if (!commit.author.username) {
+        logger.warn(`[GitHub Webhook] Commit ${commit.id} does not have author username, skipping...`);
+        return;
+      }
 
       const user = await this.userService.findUserByUsername(commit.author.username);
       if (!user) throw new HttpException(404, 'User not found');
@@ -236,18 +211,4 @@ export class GitHubController {
       logger.error(`[GitHub Webhook] Error processing commit ${commit.id}: ${error}`);
     }
   }
-
-  /**
-   * Xử lý ngôn ngữ của repository
-   */
-  public processCommitLanguage = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { repoName } = req.params;
-      const language = await this.github.detectRepoLanguage(repoName);
-
-      res.status(200).json({ data: language, message: 'github-commit-language' });
-    } catch (error) {
-      next(error);
-    }
-  };
 }

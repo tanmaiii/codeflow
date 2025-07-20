@@ -149,11 +149,11 @@ export class ReposService {
       // auto_init: true,
     });
 
-    await this.githubService.createBasicWorkflow(uniqueRepoName, repoData.language, repoData.framework);
+    const sonarKey = await this.githubService.createBasicWorkflow(uniqueRepoName, repoData.language, repoData.framework);
 
     // Tạo webhook cho repo, nếu có lỗi thì chỉ log lỗi, không throw để các bước sau vẫn thực hiện
     try {
-      await this.githubService.createWebhookCommit(uniqueRepoName, `${process.env.WEBHOOK_URL}/github/webhook`);
+      await this.githubService.createWebhookCommit(uniqueRepoName, `${process.env.WEBHOOK_URL}/api/github/webhook`);
     } catch (error) {
       logger.error(`[Repos Service] Error creating webhook for repo ${uniqueRepoName}: ${error}`);
     }
@@ -180,6 +180,7 @@ export class ReposService {
       name: uniqueRepoName,
       language: repoData.language,
       framework: repoData.framework,
+      sonarKey: sonarKey || '',
     });
   }
 
@@ -237,7 +238,7 @@ export class ReposService {
     }
 
     try {
-      await this.sonarService.deleteProject(repo.name);
+      await this.sonarService.deleteProject(repo.sonarKey);
     } catch (error) {
       logger.error(`[Repos Service] Error deleting project: ${error}`);
     }

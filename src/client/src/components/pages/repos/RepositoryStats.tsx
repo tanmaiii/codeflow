@@ -1,26 +1,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import useQ_GitHub_GetRepoInfo from '@/hooks/query-hooks/Github/useQ_GitHub_GetRepoInfo';
 
-interface RepositoryStatsProps {
-  pullRequests: {
-    open: number;
-    merged: number;
-    closed: number;
-  };
-  totalCommits: number;
-  createdAt?: string;
-  updatedAt?: string;
-  deletedAt?: string;
-}
+export default function RepositoryStats({ repoName }: { repoName: string }) {
+  const { data } = useQ_GitHub_GetRepoInfo({ repoName });
 
-export default function RepositoryStats({
-  pullRequests,
-  totalCommits,
-  createdAt,
-  updatedAt,
-  deletedAt,
-}: RepositoryStatsProps) {
   return (
     <Card>
       <CardHeader>
@@ -32,10 +17,13 @@ export default function RepositoryStats({
             <span className="text-sm text-muted-foreground">Pull Requests</span>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="text-xs">
-                {pullRequests.open} open
+                {data?.pull_requests_open} open
               </Badge>
               <Badge variant="secondary" className="text-xs">
-                {pullRequests.merged} merged
+                {data?.pull_requests_closed} closed
+              </Badge>
+              <Badge variant="secondary" className="text-xs">
+                {data?.pull_requests_merged} merged
               </Badge>
             </div>
           </div>
@@ -44,7 +32,7 @@ export default function RepositoryStats({
 
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">Total Commits</span>
-            <span className="text-sm">{totalCommits}</span>
+            <span className="text-sm">{data?.commits}</span>
           </div>
 
           <Separator />
@@ -52,7 +40,7 @@ export default function RepositoryStats({
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">Created</span>
             <span className="text-sm">
-              {createdAt ? new Date(createdAt).toLocaleDateString() : 'N/A'}
+              {data?.created_at ? new Date(data?.created_at).toLocaleDateString() : 'N/A'}
             </span>
           </div>
 
@@ -61,23 +49,20 @@ export default function RepositoryStats({
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">Last Updated</span>
             <span className="text-sm">
-              {updatedAt ? new Date(updatedAt).toLocaleDateString() : 'N/A'}
+              {data?.updated_at ? new Date(data?.updated_at).toLocaleDateString() : 'N/A'}
             </span>
           </div>
 
-          {deletedAt && (
-            <>
-              <Separator />
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-red-500">Deleted</span>
-                <span className="text-sm text-red-500">
-                  {new Date(deletedAt).toLocaleDateString()}
-                </span>
-              </div>
-            </>
-          )}
+          <Separator />
+
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-muted-foreground">Pushed</span>
+            <span className="text-sm">
+              {data?.pushed_at ? new Date(data?.pushed_at).toLocaleDateString() : 'N/A'}
+            </span>
+          </div>
         </div>
       </CardContent>
     </Card>
   );
-} 
+}

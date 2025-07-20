@@ -1,14 +1,18 @@
 import TextHeading from '@/components/ui/text';
+import { paths } from '@/data/path';
 import { IRepos } from '@/interfaces/repos';
 import { IconBrandGithub, IconCloudX } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 import CardRepo_More from './CardRepoMore';
-import Link from 'next/link';
-import { paths } from '@/data/path';
 
 export default function CardRepo({ repos }: { repos: IRepos }) {
+  const router = useRouter();
+  const onClick = () => {
+    router.push(paths.REPOS_DETAIL(repos.id));
+  };
+
   return (
-    <Link
-      href={`${paths.REPOS_DETAIL(repos.id)}`}
+    <div
       key={repos.id}
       className="group relative flex cursor-pointer items-center gap-2 p-2 rounded-md border border-input hover:bg-accent/50 transition-colors"
     >
@@ -21,7 +25,7 @@ export default function CardRepo({ repos }: { repos: IRepos }) {
           )}
         </div>
         <div>
-          <TextHeading lineClamp={2} className="break-all text-sm font-medium">
+          <TextHeading onClick={onClick} lineClamp={2} className="break-all text-sm font-medium">
             {repos.name}
           </TextHeading>
         </div>
@@ -29,6 +33,6 @@ export default function CardRepo({ repos }: { repos: IRepos }) {
       <div className="absolute right-2 top-1/2 -translate-y-1/2 ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
         <CardRepo_More className="bg-white dark:bg-black rounded-full" repos={repos} />
       </div>
-    </Link>
+    </div>
   );
 }

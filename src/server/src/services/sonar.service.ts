@@ -1,5 +1,5 @@
 import { HttpException } from '@/exceptions/HttpException';
-import { SonarMeasures } from '@/interfaces/sonar.ineterface';
+import { SonarCreate, SonarMeasures } from '@/interfaces/sonar.ineterface';
 import { logger } from '@/utils/logger';
 import axios from 'axios';
 import qs from 'qs';
@@ -20,7 +20,7 @@ export class SonarService {
   };
 
   // Tạo project trên sonar để lấy key
-  public async createProject(projectName: string) {
+  public async createProject(projectName: string): Promise<SonarCreate> {
     try {
       const formData = qs.stringify({
         name: projectName,
@@ -72,19 +72,34 @@ export class SonarService {
           metricKeys: [
             'alert_status',
             'bugs',
-            'code_smells',
             'vulnerabilities',
-            'coverage',
-            'duplicated_lines_density',
+            'code_smells',
+            'sqale_index',
+            'sqale_rating',
             'reliability_rating',
             'security_rating',
+            'security_hotspots',
+            'security_review_rating',
+            'coverage',
+            'line_coverage',
+            'uncovered_lines',
+            'lines_to_cover',
+            'duplicated_lines_density',
+            'duplicated_blocks',
+            'duplicated_lines',
+            'complexity',
+            'cognitive_complexity',
+            'ncloc',
+            'files',
+            'functions',
+            'classes',
           ].join(','),
         },
         headers: this.headers,
         auth: this.auth,
       });
 
-      logger.info(`[Sonar Service] Measures: ${JSON.stringify(response.data, null, 2)}`);
+      logger.info(`[Sonar Service] Get measures success`);
 
       return response.data;
     } catch (err: any) {

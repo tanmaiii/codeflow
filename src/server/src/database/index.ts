@@ -1,7 +1,7 @@
 import { initModels } from '@/models';
 import CodeAnalysisModel from '@/models/code_analysis.model';
+import CodeAnalysisMetricsModel from '@/models/code_analysis_metrics.model';
 import CommentModel from '@/models/comments.model';
-import CommitReviewsModel from '@/models/commit_review';
 import CommitsModel from '@/models/commits.model';
 import CourseDocument from '@/models/course_documents.model';
 import CourseEnrollmentModel from '@/models/course_enrollment.model';
@@ -69,8 +69,8 @@ export const DB = {
   Notifications: NotificationModel(sequelize),
   SystemSettings: SystemSettingsModel(sequelize),
   Commits: CommitsModel(sequelize),
-  CommitReviews: CommitReviewsModel(sequelize),
   CodeAnalysis: CodeAnalysisModel(sequelize),
+  CodeAnalysisMetrics: CodeAnalysisMetricsModel(sequelize),
   sequelize,
 };
 

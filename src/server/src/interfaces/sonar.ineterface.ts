@@ -11,3 +11,13 @@ export interface SonarMeasures {
     }[];
   };
 }
+
+export interface SonarCreate {
+  project: {
+    key: string;
+    name: string;
+    qualifier: string;
+    visibility: string;
+    uuid: string;
+  };
+}

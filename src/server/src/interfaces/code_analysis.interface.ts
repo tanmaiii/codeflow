@@ -3,13 +3,31 @@ export interface CodeAnalysis {
   reposId: string;
   branch: string;
   commitSha: string; // commit sha của branch
-  qualityGate: string; // chất lượng mã
-  bugs: number; // số lượng lỗi
-  vulnerabilities: number; // số lượng rủi ro
-  codeSmells: number; // số lượng cảm giác mã
-  coverage: number; // phần trăm code được test
-  duplicatedLinesDensity: number; // phần trăm dòng code trùng lặp
-  securityRating: number;
-  linesOfCode: number;
-  url: string;
+  status: string;
+  analyzedAt: Date;
+  workflowRunId: string;
+}
+
+export interface CodeAnalysisMetrics {
+  codeAnalysisId: string;
+  name: string;
+  value: string;
+  bestValue: boolean;
+}
+
+export interface CodeAnalysisCreate {
+  reposId: string;
+  branch: string;
+  commitSha: string;
+  status: string;
+  workflowRunId: string;
+  analyzedAt: Date;
+}
+
+export interface CodeAnalysisUpdate {
+  reposId: string;
+  branch: string;
+  commitSha: string;
+  status: string;
+  workflowRunId: string;
 }
