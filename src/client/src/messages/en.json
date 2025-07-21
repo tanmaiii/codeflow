@@ -582,5 +582,30 @@
     "daysRemaining": "{days} days {hours} hours remaining",
     "hoursRemaining": "{hours} hours {minutes} minutes remaining",
     "minutesRemaining": "{minutes} minutes remaining"
+  },
+  "metrics": {
+    "alert_status": "Alert Status",
+    "bugs": "Bugs",
+    "vulnerabilities": "Vulnerabilities", 
+    "code_smells": "Code Smells",
+    "sqale_index": "Technical Debt",
+    "sqale_rating": "Maintainability Rating",
+    "reliability_rating": "Reliability Rating",
+    "security_rating": "Security Rating",
+    "security_hotspots": "Security Hotspots",
+    "security_review_rating": "Security Review Rating",
+    "coverage": "Coverage",
+    "line_coverage": "Line Coverage",
+    "uncovered_lines": "Uncovered Lines",
+    "lines_to_cover": "Lines to Cover",
+    "duplicated_lines_density": "Duplicated Lines Density",
+    "duplicated_blocks": "Duplicated Blocks",
+    "duplicated_lines": "Duplicated Lines",
+    "complexity": "Complexity",
+    "cognitive_complexity": "Cognitive Complexity",
+    "ncloc": "Lines of Code",
+    "files": "Files",
+    "functions": "Functions",
+    "classes": "Classes"
   }
 }

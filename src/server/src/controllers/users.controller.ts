@@ -5,6 +5,7 @@ import { User } from '@interfaces/users.interface';
 import { UserService } from '@services/users.service';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
+import { SocketService } from '@services/socket.service';
 
 export class UserController {
   public user = Container.get(UserService);
@@ -101,4 +102,35 @@ export class UserController {
       next(error);
     }
   };
+
+  public getOnlineUsers = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const socketService = Container.get(SocketService);
+      const onlineUserIds = socketService.getOnlineUsers();
+      
+      // Get user details for online users
+      const onlineUsers = await Promise.all(
+        onlineUserIds.map(async (userId) => {
+          try {
+            return await this.user.findUserById(userId);
+          } catch (error) {
+            // User might be deleted but still in online list
+            return null;
+          }
+        })
+      );
+
+      // Filter out null values (deleted users)
+      const validOnlineUsers = onlineUsers.filter(user => user !== null);
+
+      res.status(200).json({
+        success: true,
+        message: 'Online users retrieved successfully',
+        data: validOnlineUsers,
+        count: validOnlineUsers.length
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

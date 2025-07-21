@@ -1,16 +1,10 @@
 import { CodeAnalysis } from '@/interfaces/code_analysis.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { TopicModel } from './topics.model';
-import { ReposModel } from './repos.model';
 import { CodeAnalysisMetricsModel } from './code_analysis_metrics.model';
+import { ReposModel } from './repos.model';
+import { UserModel } from './users.model';
 
-export type CodeAnalysisCreationAttributes = Optional<
-  CodeAnalysis,
-  | 'id'
-  | 'status'
-  | 'analyzedAt'
-  | 'workflowRunId'
->;
+export type CodeAnalysisCreationAttributes = Optional<CodeAnalysis, 'id' | 'status' | 'analyzedAt' | 'workflowRunId'>;
 
 export class CodeAnalysisModel extends Model<CodeAnalysis, CodeAnalysisCreationAttributes> implements CodeAnalysis {
   public id!: string;
@@ -20,8 +14,7 @@ export class CodeAnalysisModel extends Model<CodeAnalysis, CodeAnalysisCreationA
   public status!: string;
   public analyzedAt!: Date;
   public workflowRunId!: string;
-
-
+  public authorId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -63,6 +56,15 @@ export default function (sequelize: Sequelize): typeof CodeAnalysisModel {
         allowNull: false,
         type: DataTypes.STRING(255),
       },
+      authorId: {
+        allowNull: true,
+        type: DataTypes.UUID,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
     },
     {
       sequelize,
@@ -78,6 +80,10 @@ export default function (sequelize: Sequelize): typeof CodeAnalysisModel {
           {
             model: CodeAnalysisMetricsModel,
             as: 'metrics',
+          },
+          {
+            model: UserModel,
+            as: 'author',
           },
         ],
       },

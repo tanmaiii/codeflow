@@ -16,6 +16,6 @@ export class CodeAnalysisRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.codeAnalysis.getCodeAnalyses);
-    this.router.get(`${this.path}/:id`, AuthMiddleware, this.codeAnalysis.getCodeAnalysisByRepoId);
+    this.router.get(`${this.path}/repos/:id`, AuthMiddleware, this.codeAnalysis.getCodeAnalysisByRepoId);
   }
 }

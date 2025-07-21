@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { IconGitCommit, IconGitPullRequest } from '@tabler/icons-react';
+import { IRepos } from '@/interfaces/repos';
+import { IconCode, IconGitCommit, IconGitPullRequest } from '@tabler/icons-react';
 import CommitItem from './CommitItem';
 import PullRequestItem from './PullRequestItem';
+import CodeAnalysis from './code-analysis/CodeAnalysis';
 
 interface PullRequest {
   id: string;
@@ -40,17 +42,23 @@ interface Commit {
 interface PullRequestsAndCommitsProps {
   pullRequests: PullRequest[];
   commits: Commit[];
+  repos: IRepos;
 }
 
-export default function PullRequestsAndCommits({
+export default function RepoAnalysisAndActivity({
   pullRequests,
   commits,
+  repos,
 }: PullRequestsAndCommitsProps) {
   return (
     <Card>
-      <Tabs defaultValue="pull-requests" className="w-full">
+      <Tabs defaultValue="code-analysis" className="w-full">
         <CardHeader>
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="code-analysis" className="flex items-center gap-2">
+              <IconCode className="size-4" />
+              Code Analysis
+            </TabsTrigger>
             <TabsTrigger value="pull-requests" className="flex items-center gap-2">
               <IconGitPullRequest className="size-4" />
               Pull Requests ({pullRequests.length})
@@ -63,6 +71,10 @@ export default function PullRequestsAndCommits({
         </CardHeader>
 
         <CardContent>
+          <TabsContent value="code-analysis" className="space-y-4">
+            <CodeAnalysis repos={repos} />
+          </TabsContent>
+
           <TabsContent value="pull-requests" className="space-y-4">
             {pullRequests.map(pr => (
               <PullRequestItem key={pr.id} {...pr} />
@@ -78,4 +90,4 @@ export default function PullRequestsAndCommits({
       </Tabs>
     </Card>
   );
-} 
+}

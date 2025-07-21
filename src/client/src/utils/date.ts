@@ -24,6 +24,18 @@ export function utils_DateToDDMMYYYY(date: string | Date): string {
   return `${day}/${month}/${year}`;
 }
 
+export function utils_DateToDDMMYYYY_HHMM(date: string | Date): string {
+  if (!date) return '...';
+  const dateObj = new Date(date);
+  const day = dateObj.getDate().toString().padStart(2, '0');
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+  const year = dateObj.getFullYear();
+  const hour = dateObj.getHours().toString().padStart(2, '0');
+  const minute = dateObj.getMinutes().toString().padStart(2, '0');
+  return `${day}/${month}/${year} ${hour}:${minute}`;
+}
+
+
 /**
  * Trả về chuỗi ngày tháng (Ex: 28 tháng 5)
  * @param date Ngày

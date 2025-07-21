@@ -205,6 +205,7 @@ export default function TopicsAbout({ topic }: Topics_AboutProps) {
                   avatar={member?.user?.avatar}
                   name={member?.user?.name ?? ''}
                   role={member?.role}
+                  id={member?.user?.id}
                 />
               </div>
             ))}

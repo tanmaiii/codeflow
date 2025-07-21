@@ -45,7 +45,7 @@ export default function Users() {
         header: 'Name',
         accessorKey: 'name',
         cell: ({ row }) => (
-          <MemberAvatar name={row.original.name || ''} avatar={row.original.avatar} />
+          <MemberAvatar id={row.original.id} name={row.original.name || ''} avatar={row.original.avatar} />
         ),
       },
       {

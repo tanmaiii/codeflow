@@ -15,6 +15,7 @@ import { INotification } from '@/interfaces/notification';
 import socketService from '@/services/socket.service';
 import { useUserStore } from '@/stores/user_store';
 import { util_format_number } from '@/utils/common';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 
 const NOTIFICATION_LIMIT = 10;
 const UNREAD_LIMIT = 100000;
@@ -25,6 +26,9 @@ const NotificationCenter: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('notification');
+  
+  // Initialize online status tracking
+  useOnlineStatus();
 
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -55,7 +59,7 @@ const NotificationCenter: React.FC = () => {
   useEffect(() => {
     if (!user) return;
 
-    socketService.connect(user.id);
+    // Socket connection is now handled by useOnlineStatus hook
     const unsubscribe = socketService.onNotification((notification: unknown) => {
       const newNotification = notification as INotification;
       setNotifications(prev => [newNotification, ...prev]);
@@ -66,7 +70,6 @@ const NotificationCenter: React.FC = () => {
 
     return () => {
       unsubscribe();
-      socketService.disconnect();
     };
   }, [user]);
 

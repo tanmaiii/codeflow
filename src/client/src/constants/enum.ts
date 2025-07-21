@@ -65,3 +65,29 @@ export enum ENUM_FRAMEWORK {
   ASP_NET = 'ASP.NET', // ASP.NET
   HTML = 'HTML', // HTML
 }
+
+export enum ENUM_METRICS_CODE_ANALYSIS {
+  ALERT_STATUS = 'alert_status',
+  BUGS = 'bugs',
+  VULNERABILITIES = 'vulnerabilities',
+  CODE_SMELLS = 'code_smells',
+  SQALE_INDEX = 'sqale_index',
+  SQALE_RATING = 'sqale_rating',
+  RELIABILITY_RATING = 'reliability_rating',
+  SECURITY_RATING = 'security_rating',
+  SECURITY_HOTSPOTS = 'security_hotspots',
+  SECURITY_REVIEW_RATING = 'security_review_rating',
+  COVERAGE = 'coverage',
+  LINE_COVERAGE = 'line_coverage',
+  UNCOVERED_LINES = 'uncovered_lines',
+  LINES_TO_COVER = 'lines_to_cover',
+  DUPLICATED_LINES_DENSITY = 'duplicated_lines_density',
+  DUPLICATED_BLOCKS = 'duplicated_blocks',
+  DUPLICATED_LINES = 'duplicated_lines',
+  COMPLEXITY = 'complexity',
+  COGNITIVE_COMPLEXITY = 'cognitive_complexity',
+  NCLoc = 'ncloc',
+  FILES = 'files',
+  FUNCTIONS = 'functions',
+  CLASSES = 'classes',
+}

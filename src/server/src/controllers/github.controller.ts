@@ -20,6 +20,7 @@ export class GitHubController {
   public reposService: ReposService;
   public sonarService: SonarService;
   public codeAnalysisService: CodeAnalysisService;
+
   constructor() {
     this.github = Container.get(GitHubService);
     this.commitService = Container.get(CommitService);
@@ -154,6 +155,9 @@ export class GitHubController {
         return;
       }
 
+      const user = await this.userService.findUserByUsername(workflow_run.actor.login);
+      if (!user.uid || !user) throw new HttpException(404, 'User not found');
+
       const codeAnalysis: CodeAnalysisCreate = {
         reposId: repo.id,
         branch: workflow_run.head_branch,
@@ -161,6 +165,7 @@ export class GitHubController {
         status: workflow_run.conclusion,
         workflowRunId: workflow_run.id.toString(),
         analyzedAt: new Date(),
+        authorId: user.id,
       };
 
       const newCodeAnalysis = await this.codeAnalysisService.createCodeAnalysis(codeAnalysis);

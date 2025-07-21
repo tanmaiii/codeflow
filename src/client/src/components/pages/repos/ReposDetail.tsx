@@ -3,7 +3,6 @@ import NoData from '@/components/common/NoData/NoData';
 import TitleHeader from '@/components/layout/TitleHeader';
 import {
   AuthorInfo,
-  PullRequestsAndCommits,
   QuickActions,
   RepositoryInfo,
   RepositoryStats,
@@ -11,6 +10,7 @@ import {
 } from '@/components/pages/repos';
 import useQ_Repos_GetDetail from '@/hooks/query-hooks/Repos/useQ_Repos_GetDetail';
 import { useParams } from 'next/navigation';
+import RepoAnalysisAndActivity from './RepoAnalysisAndActivity';
 
 export default function ReposDetail() {
   const params = useParams();
@@ -60,7 +60,11 @@ export default function ReposDetail() {
           )}
 
           {/* Pull Requests & Commits */}
-          <PullRequestsAndCommits pullRequests={pullRequests} commits={commits} />
+          <RepoAnalysisAndActivity
+            repos={dataRepos.data}
+            pullRequests={pullRequests}
+            commits={commits}
+          />
         </div>
 
         {/* Sidebar */}

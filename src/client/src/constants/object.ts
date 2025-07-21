@@ -1,6 +1,7 @@
 import {
   ENUM_FRAMEWORK,
   ENUM_LANGUAGE,
+  ENUM_METRICS_CODE_ANALYSIS,
   ENUM_STATUS_TOPIC,
   ENUM_TYPE_COURSE,
   ENUM_TYPE_NOTIFICATION,
@@ -166,3 +167,98 @@ export const LANGUAGE_TYPE = {
   [ENUM_LANGUAGE.DOTNET]: [ENUM_FRAMEWORK.ASP_NET],
   [ENUM_LANGUAGE.STATIC]: [ENUM_FRAMEWORK.HTML],
 };
+
+export const METRICS_CODE_ANALYSIS: IStatusObj[] = [
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.ALERT_STATUS,
+    labelKey: 'metrics.alert_status',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.BUGS,
+    labelKey: 'metrics.bugs',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.VULNERABILITIES,
+    labelKey: 'metrics.vulnerabilities',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.CODE_SMELLS,
+    labelKey: 'metrics.code_smells',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.SQALE_INDEX,
+    labelKey: 'metrics.sqale_index',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.SQALE_RATING,
+    labelKey: 'metrics.sqale_rating',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.RELIABILITY_RATING,
+    labelKey: 'metrics.reliability_rating',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.SECURITY_RATING,
+    labelKey: 'metrics.security_rating',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS,
+    labelKey: 'metrics.security_hotspots',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.SECURITY_REVIEW_RATING,
+    labelKey: 'metrics.security_review_rating',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.COVERAGE,
+    labelKey: 'metrics.coverage',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.LINE_COVERAGE,
+    labelKey: 'metrics.line_coverage',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.UNCOVERED_LINES,
+    labelKey: 'metrics.uncovered_lines',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.LINES_TO_COVER,
+    labelKey: 'metrics.lines_to_cover',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES_DENSITY,
+    labelKey: 'metrics.duplicated_lines_density',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_BLOCKS,
+    labelKey: 'metrics.duplicated_blocks',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES,
+    labelKey: 'metrics.duplicated_lines',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.COMPLEXITY,
+    labelKey: 'metrics.complexity',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.COGNITIVE_COMPLEXITY,
+    labelKey: 'metrics.cognitive_complexity',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.NCLoc,
+    labelKey: 'metrics.ncloc',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.FILES,
+    labelKey: 'metrics.files',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.FUNCTIONS,
+    labelKey: 'metrics.functions',
+  },
+  {
+    value: ENUM_METRICS_CODE_ANALYSIS.CLASSES,
+    labelKey: 'metrics.classes',
+  },
+];

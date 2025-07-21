@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import MyImage from '../common/MyImage';
+import { useOnlineUsersStore } from '@/stores/online_users_store';
 
 interface MemberAvatarProps {
   avatar?: string;
@@ -28,6 +29,9 @@ export default function MemberAvatar({
 }: MemberAvatarProps) {
   const router = useRouter();
   const t = useTranslations();
+  const { isUserOnline } = useOnlineUsersStore();
+  
+  const isOnline = id ? isUserOnline(id) : false;
   return (
     <div
       onClick={() => {
@@ -37,14 +41,20 @@ export default function MemberAvatar({
       }}
       className={cn('flex flex-row cursor-pointer items-center gap-2', className)}
     >
-      <MyImage
-        src={!avatar ? apiConfig.avatar(name) : avatar}
-        alt={name}
-        width={size}
-        height={size}
-        className={`rounded-full`}
-        defaultSrc={apiConfig.avatar(name)}
-      />
+      <div className="relative">
+        <MyImage
+          src={!avatar ? apiConfig.avatar(name) : avatar}
+          alt={name}
+          width={size}
+          height={size}
+          className={`rounded-full `}
+          defaultSrc={apiConfig.avatar(name)}
+        />
+        {isOnline && (
+          <div className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white" />
+        )}
+      </div>
+
       <div className="flex flex-col">
         <TextDescription className="text-color-1">{name}</TextDescription>
         {description && (

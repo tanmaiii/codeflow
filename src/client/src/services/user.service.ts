@@ -39,6 +39,11 @@ class UserService {
     const res = await this.client.put(`/${id}/delete`);
     return res.data;
   }
+
+  async getOnlineUsers(): Promise<ResponseAPIDto<IUser[]>> {
+    const res = await this.client.get('/online');
+    return res.data;
+  }
 }
 
 export default new UserService() as UserService;

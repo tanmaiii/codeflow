@@ -6,6 +6,7 @@ export interface CodeAnalysis {
   status: string;
   analyzedAt: Date;
   workflowRunId: string;
+  authorId: string;
 }
 
 export interface CodeAnalysisMetrics {
@@ -22,6 +23,7 @@ export interface CodeAnalysisCreate {
   status: string;
   workflowRunId: string;
   analyzedAt: Date;
+  authorId: string;
 }
 
 export interface CodeAnalysisUpdate {

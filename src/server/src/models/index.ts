@@ -1,4 +1,4 @@
-  import { CodeAnalysisModel } from './code_analysis.model';
+import { CodeAnalysisModel } from './code_analysis.model';
 import { CodeAnalysisMetricsModel } from './code_analysis_metrics.model';
 import { CommentModel } from './comments.model';
 import { CourseDocumentModel } from './course_documents.model';
@@ -33,6 +33,7 @@ export const initModels = () => {
   UserModel.hasMany(NotificationModel, { foreignKey: 'authorId', as: 'sentNotifications' });
   UserModel.hasMany(NotificationModel, { foreignKey: 'userId', as: 'receivedNotifications' });
   UserModel.hasOne(UserSettingsModel, { foreignKey: 'userId', as: 'settings' });
+  UserModel.hasMany(CodeAnalysisModel, { foreignKey: 'authorId', as: 'codeAnalyses' });
 
   // UserSettings Model Relations
   UserSettingsModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
@@ -114,6 +115,7 @@ export const initModels = () => {
   // CodeAnalysis Model Relations
   CodeAnalysisModel.belongsTo(ReposModel, { foreignKey: 'reposId', as: 'repos' });
   CodeAnalysisModel.hasMany(CodeAnalysisMetricsModel, { foreignKey: 'codeAnalysisId', as: 'metrics' });
+  CodeAnalysisModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
 
   // CodeAnalysisMetrics Model Relations
   CodeAnalysisMetricsModel.belongsTo(CodeAnalysisModel, { foreignKey: 'codeAnalysisId', as: 'codeAnalysis' });
