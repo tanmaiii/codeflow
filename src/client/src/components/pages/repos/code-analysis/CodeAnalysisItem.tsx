@@ -1,51 +1,31 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import MyBadge from '@/components/common/MyBadge';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading from '@/components/ui/text';
 import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
+import { STATUS_CODE_ANLYSIS } from '@/constants/object';
 import { ICodeAnalysis } from '@/interfaces/code_analysis';
 import { IRepos } from '@/interfaces/repos';
 import { utils_DateToDDMMYYYY_HHMM } from '@/utils/date';
-import {
-  IconChartBar,
-  IconCheck,
-  IconClock,
-  IconExternalLink,
-  IconGitBranch,
-  IconGitCommit,
-  IconX,
-} from '@tabler/icons-react';
+import { IconExternalLink, IconGitBranch, IconGitCommit } from '@tabler/icons-react';
+import CodeAnalysisModal from './CodeAnalysisModal';
 import { MetricItem } from './MetricItem';
+import { util_object_to_color } from '@/utils/common';
+import { Badge } from '@/components/ui/badge';
 
 interface CodeAnalysisItemProps {
   data: ICodeAnalysis;
   repos: IRepos;
 }
 
-const STATUS_CONFIG = {
-  completed: { icon: IconCheck, color: 'text-green-600', badge: 'bg-green-100 text-green-800 border-green-200' },
-  success: { icon: IconCheck, color: 'text-green-600', badge: 'bg-green-100 text-green-800 border-green-200' },
-  failed: { icon: IconX, color: 'text-red-600', badge: 'bg-red-100 text-red-800 border-red-200' },
-  error: { icon: IconX, color: 'text-red-600', badge: 'bg-red-100 text-red-800 border-red-200' },
-  pending: { icon: IconClock, color: 'text-yellow-600', badge: 'bg-yellow-100 text-yellow-800 border-yellow-200' },
-  running: { icon: IconClock, color: 'text-yellow-600', badge: 'bg-yellow-100 text-yellow-800 border-yellow-200' },
-  default: { icon: IconChartBar, color: 'text-blue-600', badge: 'bg-blue-100 text-blue-800 border-blue-200' },
-};
-
-const PRIORITY_METRICS = [
-  ENUM_METRICS_CODE_ANALYSIS.SECURITY_RATING,
-  ENUM_METRICS_CODE_ANALYSIS.RELIABILITY_RATING,
-  ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS,
-  ENUM_METRICS_CODE_ANALYSIS.COVERAGE,
-  ENUM_METRICS_CODE_ANALYSIS.BUGS,
-  ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES_DENSITY,
-];
-
 export default function CodeAnalysisItem({ data, repos }: CodeAnalysisItemProps) {
   const { id, branch, commitSha, status, analyzedAt, workflowRunId, author, metrics } = data;
 
   const getStatusConfig = (status: string) => {
-    return STATUS_CONFIG[status.toLowerCase() as keyof typeof STATUS_CONFIG] || STATUS_CONFIG.default;
+    const statusGet = util_object_to_color(
+      STATUS_CODE_ANLYSIS.find(item => item.value === status)!,
+    );
+
+    return statusGet;
   };
 
   const handleOpenGitHub = () => {
@@ -66,48 +46,49 @@ export default function CodeAnalysisItem({ data, repos }: CodeAnalysisItemProps)
 
   const getFilteredAndSortedMetrics = () => {
     if (!metrics?.length) return [];
-    
+
+    // Lấy thứ tự từ ENUM_METRICS_CODE_ANALYSIS
+    const enumOrder = Object.values(ENUM_METRICS_CODE_ANALYSIS);
+
     return metrics
-      .filter(metric => PRIORITY_METRICS.includes(metric.name as ENUM_METRICS_CODE_ANALYSIS))
       .sort((a, b) => {
-        const indexA = PRIORITY_METRICS.indexOf(a.name as ENUM_METRICS_CODE_ANALYSIS);
-        const indexB = PRIORITY_METRICS.indexOf(b.name as ENUM_METRICS_CODE_ANALYSIS);
+        const indexA = enumOrder.indexOf(a.name as ENUM_METRICS_CODE_ANALYSIS);
+        const indexB = enumOrder.indexOf(b.name as ENUM_METRICS_CODE_ANALYSIS);
         return indexA - indexB;
-      });
+      })
+      .slice(0, 5); // Lấy 5 cái đầu
   };
 
+  const sortedMetrics = getFilteredAndSortedMetrics();
   const statusConfig = getStatusConfig(status);
   const StatusIcon = statusConfig.icon;
-  const sortedMetrics = getFilteredAndSortedMetrics();
 
   return (
     <div className="border rounded-lg p-4 space-y-3 hover:shadow-md transition-shadow">
       {/* Header Section */}
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3 flex-1">
-          <StatusIcon className={`size-4 ${statusConfig.color}`} />
+          <StatusIcon className={`size-4 mt-1 ${statusConfig.text}`} />
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <TextHeading
                 className="font-semibold cursor-pointer hover:text-blue-600 transition-colors flex items-center gap-1"
                 onClick={handleOpenGitHub}
               >
-                Code Analysis #{id.slice(-8)}
+                Code Analysis #{id.slice(-8)}...
                 <IconExternalLink className="size-3 opacity-60" />
               </TextHeading>
-              <Badge className={statusConfig.badge}>{status}</Badge>
+              <MyBadge
+                className="w-fit"
+                status={STATUS_CODE_ANLYSIS.find(item => item.value === status)!}
+              />
             </div>
           </div>
         </div>
 
         {/* Action Button */}
         <div className="flex items-center gap-2">
-          {isAnalysisCompleted() && (
-            <Button variant="outline" size="sm" className="text-xs">
-              <IconChartBar className="size-3 mr-1" />
-              Xem phân tích
-            </Button>
-          )}
+          {isAnalysisCompleted() && <CodeAnalysisModal data={data} />}
         </div>
       </div>
 
@@ -125,8 +106,13 @@ export default function CodeAnalysisItem({ data, repos }: CodeAnalysisItemProps)
         )}
 
         <div className="flex items-center gap-1">
-          <IconGitBranch className="size-4" />
-          <span>{branch}</span>
+          <Badge
+            variant="outline"
+            className="flex items-center gap-1 px-1 py-0.5 rounded-sm bg-amber-600/10 dark:bg-amber-600/20"
+          >
+            <IconGitBranch className="size-4 text-amber-500" />
+            <span className="text-amber-500">{branch}</span>
+          </Badge>
         </div>
 
         <div className="flex items-center gap-1">
@@ -135,7 +121,7 @@ export default function CodeAnalysisItem({ data, repos }: CodeAnalysisItemProps)
             className="cursor-pointer hover:text-blue-600 transition-colors"
             onClick={handleOpenCommit}
           >
-            {commitSha.slice(0, 7)}
+            {commitSha.slice(0, 7)}...
           </span>
         </div>
 

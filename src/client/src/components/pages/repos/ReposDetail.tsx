@@ -11,6 +11,7 @@ import {
 import useQ_Repos_GetDetail from '@/hooks/query-hooks/Repos/useQ_Repos_GetDetail';
 import { useParams } from 'next/navigation';
 import RepoAnalysisAndActivity from './RepoAnalysisAndActivity';
+import CodeAnalysisImprovementChart from './code-analysis/CodeAnalysisImprovementChart';
 
 export default function ReposDetail() {
   const params = useParams();
@@ -58,6 +59,8 @@ export default function ReposDetail() {
               status={dataRepos.data?.topic.status}
             />
           )}
+
+          <CodeAnalysisImprovementChart repos={dataRepos?.data ?? []} />
 
           {/* Pull Requests & Commits */}
           <RepoAnalysisAndActivity

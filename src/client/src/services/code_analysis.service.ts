@@ -1,5 +1,5 @@
 import { ICodeAnalysis } from '@/interfaces/code_analysis';
-import { IGetAllQuery, PaginatedResponseAPIDto } from '@/interfaces/common';
+import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 
@@ -15,8 +15,21 @@ class CodeAnalysisService {
     return res.data;
   }
 
-  async getByReposId(params: IGetAllQuery, reposId: string): Promise<PaginatedResponseAPIDto<ICodeAnalysis[]>> {
+  async getByReposId(
+    params: IGetAllQuery,
+    reposId: string,
+  ): Promise<PaginatedResponseAPIDto<ICodeAnalysis[]>> {
     const res = await this.client.get(`/repos/${reposId}`, { params });
+    return res.data;
+  }
+
+  async getByReposIdWithTimeFilter(
+    reposId: string,
+    timeframe: string,
+  ): Promise<ResponseAPIDto<ICodeAnalysis[]>> {
+    const res = await this.client.get(`/repos/${reposId}/timeframe`, {
+      params: { timeframe },
+    });
     return res.data;
   }
 }

@@ -1,0 +1,2 @@
+export { default as useQ_CodeAnalysis_GetAllByReposId } from './useQ_CodeAnalysis_GetAllByReposId';
+export { useQ_CodeAnalysis_GetByReposIdWithTimeFilter } from './useQ_CodeAnalysis_GetByReposIdWithTimeFilter'; 

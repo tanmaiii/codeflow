@@ -1,18 +1,19 @@
 import { Card } from '@/components/ui/card';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { Award, CheckCircle, Code2, GitCommit, TrendingUp, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import ContributionChart from './ContributionChart';
 import MemberCard from './MemberCard';
 import MetricCard from './MetricCard';
-import { getRoleConfig, mockMemberData } from './constants';
-import { useTranslations } from 'next-intl';
+import { mockMemberData } from './constants';
 
 export default function TopicsContribute() {
   // Tính toán các metrics tổng hợp
   const totalCommits = mockMemberData.reduce((sum, member) => sum + member.commits, 0);
   const totalLinesAdded = mockMemberData.reduce((sum, member) => sum + member.linesAdded, 0);
   const totalTasks = mockMemberData.reduce((sum, member) => sum + member.tasksCompleted, 0);
-  const averageScore = mockMemberData.reduce((sum, member) => sum + member.score, 0) / mockMemberData.length;
+  const averageScore =
+    mockMemberData.reduce((sum, member) => sum + member.score, 0) / mockMemberData.length;
   const t = useTranslations('topic.contribute');
 
   return (
@@ -113,17 +114,7 @@ export default function TopicsContribute() {
 
             <div className="flex flex-col gap-4">
               {mockMemberData.map(member => {
-                const roleConfig = getRoleConfig(member.role);
-                const IconComponent = roleConfig.icon;
-                
-                return (
-                  <MemberCard
-                    key={member.id}
-                    member={member}
-                    roleConfig={roleConfig}
-                    IconComponent={IconComponent}
-                  />
-                );
+                return <MemberCard key={member.id} member={member} />;
               })}
             </div>
           </div>
@@ -131,4 +122,4 @@ export default function TopicsContribute() {
       </div>
     </div>
   );
-} 
+}

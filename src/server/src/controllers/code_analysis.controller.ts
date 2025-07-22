@@ -55,4 +55,22 @@ export class CodeAnalysisController {
       next(error);
     }
   };
+
+  public getCodeAnalysisByRepoIdWithTimeFilter = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const { timeframe = '7d' } = req.query;
+
+      const data = await this.codeAnalysisService.findByRepoIdWithTimeFilter(id, String(timeframe));
+
+      res.status(200).json({
+        data,
+        message: 'findByRepoIdWithTimeFilter',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  //
 }

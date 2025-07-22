@@ -10,7 +10,7 @@ export interface ICodeAnalysis extends IBaseEntity {
   analyzedAt: Date;
   workflowRunId: string;
   authorId: string;
-  author: IUser;
+  author?: IUser;
   metrics: IMetrics[];
 }
 

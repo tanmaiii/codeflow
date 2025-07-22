@@ -50,8 +50,8 @@ export default function MySelect<T extends FieldValues>({
 
   if (control && !onChange) {
     return (
-      <div className="w-full">
-        <Label className="mb-2 text-color-2">{label}</Label>
+      <div className="">
+        <Label className="mb-2 text-color-2 w-fit">{label}</Label>
         <Controller
           name={name}
           control={control}
@@ -86,8 +86,8 @@ export default function MySelect<T extends FieldValues>({
 
   // Support for uncontrolled usage without react-hook-form
   return (
-    <div className="w-full">
-      <Label className="mb-2 text-color-2">{label}</Label>
+    <div className="">
+      <Label className="mb-2 text-color-2 w-fit">{label}</Label>
       <Select
         disabled={disabled}
         value={value}
@@ -104,7 +104,7 @@ export default function MySelect<T extends FieldValues>({
           <SelectGroup>
             {options.map(option => (
               <SelectItem key={option.value} value={option.value}>
-                {t(option.labelKey)}
+                {isTranslate ? t(option.labelKey) : option.labelKey}
               </SelectItem>
             ))}
           </SelectGroup>

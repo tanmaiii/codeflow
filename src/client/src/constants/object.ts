@@ -171,94 +171,121 @@ export const LANGUAGE_TYPE = {
 export const METRICS_CODE_ANALYSIS: IStatusObj[] = [
   {
     value: ENUM_METRICS_CODE_ANALYSIS.ALERT_STATUS,
-    labelKey: 'metrics.alert_status',
+    labelKey: 'codeAnalysis.metrics.alert_status',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.BUGS,
-    labelKey: 'metrics.bugs',
+    labelKey: 'codeAnalysis.metrics.bugs',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.VULNERABILITIES,
-    labelKey: 'metrics.vulnerabilities',
+    labelKey: 'codeAnalysis.metrics.vulnerabilities',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.CODE_SMELLS,
-    labelKey: 'metrics.code_smells',
+    labelKey: 'codeAnalysis.metrics.code_smells',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.SQALE_INDEX,
-    labelKey: 'metrics.sqale_index',
+    labelKey: 'codeAnalysis.metrics.sqale_index',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.SQALE_RATING,
-    labelKey: 'metrics.sqale_rating',
+    labelKey: 'codeAnalysis.metrics.sqale_rating',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.RELIABILITY_RATING,
-    labelKey: 'metrics.reliability_rating',
+    labelKey: 'codeAnalysis.metrics.reliability_rating',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.SECURITY_RATING,
-    labelKey: 'metrics.security_rating',
+    labelKey: 'codeAnalysis.metrics.security_rating',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS,
-    labelKey: 'metrics.security_hotspots',
+    labelKey: 'codeAnalysis.metrics.security_hotspots',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.SECURITY_REVIEW_RATING,
-    labelKey: 'metrics.security_review_rating',
+    labelKey: 'codeAnalysis.metrics.security_review_rating',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.COVERAGE,
-    labelKey: 'metrics.coverage',
+    labelKey: 'codeAnalysis.metrics.coverage',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.LINE_COVERAGE,
-    labelKey: 'metrics.line_coverage',
+    labelKey: 'codeAnalysis.metrics.line_coverage',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.UNCOVERED_LINES,
-    labelKey: 'metrics.uncovered_lines',
+    labelKey: 'codeAnalysis.metrics.uncovered_lines',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.LINES_TO_COVER,
-    labelKey: 'metrics.lines_to_cover',
+    labelKey: 'codeAnalysis.metrics.lines_to_cover',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES_DENSITY,
-    labelKey: 'metrics.duplicated_lines_density',
+    labelKey: 'codeAnalysis.metrics.duplicated_lines_density',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_BLOCKS,
-    labelKey: 'metrics.duplicated_blocks',
+    labelKey: 'codeAnalysis.metrics.duplicated_blocks',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES,
-    labelKey: 'metrics.duplicated_lines',
+    labelKey: 'codeAnalysis.metrics.duplicated_lines',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.COMPLEXITY,
-    labelKey: 'metrics.complexity',
+    labelKey: 'codeAnalysis.metrics.complexity',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.COGNITIVE_COMPLEXITY,
-    labelKey: 'metrics.cognitive_complexity',
+    labelKey: 'codeAnalysis.metrics.cognitive_complexity',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.NCLoc,
-    labelKey: 'metrics.ncloc',
+    labelKey: 'codeAnalysis.metrics.ncloc',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.FILES,
-    labelKey: 'metrics.files',
+    labelKey: 'codeAnalysis.metrics.files',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.FUNCTIONS,
-    labelKey: 'metrics.functions',
+    labelKey: 'codeAnalysis.metrics.functions',
   },
   {
     value: ENUM_METRICS_CODE_ANALYSIS.CLASSES,
-    labelKey: 'metrics.classes',
+    labelKey: 'codeAnalysis.metrics.classes',
+  },
+];
+
+export const STATUS_CODE_ANLYSIS: IStatusObj[] = [
+  {
+    value: 'completed',
+    labelKey: 'codeAnalysis.completed',
+  },
+  {
+    value: 'success',
+    labelKey: 'codeAnalysis.success',
+  },
+  {
+    value: 'failed',
+    labelKey: 'codeAnalysis.failed',
+  },
+  {
+    value: 'error',
+    labelKey: 'codeAnalysis.error',
+  },
+  {
+    value: 'pending',
+    labelKey: 'codeAnalysis.pending',
+  },
+  {
+    value: 'running',
+    labelKey: 'codeAnalysis.running',
   },
 ];
