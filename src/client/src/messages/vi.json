@@ -598,6 +598,7 @@
     "improveCodeAnalysis": "Xu hướng cải thiện Code Analysis",
     "needAtLeast2Analysis": "Cần ít nhất 2 lần phân tích code để hiển thị xu hướng cải thiện",
     "dataWillBeDisplayedAfterMoreAnalysis": "Dữ liệu sẽ được hiển thị sau khi có thêm phân tích",
+    "recentChanges": "Thay đổi gần đây",
     "analyzedAt" : "Thời gian phân tích",
     "branch": "Nhánh",
     "completed": "Đã hoàn thành",
@@ -630,6 +631,13 @@
       "files": "Tệp tin",
       "functions": "Hàm",
       "classes": "Lớp"
+    },
+    "timeFilters": {
+      "7d": "7 ngày qua", 
+      "30d": "30 ngày qua",
+      "3m": "3 tháng qua",
+      "6m": "6 tháng qua",
+      "1y": "1 năm"
     }
   }
 }

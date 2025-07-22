@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from '@/components/ui/select';
 import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
 import { METRICS_CODE_ANALYSIS } from '@/constants/object';
@@ -23,15 +23,16 @@ interface CodeAnalysisImprovementChartProps {
 }
 
 const timeFilters = [
-  { label: '7 ngày qua', value: '7d' },
-  { label: '30 ngày qua', value: '30d' },
-  { label: '3 tháng qua', value: '3m' },
-  { label: '6 tháng qua', value: '6m' },
-  { label: '1 năm', value: '1y' },
+  { label: 'timeFilters.7d', value: '7d' },
+  { label: 'timeFilters.30d', value: '30d' },
+  { label: 'timeFilters.3m', value: '3m' },
+  { label: 'timeFilters.6m', value: '6m' },
+  { label: 'timeFilters.1y', value: '1y' },
 ];
 
 export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImprovementChartProps) {
   const t = useTranslations();
+  const t_codeAnalysis = useTranslations("codeAnalysis");
   const { theme } = useDarkMode();
   const [selectedTimeframe, setSelectedTimeframe] = useState('7d');
 
@@ -274,8 +275,8 @@ export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImpr
         </CardHeader>
         <CardContent>
           <div className="text-center py-12 text-gray-500">
-            <p>{t('codeAnalysis.needAtLeast2Analysis')}</p>
-            <p className="text-sm mt-2">{t('codeAnalysis.dataWillBeDisplayedAfterMoreAnalysis')}</p>
+            <p>{t_codeAnalysis('needAtLeast2Analysis')}</p>
+            <p className="text-sm mt-2">{t_codeAnalysis('dataWillBeDisplayedAfterMoreAnalysis')}</p>
           </div>
         </CardContent>
       </Card>
@@ -295,13 +296,13 @@ export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImpr
             </div>
             <Select value={selectedTimeframe} onValueChange={setSelectedTimeframe}>
               <SelectTrigger className={`w-35 !h-10 !rounded-sm bg-background-1`}>
-                <SelectValue placeholder={`${t('common.select')} Metric`} />
+                <SelectValue placeholder={`${t('common.select')}`} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {timeFilters.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      {option.label}
+                      {t_codeAnalysis(option.label)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -325,7 +326,7 @@ export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImpr
         {/* Trend Summary */}
         {trends && trends.length > 0 && (
           <div className="space-y-3">
-            <h4 className="font-semibold text-sm">Thay đổi gần đây:</h4>
+            <h4 className="font-semibold text-sm">{t_codeAnalysis('recentChanges')}:</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {trends.map((trend, index) => (
                 <div

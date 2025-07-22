@@ -598,6 +598,9 @@
     "status": "Status",
     "viewAnalysis": "View Analysis",
     "improveCodeAnalysis": "Improve Code Analysis",
+    "needAtLeast2Analysis": "Need at least 2 analysis to display improvement trend",
+    "dataWillBeDisplayedAfterMoreAnalysis": "Data will be displayed after more analysis",
+    "recentChanges": "Recent Changes",
     "analyzedAt" : "Analyzed At",
     "branch": "Branch",
     "completed": "Completed",
@@ -630,6 +633,13 @@
       "files": "Files",
       "functions": "Functions",
       "classes": "Classes"
+    },
+    "timeFilters": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "3m": "3 months",
+      "6m": "6 months",
+      "1y": "1 year"
     }
   }
 }
