@@ -21,6 +21,7 @@ export const MetricItem = ({ metric }: { metric: IMetrics }) => {
     switch (name.toLowerCase()) {
       // Rating metrics - display as letter grades
       case ENUM_METRICS_CODE_ANALYSIS.SECURITY_RATING:
+        case ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS:
       case ENUM_METRICS_CODE_ANALYSIS.RELIABILITY_RATING:
       case ENUM_METRICS_CODE_ANALYSIS.SQALE_RATING:
       case ENUM_METRICS_CODE_ANALYSIS.SECURITY_REVIEW_RATING:
@@ -29,6 +30,7 @@ export const MetricItem = ({ metric }: { metric: IMetrics }) => {
       // Percentage metrics
       case ENUM_METRICS_CODE_ANALYSIS.COVERAGE:
       case ENUM_METRICS_CODE_ANALYSIS.LINE_COVERAGE:
+      case ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS_REVIEWED:
       case ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES_DENSITY:
         return `${Math.round(numValue)}%`;
 
@@ -43,7 +45,6 @@ export const MetricItem = ({ metric }: { metric: IMetrics }) => {
       case ENUM_METRICS_CODE_ANALYSIS.BUGS:
       case ENUM_METRICS_CODE_ANALYSIS.VULNERABILITIES:
       case ENUM_METRICS_CODE_ANALYSIS.CODE_SMELLS:
-      case ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS:
       case ENUM_METRICS_CODE_ANALYSIS.UNCOVERED_LINES:
       case ENUM_METRICS_CODE_ANALYSIS.LINES_TO_COVER:
       case ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_BLOCKS:
@@ -67,6 +68,7 @@ export const MetricItem = ({ metric }: { metric: IMetrics }) => {
   const isPercentageMetric = [
     ENUM_METRICS_CODE_ANALYSIS.COVERAGE,
     ENUM_METRICS_CODE_ANALYSIS.LINE_COVERAGE,
+    ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS_REVIEWED,
     ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES_DENSITY,
   ].includes(metric.name as ENUM_METRICS_CODE_ANALYSIS);
 
@@ -156,9 +158,9 @@ export const MetricItem = ({ metric }: { metric: IMetrics }) => {
           />
         </svg>
         {/* Percentage text */}
-        <div
-          className={`absolute inset-0 flex items-center justify-center text-xs font-bold ${colors.text}`}
-        ></div>
+        <span className="absolute inset-0 flex items-center justify-center text-[9px] whitespace-nowrap">
+          {percentage}%
+        </span>
       </div>
     );
   };

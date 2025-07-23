@@ -209,7 +209,7 @@ export class GitHubRepositoryService extends GitHubBaseService {
   }
 
   public async collaborateRepo(repoName: string, username: string): Promise<void> {
-    this.logInfo('Adding collaborator to repository', { repoName, username });
+    this.logInfo('Thêm thành viên vào repository', { repoName, username });
 
     return this.makeRequest<void>({
       method: 'PUT',

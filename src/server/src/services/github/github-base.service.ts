@@ -40,14 +40,14 @@ export abstract class GitHubBaseService {
    * Log thông tin
    */
   protected logInfo(message: string, data?: any): void {
-    logger.info(`[${this.serviceName}] ${message}${data ? `: ${JSON.stringify(data)}` : ''}`);
+    logger.info(`[👁️ ${this.serviceName}] ${message}${data ? `: ${JSON.stringify(data)}` : ''}`);
   }
 
   /**
    * Log lỗi
    */
   protected logError(message: string, error: any): void {
-    logger.error(`[${this.serviceName}] ${message}: ${error.message}`);
+    logger.error(`[🚨 ${this.serviceName}] ${message}: ${error.message}`);
   }
 
   /**

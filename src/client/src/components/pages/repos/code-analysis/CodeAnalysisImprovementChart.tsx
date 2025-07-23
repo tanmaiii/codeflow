@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
 import { METRICS_CODE_ANALYSIS } from '@/constants/object';
@@ -32,7 +32,7 @@ const timeFilters = [
 
 export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImprovementChartProps) {
   const t = useTranslations();
-  const t_codeAnalysis = useTranslations("codeAnalysis");
+  const t_codeAnalysis = useTranslations('codeAnalysis');
   const { theme } = useDarkMode();
   const [selectedTimeframe, setSelectedTimeframe] = useState('7d');
 
@@ -295,7 +295,7 @@ export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImpr
               {t('codeAnalysis.improveCodeAnalysis')}
             </div>
             <Select value={selectedTimeframe} onValueChange={setSelectedTimeframe}>
-              <SelectTrigger className={`w-35 !h-10 !rounded-sm bg-background-1`}>
+              <SelectTrigger className={`w-35 h-8 !rounded-sm bg-background-1`}>
                 <SelectValue placeholder={`${t('common.select')}`} />
               </SelectTrigger>
               <SelectContent>

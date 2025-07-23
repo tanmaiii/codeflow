@@ -74,10 +74,6 @@ export default function (sequelize: Sequelize): typeof CodeAnalysisModel {
       defaultScope: {
         include: [
           {
-            model: ReposModel,
-            as: 'repos',
-          },
-          {
             model: CodeAnalysisMetricsModel,
             as: 'metrics',
           },

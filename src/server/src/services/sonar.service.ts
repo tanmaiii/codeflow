@@ -80,6 +80,7 @@ export class SonarService {
             'security_rating',
             'security_hotspots',
             'security_review_rating',
+            'security_hotspots_reviewed',
             'coverage',
             'line_coverage',
             'uncovered_lines',

@@ -141,7 +141,13 @@ export class GitHubController {
     try {
       logger.info(`[GitHub Webhook] Processing workflow completion: ${workflow_run.name}`);
 
-      const repo = await this.reposService.findRepoByRepositoryName(workflow_run.repository.name);
+      let repo = null;
+      try {
+        repo = await this.reposService.findRepoByRepositoryName(workflow_run.repository.name);
+      } catch (error) {
+        logger.warn(`[GitHub Webhook] Repository not found: ${workflow_run.repository.name}`);
+        return;
+      }
 
       if (!repo) {
         logger.warn(`[GitHub Webhook] Repository not found: ${workflow_run.repository.name}`);

@@ -1,14 +1,15 @@
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { SVGS } from '@/data/images';
+import { cn } from '@/lib/utils';
 import { useThemeStore } from '@/stores/theme_store';
 import { IconCloudSearch } from '@tabler/icons-react';
 import Image from 'next/image';
 
-export default function NoData() {
+export default function NoData({ className }: { className?: string }) {
   const { theme } = useThemeStore();
 
   return (
-    <div className="flex flex-col gap-4 w-full h-full justify-center items-center opacity-80">
+    <div className={cn('flex flex-col gap-4 w-full h-full justify-center items-center opacity-80', className)}>
       {theme === 'light' ? (
         <Image src={SVGS.NO_DATA} alt="No data" width={400} height={400} />
       ) : (

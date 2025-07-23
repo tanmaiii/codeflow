@@ -67,15 +67,16 @@ export enum ENUM_FRAMEWORK {
 }
 
 export enum ENUM_METRICS_CODE_ANALYSIS {
-  SECURITY_RATING = 'security_rating',
-  RELIABILITY_RATING = 'reliability_rating',
   SECURITY_HOTSPOTS = 'security_hotspots',
-  COVERAGE = 'coverage',
+  RELIABILITY_RATING = 'reliability_rating',
+  CODE_SMELLS = 'code_smells',
+  SECURITY_HOTSPOTS_REVIEWED = 'security_hotspots_reviewed',
   BUGS = 'bugs',
+  COVERAGE = 'coverage',
   DUPLICATED_LINES_DENSITY = 'duplicated_lines_density',
   ALERT_STATUS = 'alert_status',
+  SECURITY_RATING = 'security_rating',
   VULNERABILITIES = 'vulnerabilities',
-  CODE_SMELLS = 'code_smells',
   SQALE_INDEX = 'sqale_index',
   SQALE_RATING = 'sqale_rating',
   SECURITY_REVIEW_RATING = 'security_review_rating',

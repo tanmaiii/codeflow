@@ -22,13 +22,11 @@ export class GitHubWorkflowService extends GitHubBaseService {
    * @param framework Framework của repository
    * @returns Thông tin commit đã tạo
    */
-  public async createBasicWorkflow(repoName: string, language: string, framework: string): Promise<string> {
+  public async createBasicWorkflow(repoName: string, language: string, framework: string, sonarKey: string): Promise<any> {
     this.logInfo('Creating basic workflow', { repoName, language, framework });
 
     let workflowContent = '';
     let workflowPropertiesContent = '';
-
-    const sonarData = await this.sonarService.createProject(repoName);
 
     workflowContent = workflowTemplates[language][framework]();
 
@@ -36,14 +34,14 @@ export class GitHubWorkflowService extends GitHubBaseService {
 
     workflowPropertiesContent = workflowProperties({
       organization: 'organization-codeflow',
-      projectKey: sonarData.project.key,
+      projectKey: sonarKey,
     });
 
     await this.contentService.pushCode(repoName, 'readme', readmeTemplate(repoName), 'README.md');
     await this.contentService.pushCode(repoName, 'ci', workflowContent, '.github/workflows/ci.yml');
     await this.contentService.pushCode(repoName, 'sonar', workflowPropertiesContent, 'sonar-project.properties');
 
-    return sonarData.project.key;
+    return true;
   }
 
   /**

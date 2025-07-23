@@ -17,7 +17,7 @@ export class GitHubContentService extends GitHubBaseService {
    */
   public async getRepositoryContents(owner: string, repo: string, path: string): Promise<GitHubContent | GitHubContent[]> {
     this.logInfo('Getting repository contents', { owner, repo, path });
-    
+
     return this.makeRequest<GitHubContent | GitHubContent[]>({
       method: 'GET',
       url: `${this.baseUrl}/repos/${owner}/${repo}/contents/${path}`,
@@ -38,20 +38,18 @@ export class GitHubContentService extends GitHubBaseService {
     // Encode content to base64
     const contentBase64 = Buffer.from(content).toString('base64');
 
-    // Check if file already exists
-    let sha: string | undefined;
-    try {
-      const existingFile = await this.makeRequest<any>({
-        method: 'GET',
-        url: `${this.getOrgRepoUrl(repoName)}/contents/${path}`,
-      });
-      sha = existingFile.sha;
-    } catch (error) {
-      // File doesn't exist, which is fine
-      if (error.response && error.response.status !== 404) {
-        throw error;
-      }
-    }
+    // Kiểm tra file đã tồn tại chưa
+    // let sha: string | undefined;
+    // try {
+    //   const existingFile = await this.makeRequest<any>({
+    //     method: 'GET',
+    //     url: `${this.getOrgRepoUrl(repoName)}/contents/${path}`,
+    //   });
+    //   sha = existingFile.sha;
+    // } catch (error) {
+    //   // Nếu file không tồn tại, thì không cần làm gì
+    //   this.logInfo('File does not exist, will create new file', { path });
+    // }
 
     const body: any = {
       message: `Add/Update ${message}`,
@@ -59,10 +57,10 @@ export class GitHubContentService extends GitHubBaseService {
       branch: 'main',
     };
 
-    // If file exists, include sha for update
-    if (sha) {
-      body.sha = sha;
-    }
+    // Nếu file đã tồn tại, thì thêm sha để update
+    // if (sha) {
+    //   body.sha = sha;
+    // }
 
     return this.makeRequest<any>({
       method: 'PUT',
@@ -76,6 +74,7 @@ export class GitHubContentService extends GitHubBaseService {
    * @param repoName Tên repository
    * @returns Ngôn ngữ của repository
    */
+  //FIXME: Không sử dụng nửa
   public async detectRepoLanguage(repoName: string): Promise<string> {
     this.logInfo('Detecting repository language', { repoName });
 
@@ -92,4 +91,4 @@ export class GitHubContentService extends GitHubBaseService {
     }
     return mainLanguage;
   }
-} 
+}

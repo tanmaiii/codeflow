@@ -182,6 +182,10 @@ export const METRICS_CODE_ANALYSIS: IStatusObj[] = [
     labelKey: 'codeAnalysis.metrics.vulnerabilities',
   },
   {
+    value: ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS_REVIEWED,
+    labelKey: 'codeAnalysis.metrics.security_hotspots_reviewed',
+  },
+  {
     value: ENUM_METRICS_CODE_ANALYSIS.CODE_SMELLS,
     labelKey: 'codeAnalysis.metrics.code_smells',
   },

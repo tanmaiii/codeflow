@@ -101,8 +101,8 @@ export class GitHubService {
   }
 
   // Workflow methods
-  public async createBasicWorkflow(repoName: string, language: string, framework: string): Promise<any> {
-    return this.workflowService.createBasicWorkflow(repoName, language, framework);
+  public async createBasicWorkflow(repoName: string, language: string, framework: string, sonarKey: string): Promise<any> {
+    return this.workflowService.createBasicWorkflow(repoName, language, framework, sonarKey);
   }
 
   public async deleteWorkflow(repoName: string, workflowName: string): Promise<any> {

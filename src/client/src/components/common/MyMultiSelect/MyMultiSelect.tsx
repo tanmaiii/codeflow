@@ -50,12 +50,13 @@ export default function MyMultiSelect<T extends FieldValues>({
           control={control}
           render={({ field }) => (
             <MultiSelectShadeUI
+              className="rounded-lg"
               options={options}
               defaultValue={field.value || defaultValue}
               {...registration}
               {...props}
               placeholder={t('select') + ' ' + label}
-              onValueChange={(value) => {
+              onValueChange={value => {
                 field.onChange(value);
                 handleValueChange(value);
               }}
@@ -74,6 +75,7 @@ export default function MyMultiSelect<T extends FieldValues>({
         {label}
       </Label>
       <MultiSelectShadeUI
+        className="rounded-lg"
         options={options}
         defaultValue={defaultValue}
         {...registration}

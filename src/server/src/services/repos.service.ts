@@ -149,7 +149,23 @@ export class ReposService {
       // auto_init: true,
     });
 
-    const sonarKey = await this.githubService.createBasicWorkflow(uniqueRepoName, repoData.language, repoData.framework);
+    // Tạo project để lấy key trên sonar cloud
+    const sonarData = await this.sonarService.createProject(uniqueRepoName);
+
+    // Tạo repo trong database
+    const newRepos = await DB.Repos.create({
+      url: repo.html_url,
+      courseId: topic.courseId,
+      topicId: topic.id,
+      authorId: repoData.authorId,
+      name: uniqueRepoName,
+      language: repoData.language,
+      framework: repoData.framework,
+      sonarKey: sonarData.project.key || '',
+    });
+
+    // Tạo workflow cho repository trên github
+    await this.githubService.createBasicWorkflow(uniqueRepoName, repoData.language, repoData.framework, sonarData.project.key);
 
     // Tạo webhook cho repo, nếu có lỗi thì chỉ log lỗi, không throw để các bước sau vẫn thực hiện
     try {
@@ -165,6 +181,7 @@ export class ReposService {
       }
     }
 
+    // Đổi tên branch main thành master để có thể sử dụng sonar cloud
     try {
       await this.githubService.renameBranchMainToMaster(uniqueRepoName);
     } catch (error) {
@@ -172,16 +189,7 @@ export class ReposService {
     }
 
     // Lưu repo vào database
-    return DB.Repos.create({
-      url: repo.html_url,
-      courseId: topic.courseId,
-      topicId: topic.id,
-      authorId: repoData.authorId,
-      name: uniqueRepoName,
-      language: repoData.language,
-      framework: repoData.framework,
-      sonarKey: sonarKey || '',
-    });
+    return newRepos;
   }
 
   /**
