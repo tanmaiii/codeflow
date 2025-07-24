@@ -1,17 +1,25 @@
 import { Commits } from '@/interfaces/commits.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { UserModel } from './users.model';
 
-export type CommitsCreationAttributes = Optional<Commits, 'id' | 'reposId' | 'commitHash' | 'message' | 'authorId' | 'url'>;
+export type CommitsCreationAttributes = Optional<
+  Commits,
+  'id' | 'reposId' | 'commitSha' | 'message' | 'authorId' | 'additions' | 'deletions' | 'totalChanges' | 'isMerged' | 'branch'
+>;
 
 export class CommitsModel extends Model<Commits, CommitsCreationAttributes> implements Commits {
   public id!: string;
   public reposId!: string;
-  public commitHash!: string;
+  public commitSha!: string;
   public message!: string;
   public authorId!: string;
-  public date!: Date;
-  public url!: string;
-
+  public additions!: number;
+  public deletions!: number;
+  public totalChanges!: number;
+  public isMerged!: boolean;
+  public pullRequestId!: string;
+  public branch!: string;
+  
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -33,7 +41,7 @@ export default function (sequelize: Sequelize): typeof CommitsModel {
         },
         onDelete: 'CASCADE',
       },
-      commitHash: {
+      commitSha: {
         allowNull: false,
         type: DataTypes.STRING(255),
       },
@@ -50,7 +58,23 @@ export default function (sequelize: Sequelize): typeof CommitsModel {
         },
         onDelete: 'CASCADE',
       },
-      url: {
+      additions: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      deletions: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      totalChanges: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      isMerged: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+      },
+      branch: {
         allowNull: false,
         type: DataTypes.STRING(255),
       },
@@ -60,6 +84,14 @@ export default function (sequelize: Sequelize): typeof CommitsModel {
       modelName: 'commits',
       tableName: 'commits',
       timestamps: true,
+      defaultScope: {
+        include: [
+          {
+            model: UserModel,
+            as: 'author',
+          },
+        ],
+      },
     },
   );
   return CommitsModel;

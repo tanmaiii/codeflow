@@ -99,13 +99,8 @@ export class GitHubController {
         const workflowEvent = body as WorkflowRunEvent;
         const { workflow_run } = workflowEvent;
 
-        logger.info(`[GitHub Webhook] Workflow run event received. Status: ${workflow_run.status}, Conclusion: ${workflow_run.conclusion}`);
-
         // Kiểm tra nếu workflow run đã completed
         if (workflow_run.status === 'completed') {
-          logger.info(`[GitHub Webhook] Workflow run completed for repository: ${workflow_run.repository.full_name}`);
-          logger.info(`[GitHub Webhook] Workflow conclusion: ${workflow_run.conclusion}`);
-
           // Xử lý logic khi workflow hoàn thành
           await this.processWorkflowCompletion(workflow_run);
         }
@@ -122,7 +117,7 @@ export class GitHubController {
         logger.info(`[GitHub Webhook] Branch: ${ref}, Commits count: ${commits.length}`);
 
         for (const commit of commits) {
-          await this.processCommit(commit, repository);
+          await this.processCommit(commit, repository, ref);
         }
 
         res.status(200).json({ message: 'Webhook processed successfully' });
@@ -139,8 +134,6 @@ export class GitHubController {
   // Xử lý khi workflow run hoàn thành
   private async processWorkflowCompletion(workflow_run: WorkflowRunEvent['workflow_run']) {
     try {
-      logger.info(`[GitHub Webhook] Processing workflow completion: ${workflow_run.name}`);
-
       let repo = null;
       try {
         repo = await this.reposService.findRepoByRepositoryName(workflow_run.repository.name);
@@ -157,7 +150,6 @@ export class GitHubController {
       const sonarAnalysis = await this.sonarService.getMeasures(repo.sonarKey);
 
       if (sonarAnalysis.component.measures.length === 0) {
-        logger.warn(`[GitHub Webhook] Sonar analysis not found: ${workflow_run.repository.name}`);
         return;
       }
 
@@ -193,10 +185,10 @@ export class GitHubController {
   }
 
   // Lưu commit
-  private async processCommit(commit: PushEvent['commits'][0], repository: PushEvent['repository']) {
+  private async processCommit(commit: PushEvent['commits'][0], repository: PushEvent['repository'], ref: string) {
     try {
-      // logger.info(`[GitHub Webhook] Processing commit: ${JSON.stringify(commit)}`);
-      // logger.info(`[GitHub Webhook] Processing repository: ${JSON.stringify(repository)}`);
+      logger.info(`[GitHub Webhook] Processing commit: ${JSON.stringify(commit)}`);
+      logger.info(`[GitHub Webhook] Processing repository: ${JSON.stringify(repository)}`);
 
       // Kiểm tra nếu author.username tồn tại
       if (!commit.author.username) {
@@ -205,21 +197,27 @@ export class GitHubController {
       }
 
       const user = await this.userService.findUserByUsername(commit.author.username);
-      if (!user) throw new HttpException(404, 'User not found');
+      if (!user.uid || !user) throw new HttpException(404, 'User not found');
 
       const repo = await this.reposService.findRepoByRepositoryName(repository.name);
       if (!repo) throw new HttpException(404, 'Repo not found');
 
+      const commitDetail = await this.github.getCommitDetails(repository.name, commit.id);
+
       const commitData: CommitCreate = {
         reposId: repo.id,
-        commitHash: commit.id,
+        commitSha: commit.id,
         message: commit.message,
         authorId: user.id,
-        url: commit.url,
+        additions: commitDetail.stats.additions,
+        deletions: commitDetail.stats.deletions,
+        totalChanges: commitDetail.stats.total,
+        isMerged: false,
+        branch: ref.replace('refs/heads/', ''),
       };
       this.commitService.createCommit(commitData);
     } catch (error) {
-      logger.error(`[GitHub Webhook] Error processing commit ${commit.id}: ${error}`);
+      logger.error(`[GitHub Webhook Commit] ${commit.id}: ${error}`);
     }
   }
 }

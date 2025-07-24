@@ -1,5 +1,5 @@
 export { default as AuthorInfo } from './AuthorInfo';
-export { default as CommitItem } from './CommitItem';
+export { default as CommitItem } from './commits/CommitItem';
 export { default as PullRequestItem } from './PullRequestItem';
 export { default as QuickActions } from './QuickActions';
 export { default as PullRequestsAndCommits } from './RepoAnalysisAndActivity';

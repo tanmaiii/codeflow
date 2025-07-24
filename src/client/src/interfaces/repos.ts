@@ -28,3 +28,19 @@ export interface IReposUpdateDto {
   topicId: string;
   framework: string;
 }
+
+
+export interface ICommit extends IBaseEntity {
+  id: string;
+  reposId: string;
+  commitSha: string;
+  message: string;
+  description?: string;
+  authorId: string;
+  additions: number;
+  deletions: number;
+  totalChanges: number;
+  isMerged: boolean;
+  author: IUser;
+  branch?: string;
+}

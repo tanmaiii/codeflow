@@ -11,8 +11,33 @@ if (!existsSync(logDir)) {
   mkdirSync(logDir);
 }
 
-// Define log format
-const logFormat = winston.format.printf(({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`);
+// Function to get icon based on log level
+const getLogIcon = (level: string): string => {
+  switch (level.toLowerCase()) {
+    case 'error':
+      return '❌';
+    case 'warn':
+      return '⚠️';
+    case 'info':
+      return '✅';
+    case 'http':
+      return '🔗';
+    case 'verbose':
+      return '📝';
+    case 'debug':
+      return '🐛';
+    case 'silly':
+      return '🔍';
+    default:
+      return '•';
+  }
+};
+
+// Define log format with icons
+const logFormat = winston.format.printf(({ timestamp, level, message }) => {
+  const icon = getLogIcon(level);
+  return `${timestamp} ${icon} ${level.toUpperCase()}: ${message}`;
+});
 
 /*
  * Log Level

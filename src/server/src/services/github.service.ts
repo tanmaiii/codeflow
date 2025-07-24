@@ -1,12 +1,13 @@
-import { GitHubContent, GithubMeta, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
-import Container, { Service } from 'typedi';
+import { GitHubCommitDetail, GitHubContent, GithubMeta, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
 import {
   GitHubUserService,
   GitHubRepositoryService,
   GitHubContentService,
   GitHubWebhookService,
   GitHubWorkflowService,
+  GitHubCommitsService,
 } from './github';
+import Container, { Service } from 'typedi';
 
 @Service()
 export class GitHubService {
@@ -15,6 +16,7 @@ export class GitHubService {
   private readonly contentService = Container.get(GitHubContentService);
   private readonly webhookService = Container.get(GitHubWebhookService);
   private readonly workflowService = Container.get(GitHubWorkflowService);
+  private readonly commitService = Container.get(GitHubCommitsService);
 
   // Webhook methods
   public async verifyWebhookSignature(signature: string): Promise<boolean> {
@@ -107,5 +109,10 @@ export class GitHubService {
 
   public async deleteWorkflow(repoName: string, workflowName: string): Promise<any> {
     return this.workflowService.deleteWorkflow(repoName, workflowName);
+  }
+
+  // Commit
+  public async getCommitDetails(repoName: string, commitSha: string): Promise<GitHubCommitDetail> {
+    return this.commitService.getCommitDetails(repoName, commitSha);
   }
 }

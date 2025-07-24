@@ -1,26 +1,35 @@
 import { DB } from '@/database';
 import { CommitCreate, Commits, CommitUpdate } from '@/interfaces/commits.interface';
-import Container, { Service } from 'typedi';
-import { ReposService } from './repos.service';
-import { UserService } from './users.service';
+import { Service } from 'typedi';
 
 @Service()
 export class CommitService {
-  private readonly reposService: ReposService;
-  private readonly userService: UserService;
-
-  constructor() {
-    this.reposService = Container.get(ReposService);
-    this.userService = Container.get(UserService);
-  }
-
   public async findAllCommits(): Promise<Commits[]> {
     const commits = await DB.Commits.findAll();
     return commits;
   }
 
-  public async findCommitByCommitHash(commitHash: string): Promise<Commits> {
-    const commit = await DB.Commits.findOne({ where: { commitHash } });
+  public async findByRepoId(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    repoId: string,
+  ): Promise<{ count: number; rows: Commits[] }> {
+    const offset = (page - 1) * pageSize;
+
+    return await DB.Commits.findAndCountAll({
+      where: { reposId: repoId },
+      order: [[sortBy, sortOrder]],
+      limit: pageSize,
+      distinct: true,
+      col: 'commits.id',
+      offset,
+    });
+  }
+
+  public async findCommitByCommitSha(commitSha: string): Promise<Commits> {
+    const commit = await DB.Commits.findOne({ where: { commitSha } });
     return commit;
   }
 
@@ -30,6 +39,6 @@ export class CommitService {
   }
 
   public async updateCommit(commit: CommitUpdate): Promise<void> {
-    await DB.Commits.update(commit, { where: { commitHash: commit.commitHash } });
+    await DB.Commits.update(commit, { where: { commitSha: commit.commitSha } });
   }
 }

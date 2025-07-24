@@ -17,6 +17,7 @@ import { UserSettingsRoute } from './routes/user_settings.route';
 import { GeminiRoute } from './routes/gemini.route';
 import { SonarRoute } from './routes/sonar.route';
 import { CodeAnalysisRoute } from './routes/code_analysis.route';
+import { CommitRoute } from './routes/commit.route';
 ValidateEnv();
 
 const app = new App([
@@ -37,6 +38,7 @@ const app = new App([
   new GeminiRoute(),
   new SonarRoute(),
   new CodeAnalysisRoute(),
+  new CommitRoute(),
 ]);
 
 app.listen();

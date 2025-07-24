@@ -1,8 +1,7 @@
-import { GitHubCommit, GitHubContributor, GithubMeta, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
+import { GitHubContributor, GithubMeta, GitHubRepository, GitHubRepositoryCreate } from '@interfaces/github.interface';
+import axios from 'axios';
 import { Service } from 'typedi';
 import { GitHubBaseService } from './github-base.service';
-import axios from 'axios';
-import { logger } from '@/utils/logger';
 
 @Service()
 export class GitHubRepositoryService extends GitHubBaseService {
