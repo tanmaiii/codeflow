@@ -1,4 +1,5 @@
 import { CommitController } from '@/controllers/commit.controller';
+import { GetCommitByRepoIdDto } from '@/dtos/commit.dto';
 import { GetAllQueryDto } from '@/dtos/common.dto';
 import { Routes } from '@/interfaces/routes.interface';
 import { AuthMiddleware } from '@/middlewares/auth.middleware';
@@ -15,6 +16,6 @@ export class CommitRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/repos/:id`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.commit.getAllCommitByRepoId);
+    this.router.get(`${this.path}/repos/:id`, AuthMiddleware, ValidationMiddleware(GetCommitByRepoIdDto, 'query'), this.commit.getAllCommitByRepoId);
   }
 }

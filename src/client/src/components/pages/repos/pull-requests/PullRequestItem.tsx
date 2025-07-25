@@ -1,60 +1,27 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading from '@/components/ui/text';
+import { IPullRequest, IRepos } from '@/interfaces/repos';
+import { utils_DateToDDMMYYYY_HHMM } from '@/utils/date';
 import {
   IconCheck,
   IconClock,
+  IconExternalLink,
   IconGitBranch,
   IconGitCommit,
   IconGitPullRequest,
   IconRobot,
   IconX,
-  IconExternalLink,
 } from '@tabler/icons-react';
 
-interface PullRequestItemProps {
-  id: string;
-  number: number;
-  title: string;
-  description: string;
-  status: 'open' | 'merged' | 'closed';
-  author: {
-    name: string;
-    avatar: string;
-  };
-  createdAt: string;
-  mergedAt?: string;
-  closedAt?: string;
-  branch: string;
-  commits: number;
-  additions: number;
-  deletions: number;
-  repositoryUrl?: string; // GitHub repository URL (e.g., "https://github.com/owner/repo")
-  aiReview?: {
-    status: 'pending' | 'completed' | 'failed' | 'not_started';
-    score?: number;
-    reviewedAt?: string;
-  };
-  onAIReview?: (prId: string) => void;
-}
-
 export default function PullRequestItem({
-  id,
-  number,
-  title,
-  description,
-  status,
-  author,
-  createdAt,
-  branch,
-  commits,
-  additions,
-  deletions,
-  aiReview,
-  onAIReview,
-  repositoryUrl = 'https://github.com/owner/repo',
-}: PullRequestItemProps) {
+  pullRequest,
+  repos,
+}: {
+  pullRequest: IPullRequest;
+  repos: IRepos;
+}) {
   const getPRStatusIcon = (status: string) => {
     switch (status) {
       case 'open':
@@ -82,17 +49,19 @@ export default function PullRequestItem({
   };
 
   const getAIReviewButton = () => {
-    const isReviewing = aiReview?.status === 'pending';
-    const isCompleted = aiReview?.status === 'completed';
+    // const isReviewing = aiReview?.status === 'pending';
+    // const isCompleted = aiReview?.status === 'completed';
+    const isReviewing = false;
+    const isCompleted = true;
 
     if (isCompleted) {
       return (
         <div className="flex items-center gap-2 text-sm">
           <div className="flex items-center gap-1 text-green-600">
             <IconRobot className="size-4" />
-            <span>Đã review ({aiReview?.score}/10)</span>
+            <span>Đã review 5/10</span>
           </div>
-          <Button size="sm" variant="outline" onClick={() => onAIReview?.(id)} className="text-xs">
+          <Button size="sm" variant="outline" onClick={()=>{}} className="text-xs">
             Review lại
           </Button>
         </div>
@@ -103,7 +72,7 @@ export default function PullRequestItem({
       <Button
         size="sm"
         variant="outline"
-        onClick={() => onAIReview?.(id)}
+        onClick={() => {}}
         disabled={isReviewing}
         className="flex items-center gap-2"
       >
@@ -113,28 +82,29 @@ export default function PullRequestItem({
     );
   };
 
-  const handleOpenGitHub = () => {
-    const githubPRUrl = `${repositoryUrl}/pull/${number}`;
-    window.open(githubPRUrl, '_blank');
+  const handleOpenPull = () => {
+    if (repos.url) {
+      window.open(`${repos.url}/pull/${pullRequest.pullNumber}`, '_blank');
+    }
   };
 
   return (
     <div className="border rounded-lg p-4 space-y-3 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3 flex-1">
-          {getPRStatusIcon(status)}
+          {getPRStatusIcon(pullRequest.status)}
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <TextHeading
                 className="font-semibold cursor-pointer hover:text-blue-600 transition-colors flex items-center gap-1"
-                onClick={handleOpenGitHub}
+                onClick={handleOpenPull}
               >
-                #{number} {title}
+                #{pullRequest.pullNumber} {pullRequest.title}
                 <IconExternalLink className="size-3 opacity-60" />
               </TextHeading>
-              <Badge className={getPRStatusColor(status)}>{status}</Badge>
+              <Badge className={getPRStatusColor(pullRequest.status)}>{pullRequest.status}</Badge>
             </div>
-            <p className="text-sm text-muted-foreground mt-1">{description}</p>
+            <p className="text-sm text-muted-foreground mt-1">{pullRequest.body}</p>
           </div>
         </div>
 
@@ -143,29 +113,29 @@ export default function PullRequestItem({
 
       <div className="flex items-center gap-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-1">
-          <Avatar className="size-5">
-            <AvatarImage src={author.avatar} alt={author.name} />
-            <AvatarFallback>{author.name.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <span>{author.name}</span>
+          <MemberAvatar
+            name={pullRequest.author.name || ''}
+            avatar={pullRequest.author.avatar}
+            size={26}
+            id={pullRequest.author.id}
+          />
         </div>
-
-        <div className="flex items-center gap-1">
-          <IconGitBranch className="size-4" />
-          <span>{branch}</span>
-        </div>
-
+        <Badge
+          variant="outline"
+          className="flex items-center gap-1 px-1 py-0.5 rounded-sm bg-amber-600/10 dark:bg-amber-600/20"
+        >
+          <IconGitBranch className="size-4 text-amber-500" />
+          <span className="text-amber-500">{pullRequest.headBranch}</span>
+        </Badge>
         <div className="flex items-center gap-1">
           <IconGitCommit className="size-4" />
-          <span>{commits} commits</span>
+          <span>{pullRequest.commitCount} commits</span>
         </div>
-
         <div className="flex items-center gap-2">
-          <span className="text-green-600">+{additions}</span>
-          <span className="text-red-600">-{deletions}</span>
+          <span className="text-green-600">+{pullRequest.additions}</span>
+          <span className="text-red-600">-{pullRequest.deletions}</span>
         </div>
-
-        <span>{new Date(createdAt).toLocaleDateString()}</span>
+        <span>{utils_DateToDDMMYYYY_HHMM(pullRequest.createdAt || new Date())}</span>
       </div>
     </div>
   );

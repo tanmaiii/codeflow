@@ -11,6 +11,7 @@ import NotificationModel from '@/models/notification.model';
 import PostLikeModel from '@/models/post_like.model';
 import PostTagModel from '@/models/post_tag.model';
 import PostModel from '@/models/posts.model';
+import PullRequestsModel from '@/models/pull_requests.model';
 import ReposModel from '@/models/repos.model';
 import SubmissionModel from '@/models/submissions.model';
 import SystemSettingsModel from '@/models/system_settings.model';
@@ -71,6 +72,7 @@ export const DB = {
   Commits: CommitsModel(sequelize),
   CodeAnalysis: CodeAnalysisModel(sequelize),
   CodeAnalysisMetrics: CodeAnalysisMetricsModel(sequelize),
+  PullRequests: PullRequestsModel(sequelize),
   sequelize,
 };
 

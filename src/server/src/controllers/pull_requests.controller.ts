@@ -1,16 +1,16 @@
 import { RequestWithUser } from '@/interfaces/auth.interface';
-import { CommitService } from '@/services/commit.service';
+import { PullRequestsService } from '@/services/pull_requests.service';
 import { NextFunction, Response } from 'express';
 import Container from 'typedi';
 
-export class CommitController {
-  public commitService = Container.get(CommitService);
+export class PullRequestsController {
+  public pullRequestsService = Container.get(PullRequestsService);
 
-  public getAllCommitByRepoId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+  public getAllPullRequestsByRepoId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', authorId } = req.query;
-      const { count, rows } = await this.commitService.findByRepoIdOrAuthorId(
+      const { count, rows } = await this.pullRequestsService.findByRepoIdOrAuthorId(
         Number(page),
         Number(limit),
         String(sortBy ?? ''),

@@ -1,14 +1,16 @@
 import { CodeAnalysisCreate, CodeAnalysisMetrics } from '@/interfaces/code_analysis.interface';
 import { CommitCreate } from '@/interfaces/commits.interface';
+import { PullRequests, PullRequestsCreate, PullRequestsUpdate } from '@/interfaces/pull_requests.interface';
 import CodeAnalysisService from '@/services/code_analysis.service';
 import { CommitService } from '@/services/commit.service';
+import { PullRequestsService } from '@/services/pull_requests.service';
 import { ReposService } from '@/services/repos.service';
 import { SonarService } from '@/services/sonar.service';
 import { UserService } from '@/services/users.service';
 import { logger } from '@/utils/logger';
 import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
-import { PushEvent, WorkflowRunEvent } from '@octokit/webhooks-types';
+import { PullRequestEvent, PushEvent, WorkflowRunEvent } from '@octokit/webhooks-types';
 import { GitHubService } from '@services/github.service';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
@@ -20,6 +22,7 @@ export class GitHubController {
   public reposService: ReposService;
   public sonarService: SonarService;
   public codeAnalysisService: CodeAnalysisService;
+  public pullRequestsService: PullRequestsService;
 
   constructor() {
     this.github = Container.get(GitHubService);
@@ -28,6 +31,7 @@ export class GitHubController {
     this.reposService = Container.get(ReposService);
     this.sonarService = Container.get(SonarService);
     this.codeAnalysisService = Container.get(CodeAnalysisService);
+    this.pullRequestsService = Container.get(PullRequestsService);
   }
 
   public getUserInfoByUsername = async (req: RequestWithUser, res: Response, next: NextFunction) => {
@@ -121,9 +125,12 @@ export class GitHubController {
         }
 
         res.status(200).json({ message: 'Webhook processed successfully' });
-      } else {
-        logger.info(`[GitHub Webhook] Unhandled event type: ${event}`);
-        res.status(200).json({ message: 'Event ignored' });
+      }
+
+      if (event === 'pull_request') {
+        const pullRequestEvent = body as PullRequestEvent;
+        const { pull_request } = pullRequestEvent;
+        await this.processPullRequest(pull_request);
       }
     } catch (error) {
       logger.error(`[GitHub Webhook] Error processing webhook: ${error}`);
@@ -218,6 +225,50 @@ export class GitHubController {
       this.commitService.createCommit(commitData);
     } catch (error) {
       logger.error(`[GitHub Webhook Commit] ${commit.id}: ${error}`);
+    }
+  }
+
+  // Lưu pull request
+  private async processPullRequest(pullRequest: PullRequestEvent['pull_request']) {
+    try {
+      logger.info(`[GitHub Webhook] Processing pull request: ${JSON.stringify(pullRequest)}`);
+
+      const user = await this.userService.findUserByUsername(pullRequest.user.login);
+      if (!user.uid || !user) throw new HttpException(404, 'User not found');
+
+      const repo = await this.reposService.findRepoByRepositoryName(pullRequest.head.repo.name);
+      if (!repo) throw new HttpException(404, 'Repo not found');
+
+      const pullRequestData: PullRequestsCreate = {
+        reposId: repo.id,
+        pullNumber: pullRequest.number,
+        title: pullRequest.title,
+        body: pullRequest.body,
+        authorId: user.id,
+        headBranch: pullRequest.head.ref,
+        baseBranch: pullRequest.base.ref,
+        commitCount: pullRequest.commits,
+        additions: pullRequest.additions,
+        deletions: pullRequest.deletions,
+        status: pullRequest.state,
+        mergedAt: pullRequest.merged_at ? new Date(pullRequest.merged_at) : undefined,
+        closedAt: pullRequest.closed_at ? new Date(pullRequest.closed_at) : undefined,
+      };
+
+      const existingPullRequest = await this.pullRequestsService.findPullRequestByPullNumber(repo.id, pullRequest.number);
+
+      if (existingPullRequest) {
+        const pullRequestUpdate: PullRequestsUpdate = {
+          id: existingPullRequest.id,
+          ...pullRequestData,
+        };
+        await this.pullRequestsService.updatePullRequest(pullRequestUpdate);
+        return;
+      }
+
+      await this.pullRequestsService.createPullRequest(pullRequestData);
+    } catch (error) {
+      logger.error(`[GitHub Webhook] Error processing pull request: ${error}`);
     }
   }
 }

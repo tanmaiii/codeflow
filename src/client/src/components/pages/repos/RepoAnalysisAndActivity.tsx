@@ -4,6 +4,7 @@ import { IRepos } from '@/interfaces/repos';
 import { IconCode, IconGitCommit, IconGitPullRequest } from '@tabler/icons-react';
 import CodeAnalysis from './code-analysis/CodeAnalysis';
 import Commits from './commits/Commits';
+import PullRequests from './pull-requests/PullRequests';
 
 interface PullRequestsAndCommitsProps {
   repos: IRepos;
@@ -36,7 +37,7 @@ export default function RepoAnalysisAndActivity({ repos }: PullRequestsAndCommit
           </TabsContent>
 
           <TabsContent value="pull-requests" className="space-y-4">
-            {/* <Commits repos={repos} /> */}
+            <PullRequests repos={repos} />
           </TabsContent>
 
           <TabsContent value="commits" className="space-y-4">

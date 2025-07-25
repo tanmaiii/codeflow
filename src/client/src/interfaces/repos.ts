@@ -1,4 +1,4 @@
-import { IBaseEntity } from './common';
+import { IBaseEntity, IGetAllQuery } from './common';
 import { ITopic } from './topic';
 import { IUser } from './user';
 
@@ -29,13 +29,11 @@ export interface IReposUpdateDto {
   framework: string;
 }
 
-
 export interface ICommit extends IBaseEntity {
   id: string;
   reposId: string;
   commitSha: string;
   message: string;
-  description?: string;
   authorId: string;
   additions: number;
   deletions: number;
@@ -43,4 +41,26 @@ export interface ICommit extends IBaseEntity {
   isMerged: boolean;
   author: IUser;
   branch?: string;
+}
+
+export interface IPullRequest extends IBaseEntity {
+  id: string;
+  reposId: string;
+  pullNumber: number;
+  title: string;
+  body: string;
+  authorId: string;
+  headBranch: string; // Nhánh đẩy lên
+  baseBranch: string; // Nhánh cần merge
+  commitCount: number;
+  additions: number; // dòng thêm
+  deletions: number; // dòng xóa
+  status: 'open' | 'closed' | 'merged';
+  mergedAt?: Date;
+  closedAt?: Date;
+  author: IUser;
+}
+
+export interface IPullRequestQueryParams extends IGetAllQuery {
+  authorId?: string;
 }

@@ -1,31 +1,30 @@
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import { Label } from '@/components/ui/label';
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
-import useQ_Commit_GetByReposId from '@/hooks/query-hooks/Commit/useQ_Commit_GetByReposId';
+import useQ_PullRequests_GetByReposId from '@/hooks/query-hooks/PullRequests/useQ_PullRequests_GetByReposId';
 import { IRepos } from '@/interfaces/repos';
-import { IconGitCommit } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import CommitItem from './CommitItem';
+import PullRequestItem from './PullRequestItem';
 
 const filterItem = [
   { label: 'common.newest', value: 'DESC' },
   { label: 'common.oldest', value: 'ASC' },
 ];
 
-export default function Commits({ repos }: { repos: IRepos }) {
-  const t = useTranslations();
+export default function PullRequests({ repos }: { repos: IRepos }) {
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState<'ASC' | 'DESC'>('DESC');
+  const t = useTranslations();
 
-  const Q_Commit = useQ_Commit_GetByReposId({
+  const Q_PullRequests = useQ_PullRequests_GetByReposId({
     params: {
       page: page,
       limit: 5,
@@ -34,23 +33,10 @@ export default function Commits({ repos }: { repos: IRepos }) {
     reposId: repos.id,
   });
 
-  if (Q_Commit.data?.data.length === 0) {
-    return (
-      <div className="flex flex-col gap-4 items-center justify-center h-100">
-        <IconGitCommit className="size-12 text-gray-500" />
-        <h4 className="text-2xl font-bold">Welcome to commits!</h4>
-        <p className="text-gray-500">
-          Commits is a process of analyzing the code to find potential issues and improve the code
-          quality.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between">
-        <Label>{Q_Commit.data?.pagination.totalItems} Commits</Label>
+        <Label>{Q_PullRequests.data?.pagination.totalItems} Pull Requests</Label>
         <Select defaultValue={sortBy} onValueChange={value => setSortBy(value as 'ASC' | 'DESC')}>
           <SelectTrigger className={`w-35 h-8 !rounded-sm bg-background-1`}>
             <SelectValue placeholder={`${t('common.select')}`} />
@@ -67,15 +53,15 @@ export default function Commits({ repos }: { repos: IRepos }) {
         </Select>
       </div>
       <div className="flex flex-col gap-4 min-h-[300px]">
-        {Q_Commit.data?.data.map(commit => (
-          <CommitItem key={commit.id} commit={commit} repos={repos} />
+        {Q_PullRequests.data?.data.map(pullRequest => (
+          <PullRequestItem key={pullRequest.id} pullRequest={pullRequest} repos={repos} />
         ))}
       </div>
       <div className="flex justify-center mt-auto">
-        {Q_Commit.data && (
+        {Q_PullRequests.data && (
           <MyPagination
             currentPage={page}
-            totalPages={Q_Commit.data?.pagination?.totalPages || 0}
+            totalPages={Q_PullRequests.data?.pagination?.totalPages || 0}
             onPageChange={setPage}
           />
         )}

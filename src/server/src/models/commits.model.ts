@@ -19,7 +19,7 @@ export class CommitsModel extends Model<Commits, CommitsCreationAttributes> impl
   public isMerged!: boolean;
   public pullRequestId!: string;
   public branch!: string;
-  
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -73,6 +73,7 @@ export default function (sequelize: Sequelize): typeof CommitsModel {
       isMerged: {
         allowNull: false,
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       branch: {
         allowNull: false,

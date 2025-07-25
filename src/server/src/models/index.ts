@@ -10,6 +10,7 @@ import { NotificationModel } from './notification.model';
 import { PostLikeModel } from './post_like.model';
 import { PostTagModel } from './post_tag.model';
 import { PostModel } from './posts.model';
+import { PullRequestsModel } from './pull_requests.model';
 import { ReposModel } from './repos.model';
 import { SubmissionModel } from './submissions.model';
 import { TagModel } from './tags.model';
@@ -36,7 +37,8 @@ export const initModels = () => {
   UserModel.hasOne(UserSettingsModel, { foreignKey: 'userId', as: 'settings' });
   UserModel.hasMany(CodeAnalysisModel, { foreignKey: 'authorId', as: 'codeAnalyses' });
   UserModel.hasMany(CommitsModel, { foreignKey: 'authorId', as: 'commits' });
-
+  UserModel.hasMany(PullRequestsModel, { foreignKey: 'authorId', as: 'pullRequests' });
+  
   // UserSettings Model Relations
   UserSettingsModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
 
@@ -114,6 +116,7 @@ export const initModels = () => {
   ReposModel.belongsTo(TopicModel, { foreignKey: 'topicId', as: 'topic' });
   ReposModel.hasMany(CodeAnalysisModel, { foreignKey: 'reposId', as: 'codeAnalyses' });
   ReposModel.hasMany(CommitsModel, { foreignKey: 'reposId', as: 'commits' });
+  ReposModel.hasMany(PullRequestsModel, { foreignKey: 'reposId', as: 'pullRequests' });
 
   // CodeAnalysis Model Relations
   CodeAnalysisModel.belongsTo(ReposModel, { foreignKey: 'reposId', as: 'repos' });
@@ -126,6 +129,10 @@ export const initModels = () => {
   //Commit Model Relations
   CommitsModel.belongsTo(ReposModel, { foreignKey: 'reposId', as: 'repos' });
   CommitsModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
+
+  // PullRequests Model Relations
+  PullRequestsModel.belongsTo(ReposModel, { foreignKey: 'reposId', as: 'repos' });
+  PullRequestsModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
 };
 
 export { CodeAnalysisModel, CourseModel, PostLikeModel, PostModel, TagModel, UserModel };

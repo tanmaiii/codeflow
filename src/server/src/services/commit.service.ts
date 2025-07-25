@@ -9,17 +9,22 @@ export class CommitService {
     return commits;
   }
 
-  public async findByRepoId(
+  public async findByRepoIdOrAuthorId(
     page = 1,
     pageSize = 10,
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
-    repoId: string,
+    repoId?: string,
+    authorId?: string,
   ): Promise<{ count: number; rows: Commits[] }> {
     const offset = (page - 1) * pageSize;
 
+    const where: any = {};
+    if (repoId) where['reposId'] = repoId;
+    if (authorId) where['authorId'] = authorId;
+
     return await DB.Commits.findAndCountAll({
-      where: { reposId: repoId },
+      where,
       order: [[sortBy, sortOrder]],
       limit: pageSize,
       distinct: true,

@@ -28,9 +28,6 @@ export default function CommitItem({ commit, repos }: { commit: ICommit; repos: 
                 <IconExternalLink className="size-3 opacity-60" onClick={handleOpenCommit} />
               </TextHeading>
             </div>
-            {commit.description && (
-              <p className="text-sm text-muted-foreground mt-1">{commit.description}</p>
-            )}
           </div>
         </div>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">

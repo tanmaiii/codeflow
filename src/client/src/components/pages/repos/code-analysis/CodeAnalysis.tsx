@@ -60,9 +60,11 @@ export default function CodeAnalysis({ repos }: { repos: IRepos }) {
           </SelectContent>
         </Select>
       </div>
-      {Q_CodeAnalysis.data?.data?.map(pr => (
-        <CodeAnalysisItem key={pr.id} data={pr} repos={repos} />
-      ))}
+      <div className="flex flex-col gap-4 min-h-[300px]">
+        {Q_CodeAnalysis.data?.data?.map(pr => (
+          <CodeAnalysisItem key={pr.id} data={pr} repos={repos} />
+        ))}
+      </div>
       <div className="flex justify-center mt-auto">
         {Q_CodeAnalysis.data && (
           <MyPagination
