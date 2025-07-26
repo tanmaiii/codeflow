@@ -1,4 +1,4 @@
-import { IBaseEntity } from "./common";
+import { IBaseEntity, IGetAllQuery } from "./common";
 import { IUser } from "./user";
 
 export interface ICodeAnalysis extends IBaseEntity {
@@ -20,4 +20,8 @@ export interface IMetrics extends IBaseEntity {
   name: string;
   value: number;
   bestValue: number;
+}
+
+export interface ICodeAnalysisQueryParams extends IGetAllQuery {
+  authorId?: string;
 }

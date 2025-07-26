@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { Control, Controller, FieldError, FieldValues, Path, PathValue } from 'react-hook-form';
 
 interface MySelectProps<T extends FieldValues = FieldValues> {
-  label: string;
+  label?: string;
   options: IStatusObj[];
   name: Path<T>;
   control?: Control<T>;
@@ -25,6 +25,7 @@ interface MySelectProps<T extends FieldValues = FieldValues> {
   className?: string;
   onChange?: (value: string) => void;
   isTranslate?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export default function MySelect<T extends FieldValues>({
@@ -39,6 +40,7 @@ export default function MySelect<T extends FieldValues>({
   label,
   onChange,
   isTranslate = true,
+  size = 'lg',
 }: MySelectProps<T>) {
   // const currentLocale = getCurrentLocale();
   const t = useTranslations();
@@ -51,7 +53,7 @@ export default function MySelect<T extends FieldValues>({
   if (control && !onChange) {
     return (
       <div className="">
-        <Label className="mb-2 text-color-2 w-fit">{label}</Label>
+        {label && <Label className="mb-2 text-color-2 w-fit">{label}</Label>}
         <Controller
           name={name}
           control={control}
@@ -64,8 +66,16 @@ export default function MySelect<T extends FieldValues>({
               onValueChange={field.onChange}
               disabled={disabled || field.disabled}
             >
-              <SelectTrigger className={`w-full !h-13 !rounded-xl bg-background-1 ${className}`}>
-                <SelectValue placeholder={`${t('common.select')} ${label}`} />
+              <SelectTrigger
+                className={`w-full bg-background-1 ${className} ${
+                  size === 'sm'
+                    ? '!h-9 !rounded-sm'
+                    : size === 'md'
+                    ? '!h-11 !rounded-md'
+                    : '!h-13 !rounded-lg'
+                }`}
+              >
+                <SelectValue placeholder={`${t('common.select')} ${label ? label : ''}`} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -87,7 +97,7 @@ export default function MySelect<T extends FieldValues>({
   // Support for uncontrolled usage without react-hook-form
   return (
     <div className="">
-      <Label className="mb-2 text-color-2 w-fit">{label}</Label>
+      {label && <Label className="mb-2 text-color-2 w-fit">{label}</Label>}
       <Select
         disabled={disabled}
         value={value}
@@ -97,8 +107,16 @@ export default function MySelect<T extends FieldValues>({
           onChange?.(newValue);
         }}
       >
-        <SelectTrigger className={`w-full !h-13 !rounded-lg ${className}`}>
-          <SelectValue placeholder={`${t('common.select')} ${label}`} />
+        <SelectTrigger
+          className={`w-full ${className} ${
+            size === 'sm'
+              ? '!h-9 !rounded-sm'
+              : size === 'md'
+              ? '!h-11 !rounded-md'
+              : '!h-13 !rounded-lg'
+          }`}
+        >
+          <SelectValue placeholder={`${t('common.select')} ${label ? label : ''}`} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

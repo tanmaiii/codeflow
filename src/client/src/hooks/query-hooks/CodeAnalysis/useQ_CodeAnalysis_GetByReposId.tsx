@@ -1,6 +1,6 @@
 'use client';
-import { ICodeAnalysis } from '@/interfaces/code_analysis';
-import { IGetAllQuery, PaginatedResponseAPIDto } from '@/interfaces/common';
+import { ICodeAnalysis, ICodeAnalysisQueryParams } from '@/interfaces/code_analysis';
+import { PaginatedResponseAPIDto } from '@/interfaces/common';
 import codeAnalysisService from '@/services/code_analysis.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
@@ -10,7 +10,7 @@ export default function useQ_CodeAnalysis_GetByReposId({
   reposId,
 }: {
   options?: Partial<UseQueryOptions<PaginatedResponseAPIDto<ICodeAnalysis[]>, Error>>;
-  params: IGetAllQuery;
+  params: ICodeAnalysisQueryParams;
   reposId: string;
 }) {
   const query = useQuery({

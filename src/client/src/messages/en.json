@@ -70,8 +70,9 @@
     "deleting": "Deleting...",
     "hidden": "Hidden",
     "visible": "Visible",
-    "newest": "Mới nhất",
-    "oldest": "Cũ nhất"
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "all": "All"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -611,6 +612,8 @@
     "error": "Error",
     "pending": "Pending",
     "running": "Running",
+    "notOptimized": "Chưa tối ưu",
+    "optimized": "Tốt nhất",
     "metrics": {
       "alert_status": "Alert Status",
       "bugs": "Bugs",

@@ -206,9 +206,9 @@ export const MetricItem = ({ metric }: { metric: IMetrics }) => {
         {metric.bestValue !== null && (
           <span className="text-xs">
             {metric.bestValue ? (
-              <span className="text-green-600">✓ Tốt nhất</span>
+              <span className="text-green-600">✓ {t('codeAnalysis.optimized')}</span>
             ) : (
-              <span className="text-amber-600">⚠ Chưa tối ưu</span>
+              <span className="text-amber-600">⚠ {t('codeAnalysis.notOptimized')}</span>
             )}
           </span>
         )}

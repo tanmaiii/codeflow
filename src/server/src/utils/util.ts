@@ -63,3 +63,45 @@ export const reposName = ({ type, name, groupName }: { type: ENUM_TYPE_COURSE; n
 
   return nameRepo;
 };
+
+export const getStartLinePullRequest = (diffHeader: string) => {
+  const match = diffHeader.match(/\@\@ -\d+,\d+ \+(\d+),?/);
+  if (match) {
+    return parseInt(match[1], 10);
+  }
+  return null;
+};
+
+export function formatUnifiedDiffWithLineNumbers(diff: string): string {
+  const lines = diff.split('\n');
+  let result: string[] = [];
+  let oldLine = 0;
+  let newLine = 0;
+
+  for (let line of lines) {
+    const hunkMatch = line.match(/^@@ -(\d+),\d+ \+(\d+),\d+ @@/);
+    if (hunkMatch) {
+      oldLine = parseInt(hunkMatch[1]);
+      newLine = parseInt(hunkMatch[2]);
+      result.push(line); // keep the @@ header
+      continue;
+    }
+
+    if (line.startsWith('-')) {
+      result.push(`${oldLine}: ${line}`);
+      oldLine++;
+    } else if (line.startsWith('+')) {
+      result.push(`${newLine}: ${line}`);
+      newLine++;
+    } else if (line.startsWith(' ')) {
+      result.push(`${oldLine}: ${line}`);
+      oldLine++;
+      newLine++;
+    } else {
+      // fallback
+      result.push(line);
+    }
+  }
+
+  return result.join('\n');
+}

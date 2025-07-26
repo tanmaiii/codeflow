@@ -64,3 +64,7 @@ export interface IPullRequest extends IBaseEntity {
 export interface IPullRequestQueryParams extends IGetAllQuery {
   authorId?: string;
 }
+
+export interface ICommitQueryParams extends IGetAllQuery {
+  authorId?: string;
+}

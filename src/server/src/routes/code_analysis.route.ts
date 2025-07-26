@@ -1,5 +1,5 @@
 import { GetAllQueryDto } from '@/dtos/common.dto';
-import { CodeAnalysisTimeframeQueryDto } from '@/dtos/code_analysis.dto';
+import { CodeAnalysisTimeframeQueryDto, GetCodeAnalysisByRepoIdDto } from '@/dtos/code_analysis.dto';
 import { AuthMiddleware } from '@/middlewares/auth.middleware';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
 import { CodeAnalysisController } from '@controllers/code_analysis.controller';
@@ -17,7 +17,7 @@ export class CodeAnalysisRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.codeAnalysis.getCodeAnalyses);
-    this.router.get(`${this.path}/repos/:id`, AuthMiddleware, this.codeAnalysis.getCodeAnalysisByRepoId);
+    this.router.get(`${this.path}/repos/:id`, AuthMiddleware, ValidationMiddleware(GetCodeAnalysisByRepoIdDto, 'query'), this.codeAnalysis.getCodeAnalysisByRepoId);
     this.router.get(`${this.path}/repos/:id/timeframe`, AuthMiddleware, ValidationMiddleware(CodeAnalysisTimeframeQueryDto, 'query'), this.codeAnalysis.getCodeAnalysisByRepoIdWithTimeFilter);
   }
 }

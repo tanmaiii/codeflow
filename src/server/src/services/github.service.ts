@@ -1,11 +1,21 @@
-import { GitHubCommitDetail, GitHubContent, GithubMeta, GitHubRepository, GitHubRepositoryCreate, GitHubUser } from '@interfaces/github.interface';
+import {
+  GitHubCommitDetail,
+  GitHubContent,
+  GithubMeta,
+  GitHubPullRequest,
+  GitHubPullRequestFile,
+  GitHubPullRequestFileContent,
+  GitHubRepository,
+  GitHubRepositoryCreate,
+  GitHubUser,
+} from '@interfaces/github.interface';
 import {
   GitHubUserService,
   GitHubRepositoryService,
   GitHubContentService,
   GitHubWebhookService,
   GitHubWorkflowService,
-  GitHubCommitsService,
+  GitHubDetailsService,
 } from './github';
 import Container, { Service } from 'typedi';
 
@@ -16,7 +26,7 @@ export class GitHubService {
   private readonly contentService = Container.get(GitHubContentService);
   private readonly webhookService = Container.get(GitHubWebhookService);
   private readonly workflowService = Container.get(GitHubWorkflowService);
-  private readonly commitService = Container.get(GitHubCommitsService);
+  private readonly detailsService = Container.get(GitHubDetailsService);
 
   // Webhook methods
   public async verifyWebhookSignature(signature: string): Promise<boolean> {
@@ -113,6 +123,51 @@ export class GitHubService {
 
   // Commit
   public async getCommitDetails(repoName: string, commitSha: string): Promise<GitHubCommitDetail> {
-    return this.commitService.getCommitDetails(repoName, commitSha);
+    return this.detailsService.getCommitDetails(repoName, commitSha);
+  }
+
+  //Pull Request
+  public async getPullRequestDetails(
+    repoName: string,
+    pullNumber: number,
+  ): Promise<{
+    pullRequest: GitHubPullRequest;
+    files: GitHubPullRequestFile[];
+    content: GitHubPullRequestFileContent[];
+  }> {
+    const pullRequest = await this.detailsService.getPullRequestDetails(repoName, pullNumber);
+    const files = await this.detailsService.getPullRequestFiles(repoName, pullNumber);
+    // Read content for all files
+    const filesWithContent: GitHubPullRequestFileContent[] = await Promise.all(
+      files.map(async file => {
+        try {
+          const content = await this.detailsService.readFile(repoName, file.filename, pullRequest.head.sha);
+          return {
+            ...content,
+            contentDecode: Buffer.from(content.content, 'base64').toString('utf-8'),
+          };
+        } catch (error) {
+          // Handle cases where file content cannot be read (e.g., binary files, large files)
+          return;
+        }
+      }),
+    );
+    return { pullRequest, files, content: filesWithContent };
+  }
+
+  public async commentPullRequest(
+    repoName: string,
+    pullNumber: number,
+    comment: string,
+    commitId: string,
+    path: string,
+    line: number,
+  ): Promise<any> {
+    try {
+      return await this.detailsService.commentPullRequest(repoName, pullNumber, comment, commitId, path, line);
+    } catch (error) {
+      console.error('Failed to comment on pull request:', error.message);
+      throw error; // Re-throw để controller có thể handle
+    }
   }
 }

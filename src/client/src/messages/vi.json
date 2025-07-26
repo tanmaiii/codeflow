@@ -71,7 +71,8 @@
     "hidden": "Ẩn",
     "visible": "Hiện",
     "newest": "Mới nhất",
-    "oldest": "Cũ nhất"
+    "oldest": "Cũ nhất",
+    "all": "Tất cả"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
@@ -609,6 +610,8 @@
     "error": "Lỗi",
     "pending": "Chờ",
     "running": "Đang chạy",
+    "notOptimized": "Chưa tối ưu",
+    "optimized": "Tốt nhất",
     "metrics": {
       "alert_status": "Trạng thái cảnh báo",
       "bugs": "Lỗi",

@@ -38,13 +38,14 @@ export class CodeAnalysisController {
   public getCodeAnalysisByRepoId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
-      const { count, rows } = await this.codeAnalysisService.findByRepoId(
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', authorId } = req.query;
+      const { count, rows } = await this.codeAnalysisService.findByRepoIdOrAuthorId(
         Number(page),
         Number(limit),
         String(sortBy ?? ''),
         String(order ?? 'DESC') as 'ASC' | 'DESC',
         id,
+        String(authorId ?? ''),
       );
       res.status(200).json({
         data: rows,

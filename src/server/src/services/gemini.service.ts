@@ -1,7 +1,9 @@
 import { HttpException } from '@/exceptions/HttpException';
-import { CodeEvaluationRequest, CodeEvaluationResponse, EvaluationPromptData, GeminiConfig } from '@/interfaces/gemini.interface';
+import { CodeChange, GeminiConfig, GeminiResReviewPR } from '@/interfaces/gemini.interface';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { logger } from '@/utils/logger';
 import { Service } from 'typedi';
+import { formatUnifiedDiffWithLineNumbers } from '@/utils/util';
 
 @Service()
 export class GeminiService {
@@ -41,137 +43,91 @@ export class GeminiService {
       },
     });
     const result = await model.generateContent(prompt);
+
     return result.response.text();
   }
 
-  /**
-   * Đánh giá code
-   */
-  public async evaluateCode(request: CodeEvaluationRequest) {
-    try {
-      const prompt = this.buildEvaluationPrompt({
-        code: request.code,
-        language: request.language,
-        exerciseDescription: request.exerciseDescription,
-        requirements: request.requirements,
-        criteria: request.evaluationCriteria,
-      });
+  public async evaluateCodeWithPrompt(pr_description: string, code: CodeChange[]): Promise<GeminiResReviewPR> {
+    const model = this.genAI.getGenerativeModel({
+      model: this.config.model,
+      generationConfig: {
+        maxOutputTokens: this.config.maxTokens,
+        temperature: this.config.temperature,
+      },
+    });
 
-      const model = this.genAI.getGenerativeModel({
-        model: this.config.model,
-        generationConfig: {
-          maxOutputTokens: this.config.maxTokens,
-          temperature: this.config.temperature,
-        },
-      });
+    const prompt = this.buildPromptReviewPullRequest(pr_description, code);
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+    logger.info(prompt);
 
-      // Parse và validate response
-      const evaluation = this.parseEvaluationResponse(text);
-      return evaluation;
-    } catch (error) {
-      throw error;
-    }
+    const result = await model.generateContent(prompt);
+
+    return this.parseEvaluationResponse(result.response.text());
   }
 
-  public async evaluateCommitGithub(commit: string) {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  private buildEvaluationPrompt(data: EvaluationPromptData): string {
-    const criteriaList = Object.entries(data.criteria)
-      .filter(([_, enabled]) => enabled)
-      .map(([key, _]) => key)
-      .join(', ');
+  private buildPromptReviewPullRequest(pr_description: string, code_changes: CodeChange[]) {
+    const formattedCodeChanges = code_changes
+      .map(change => {
+        const numberedLines = formatUnifiedDiffWithLineNumbers(change.code);
+        return `File: ${change.file}:\n${numberedLines}`;
+      })
+      .join('\n\n---\n\n');
 
     return `
-Bạn là một giảng viên lập trình chuyên nghiệp. Hãy đánh giá code của sinh viên một cách chi tiết và xây dựng.
+    Bạn là một chuyên gia review mã nguồn, được giao nhiệm vụ đánh giá một Pull Request (PR) trên GitHub.
+Dưới đây là thông tin về PR:
 
-**THÔNG TIN BÀI TẬP:**
-${data.exerciseDescription ? `Mô tả bài tập: ${data.exerciseDescription}` : ''}
-${data.requirements ? `Yêu cầu: ${data.requirements.join(', ')}` : ''}
+Mô tả PR:
+${pr_description}
 
-**CODE CẦN ĐÁNH GIÁ:**
-Ngôn ngữ: ${data.language}
-\`\`\`${data.language}
-${data.code}
-\`\`\`
+Thay đổi mã nguồn:
+${formattedCodeChanges}
 
-**TIÊU CHÍ ĐÁNH GIÁ:** ${criteriaList}
+Yêu cầu đánh giá:
 
-Hãy đánh giá theo format JSON chính xác sau (Trả lời bằng tiếng việt):
+Hãy phân tích kỹ các thay đổi và phản hồi theo định dạng JSON với các nội dung sau:
+1. summary: Một tiêu đề ngắn tóm tắt nội dung PR.
+2. comments: Danh sách các nhận xét chi tiết cho từng dòng mã cần góp ý.
+
+Chỉ đưa ra nhận xét nếu:
+- Dòng mã có lỗi logic, bug, hoặc vấn đề bảo mật.
+- Có thể cải thiện về hiệu suất, khả năng bảo trì, hoặc độ dễ đọc.
+- Thiếu xử lý lỗi hoặc chưa đáp ứng đủ yêu cầu chức năng.
+
+Không đưa ra nhận xét nếu:
+- Nội dung không liên quan đến code.
+- Thay đổi nhỏ, hiển nhiên hoặc không cần thiết.
+
+Định dạng phản hồi:
+Bạn phải trả về một đối tượng JSON hợp lệ với cấu trúc sau:
 {
-  "overallScore": <số điểm tổng thể từ 0-100>,
-  "detailScores": {
-    "codeQuality": <0-100>,
-    "functionality": <0-100>,
-    "efficiency": <0-100>,
-    "readability": <0-100>,
-    "bestPractices": <0-100>,
-    "security": <0-100>
-  },
-  "feedback": {
-    "strengths": ["điểm mạnh 1", "điểm mạnh 2", ...],
-    "weaknesses": ["điểm yếu 1", "điểm yếu 2", ...],
-    "suggestions": ["gợi ý 1", "gợi ý 2", ...]
-  },
-  "codeIssues": [
+  "summary": "Tóm tắt ngắn gọn về nội dung PR",
+  "score": 0-10,
+  "comments": [
     {
-      "type": "error|warning|suggestion",
-      "line": <số dòng nếu có>,
-      "description": "mô tả vấn đề",
-      "severity": "low|medium|high|critical",
-      "category": "syntax|logic|performance|security|style"
-    }
-  ],
-  "recommendations": ["khuyến nghị 1", "khuyến nghị 2", ...],
-  "evaluationSummary": "tóm tắt đánh giá tổng quan"
+      "file": "path/to/file.ext",
+      "line": 42,
+      "comment": "[🤖 AI Review] (Mức độ: Nhận xét rõ ràng và cụ thể về đoạn mã)"
+    },
+    ...thêm nhận xét
+  ]
 }
-
-Lưu ý: Chỉ trả về JSON hợp lệ, không có text thêm.`;
+Không thêm bất kỳ văn bản, markdown hay giải thích nào bên ngoài JSON.
+    `;
   }
 
   // Hàm này dùng để parse json response từ Gemini
-  private parseEvaluationResponse(text: string): CodeEvaluationResponse {
+  private parseEvaluationResponse(text: string): GeminiResReviewPR {
     try {
       // Loại bỏ markdown code blocks nếu có
       const cleanText = text.replace(/```json\n?|\n?```/g, '').trim();
       const parsed = JSON.parse(cleanText);
 
-      // Validate required fields
-      if (!parsed.overallScore || !parsed.detailScores || !parsed.feedback) {
-        throw new Error('Invalid response format from Gemini');
-      }
-
-      return parsed as CodeEvaluationResponse;
+      return parsed as GeminiResReviewPR;
     } catch (error) {
       console.error('Error parsing Gemini response:', error);
       // Fallback response
-      return {
-        overallScore: 0,
-        detailScores: {
-          codeQuality: 0,
-          functionality: 0,
-          efficiency: 0,
-          readability: 0,
-          bestPractices: 0,
-          security: 0,
-        },
-        feedback: {
-          strengths: [],
-          weaknesses: ['Không thể phân tích code'],
-          suggestions: ['Vui lòng kiểm tra lại code'],
-        },
-        codeIssues: [],
-        recommendations: [],
-        evaluationSummary: 'Đánh giá thất bại do lỗi hệ thống',
-      };
+      return null;
     }
   }
 }

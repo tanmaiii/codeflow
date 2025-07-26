@@ -1,6 +1,6 @@
 'use client';
-import { IGetAllQuery, PaginatedResponseAPIDto } from '@/interfaces/common';
-import { ICommit } from '@/interfaces/repos';
+import { PaginatedResponseAPIDto } from '@/interfaces/common';
+import { ICommit, ICommitQueryParams } from '@/interfaces/repos';
 import commitService from '@/services/commit.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
@@ -10,7 +10,7 @@ export default function useQ_Commit_GetByReposId({
   reposId,
 }: {
   options?: Partial<UseQueryOptions<PaginatedResponseAPIDto<ICommit[]>, Error>>;
-  params: IGetAllQuery;
+  params: ICommitQueryParams;
   reposId: string;
 }) {
   const query = useQuery({
