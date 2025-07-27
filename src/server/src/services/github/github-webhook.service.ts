@@ -22,6 +22,106 @@ export class GitHubWebhookService extends GitHubBaseService {
       throw error;
     }
   }
+  
+  /**
+   * Lấy danh sách webhooks của repository
+   * @param repoName Tên repository
+   * @returns Danh sách webhooks
+   */
+  public async getWebhooks(repoName: string) {
+    try {
+      this.logInfo('Getting webhooks', { repoName });
+
+      const response = await this.makeRequest({
+        method: 'GET',
+        url: `${this.getOrgRepoUrl(repoName)}/hooks`,
+      });
+      
+      return response;
+    } catch (error) {
+      this.logError(`Error getting webhooks for repo: ${repoName}`, error);
+      throw error.response?.data || error;
+    }
+  }
+
+  /**
+   * Xóa webhook theo ID
+   * @param repoName Tên repository
+   * @param hookId ID của webhook
+   * @returns
+   */
+  public async deleteWebhook(repoName: string, hookId: number) {
+    try {
+      this.logInfo('Deleting webhook', { repoName, hookId });
+
+      const response = await this.makeRequest({
+        method: 'DELETE',
+        url: `${this.getOrgRepoUrl(repoName)}/hooks/${hookId}`,
+      });
+      
+      return response;
+    } catch (error) {
+      this.logError(`Error deleting webhook: ${hookId}`, error);
+      throw error.response?.data || error;
+    }
+  }
+
+  /**
+   * Kiểm tra và xóa tất cả webhooks nếu tồn tại
+   * @param repoName Tên repository
+   * @returns
+   */
+  public async checkAndDeleteExistingWebhook(repoName: string) {
+    try {
+      this.logInfo('Checking and deleting existing webhooks', { repoName });
+
+      // Lấy danh sách webhooks hiện có
+      const webhooks = await this.getWebhooks(repoName);
+      
+      if (!webhooks || !Array.isArray(webhooks) || webhooks.length === 0) {
+        this.logInfo('No webhooks found', { repoName });
+        return { deleted: false, message: 'No webhooks found', deletedCount: 0 };
+      }
+
+      // Xóa tất cả webhooks hiện có
+      const deletedWebhooks = [];
+      for (const webhook of webhooks) {
+        try {
+          this.logInfo('Deleting webhook', { 
+            repoName, 
+            webhookId: webhook.id,
+            webhookUrl: webhook.config?.url 
+          });
+          
+          await this.deleteWebhook(repoName, webhook.id);
+          deletedWebhooks.push({
+            id: webhook.id,
+            url: webhook.config?.url
+          });
+        } catch (error) {
+          this.logError(`Failed to delete webhook ${webhook.id}`, error);
+        }
+      }
+
+      if (deletedWebhooks.length > 0) {
+        return { 
+          deleted: true, 
+          message: `Successfully deleted ${deletedWebhooks.length} webhook(s)`,
+          deletedCount: deletedWebhooks.length,
+          deletedWebhooks 
+        };
+      } else {
+        return { 
+          deleted: false, 
+          message: 'Failed to delete any webhooks',
+          deletedCount: 0 
+        };
+      }
+    } catch (error) {
+      this.logError('Error checking and deleting existing webhooks', error);
+      throw error;
+    }
+  }
 
   /**
    * Tạo webhook commit trên repository

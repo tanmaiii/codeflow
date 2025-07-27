@@ -1,9 +1,9 @@
 import { HttpException } from '@/exceptions/HttpException';
 import { CodeChange, GeminiConfig, GeminiResReviewPR } from '@/interfaces/gemini.interface';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logger } from '@/utils/logger';
-import { Service } from 'typedi';
 import { formatUnifiedDiffWithLineNumbers } from '@/utils/util';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { Service } from 'typedi';
 
 @Service()
 export class GeminiService {
@@ -101,15 +101,15 @@ Không đưa ra nhận xét nếu:
 Định dạng phản hồi:
 Bạn phải trả về một đối tượng JSON hợp lệ với cấu trúc sau:
 {
-  "summary": "Tóm tắt ngắn gọn về nội dung PR",
+  "summary": "Tóm tắt ngắn gọn về nội dung PR (Không quá 255 kí tự)",
   "score": 0-10,
   "comments": [
     {
       "file": "path/to/file.ext",
       "line": 42,
-      "comment": "[🤖 AI Review] (Mức độ: Nhận xét rõ ràng và cụ thể về đoạn mã)"
+      "comment": "[🤖 AI Review] (Mức độ: Nhận xét, gợi ý, cải thiện, lỗi, bug, vấn đề bảo mật, ...) Nhận xét rõ ràng và cụ thể về đoạn mã"
     },
-    ...thêm nhận xét
+    ...thêm nhận xét (Không quá 1000 kí tự)
   ]
 }
 Không thêm bất kỳ văn bản, markdown hay giải thích nào bên ngoài JSON.
@@ -123,11 +123,22 @@ Không thêm bất kỳ văn bản, markdown hay giải thích nào bên ngoài 
       const cleanText = text.replace(/```json\n?|\n?```/g, '').trim();
       const parsed = JSON.parse(cleanText);
 
+      if (parsed.summary.length > 255) {
+        throw new HttpException(400, 'Summary is too long');
+      }
+      if (parsed.comments.length > 1000) {
+        throw new HttpException(400, 'Comments is too long');
+      }
+
       return parsed as GeminiResReviewPR;
     } catch (error) {
       console.error('Error parsing Gemini response:', error);
       // Fallback response
-      return null;
+      return {
+        summary: '',
+        score: 0,
+        comments: [],
+      };
     }
   }
 }

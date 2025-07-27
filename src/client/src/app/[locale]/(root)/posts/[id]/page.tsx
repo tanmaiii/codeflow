@@ -11,14 +11,14 @@ interface PageProps {
 export async function generateStaticParams() {
   try {
     // Fetch first 10 posts for static generation
-    const posts = await postService.getAll({ 
-      limit: 10, 
+    const posts = await postService.getAll({
+      limit: 10,
       page: 1,
       sortBy: 'createdAt',
-      order: 'DESC'
+      order: 'DESC',
     });
-    
-    return posts.data.map((post) => ({
+
+    return posts.data.map(post => ({
       id: post.id,
     }));
   } catch (error) {
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try {
     const resolvedParams = await params;
     const post = await postService.getById(resolvedParams.id);
-    
+
     if (!post.data) {
       return {
         title: 'Post Not Found',
@@ -51,7 +51,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         images: post.data.thumbnail ? [post.data.thumbnail] : undefined,
         type: 'article',
         authors: post.data.author?.name ? [post.data.author.name] : undefined,
-        publishedTime: post.data.createdAt ? new Date(post.data.createdAt).toISOString() : undefined,
+        publishedTime: post.data.createdAt
+          ? new Date(post.data.createdAt).toISOString()
+          : undefined,
         modifiedTime: post.data.updatedAt ? new Date(post.data.updatedAt).toISOString() : undefined,
       },
       twitter: {
@@ -87,11 +89,11 @@ export default async function Page({ params }: PageProps) {
     }
 
     return (
-        <PostDetailLayout 
-          initialPostData={postResponse.data}
-          initialCommentsData={commentsResponse.data || []}
-          postId={resolvedParams.id}
-        />
+      <PostDetailLayout
+        initialPostData={postResponse.data}
+        initialCommentsData={commentsResponse.data || []}
+        postId={resolvedParams.id}
+      />
     );
   } catch (error) {
     console.error('Error fetching post data:', error);

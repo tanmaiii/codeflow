@@ -1,6 +1,6 @@
 import { CodeAnalysisCreate, CodeAnalysisMetrics } from '@/interfaces/code_analysis.interface';
 import { CommitCreate } from '@/interfaces/commits.interface';
-import { PullRequests, PullRequestsCreate, PullRequestsUpdate } from '@/interfaces/pull_requests.interface';
+import { PullRequestsCreate, PullRequestsUpdate } from '@/interfaces/pull_requests.interface';
 import CodeAnalysisService from '@/services/code_analysis.service';
 import { CommitService } from '@/services/commit.service';
 import { PullRequestsService } from '@/services/pull_requests.service';
@@ -73,9 +73,15 @@ export class GitHubController {
    */
   public addWebhookCommit = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { repoName, webhookUrl } = req.body;
-      logger.info(`[GitHub Controller] repoName: ${repoName}, webhookUrl: ${webhookUrl}`);
-      await this.github.createWebhookCommit(repoName, webhookUrl);
+      const { webhookUrl } = req.body;
+      const repos = await this.reposService.findAll();
+
+      for (const repo of repos) {
+        logger.info(`[GitHub Controller] repoName: ${repo.name}, webhookUrl: ${webhookUrl}`);
+        await this.github.checkAndDeleteExistingWebhook(repo.name);
+        await this.github.createWebhookCommit(repo.name, webhookUrl);
+      }
+
       res.status(200).json({ message: 'Webhook added successfully' });
     } catch (error) {
       next(error);
@@ -194,10 +200,6 @@ export class GitHubController {
   // Lưu commit
   private async processCommit(commit: PushEvent['commits'][0], repository: PushEvent['repository'], ref: string) {
     try {
-      logger.info(`[GitHub Webhook] Processing commit: ${JSON.stringify(commit)}`);
-      logger.info(`[GitHub Webhook] Processing repository: ${JSON.stringify(repository)}`);
-
-      // Kiểm tra nếu author.username tồn tại
       if (!commit.author.username) {
         logger.warn(`[GitHub Webhook] Commit ${commit.id} does not have author username, skipping...`);
         return;

@@ -20,7 +20,7 @@ import {
 } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { notFound, useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import TopicsAbout from './TopicsAbout';
 import TopicsContribute from './contribute';
@@ -71,7 +71,7 @@ export default function Topics_Detail() {
   const router = useRouter();
 
   if (isLoading) return <TopicListSkeleton />;
-  if (isError) return <div>Error</div>;
+  if (isError) return notFound();
 
   const isLeader =
     user?.id === dataTopic?.data?.members?.find(member => member.role === 'leader')?.userId;

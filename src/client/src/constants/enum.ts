@@ -67,28 +67,28 @@ export enum ENUM_FRAMEWORK {
 }
 
 export enum ENUM_METRICS_CODE_ANALYSIS {
-  SECURITY_HOTSPOTS = 'security_hotspots',
-  RELIABILITY_RATING = 'reliability_rating',
-  CODE_SMELLS = 'code_smells',
-  SECURITY_HOTSPOTS_REVIEWED = 'security_hotspots_reviewed',
-  BUGS = 'bugs',
-  COVERAGE = 'coverage',
-  DUPLICATED_LINES_DENSITY = 'duplicated_lines_density',
-  ALERT_STATUS = 'alert_status',
-  SECURITY_RATING = 'security_rating',
-  VULNERABILITIES = 'vulnerabilities',
-  SQALE_INDEX = 'sqale_index',
-  SQALE_RATING = 'sqale_rating',
-  SECURITY_REVIEW_RATING = 'security_review_rating',
-  LINE_COVERAGE = 'line_coverage',
-  UNCOVERED_LINES = 'uncovered_lines',
-  LINES_TO_COVER = 'lines_to_cover',
-  DUPLICATED_BLOCKS = 'duplicated_blocks',
-  DUPLICATED_LINES = 'duplicated_lines',
-  COMPLEXITY = 'complexity',
-  COGNITIVE_COMPLEXITY = 'cognitive_complexity',
-  NCLoc = 'ncloc',
-  FILES = 'files',
-  FUNCTIONS = 'functions',
-  CLASSES = 'classes',
+  SECURITY_HOTSPOTS = 'security_hotspots', // Điểm nóng bảo mật
+  BUGS = 'bugs', // Lỗi
+  RELIABILITY_RATING = 'reliability_rating', // Độ tin cậy
+  CODE_SMELLS = 'code_smells', // Mùi code
+  DUPLICATED_LINES = 'duplicated_lines', // Dòng code lặp lại
+  COVERAGE = 'coverage', // Phần trăm code được test
+  DUPLICATED_LINES_DENSITY = 'duplicated_lines_density', // Mật độ dòng lặp lại
+  ALERT_STATUS = 'alert_status', // Trạng thái cảnh báo
+  SECURITY_HOTSPOTS_REVIEWED = 'security_hotspots_reviewed', // Điểm nóng bảo mật đã xem xét
+  SECURITY_RATING = 'security_rating', // Đánh giá bảo mật
+  VULNERABILITIES = 'vulnerabilities', // Lỗi bảo mật
+  SQALE_INDEX = 'sqale_index', // Chỉ số SQALE
+  SQALE_RATING = 'sqale_rating', // Đánh giá SQALE
+  SECURITY_REVIEW_RATING = 'security_review_rating', // Đánh giá bảo mật đã xem xét
+  LINE_COVERAGE = 'line_coverage', // Phần trăm dòng code được test
+  UNCOVERED_LINES = 'uncovered_lines', // Dòng code không được test
+  LINES_TO_COVER = 'lines_to_cover', // Dòng code cần test
+  DUPLICATED_BLOCKS = 'duplicated_blocks', // Khối code lặp lại
+  COMPLEXITY = 'complexity', // Độ phức tạp
+  COGNITIVE_COMPLEXITY = 'cognitive_complexity', // Độ phức tạp trí tuệ
+  NCLoc = 'ncloc', // Số dòng code
+  FILES = 'files', // Số file
+  FUNCTIONS = 'functions', // Số hàm
+  CLASSES = 'classes', // Số lớp
 }

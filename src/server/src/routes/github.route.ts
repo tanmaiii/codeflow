@@ -1,9 +1,8 @@
-import { Router } from 'express';
+import { AddWebHookDto } from '@/dtos/github.dto';
+import { ValidationMiddleware } from '@/middlewares/validation.middleware';
 import { GitHubController } from '@controllers/github.controller';
 import { Routes } from '@interfaces/routes.interface';
-import { AuthMiddleware } from '@/middlewares/auth.middleware';
-import { ValidationMiddleware } from '@/middlewares/validation.middleware';
-import { AddWebHookDto } from '@/dtos/github.dto';
+import { Router } from 'express';
 
 export class GitHubRoute implements Routes {
   public path = '/github';

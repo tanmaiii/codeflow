@@ -1,21 +1,23 @@
 'use client';
 
-import { Bell } from 'lucide-react';
-import { useRouter, usePathname } from 'next/navigation';
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
+import { Bell } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-import NotificationItem from '@/components/common/NotificationItem';
+import NotificationItem, { IconNotification } from '@/components/common/NotificationItem';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { paths } from '@/data/path';
 import useQ_Notification_GetAllByUser from '@/hooks/query-hooks/Notification/useQ_Notification_GetAllByUser';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { INotification } from '@/interfaces/notification';
 import socketService from '@/services/socket.service';
 import { useUserStore } from '@/stores/user_store';
 import { util_format_number } from '@/utils/common';
-import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { IconChevronRight } from '@tabler/icons-react';
+import { toast } from 'sonner';
 
 const NOTIFICATION_LIMIT = 10;
 const UNREAD_LIMIT = 100000;
@@ -26,7 +28,7 @@ const NotificationCenter: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('notification');
-  
+
   // Initialize online status tracking
   useOnlineStatus();
 
@@ -62,6 +64,22 @@ const NotificationCenter: React.FC = () => {
     // Socket connection is now handled by useOnlineStatus hook
     const unsubscribe = socketService.onNotification((notification: unknown) => {
       const newNotification = notification as INotification;
+      toast(
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <IconNotification type={newNotification.type} />
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">New notification</span>
+              <span className="text-xs text-muted-foreground">
+                {newNotification.title.slice(0, 30)}...
+              </span>
+            </div>
+          </div>
+          <Button variant="link" className="ml-auto text-xs" onClick={() => handleSeeAll()}>
+            <IconChevronRight />
+          </Button>
+        </div>,
+      );
       setNotifications(prev => [newNotification, ...prev]);
       if (!newNotification.isRead) {
         setUnreadCount(prev => prev + 1);
@@ -79,19 +97,11 @@ const NotificationCenter: React.FC = () => {
     <ScrollArea className="min-h-[300px] rounded-md border">
       <div className="space-y-2 p-2">
         {notifications.slice(0, DISPLAY_LIMIT).map(notification => (
-          <NotificationItem 
-            key={notification.id} 
-            item={notification} 
-            className="p-2" 
-          />
+          <NotificationItem key={notification.id} item={notification} className="p-2" />
         ))}
         {notifications.length > DISPLAY_LIMIT && (
           <div className="flex justify-center mt-3">
-            <Button
-              variant="secondary"
-              className="w-full"
-              onClick={handleSeeAll}
-            >
+            <Button variant="secondary" className="w-full" onClick={handleSeeAll}>
               {t('seeAll')}
             </Button>
           </div>
@@ -100,13 +110,12 @@ const NotificationCenter: React.FC = () => {
     </ScrollArea>
   );
 
-  const renderUnreadBadge = () => (
+  const renderUnreadBadge = () =>
     unreadCount > 0 && (
       <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
         {util_format_number(unreadCount)}
       </span>
-    )
-  );
+    );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

@@ -37,6 +37,10 @@ export class GitHubService {
     return this.webhookService.createWebhookCommit(repoName, webhookUrl);
   }
 
+  public async checkAndDeleteExistingWebhook(repoName: string) {
+    return this.webhookService.checkAndDeleteExistingWebhook(repoName);
+  }
+
   public async handleWebhookCommit(body: any, signature: string): Promise<void> {
     return this.webhookService.handleWebhookCommit(body, signature);
   }

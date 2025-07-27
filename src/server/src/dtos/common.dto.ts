@@ -11,7 +11,7 @@ export class GetAllQueryDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
-  @IsPositive()
+  // @IsPositive()
   limit? = 10;
 
   @IsOptional()

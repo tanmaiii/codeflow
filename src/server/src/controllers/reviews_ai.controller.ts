@@ -1,7 +1,10 @@
 import { HttpException } from '@/exceptions/HttpException';
+import { RequestWithUser } from '@/interfaces/auth.interface';
 import { GeminiService } from '@/services/gemini.service';
 import { GitHubService } from '@/services/github.service';
+import { PullRequestsService } from '@/services/pull_requests.service';
 import { ReposService } from '@/services/repos.service';
+import { ReviewsAIService } from '@/services/reviews_ai.service';
 import { getStartLinePullRequest } from '@/utils/util';
 import { NextFunction, Request, Response } from 'express';
 import Container, { Service } from 'typedi';
@@ -11,17 +14,24 @@ export class ReviewsAIController {
   public gemini = Container.get(GeminiService);
   public gitHub = Container.get(GitHubService);
   public reposService = Container.get(ReposService);
+  public pullRequestsService = Container.get(PullRequestsService);
+  public reviewsAIService = Container.get(ReviewsAIService);
 
-  public evaluatePullRequestGithub = async (req: Request, res: Response, next: NextFunction) => {
+  public evaluatePullRequestGithub = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const { reposId, pullNumber } = req.params;
+      const user = req.user;
+      const { reposId, prId } = req.params;
+      const pr = await this.pullRequestsService.findById(prId);
+      if (!pr) throw new HttpException(404, 'Pull request not found');
+
       const repos = await this.reposService.findById(reposId);
       if (!repos) throw new HttpException(404, 'Repository not found');
-      const pullRequest = await this.gitHub.getPullRequestDetails(repos.name, Number(pullNumber));
+
+      const prGitHub = await this.gitHub.getPullRequestDetails(repos.name, Number(pr.pullNumber));
 
       const result = await this.gemini.evaluateCodeWithPrompt(
-        `${pullRequest.pullRequest.title}\n${pullRequest.pullRequest.body}`,
-        pullRequest.files.map(content => ({
+        `${prGitHub.pullRequest.title}\n${prGitHub.pullRequest.body}`,
+        prGitHub.files.map(content => ({
           file: content.filename,
           start_line: getStartLinePullRequest(content.patch),
           code: content.patch,
@@ -34,9 +44,9 @@ export class ReviewsAIController {
           try {
             await this.gitHub.commentPullRequest(
               repos.name,
-              Number(pullNumber),
+              Number(pr.pullNumber),
               comment.comment,
-              pullRequest.pullRequest.head.sha,
+              prGitHub.pullRequest.head.sha,
               comment.file,
               comment.line,
             );
@@ -47,6 +57,14 @@ export class ReviewsAIController {
           }
         }),
       );
+
+      await this.reviewsAIService.createReviewAI({
+        pullRequestId: pr.id,
+        authorId: user.id,
+        summany: result.summary,
+        score: result.score,
+        comments: result.comments,
+      });
 
       res.status(200).json({
         data: result,

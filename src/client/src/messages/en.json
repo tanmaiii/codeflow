@@ -510,7 +510,20 @@
     "pullRequest_close": "Close",
     "pullRequest_merged": "Merged",
     "totalCommits": "Total Commits",
-    "Commits": "Commits"
+    "Commits": "Commits",
+    "contribute": "Contribute",
+    "contributors": "Contributors",
+    "topContributors": "Top Contributors",
+    "recentCommits": "Recent Commits",
+    "recentPullRequests": "Recent Pull Requests",
+    "contributionActivity": "Contribution Activity",
+    "additions": "Additions",
+    "deletions": "Deletions",
+    "commits": "commits",
+    "reviewed": "Reviewed",
+    "reviewSuccess": "Review success: {score}",
+    "reviewFailed": "Review failed",
+    "reviewing": "Reviewing..."
   },
   "tag": {
     "tag": "Tag",

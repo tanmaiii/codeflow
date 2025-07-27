@@ -27,9 +27,10 @@ export default function CoursesMember() {
   const params = useParams();
   const id = params?.id as string;
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
   const { data } = useQ_Course_GetMembers({
     id: id,
-    params: { page: Number(page), limit: 10 },
+    params: { page: Number(page), limit: 10, search: search },
   });
 
   const columns = useMemo<ColumnDef<IUser>[]>(
@@ -124,6 +125,9 @@ export default function CoursesMember() {
           fieldFilter="name"
           showIndexColumn={true}
           showSelectionColumn={true}
+          onSearchChange={value => {
+            setSearch(value);
+          }}
           pagination={false}
           columns={columns}
           data={data?.data || []}

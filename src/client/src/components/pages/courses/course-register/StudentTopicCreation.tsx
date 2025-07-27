@@ -37,7 +37,7 @@ export default function StudentTopicCreation() {
 
   const { data: Q_Members } = useQuery({
     queryKey: ['topics', params?.id],
-    queryFn: () => courseService.memberInCourse(params?.id as string, { page: 1, limit: 100 }),
+    queryFn: () => courseService.memberInCourse(params?.id as string, { page: 1, limit: -1 }),
   });
 
   const { data: Q_Course } = useQ_Course_GetDetail({ id: params?.id as string });

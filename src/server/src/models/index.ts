@@ -12,6 +12,7 @@ import { PostTagModel } from './post_tag.model';
 import { PostModel } from './posts.model';
 import { PullRequestsModel } from './pull_requests.model';
 import { ReposModel } from './repos.model';
+import { ReviewAIModel } from './reviews_ai.model';
 import { SubmissionModel } from './submissions.model';
 import { TagModel } from './tags.model';
 import { TopicEvaluationsModel } from './topic_evaluations.model';
@@ -38,6 +39,7 @@ export const initModels = () => {
   UserModel.hasMany(CodeAnalysisModel, { foreignKey: 'authorId', as: 'codeAnalyses' });
   UserModel.hasMany(CommitsModel, { foreignKey: 'authorId', as: 'commits' });
   UserModel.hasMany(PullRequestsModel, { foreignKey: 'authorId', as: 'pullRequests' });
+  UserModel.hasMany(ReviewAIModel, { foreignKey: 'authorId', as: 'reviewsAI' });
   
   // UserSettings Model Relations
   UserSettingsModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
@@ -133,6 +135,11 @@ export const initModels = () => {
   // PullRequests Model Relations
   PullRequestsModel.belongsTo(ReposModel, { foreignKey: 'reposId', as: 'repos' });
   PullRequestsModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
+  PullRequestsModel.hasMany(ReviewAIModel, { foreignKey: 'pullRequestId', as: 'reviewsAI' });
+
+  // ReviewAIModel Relations
+  ReviewAIModel.belongsTo(PullRequestsModel, { foreignKey: 'pullRequestId', as: 'pullRequest' });
+  ReviewAIModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
 };
 
 export { CodeAnalysisModel, CourseModel, PostLikeModel, PostModel, TagModel, UserModel };

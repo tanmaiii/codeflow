@@ -509,7 +509,20 @@
     "pullRequest_close": "Đóng",
     "pullRequest_merged": "Đã hợp nhất",
     "totalCommits": "Tổng số Commit",
-    "Commits": "Commit"
+    "Commits": "Commit",
+    "contribute": "Đóng góp",
+    "contributors": "Người đóng góp",
+    "topContributors": "Người đóng góp hàng đầu",
+    "recentCommits": "Commit gần đây",
+    "recentPullRequests": "Pull Request gần đây",
+    "contributionActivity": "Hoạt động đóng góp",
+    "additions": "Thêm",
+    "deletions": "Xóa",
+    "commits": "commits",
+    "reviewed": "Đã review",
+    "reviewSuccess": "Đã review thành công điểm: {score}",
+    "reviewFailed": "Review thất bại",
+    "reviewing": "Đang review..."
   },
   "tag": {
     "tag": "Thẻ",

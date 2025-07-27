@@ -13,6 +13,6 @@ export class ReviewsAIRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/repos/:reposId/pull-request/:pullNumber`, AuthMiddleware, this.reviewsAI.evaluatePullRequestGithub);
+    this.router.get(`${this.path}/repos/:reposId/pull-request/:prId`, AuthMiddleware, this.reviewsAI.evaluatePullRequestGithub);
   }
 }

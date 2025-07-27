@@ -10,7 +10,7 @@ interface PullRequestsAndCommitsProps {
   repos: IRepos;
 }
 
-export default function RepoAnalysisAndActivity({ repos }: PullRequestsAndCommitsProps) {
+export default function ReposAnalysisAndActivity({ repos }: PullRequestsAndCommitsProps) {
   return (
     <Card>
       <Tabs defaultValue="code-analysis" className="w-full">

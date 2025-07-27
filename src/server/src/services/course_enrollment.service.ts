@@ -26,6 +26,14 @@ export class CourseEnrollmentService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     courseId: string,
   ): Promise<{ count: number; rows: CourseEnrollment[] }> {
+    if (pageSize == -1) {
+      const { count, rows }: { count: number; rows: CourseEnrollment[] } = await DB.CourseEnrollment.findAndCountAll({
+        where: { courseId },
+        col: 'course_enrollments.id',
+      });
+      return { count, rows };
+    }
+
     const { count, rows }: { count: number; rows: CourseEnrollment[] } = await DB.CourseEnrollment.findAndCountAll({
       limit: pageSize,
       offset: (page - 1) * pageSize,

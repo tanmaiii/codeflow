@@ -9,6 +9,11 @@ export class PullRequestsService {
     return pullRequest;
   }
 
+  public async findById(id: string): Promise<PullRequests> {
+    const pullRequest = await DB.PullRequests.findByPk(id);
+    return pullRequest;
+  }
+
   public async findAllPullRequests(): Promise<PullRequests[]> {
     const pullRequests = await DB.PullRequests.findAll();
     return pullRequests;

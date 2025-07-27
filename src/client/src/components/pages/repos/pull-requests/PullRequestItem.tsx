@@ -1,8 +1,10 @@
+import IconLoading from '@/components/common/IconLoading/IconLoading';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading from '@/components/ui/text';
 import { IPullRequest, IRepos } from '@/interfaces/repos';
+import reviews_aiService from '@/services/reviews_ai.service';
 import { utils_DateToDDMMYYYY_HHMM } from '@/utils/date';
 import {
   IconCheck,
@@ -14,6 +16,10 @@ import {
   IconRobot,
   IconX,
 } from '@tabler/icons-react';
+import { useMutation } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function PullRequestItem({
   pullRequest,
@@ -22,6 +28,8 @@ export default function PullRequestItem({
   pullRequest: IPullRequest;
   repos: IRepos;
 }) {
+  const [score, setScore] = useState<number | null>(null);
+  const t = useTranslations();
   const getPRStatusIcon = (status: string) => {
     switch (status) {
       case 'open':
@@ -48,39 +56,21 @@ export default function PullRequestItem({
     }
   };
 
-  const getAIReviewButton = () => {
-    // const isReviewing = aiReview?.status === 'pending';
-    // const isCompleted = aiReview?.status === 'completed';
-    const isReviewing = false;
-    const isCompleted = true;
-
-    if (isCompleted) {
-      return (
-        <div className="flex items-center gap-2 text-sm">
-          <div className="flex items-center gap-1 text-green-600">
-            <IconRobot className="size-4" />
-            <span>Đã review 5/10</span>
-          </div>
-          <Button size="sm" variant="outline" onClick={()=>{}} className="text-xs">
-            Review lại
-          </Button>
-        </div>
-      );
-    }
-
-    return (
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={() => {}}
-        disabled={isReviewing}
-        className="flex items-center gap-2"
-      >
-        <IconRobot className="size-4" />
-        {isReviewing ? 'Đang review...' : 'Review bằng AI'}
-      </Button>
-    );
-  };
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const res = await reviews_aiService.evaluatePullRequestGithub(repos.id, pullRequest.id);
+      setScore(res?.data.score);
+      return res;
+    },
+    onSuccess: data => {
+      setScore(data?.data.score);
+      toast.success(t('repos.reviewSuccess', { score: data?.data.score }));
+    },
+    onError: error => {
+      console.log(error);
+      toast.error(t('repos.reviewFailed'));
+    },
+  });
 
   const handleOpenPull = () => {
     if (repos.url) {
@@ -108,7 +98,44 @@ export default function PullRequestItem({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">{getAIReviewButton()}</div>
+        <div className="flex items-center gap-2">
+          {pullRequest.reviewsAI?.length !== undefined && (
+            <div
+              className="flex items-center gap-1 text-green-600 cursor-pointer hover:text-green-700"
+              onClick={handleOpenPull}
+            >
+              <IconRobot className="size-4" />
+              <span className="text-xs">
+                {t('repos.reviewed')}
+                {score ||
+                  pullRequest.reviewsAI?.sort(
+                    (a, b) =>
+                      new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime(),
+                  )[0]?.score ||
+                  0}
+                /10
+              </span>
+            </div>
+          )}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              mutation.mutate();
+            }}
+            disabled={mutation.isPending}
+            className="text-xs"
+          >
+            {mutation.isPending ? (
+              <div className="flex items-center gap-2">
+                <IconLoading className="w-3 h-3" />
+                <span>{t('repos.reviewing')}</span>
+              </div>
+            ) : (
+              '🤖 Review'
+            )}
+          </Button>
+        </div>
       </div>
 
       <div className="flex items-center gap-4 text-sm text-muted-foreground">

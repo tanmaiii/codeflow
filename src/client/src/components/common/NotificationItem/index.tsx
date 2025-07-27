@@ -13,7 +13,7 @@ interface NotificationItemProps {
   className?: string;
 }
 
-const IconNotification = ({ type }: { type: ENUM_TYPE_NOTIFICATION }) => {
+export const IconNotification = ({ type }: { type: ENUM_TYPE_NOTIFICATION }) => {
   const getIcon = () => {
     switch (type) {
       case ENUM_TYPE_NOTIFICATION.TOPIC_EVALUATION:
@@ -74,7 +74,9 @@ export default function NotificationItem({ item, className }: NotificationItemPr
     <div
       className={cn(
         'border bg-gradient-to-r py-4 px-3 rounded-lg cursor-pointer transition-colors flex items-start gap-2 ',
-        !item?.isRead ? 'border-l-4 border-green-500 from-green-50 to-blue-50 dark:from-green-500/10 dark:to-green-500/10' : '',
+        !item?.isRead
+          ? 'border-l-4 border-green-500 from-green-50 to-blue-50 dark:from-green-500/10 dark:to-green-500/10'
+          : '',
         className,
       )}
     >

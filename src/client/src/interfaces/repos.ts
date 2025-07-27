@@ -1,4 +1,5 @@
 import { IBaseEntity, IGetAllQuery } from './common';
+import { IReviewAI } from './reviews_ai';
 import { ITopic } from './topic';
 import { IUser } from './user';
 
@@ -59,6 +60,7 @@ export interface IPullRequest extends IBaseEntity {
   mergedAt?: Date;
   closedAt?: Date;
   author: IUser;
+  reviewsAI?: IReviewAI[];
 }
 
 export interface IPullRequestQueryParams extends IGetAllQuery {

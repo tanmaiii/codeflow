@@ -13,6 +13,7 @@ import PostTagModel from '@/models/post_tag.model';
 import PostModel from '@/models/posts.model';
 import PullRequestsModel from '@/models/pull_requests.model';
 import ReposModel from '@/models/repos.model';
+import ReviewAIModel from '@/models/reviews_ai.model';
 import SubmissionModel from '@/models/submissions.model';
 import SystemSettingsModel from '@/models/system_settings.model';
 import TagModel from '@/models/tags.model';
@@ -73,6 +74,7 @@ export const DB = {
   CodeAnalysis: CodeAnalysisModel(sequelize),
   CodeAnalysisMetrics: CodeAnalysisMetricsModel(sequelize),
   PullRequests: PullRequestsModel(sequelize),
+  ReviewsAI: ReviewAIModel(sequelize),
   sequelize,
 };
 
