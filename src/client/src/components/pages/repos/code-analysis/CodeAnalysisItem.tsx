@@ -1,16 +1,16 @@
 import MyBadge from '@/components/common/MyBadge';
+import { Badge } from '@/components/ui/badge';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading from '@/components/ui/text';
-import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
 import { STATUS_CODE_ANLYSIS } from '@/constants/object';
 import { ICodeAnalysis } from '@/interfaces/code_analysis';
 import { IRepos } from '@/interfaces/repos';
+import { util_object_to_color } from '@/utils/common';
 import { utils_DateToDDMMYYYY_HHMM } from '@/utils/date';
 import { IconExternalLink, IconGitBranch, IconGitCommit } from '@tabler/icons-react';
 import CodeAnalysisModal from './CodeAnalysisModal';
 import { MetricItem } from './MetricItem';
-import { util_object_to_color } from '@/utils/common';
-import { Badge } from '@/components/ui/badge';
+import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
 
 interface CodeAnalysisItemProps {
   data: ICodeAnalysis;
@@ -129,7 +129,7 @@ export default function CodeAnalysisItem({ data, repos }: CodeAnalysisItemProps)
       </div>
 
       {/* Metrics Section */}
-      {sortedMetrics.length > 0 && (
+      {sortedMetrics.length > 0 && status === 'success' && (
         <div className="border-t pt-3">
           <div className="flex items-start gap-6 text-sm">
             {sortedMetrics.map(metric => (

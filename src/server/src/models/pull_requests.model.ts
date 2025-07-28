@@ -1,7 +1,7 @@
 import { PullRequests } from '@/interfaces/pull_requests.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { UserModel } from './users.model';
 import { ReviewAIModel } from './reviews_ai.model';
+import { UserModel } from './users.model';
 
 type PullRequestsCreationAttributes = Optional<
   PullRequests,
@@ -106,10 +106,10 @@ export default function (sequelize: Sequelize): typeof PullRequestsModel {
             model: UserModel,
             as: 'author',
           },
-          {
-            model: ReviewAIModel,
-            as: 'reviewsAI',
-          },
+          // {
+          //   model: ReviewAIModel,
+          //   as: 'reviewsAI',
+          // },
         ],
       },
     },

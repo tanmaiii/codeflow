@@ -6,7 +6,7 @@ import { PullRequestsService } from '@/services/pull_requests.service';
 import { ReposService } from '@/services/repos.service';
 import { ReviewsAIService } from '@/services/reviews_ai.service';
 import { getStartLinePullRequest } from '@/utils/util';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import Container, { Service } from 'typedi';
 
 @Service()
@@ -69,8 +69,15 @@ export class ReviewsAIController {
       res.status(200).json({
         data: result,
       });
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      if (error.status === 503) {
+        res.status(503).json({
+          data: null,
+          message: 'Token limit exceeded',
+        });
+        return;
+      }
+      next(error);
     }
   };
 }

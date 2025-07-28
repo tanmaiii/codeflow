@@ -16,6 +16,21 @@ export interface IRepos extends IBaseEntity {
   topic: ITopic;
 }
 
+export interface IReposContributors {
+  authorId: string;
+  author: IUser;
+  commit: {
+    total: number;
+    additions: number;
+    deletions: number;
+  };
+  pullRequest: {
+    total: number;
+    additions: number;
+    deletions: number;
+  };
+}
+
 export interface IReposCreateDto {
   name: string;
   topicId: string;

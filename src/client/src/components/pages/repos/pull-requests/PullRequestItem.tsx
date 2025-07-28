@@ -68,7 +68,11 @@ export default function PullRequestItem({
     },
     onError: error => {
       console.log(error);
-      toast.error(t('repos.reviewFailed'));
+      if (error.message === 'Token limit exceeded') {
+        toast.error(t('repos.tokenLimitExceeded'));
+      } else {
+        toast.error(t('repos.reviewFailed'));
+      }
     },
   });
 
@@ -99,14 +103,14 @@ export default function PullRequestItem({
         </div>
 
         <div className="flex items-center gap-2">
-          {pullRequest.reviewsAI?.length !== undefined && (
+          {pullRequest.reviewsAI && pullRequest.reviewsAI.length > 0 && (
             <div
               className="flex items-center gap-1 text-green-600 cursor-pointer hover:text-green-700"
               onClick={handleOpenPull}
             >
               <IconRobot className="size-4" />
               <span className="text-xs">
-                {t('repos.reviewed')}
+                {t('repos.reviewed') + ' '}
                 {score ||
                   pullRequest.reviewsAI?.sort(
                     (a, b) =>
@@ -140,12 +144,14 @@ export default function PullRequestItem({
 
       <div className="flex items-center gap-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-1">
-          <MemberAvatar
-            name={pullRequest.author.name || ''}
-            avatar={pullRequest.author.avatar}
-            size={26}
-            id={pullRequest.author.id}
-          />
+          {pullRequest.author && (
+            <MemberAvatar
+              name={pullRequest.author.name || ''}
+              avatar={pullRequest.author.avatar}
+              size={26}
+              id={pullRequest.author.id}
+            />
+          )}
         </div>
         <Badge
           variant="outline"

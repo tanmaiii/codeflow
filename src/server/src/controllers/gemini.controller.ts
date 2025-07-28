@@ -16,6 +16,13 @@ export class GeminiController {
       const result = await this.gemini.generateText(prompt);
       res.status(200).json({ data: result });
     } catch (error) {
+      if (error.status === 503) {
+        res.status(503).json({
+          data: null,
+          message: 'Token limit exceeded',
+        });
+        return;
+      }
       next(error);
     }
   };

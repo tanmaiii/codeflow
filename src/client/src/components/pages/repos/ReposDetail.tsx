@@ -78,7 +78,7 @@ export default function ReposDetail() {
           <RepositoryStats repoName={dataRepos.data?.name ?? ''} />
 
           {/* Quick Actions */}
-          <ReposContribute />
+          <ReposContribute repos={dataRepos.data} />
         </div>
       </div>
     </div>

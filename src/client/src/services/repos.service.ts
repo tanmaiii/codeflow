@@ -1,5 +1,5 @@
 import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
-import { IRepos, IReposCreateDto, IReposUpdateDto } from '@/interfaces/repos';
+import { IRepos, IReposContributors, IReposCreateDto, IReposUpdateDto } from '@/interfaces/repos';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 
@@ -14,6 +14,11 @@ class ReposService {
     const res = await this.client.get('/', {
       params,
     });
+    return res.data;
+  }
+
+  public async getContributors(id: string): Promise<ResponseAPIDto<IReposContributors[]>> {
+    const res = await this.client.get(`/${id}/contributors`);
     return res.data;
   }
 

@@ -181,14 +181,17 @@ export class GitHubController {
 
       const newCodeAnalysis = await this.codeAnalysisService.createCodeAnalysis(codeAnalysis);
 
-      for (const measure of sonarAnalysis.component.measures) {
-        const codeAnalysisMetrics: CodeAnalysisMetrics = {
-          codeAnalysisId: newCodeAnalysis.id,
-          name: measure.metric,
-          value: measure.value,
-          bestValue: measure.bestValue,
-        };
-        await this.codeAnalysisService.createCodeAnalysisMetrics(codeAnalysisMetrics);
+      if (newCodeAnalysis.status === 'success') {
+        for (const measure of sonarAnalysis.component.measures) {
+          const codeAnalysisMetrics: CodeAnalysisMetrics = {
+            codeAnalysisId: newCodeAnalysis.id,
+            name: measure.metric,
+            value: measure.value,
+            bestValue: measure.bestValue,
+          };
+          await this.codeAnalysisService.createCodeAnalysisMetrics(codeAnalysisMetrics);
+        }
+        return;
       }
 
       return;

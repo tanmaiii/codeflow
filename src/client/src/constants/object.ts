@@ -277,7 +277,7 @@ export const STATUS_CODE_ANLYSIS: IStatusObj[] = [
     labelKey: 'codeAnalysis.success',
   },
   {
-    value: 'failed',
+    value: 'failure',
     labelKey: 'codeAnalysis.failed',
   },
   {

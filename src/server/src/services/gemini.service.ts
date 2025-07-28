@@ -62,6 +62,8 @@ export class GeminiService {
 
     const result = await model.generateContent(prompt);
 
+    logger.info(result.response.text());
+
     return this.parseEvaluationResponse(result.response.text());
   }
 
@@ -112,30 +114,115 @@ Bạn phải trả về một đối tượng JSON hợp lệ với cấu trúc 
     ...thêm nhận xét (Không quá 1000 kí tự)
   ]
 }
-Không thêm bất kỳ văn bản, markdown hay giải thích nào bên ngoài JSON.
+
+QUAN TRỌNG:
+- Khi đề cập đến code trong comment, hãy escape tất cả dấu quotes: \" thay vì "
+- Ví dụ: thay vì href="/", hãy viết href=\"/\"
+- Đảm bảo JSON hoàn toàn hợp lệ, không có dấu quotes chưa được escape
+- Không thêm bất kỳ văn bản, markdown hay giải thích nào bên ngoài JSON.
     `;
+  }
+
+  /**
+   * Fix common JSON escape issues in AI response
+   * @param jsonText - The JSON text to fix
+   * @returns Fixed JSON text
+   */
+  private fixJsonEscapeIssues(jsonText: string): string {
+    try {
+      // Đầu tiên thử parse để xem có lỗi không
+      JSON.parse(jsonText);
+      return jsonText; // Nếu parse được thì return luôn
+    } catch (error) {
+      logger.info('JSON parsing failed, attempting to fix escape issues...');
+      
+      // Nếu có lỗi, thử fix các vấn đề thường gặp
+      let fixedText = jsonText;
+      
+      // Fix quotes trong comment values - approach an toàn hơn
+      fixedText = fixedText.replace(
+        /"comment":\s*"((?:[^"\\]|\\.)*)"/g,
+        (match, commentContent) => {
+          // Tạm thời replace escaped quotes với placeholder
+          let tempContent = commentContent.replace(/\\"/g, '__ESCAPED_QUOTE__');
+          
+          // Escape unescaped quotes
+          tempContent = tempContent.replace(/"/g, '\\"');
+          
+          // Restore escaped quotes
+          tempContent = tempContent.replace(/__ESCAPED_QUOTE__/g, '\\"');
+          
+          return `"comment": "${tempContent}"`;
+        }
+      );
+      
+      // Fix các trường hợp khác nếu cần
+      try {
+        JSON.parse(fixedText);
+        logger.info('Successfully fixed JSON escape issues');
+        return fixedText;
+      } catch (secondError) {
+        // Nếu vẫn không fix được, return original
+        logger.warn('Could not fix JSON escape issues:', secondError);
+        return jsonText;
+      }
+    }
   }
 
   // Hàm này dùng để parse json response từ Gemini
   private parseEvaluationResponse(text: string): GeminiResReviewPR {
     try {
-      // Loại bỏ markdown code blocks nếu có
-      const cleanText = text.replace(/```json\n?|\n?```/g, '').trim();
+      logger.info('Raw Gemini response:', text);
+      
+      // Cải thiện regex để loại bỏ markdown code blocks
+      let cleanText = text.trim();
+      
+      // Loại bỏ các markdown code blocks với nhiều pattern khác nhau
+      cleanText = cleanText.replace(/^```(?:json)?\s*\n?/gm, ''); // Loại bỏ opening ```json hoặc ```
+      cleanText = cleanText.replace(/\n?```\s*$/gm, ''); // Loại bỏ closing ```
+      cleanText = cleanText.trim();
+      
+      // Fix JSON escape issues
+      cleanText = this.fixJsonEscapeIssues(cleanText);
+      
+      logger.info('Cleaned text for parsing:', cleanText);
+
       const parsed = JSON.parse(cleanText);
+
+      // Validation
+      if (!parsed.summary || typeof parsed.summary !== 'string') {
+        throw new Error('Invalid summary field');
+      }
 
       if (parsed.summary.length > 255) {
         throw new HttpException(400, 'Summary is too long');
       }
-      if (parsed.comments.length > 1000) {
-        throw new HttpException(400, 'Comments is too long');
+
+      if (!Array.isArray(parsed.comments)) {
+        throw new Error('Comments must be an array');
+      }
+
+      parsed.comments.forEach((comment: any, index: number) => {
+        if (!comment.comment || typeof comment.comment !== 'string') {
+          throw new Error(`Invalid comment at index ${index}`);
+        }
+        if (comment.comment.length > 1000) {
+          throw new HttpException(400, `Comment at index ${index} is too long`);
+        }
+      });
+
+      if (typeof parsed.score !== 'number' || parsed.score < 0 || parsed.score > 10) {
+        throw new Error('Score must be a number between 0 and 10');
       }
 
       return parsed as GeminiResReviewPR;
     } catch (error) {
-      console.error('Error parsing Gemini response:', error);
+      logger.error('Error parsing Gemini response:', error);
+      logger.error('Original text:', text);
+      
       // Fallback response
       return {
-        summary: '',
+        summary: 'Không thể phân tích phản hồi từ AI',
         score: 0,
         comments: [],
       };

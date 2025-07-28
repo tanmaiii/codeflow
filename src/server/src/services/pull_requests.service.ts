@@ -1,16 +1,34 @@
 import { DB } from '@/database';
 import { PullRequests, PullRequestsCreate, PullRequestsUpdate } from '@/interfaces/pull_requests.interface';
+import { ReviewAIModel } from '@/models/reviews_ai.model';
 import { Service } from 'typedi';
 
 @Service()
 export class PullRequestsService {
   public async findPullRequestByPullNumber(reposId: string, pullNumber: number): Promise<PullRequests> {
-    const pullRequest = await DB.PullRequests.findOne({ where: { reposId, pullNumber } });
+    const pullRequest = await DB.PullRequests.findOne({
+      where: { reposId, pullNumber },
+      include: {
+        model: ReviewAIModel,
+        as: 'reviewsAI',
+        separate: true,
+        order: [['createdAt', 'DESC']],
+        limit: 1,
+      },
+    });
     return pullRequest;
   }
 
   public async findById(id: string): Promise<PullRequests> {
-    const pullRequest = await DB.PullRequests.findByPk(id);
+    const pullRequest = await DB.PullRequests.findByPk(id, {
+      include: {
+        model: ReviewAIModel,
+        as: 'reviewsAI',
+        separate: true,
+        order: [['createdAt', 'DESC']],
+        limit: 1,
+      },
+    });
     return pullRequest;
   }
 
@@ -33,13 +51,36 @@ export class PullRequestsService {
     if (repoId) where['reposId'] = repoId;
     if (userId) where['authorId'] = userId;
 
+    if (pageSize == -1) {
+      return await DB.PullRequests.findAndCountAll({
+        where,
+        order: [[sortBy, sortOrder]],
+        include: [
+          {
+            model: ReviewAIModel,
+            as: 'reviewsAI',
+            separate: true, // Tránh duplicate data
+            order: [['createdAt', 'DESC']], // Sắp xếp theo thời gian tạo mới nhất
+            limit: 1, // Chỉ lấy review AI mới nhất
+          },
+        ],
+      });
+    }
+
     return await DB.PullRequests.findAndCountAll({
       where,
       order: [[sortBy, sortOrder]],
       limit: pageSize,
-      distinct: true,
-      col: 'pull_requests.id',
       offset,
+      include: [
+        {
+          model: ReviewAIModel,
+          as: 'reviewsAI',
+          separate: true, // Tránh duplicate data
+          order: [['createdAt', 'DESC']], // Sắp xếp theo thời gian tạo mới nhất
+          limit: 1, // Chỉ lấy review AI mới nhất
+        },
+      ],
     });
   }
 
@@ -54,5 +95,50 @@ export class PullRequestsService {
 
   public async deletePullRequest(id: string): Promise<void> {
     await DB.PullRequests.destroy({ where: { id } });
+  }
+
+  public async getLatestReviewAI(pullRequestId: string): Promise<any> {
+    const reviewAI = await DB.ReviewsAI.findOne({
+      where: { pullRequestId },
+      order: [['createdAt', 'DESC']],
+    });
+    return reviewAI;
+  }
+
+  public async getContributorsByRepoIdOrAuthorId(repoId?: string, authorId?: string): Promise<any> {
+    const { sequelize } = DB;
+
+    const whereCondition: any = {};
+    if (repoId) whereCondition['reposId'] = repoId;
+    if (authorId) whereCondition['authorId'] = authorId;
+
+    // Get contributor stats
+    const contributor = await DB.PullRequests.findOne({
+      where: whereCondition,
+      attributes: [
+        'authorId',
+        [sequelize.fn('COUNT', sequelize.col('pull_requests.id')), 'totalPullRequests'],
+        [sequelize.fn('SUM', sequelize.col('pull_requests.additions')), 'totalAdditions'],
+        [sequelize.fn('SUM', sequelize.col('pull_requests.deletions')), 'totalDeletions'],
+      ],
+      group: ['authorId'],
+      raw: false,
+    });
+
+    if (!contributor) {
+      return null;
+    }
+
+    return this.formatContributorData(contributor);
+  }
+
+  private formatContributorData(contributor: any): any {
+    return {
+      pullRequest: {
+        total: parseInt(contributor.dataValues?.totalPullRequests || contributor.totalPullRequests) || 0,
+        additions: parseInt(contributor.dataValues?.totalAdditions || contributor.totalAdditions) || 0,
+        deletions: parseInt(contributor.dataValues?.totalDeletions || contributor.totalDeletions) || 0,
+      },
+    };
   }
 }

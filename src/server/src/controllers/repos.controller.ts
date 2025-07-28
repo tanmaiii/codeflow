@@ -1,13 +1,22 @@
 import { RequestWithUser } from '@/interfaces/auth.interface';
+import CodeAnalysisService from '@/services/code_analysis.service';
+import { CommitService } from '@/services/commit.service';
+import { PullRequestsService } from '@/services/pull_requests.service';
 import { ReposService } from '@/services/repos.service';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
 
 export class ReposController {
   private readonly reposService: ReposService;
+  private readonly codeAnalysisService: CodeAnalysisService;
+  private readonly commitService: CommitService;
+  private readonly pullRequestService: PullRequestsService;
 
   constructor() {
     this.reposService = Container.get(ReposService);
+    this.codeAnalysisService = Container.get(CodeAnalysisService);
+    this.commitService = Container.get(CommitService);
+    this.pullRequestService = Container.get(PullRequestsService);
   }
 
   public getRepos = async (req: RequestWithUser, res: Response, next: NextFunction) => {
@@ -119,6 +128,18 @@ export class ReposController {
     try {
       const repo = await this.reposService.restoreRepo(req.params.id);
       res.status(200).json(repo);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getRepoContributors = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const repo = await this.reposService.getRepoContributors(req.params.id);
+      res.status(200).json({
+        data: repo,
+        message: 'Get repo contributors',
+      });
     } catch (error) {
       next(error);
     }

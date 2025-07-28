@@ -522,7 +522,8 @@
     "reviewed": "Đã review",
     "reviewSuccess": "Đã review thành công điểm: {score}",
     "reviewFailed": "Review thất bại",
-    "reviewing": "Đang review..."
+    "reviewing": "Đang review...",
+    "tokenLimitExceeded": "Quá giới hạn token, vui lòng thử lại sau"
   },
   "tag": {
     "tag": "Thẻ",

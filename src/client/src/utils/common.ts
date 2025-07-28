@@ -122,32 +122,33 @@ export function util_object_to_color(obj: IStatusObj) {
     // Red group
     rejected: 'red',
     hidden: 'red',
-    
-    // Red variant group  
+
+    // Red variant group
     failed: 'red',
+    failure: 'red',
     error: 'red',
-    
+
     // Green group
     approved: 'green',
     visible: 'green',
     finished: 'green',
     user: 'green',
-    
+
     // Green variant group
     success: 'green',
-    
+
     // Blue group
     'in progress': 'blue',
     started: 'blue',
     admin: 'blue',
-    
+
     // Yellow group
     not_started: 'yellow',
     teacher: 'yellow',
-    
+
     // Yellow variant group
     running: 'yellow',
-    
+
     // Special cases
     pending: 'amber',
     suggest: 'orange',
@@ -157,7 +158,7 @@ export function util_object_to_color(obj: IStatusObj) {
 
   const normalizedStr = obj.value.toLowerCase().trim();
   const colorScheme = statusColorMap[normalizedStr];
-  
+
   return colorScheme ? colorSchemes[colorScheme] : colorSchemes.slate;
 }
 

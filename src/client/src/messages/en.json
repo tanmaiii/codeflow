@@ -523,7 +523,8 @@
     "reviewed": "Reviewed",
     "reviewSuccess": "Review success: {score}",
     "reviewFailed": "Review failed",
-    "reviewing": "Reviewing..."
+    "reviewing": "Reviewing...",
+    "tokenLimitExceeded": "Token limit exceeded, please try again later"
   },
   "tag": {
     "tag": "Tag",

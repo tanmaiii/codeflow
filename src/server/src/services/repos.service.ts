@@ -5,15 +5,24 @@ import { HttpException } from '@exceptions/HttpException';
 import { Op } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
+import { CodeAnalysisService } from './code_analysis.service';
+import { CommitService } from './commit.service';
 import { GitHubService } from './github.service';
+import { PullRequestsService } from './pull_requests.service';
 import { SonarService } from './sonar.service';
 import { TopicService } from './topic.service';
+import { TopicMemberService } from './topic_member.service';
+
 @Service()
 export class ReposService {
   constructor(
     private readonly githubService = Container.get(GitHubService),
     private readonly topicService = Container.get(TopicService),
     private readonly sonarService = Container.get(SonarService),
+    private readonly commitService = Container.get(CommitService),
+    private readonly pullRequestService = Container.get(PullRequestsService),
+    private readonly codeAnalysisService = Container.get(CodeAnalysisService),
+    private readonly topicMemberService = Container.get(TopicMemberService),
   ) {}
 
   /**
@@ -264,5 +273,42 @@ export class ReposService {
 
     await DB.Repos.restore({ where: { id } });
     return repo;
+  }
+
+  public async getRepoContributors(id: string): Promise<any> {
+    const repo = await this.findById(id);
+    const topicMembers = await this.topicMemberService.findTopicMembersByTopicId(repo.topicId);
+
+    const contributors = [];
+
+    // Sử dụng Promise.all để đợi tất cả async operations hoàn thành
+    const contributorPromises = topicMembers.map(async member => {
+      const contributor = await this.commitService.getContributorsByRepoIdOrAuthorId(id, member.userId);
+      const pullRequest = await this.pullRequestService.getContributorsByRepoIdOrAuthorId(id, member.userId);
+      return {
+        authorId: member.userId,
+        author: member.user,
+        ...(contributor ?? {
+          commit: {
+            total: 0,
+            additions: 0,
+            deletions: 0,
+          },
+        }),
+        ...(pullRequest ?? {
+          pullRequest: {
+            total: 0,
+            additions: 0,
+            deletions: 0,
+          },
+        }),
+      };
+    });
+
+    const contributorResults = await Promise.all(contributorPromises);
+    contributors.push(...contributorResults);
+
+    if (!repo) throw new HttpException(409, "Repo doesn't exist");
+    return contributors;
   }
 }
