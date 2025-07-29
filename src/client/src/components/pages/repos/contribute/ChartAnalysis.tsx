@@ -1,0 +1,65 @@
+import TextHeading from '@/components/ui/text';
+import { useDarkMode } from '@/hooks';
+import { IReposContributors } from '@/interfaces/repos';
+import ReactECharts from 'echarts-for-react';
+import { useTranslations } from 'next-intl';
+
+export default function ChartAnalysis({ contributors }: { contributors: IReposContributors[] }) {
+  const { theme } = useDarkMode();
+  const t = useTranslations('repos');
+
+  const contributorNames = contributors?.map(c => c.author.name) || [];
+  const successData = contributors?.map(c => c.codeAnalysis.success) || [];
+  const failureData = contributors?.map(c => c.codeAnalysis.failure) || [];
+
+  const option = {
+    textStyle: { fontSize: 16, fontFamily: 'Inter, sans-serif', color: theme.textColor },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      formatter: (params: Array<{axisValue: string, marker: string, seriesName: string, value: number}>) => 
+        `<strong>${params[0].axisValue}</strong><br/>${params.map(p => 
+          `${p.marker} ${p.seriesName}: ${p.value} lần`).join('<br/>')}`,
+      backgroundColor: theme.backgroundColor,
+      textStyle: { color: theme.textColor },
+      borderWidth: 0,
+      borderRadius: 8,
+      extraCssText: 'box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);',
+    },
+    legend: {
+      top: 'bottom',
+      data: ['Success', 'Failure'],
+      textStyle: { fontSize: 12, color: theme.textColor },
+    },
+    grid: { left: '3%', right: '4%', bottom: '10%', containLabel: true },
+    xAxis: { type: 'category', data: contributorNames },
+    yAxis: { type: 'value', name: '', textStyle: { fontSize: 12, color: theme.textColor } },
+    series: [
+      {
+        name: 'Success',
+        type: 'bar',
+        stack: 'codeAnalysis',
+        emphasis: { focus: 'series' },
+        itemStyle: { color: '#10b981', },
+        data: successData,
+      },
+      {
+        name: 'Failure',
+        type: 'bar',
+        stack: 'codeAnalysis',
+        emphasis: { focus: 'series' },
+        itemStyle: { color: '#ef4444' },
+        data: failureData,
+      },
+    ],
+  };
+
+  return (
+    <div className="gap-0 border rounded-lg p-4">
+      <TextHeading className="text-lg">{t('codeAnalysisResult')}</TextHeading>
+      <div>
+        <ReactECharts option={option} style={{ height: '340px', width: '100%' }} opts={{ renderer: 'svg' }} />
+      </div>
+    </div>
+  );
+}

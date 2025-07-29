@@ -524,7 +524,12 @@
     "reviewSuccess": "Review success: {score}",
     "reviewFailed": "Review failed",
     "reviewing": "Reviewing...",
-    "tokenLimitExceeded": "Token limit exceeded, please try again later"
+    "tokenLimitExceeded": "Token limit exceeded, please try again later",
+    "codeChanges": "Code Changes",
+    "codeDistribution": "Code Distribution",
+    "memberContributionOverview": "Member Contribution Overview",
+    "memberCapability": "Member Capability",
+    "codeAnalysisResult": "Code Analysis Result"
   },
   "tag": {
     "tag": "Tag",
@@ -610,8 +615,8 @@
     "hoursRemaining": "{hours} hours {minutes} minutes remaining",
     "minutesRemaining": "{minutes} minutes remaining"
   },
-
   "codeAnalysis": {
+    "codeAnalysis": "Code Analysis",
     "status": "Status",
     "viewAnalysis": "View Analysis",
     "improveCodeAnalysis": "Improve Code Analysis",

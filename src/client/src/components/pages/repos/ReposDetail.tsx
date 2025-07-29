@@ -2,12 +2,12 @@
 import NoPage from '@/components/common/NoPage/NoPage';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { AuthorInfo, RepositoryInfo, RepositoryStats, TopicInfo } from '@/components/pages/repos';
+import ReposDetailSkeleton from '@/components/skeletons/repos/ReposDetailSkeleton';
 import useQ_Repos_GetDetail from '@/hooks/query-hooks/Repos/useQ_Repos_GetDetail';
 import { useParams } from 'next/navigation';
-import CodeAnalysisImprovementChart from './code-analysis/CodeAnalysisImprovementChart';
+import ReposContribute from './contribute/ReposContribute';
+import ReposContributeChart from './contribute/ReposContributeChart';
 import RepoAnalysisAndActivity from './ReposAnalysisAndActivity';
-import ReposContribute from './ReposContribute';
-import ReposDetailSkeleton from '@/components/skeletons/repos/ReposDetailSkeleton';
 
 export default function ReposDetail() {
   const params = useParams();
@@ -56,7 +56,7 @@ export default function ReposDetail() {
             />
           )}
 
-          <CodeAnalysisImprovementChart repos={dataRepos?.data ?? []} />
+          <ReposContributeChart repos={dataRepos.data} />
 
           {/* Pull Requests & Commits */}
           <RepoAnalysisAndActivity repos={dataRepos.data} />
@@ -64,21 +64,23 @@ export default function ReposDetail() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Author Info */}
-          {dataRepos.data?.author && (
-            <AuthorInfo
-              email={dataRepos.data?.author.email}
-              name={dataRepos.data?.author.name}
-              avatar={dataRepos.data?.author.avatar ?? ''}
-              bio={dataRepos.data?.author.bio}
-            />
-          )}
+          <div className="sticky space-y-6 top-24">
+            {/* Author Info */}
+            {dataRepos.data?.author && (
+              <AuthorInfo
+                email={dataRepos.data?.author.email}
+                name={dataRepos.data?.author.name}
+                avatar={dataRepos.data?.author.avatar ?? ''}
+                bio={dataRepos.data?.author.bio}
+              />
+            )}
 
-          {/* Repository Stats */}
-          <RepositoryStats repoName={dataRepos.data?.name ?? ''} />
+            {/* Repository Stats */}
+            <RepositoryStats repoName={dataRepos.data?.name ?? ''} />
 
-          {/* Quick Actions */}
-          <ReposContribute repos={dataRepos.data} />
+            {/* Contributors */}
+            <ReposContribute repos={dataRepos.data} />
+          </div>
         </div>
       </div>
     </div>

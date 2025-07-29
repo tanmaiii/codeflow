@@ -1,7 +1,8 @@
 import { DB } from '@/database';
 import { CodeAnalysis, CodeAnalysisCreate, CodeAnalysisMetrics } from '@/interfaces/code_analysis.interface';
-import { Service } from 'typedi';
+import { UserModel } from '@/models';
 import { Op } from 'sequelize';
+import { Service } from 'typedi';
 
 @Service()
 export class CodeAnalysisService {
@@ -18,6 +19,11 @@ export class CodeAnalysisService {
   public async findAll(): Promise<CodeAnalysis[]> {
     const codeAnalyses = await DB.CodeAnalysis.findAll();
     return codeAnalyses;
+  }
+
+  public async findById(id: string): Promise<CodeAnalysis> {
+    const codeAnalysis = await DB.CodeAnalysis.findByPk(id);
+    return codeAnalysis;
   }
 
   public async findAndCountAllWithPagination(
@@ -76,7 +82,7 @@ export class CodeAnalysisService {
     }
 
     const latestDate = new Date(latestAnalysis.analyzedAt);
-    let startDate = new Date(latestDate);
+    const startDate = new Date(latestDate);
 
     // Tính toán thời gian bắt đầu dựa trên timeframe từ ngày đánh giá cuối cùng
     switch (timeframe) {
@@ -109,6 +115,47 @@ export class CodeAnalysisService {
       },
       order: [['analyzedAt', 'ASC']],
     });
+  }
+
+  public async getContributorsByRepoIdOrAuthorId(repoId?: string, authorId?: string): Promise<any> {
+    const { sequelize } = DB;
+
+    const whereCondition: any = {};
+    if (repoId) whereCondition['reposId'] = repoId;
+    if (authorId) whereCondition['authorId'] = authorId;
+
+    // Get contributor stats
+    const contributor = await DB.CodeAnalysis.findOne({
+      where: whereCondition,
+      attributes: ['authorId', 
+        [sequelize.fn('COUNT', sequelize.col('CodeAnalysis.id')), 'total'],
+        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `CodeAnalysis`.`status` = 'success' THEN 1 ELSE NULL END")), 'success'],
+        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `CodeAnalysis`.`status` = 'failure' THEN 1 ELSE NULL END")), 'failure']
+      ],
+      group: ['authorId'],
+      raw: false,
+      include: {
+        model: UserModel,
+        as: 'author',
+        attributes: [],
+      },
+    });
+
+    if (!contributor) {
+      return null;
+    }
+
+    return this.formatContributorData(contributor);
+  }
+
+  private formatContributorData(contributor: any): any {
+    return {
+      codeAnalysis: {
+        total: parseInt(contributor.dataValues?.total || contributor.total) || 0,
+        success: parseInt(contributor.dataValues?.success || contributor.success) || 0,
+        failure: parseInt(contributor.dataValues?.failure || contributor.failure) || 0,
+      },
+    };
   }
 }
 

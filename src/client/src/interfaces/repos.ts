@@ -29,6 +29,11 @@ export interface IReposContributors {
     additions: number;
     deletions: number;
   };
+  codeAnalysis: {
+    total: number;
+    success: number;
+    failure: number;
+  };
 }
 
 export interface IReposCreateDto {

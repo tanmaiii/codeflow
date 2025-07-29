@@ -1,0 +1,97 @@
+import TextHeading from '@/components/ui/text';
+import { useDarkMode } from '@/hooks';
+import { IReposContributors } from '@/interfaces/repos';
+import ReactECharts from 'echarts-for-react';
+import { useTranslations } from 'next-intl';
+
+export default function ChartAdditions({ contributors }: { contributors: IReposContributors[] }) {
+  const { theme } = useDarkMode();
+  const t = useTranslations('repos');
+
+  const codeContributionOption = {
+    grid: {
+      left: '5%',
+      right: '5%',
+      top: '5%',
+      bottom: '20%',
+      containLabel: true,
+    },
+    textStyle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      fontFamily: 'Inter, sans-serif',
+      color: theme.textColor,
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c} dòng ({d}%)',
+      backgroundColor: theme.backgroundColor,
+      textStyle: {
+        color: theme.textColor,
+      },
+      borderWidth: 0,
+      borderRadius: 8,
+      extraCssText: 'box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);',
+    },
+    legend: {
+      orient: 'horizontal',
+      left: 'center',
+      bottom: 10,
+      textStyle: {
+        color: theme.textColor,
+        fontSize: 12,
+      },
+      itemGap: 15,
+    },
+    series: [
+      {
+        name: 'Dòng code',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        center: ['50%', '45%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 8,
+          borderColor: theme.backgroundColor,
+          borderWidth: 2,
+        },
+        label: {
+          show: false,
+          position: 'center',
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: theme.textColor,
+          },
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: contributors?.map(member => ({
+          value: member.commit.additions,
+          name: member.author.name,
+        })),
+      },
+    ],
+  };
+
+  return (
+    <div className="gap-0 border rounded-lg p-4">
+      <TextHeading className="text-lg">{t('codeDistribution')}</TextHeading>
+      <div>
+        <ReactECharts
+          option={codeContributionOption}
+          opts={{ renderer: 'svg' }}
+        />
+      </div>
+    </div>
+  );
+}

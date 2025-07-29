@@ -523,7 +523,12 @@
     "reviewSuccess": "Đã review thành công điểm: {score}",
     "reviewFailed": "Review thất bại",
     "reviewing": "Đang review...",
-    "tokenLimitExceeded": "Quá giới hạn token, vui lòng thử lại sau"
+    "tokenLimitExceeded": "Quá giới hạn token, vui lòng thử lại sau",
+    "codeChanges": "Thay đổi dòng code",
+    "codeDistribution": "Phân bổ dòng code thêm mới",
+    "memberContributionOverview": "Tổng quan đóng góp thành viên",
+    "memberCapability": "Năng lực thành viên",
+    "codeAnalysisResult": "Kết quả phân tích code"
   },
   "tag": {
     "tag": "Thẻ",
@@ -610,6 +615,7 @@
     "minutesRemaining": "{minutes} phút còn lại"
   },
   "codeAnalysis": {
+    "codeAnalysis": "Phân tích code",
     "status": "Trạng thái",
     "viewAnalysis": "Xem phân tích",
     "improveCodeAnalysis": "Xu hướng cải thiện Code Analysis",

@@ -185,7 +185,7 @@ export default function Topics_Detail() {
 
           {/* Sidebar */}
           <div className="xl:col-span-4">
-            <div className="sticky top-8">
+            <div className="sticky top-24">
               {dataTopic?.data && <TopicsAbout topic={dataTopic?.data} />}
             </div>
           </div>

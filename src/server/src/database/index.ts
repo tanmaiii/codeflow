@@ -21,6 +21,7 @@ import TopicEvaluationsModel from '@/models/topic_evaluations.model';
 import TopicMemberModel from '@/models/topic_member.mode';
 import TopicTagModel from '@/models/topic_tag.model';
 import TopicModel from '@/models/topics.model';
+import { logger } from '@/utils/logger';
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER, NODE_ENV } from '@config';
 import UserSettingsModel from '@models/user_settings.model';
 import UserModel from '@models/users.model';
@@ -43,7 +44,7 @@ const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   },
   logQueryParameters: NODE_ENV === 'development',
   logging: (query, time) => {
-    // logger.info(time + 'ms' + ' ' + query);
+    logger.info(time + 'ms' + ' ' + query);
   },
   benchmark: true,
 });

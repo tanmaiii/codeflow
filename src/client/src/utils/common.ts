@@ -240,3 +240,16 @@ export const util_repos_name = ({
 
   return nameRepo;
 };
+
+export const util_chart_generate_color = (name: string): string => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const hue = Math.abs(hash) % 360;
+  const saturation = 65 + (Math.abs(hash) % 20); // 65-85%
+  const lightness = 50 + (Math.abs(hash) % 15); // 50-65%
+
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+};

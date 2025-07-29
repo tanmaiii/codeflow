@@ -285,6 +285,7 @@ export class ReposService {
     const contributorPromises = topicMembers.map(async member => {
       const contributor = await this.commitService.getContributorsByRepoIdOrAuthorId(id, member.userId);
       const pullRequest = await this.pullRequestService.getContributorsByRepoIdOrAuthorId(id, member.userId);
+      const analysisService = await this.codeAnalysisService.getContributorsByRepoIdOrAuthorId(id, member.userId);
       return {
         authorId: member.userId,
         author: member.user,
@@ -300,6 +301,13 @@ export class ReposService {
             total: 0,
             additions: 0,
             deletions: 0,
+          },
+        }),
+        ...(analysisService ?? {
+          codeAnalysis: {
+            total: 0,
+            success: 0,
+            failure: 0,
           },
         }),
       };
