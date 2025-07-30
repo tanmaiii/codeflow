@@ -8,9 +8,6 @@ export class CodeAnalysisMetricsModel extends Model<CodeAnalysisMetrics, CodeAna
   public name!: string;
   public value!: string;
   public bestValue!: boolean;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof CodeAnalysisMetricsModel {
@@ -42,7 +39,7 @@ export default function (sequelize: Sequelize): typeof CodeAnalysisMetricsModel 
       sequelize,
       modelName: 'CodeAnalysisMetrics',
       tableName: 'code_analysis_metrics',
-      timestamps: true,
+      timestamps: false,
     },
   );
   return CodeAnalysisMetricsModel;

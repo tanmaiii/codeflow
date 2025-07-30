@@ -52,7 +52,7 @@ export class ReposController {
       const { id } = req.params;
       const isAdmin = req.user?.role === 'admin';
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', search = '' } = req.query;
-      const { count, rows } = await this.reposService.finAndCountByTopic(
+      const { count, rows } = await this.reposService.findAndCountByTopic(
         Number(page),
         Number(limit),
         String(sortBy),

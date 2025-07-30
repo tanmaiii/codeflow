@@ -1,4 +1,5 @@
 import { RepoCreate, Repos, RepoUpdate } from '@/interfaces/repos.interface';
+import { UserContributes } from '@/interfaces/users.interface';
 import { logger } from '@/utils/logger';
 import { cleanSpecialCharacters, isEmpty } from '@/utils/util';
 import { HttpException } from '@exceptions/HttpException';
@@ -59,7 +60,7 @@ export class ReposService {
   /**
    * Lấy danh sách repository theo topic, có phân trang, tìm kiếm, sắp xếp.
    */
-  public async finAndCountByTopic(
+  public async findAndCountByTopic(
     page = 1,
     pageSize = 10,
     sortBy = 'created_at',
@@ -80,6 +81,10 @@ export class ReposService {
       },
       paranoid: !isAdmin,
     });
+  }
+
+  public async findByByTopicId(id: string) {
+    return DB.Repos.findAll({ where: { topicId: id } });
   }
 
   /**
@@ -275,8 +280,10 @@ export class ReposService {
     return repo;
   }
 
-  public async getRepoContributors(id: string): Promise<any> {
+  public async getRepoContributors(id: string): Promise<UserContributes[]> {
     const repo = await this.findById(id);
+    if (!repo) throw new HttpException(409, "Repo doesn't exist");
+
     const topicMembers = await this.topicMemberService.findTopicMembersByTopicId(repo.topicId);
 
     const contributors = [];
@@ -316,7 +323,6 @@ export class ReposService {
     const contributorResults = await Promise.all(contributorPromises);
     contributors.push(...contributorResults);
 
-    if (!repo) throw new HttpException(409, "Repo doesn't exist");
     return contributors;
   }
 }

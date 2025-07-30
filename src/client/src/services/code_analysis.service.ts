@@ -32,6 +32,16 @@ class CodeAnalysisService {
     });
     return res.data;
   }
+
+  async getByTopicIdWithTimeFilter(
+    topicId: string,
+    timeframe: string,
+  ): Promise<ResponseAPIDto<ICodeAnalysis[]>> {
+    const res = await this.client.get(`/topic/${topicId}/timeframe`, {
+      params: { timeframe },
+    });
+    return res.data;
+  }
 }
 
 export default new CodeAnalysisService() as CodeAnalysisService;

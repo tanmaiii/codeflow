@@ -1,11 +1,12 @@
 import { PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
+import { IReposContributors } from '@/interfaces/repos';
 import {
   IGetAllTopicParams,
   ITopic,
   ITopicCreateDto,
   ITopicEvaluation,
   ITopicEvaluationCreateDto,
-  ITopicEvaluationUpdateDto
+  ITopicEvaluationUpdateDto,
 } from '@/interfaces/topic';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
@@ -40,6 +41,11 @@ class TopicService {
 
   async getById(id: string): Promise<ResponseAPIDto<ITopic>> {
     const res = await this.client.get(`/${id}`);
+    return res.data;
+  }
+
+  public async getContributors(id: string): Promise<ResponseAPIDto<IReposContributors[]>> {
+    const res = await this.client.get(`/${id}/contributors`);
     return res.data;
   }
 

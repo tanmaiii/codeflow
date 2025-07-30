@@ -1,13 +1,19 @@
 import { ENUM_TOPIC_STATUS, ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { Notification } from '@/interfaces/notification.interface';
 import { Topic, TopicCreate } from '@/interfaces/topics.interface';
+import { UserContributes } from '@/interfaces/users.interface';
+import { logger } from '@/utils/logger';
 import { isEmpty } from '@/utils/util';
 import { HttpException } from '@exceptions/HttpException';
 import { Op, Sequelize } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { DB } from '../database';
+import CodeAnalysisService from './code_analysis.service';
+import { CommitService } from './commit.service';
 import { CourseService } from './courses.service';
 import { NotificationService } from './notification.service';
+import { PullRequestsService } from './pull_requests.service';
+import { ReposService } from './repos.service';
 import { TagService } from './tag.service';
 import { TopicMemberService } from './topic_member.service';
 @Service()
@@ -15,13 +21,32 @@ export class TopicService {
   private readonly defaultPageSize = 10;
   private readonly defaultSortBy = 'created_at';
   private readonly defaultSortOrder: 'ASC' | 'DESC' = 'DESC';
+  private _reposService: ReposService;
+  public tagService: TagService;
+  public topicMemberService: TopicMemberService;
+  public notificationService: NotificationService;
+  public courseService: CourseService;
+  public commitService: CommitService;
+  public codeAnalysisService: CodeAnalysisService;
+  public pullRequestService: PullRequestsService;
 
-  constructor(
-    private readonly tagService = Container.get(TagService),
-    private readonly topicMemberService = Container.get(TopicMemberService),
-    private readonly notificationService = Container.get(NotificationService),
-    private readonly courseService = Container.get(CourseService),
-  ) {}
+  constructor() {
+    this.tagService = Container.get(TagService);
+    this.topicMemberService = Container.get(TopicMemberService);
+    this.notificationService = Container.get(NotificationService);
+    this.courseService = Container.get(CourseService);
+    this.commitService = Container.get(CommitService);
+    this.pullRequestService = Container.get(PullRequestsService);
+    this.codeAnalysisService = Container.get(CodeAnalysisService);
+  }
+
+  // Lazy getter để tránh circular dependency
+  private get reposService(): ReposService {
+    if (!this._reposService) {
+      this._reposService = Container.get(ReposService);
+    }
+    return this._reposService;
+  }
 
   private readonly memberCountLiteral = Sequelize.literal(`(
     SELECT COUNT(*)
@@ -255,5 +280,58 @@ export class TopicService {
       }
     });
     return whereClause;
+  }
+
+  public async contributors(id: string): Promise<UserContributes[]> {
+    const topic = await this.findTopicById(id, true);
+    if (!topic) throw new HttpException(409, "Topic doesn't exist");
+
+    const topicMembers = await this.topicMemberService.findTopicMembersByTopicId(id);
+
+    const repos = await this.reposService.findByByTopicId(id);
+
+    const contributorPromises = repos.map(async repo => {
+      const repoContributors = await this.reposService.getRepoContributors(repo.id);
+      return repoContributors;
+    });
+
+    const contributorResults = await Promise.all(contributorPromises);
+    const allContributors = contributorResults.flat();
+
+    // Gộp contributors có cùng authorId
+    const mergedContributors = this.mergeContributorsByAuthorId(allContributors);
+
+    return mergedContributors;
+  }
+
+  private mergeContributorsByAuthorId(contributors: UserContributes[]): UserContributes[] {
+    const contributorMap = new Map<string, UserContributes>();
+
+    contributors.forEach(contributor => {
+      const { authorId } = contributor;
+
+      if (contributorMap.has(authorId)) {
+        // Nếu đã có contributor này, gộp các thống kê
+        const existing = contributorMap.get(authorId);
+        if (existing) {
+          existing.commit.total += contributor.commit.total;
+          existing.commit.additions += contributor.commit.additions;
+          existing.commit.deletions += contributor.commit.deletions;
+
+          existing.pullRequest.total += contributor.pullRequest.total;
+          existing.pullRequest.additions += contributor.pullRequest.additions;
+          existing.pullRequest.deletions += contributor.pullRequest.deletions;
+
+          existing.codeAnalysis.total += contributor.codeAnalysis.total;
+          existing.codeAnalysis.success += contributor.codeAnalysis.success;
+          existing.codeAnalysis.failure += contributor.codeAnalysis.failure;
+        }
+      } else {
+        // Nếu chưa có, thêm mới vào map
+        contributorMap.set(authorId, { ...contributor });
+      }
+    });
+
+    return Array.from(contributorMap.values());
   }
 }

@@ -6,6 +6,11 @@ import { Service } from 'typedi';
 
 @Service()
 export class CodeAnalysisService {
+  // constructor(
+  //   private readonly topicService = Container.get(TopicService),
+  //   private readonly reposService = Container.get(ReposService)
+  // ) {}
+
   public async createCodeAnalysis(codeAnalysis: CodeAnalysisCreate): Promise<CodeAnalysis> {
     const newCodeAnalysis = await DB.CodeAnalysis.create(codeAnalysis);
     return newCodeAnalysis;
@@ -69,6 +74,10 @@ export class CodeAnalysisService {
     });
   }
 
+  public async findByTopicId(topicId: string): Promise<CodeAnalysis[]> {
+    return [];
+  }
+
   public async findByRepoIdWithTimeFilter(repoId: string, timeframe: string): Promise<CodeAnalysis[]> {
     // Tìm ngày đánh giá cuối cùng của repo này
     const latestAnalysis = await DB.CodeAnalysis.findOne({
@@ -127,10 +136,11 @@ export class CodeAnalysisService {
     // Get contributor stats
     const contributor = await DB.CodeAnalysis.findOne({
       where: whereCondition,
-      attributes: ['authorId', 
+      attributes: [
+        'authorId',
         [sequelize.fn('COUNT', sequelize.col('CodeAnalysis.id')), 'total'],
         [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `CodeAnalysis`.`status` = 'success' THEN 1 ELSE NULL END")), 'success'],
-        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `CodeAnalysis`.`status` = 'failure' THEN 1 ELSE NULL END")), 'failure']
+        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `CodeAnalysis`.`status` = 'failure' THEN 1 ELSE NULL END")), 'failure'],
       ],
       group: ['authorId'],
       raw: false,

@@ -3,28 +3,18 @@ import ChartAnalysis from '@/components/common/MyChart/ChartAnalysis';
 import ChartCodeChanges from '@/components/common/MyChart/ChartCodeChanges';
 import ChartContribution from '@/components/common/MyChart/ChartContribution';
 import ChartMemberRadar from '@/components/common/MyChart/ChartMemberRadar';
-import CodeAnalysisImprovementChart from '@/components/common/MyChart/CodeAnalysisImprovementChart';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useQ_CodeAnalysis_GetByReposIdWithTimeFilter } from '@/hooks/query-hooks/CodeAnalysis';
 import useQ_Repos_GetContributors from '@/hooks/query-hooks/Repos/useQ_Repos_Contributors';
 import { IRepos } from '@/interfaces/repos';
 import { IconChartBar, IconChartDots3 } from '@tabler/icons-react';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
 
 export default function ReposContributeChart({ repos }: { repos: IRepos }) {
   const { data: contributors } = useQ_Repos_GetContributors({
     id: repos.id,
   });
   const t = useTranslations('repos');
-  const [selectedTimeframe, setSelectedTimeframe] = useState('7d');
-
-  const { data: analysisData, isLoading } = useQ_CodeAnalysis_GetByReposIdWithTimeFilter(
-    repos?.id,
-    selectedTimeframe,
-  );
 
   return (
     <Card>
@@ -44,17 +34,7 @@ export default function ReposContributeChart({ repos }: { repos: IRepos }) {
 
         <CardContent className="min-h-[300px]">
           <TabsContent value="code-analysis" className="space-y-4">
-            {isLoading ? (
-              <div className="flex justify-center items-center h-full">
-                <Loader2 className="size-4 animate-spin" />
-              </div>
-            ) : (
-              <CodeAnalysisImprovementChart
-                analysisData={analysisData?.data ?? []}
-                selectedTimeframe={selectedTimeframe}
-                setSelectedTimeframe={setSelectedTimeframe}
-              />
-            )}
+            {/* <CodeAnalysisImprovementChart repos={repos} /> */}
           </TabsContent>
 
           <TabsContent value="contribute" className="space-y-4">

@@ -16,4 +16,7 @@ export interface CreateTopicEvaluationDto {
   rating: number;
 }
 
-export interface UpdateTopicEvaluationDto extends Partial<CreateTopicEvaluationDto> {} 
+export interface UpdateTopicEvaluationDto {
+  content: string;
+  rating: number;
+}

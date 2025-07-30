@@ -233,4 +233,15 @@ export class TopicController {
       next(error);
     }
   };
+
+  //Đóng góp
+  public getContributors = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const topicId = req.params.id;
+      const contributors = await this.topic.contributors(topicId);
+      res.status(200).json({ data: contributors, message: 'get contributors' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

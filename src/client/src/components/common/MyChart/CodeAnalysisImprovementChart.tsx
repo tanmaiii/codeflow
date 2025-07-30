@@ -1,19 +1,15 @@
 import MySelect from '@/components/common/MySelect';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardTitle } from '@/components/ui/card';
+import TextHeading from '@/components/ui/text';
 import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
 import { METRICS_CODE_ANALYSIS } from '@/constants/object';
 import { useDarkMode } from '@/hooks';
-import { useQ_CodeAnalysis_GetByReposIdWithTimeFilter } from '@/hooks/query-hooks/CodeAnalysis/useQ_CodeAnalysis_GetByReposIdWithTimeFilter';
-import { IRepos } from '@/interfaces/repos';
+import { ICodeAnalysis } from '@/interfaces/code_analysis';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { IconMinus, IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
 import ReactECharts from 'echarts-for-react';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
-
-interface CodeAnalysisImprovementChartProps {
-  repos: IRepos;
-}
+import { useMemo } from 'react';
 
 const timeFilters = [
   { label: 'timeFilters.7d', value: '7d' },
@@ -23,26 +19,30 @@ const timeFilters = [
   { label: 'timeFilters.1y', value: '1y' },
 ];
 
-export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImprovementChartProps) {
+interface CodeAnalysisImprovementChartProps {
+  analysisData: ICodeAnalysis[];
+  setSelectedTimeframe: (value: string) => void;
+  selectedTimeframe: string;
+}
+
+export default function CodeAnalysisImprovementChart({
+  analysisData,
+  setSelectedTimeframe,
+  selectedTimeframe,
+}: CodeAnalysisImprovementChartProps) {
   const t = useTranslations();
   const t_codeAnalysis = useTranslations('codeAnalysis');
   const { theme } = useDarkMode();
-  const [selectedTimeframe, setSelectedTimeframe] = useState('7d');
-
-  const { data: analysisData, isLoading } = useQ_CodeAnalysis_GetByReposIdWithTimeFilter(
-    repos?.id,
-    selectedTimeframe,
-  );
 
   const colors = ['#ef4444', '#f59e0b', '#8b5cf6', '#10b981', '#3b82f6'];
 
   const chartOption = useMemo(() => {
-    if (!analysisData || analysisData?.data.length < 2) {
+    if (!analysisData || analysisData?.length < 2) {
       return null;
     }
 
     // Sort data by analyzed date
-    const sortedData = [...analysisData.data]
+    const sortedData = [...analysisData]
       .filter(
         item =>
           item.status.toLowerCase() === 'completed' || item.status.toLowerCase() === 'success',
@@ -119,7 +119,7 @@ export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImpr
             if (param.value !== null) {
               result += `<div style="display: flex; align-items: center; margin: 4px 0;">
                           <div style="width: 10px; height: 10px; background: ${param.color}; border-radius: 50%; margin-right: 8px;"></div>
-                          <span>${param.seriesName}: <strong>${param.value}</strong></span>
+                          <span>${param.seriesName}: <strong>${param.value ?? 0}</strong></span>
                         </div>`;
             }
           });
@@ -182,9 +182,9 @@ export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImpr
   }, [analysisData, theme, t]);
 
   const getTrendAnalysis = () => {
-    if (!analysisData || analysisData?.data.length < 2) return null;
+    if (!analysisData || analysisData?.length < 2) return null;
 
-    const sortedData = [...analysisData?.data]
+    const sortedData = [...analysisData]
       .filter(
         item =>
           item.status.toLowerCase() === 'completed' || item.status.toLowerCase() === 'success',
@@ -250,26 +250,26 @@ export default function CodeAnalysisImprovementChart({ repos }: CodeAnalysisImpr
 
   const trends = getTrendAnalysis();
 
-  if (!chartOption && (!analysisData || analysisData.data.length < 2)) {
+  if (!chartOption && (!analysisData || analysisData.length < 2)) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-2 w-full">
+          <TextHeading className="flex items-center gap-2">
             <IconTrendingUp className="size-5" />
             {t('codeAnalysis.improveCodeAnalysis')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </TextHeading>
+        </div>
+        <div>
           <div className="text-center py-12 text-gray-500">
             <p>{t_codeAnalysis('needAtLeast2Analysis')}</p>
             <p className="text-sm mt-2">{t_codeAnalysis('dataWillBeDisplayedAfterMoreAnalysis')}</p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="flex flex-col gap-4">

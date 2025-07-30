@@ -1,5 +1,5 @@
-import React from 'react';
 import { TrendingUp } from 'lucide-react';
+import React from 'react';
 
 interface MetricCardProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -20,7 +20,7 @@ export default function MetricCard({
 }: MetricCardProps) {
   return (
     <div className="group relative rounded-xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-white/50 dark:from-zinc-800/90 dark:to-zinc-800/50 backdrop-blur-sm rounded-xl border border-white/20 dark:border-zinc-700/20 shadow-lg"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-800/90 dark:to-zinc-800/50 backdrop-blur-sm rounded-xl border border-white/20 dark:border-zinc-700/20 shadow-lg"></div>
       <div className="relative p-6 rounded-xl">
         <div className="flex items-start justify-between">
           <div className="flex-1">

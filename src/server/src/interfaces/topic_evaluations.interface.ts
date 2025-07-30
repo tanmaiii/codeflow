@@ -6,4 +6,4 @@ export interface TopicEvaluations {
   comment: string;
   createdAt: Date;
   updatedAt: Date;
-} 
+}

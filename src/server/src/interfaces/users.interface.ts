@@ -47,3 +47,23 @@ export interface UserGithub {
   created_at: string;
   updated_at: string;
 }
+
+export interface UserContributes {
+  authorId: string;
+  author: User;
+  commit: {
+    total: number;
+    additions: number;
+    deletions: number;
+  };
+  pullRequest: {
+    total: number;
+    additions: number;
+    deletions: 2;
+  };
+  codeAnalysis: {
+    total: number;
+    success: number;
+    failure: number;
+  };
+}

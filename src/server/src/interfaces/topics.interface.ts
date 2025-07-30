@@ -1,5 +1,6 @@
 import { Course } from './courses.interface';
 import { User } from './users.interface';
+import { IUser } from '../../../client/src/interfaces/user';
 export interface Topic {
   id: string;
   title: string;

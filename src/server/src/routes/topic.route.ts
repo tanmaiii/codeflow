@@ -40,5 +40,7 @@ export class TopicRoute implements Routes {
       this.topic.updateTopicEvaluation,
     );
     this.router.delete(`${this.path}/:id/evaluations/:evaluationId`, isTeacherOrAdmin, this.topic.deleteTopicEvaluation);
+
+    this.router.get(`${this.path}/:id/contributors`, AuthMiddleware, this.topic.getContributors);
   }
 }
