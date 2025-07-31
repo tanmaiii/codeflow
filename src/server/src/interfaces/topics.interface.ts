@@ -43,3 +43,26 @@ export interface TopicCreate {
   members?: Array<string>;
   tags?: Array<string>;
 }
+
+
+export interface TopicStats {
+  topicId: string;
+  commit: {
+    total: number;
+    additions: number;
+    deletions: number;
+  };
+  pullRequest: {
+    total: number;
+    additions: number;
+    deletions: number;
+    open: number;
+    closed: number;
+    merged: number;
+  };
+  codeAnalysis: {
+    total: number;
+    success: number;
+    failure: number;
+  };
+}

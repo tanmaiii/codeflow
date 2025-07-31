@@ -15,14 +15,14 @@ const filterItem = [
 
 export default function CodeAnalysis({ repos }: { repos: IRepos }) {
   const [page, setPage] = useState(1);
-  const t = useTranslations();
   const [sortBy, setSortBy] = useState<'ASC' | 'DESC'>('DESC');
+  const t = useTranslations();
   const [authorId, setAuthorId] = useState<string>('all');
 
   const Q_CodeAnalysis = useQ_CodeAnalysis_GetByReposId({
     params: {
       page: page,
-      limit: 4,
+      limit: 5,
       order: sortBy,
       authorId: authorId !== 'all' ? authorId : undefined,
     },

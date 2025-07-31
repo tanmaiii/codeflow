@@ -36,6 +36,27 @@ export interface IReposContributors {
   };
 }
 
+export interface IReposStats {
+  commit: {
+    total: number;
+    additions: number;
+    deletions: number;
+  };
+  pullRequest: {
+    total: number;
+    additions: number;
+    deletions: number;
+    open: number;
+    closed: number;
+    merged: number;
+  };
+  codeAnalysis: {
+    total: number;
+    success: number;
+    failure: number;
+  };
+}
+
 export interface IReposCreateDto {
   name: string;
   topicId: string;

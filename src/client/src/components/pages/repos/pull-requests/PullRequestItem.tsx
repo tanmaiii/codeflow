@@ -1,8 +1,10 @@
 import IconLoading from '@/components/common/IconLoading/IconLoading';
+import MyBadge from '@/components/common/MyBadge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading from '@/components/ui/text';
+import { STATUS_PULL_REQUEST } from '@/constants/object';
 import { IPullRequest, IRepos } from '@/interfaces/repos';
 import reviews_aiService from '@/services/reviews_ai.service';
 import { utils_DateToDDMMYYYY_HHMM } from '@/utils/date';
@@ -40,19 +42,6 @@ export default function PullRequestItem({
         return <IconX className="size-4 mt-1 text-red-500" />;
       default:
         return <IconGitPullRequest className="size-4 mt-1" />;
-    }
-  };
-
-  const getPRStatusColor = (status: string) => {
-    switch (status) {
-      case 'open':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'merged':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'closed':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     }
   };
 
@@ -96,7 +85,11 @@ export default function PullRequestItem({
                 #{pullRequest.pullNumber} {pullRequest.title}
                 <IconExternalLink className="size-3 opacity-60" />
               </TextHeading>
-              <Badge className={getPRStatusColor(pullRequest.status)}>{pullRequest.status}</Badge>
+              {/* <Badge className={getPRStatusColor(pullRequest.status)}>{pullRequest.status}</Badge> */}
+              <MyBadge
+                className="w-fit"
+                status={STATUS_PULL_REQUEST.find(item => item.value === pullRequest.status)!}
+              />
             </div>
             <p className="text-sm text-muted-foreground mt-1">{pullRequest.body}</p>
           </div>

@@ -76,7 +76,7 @@ export default function ReposDetail() {
             )}
 
             {/* Repository Stats */}
-            <RepositoryStats repoName={dataRepos.data?.name ?? ''} />
+            <RepositoryStats repo={dataRepos.data} />
 
             {/* Contributors */}
             <ReposContribute repos={dataRepos.data} />

@@ -26,6 +26,7 @@
     "restore": "Khôi phục",
     "deleteSoft": "Xóa mềm",
     "view": "Xem",
+    "viewOnGithub": "Xem trên Github",
     "action": "Hành động",
     "status": "Trạng thái",
     "register": "Đăng ký",
@@ -410,7 +411,17 @@
     "studentChoose": "Sinh viên tự chọn",
     "contribute": {
       "title": "Đóng góp thành viên",
-      "description": "Thống kê và phân tích hoạt động của từng thành viên trong dự án"
+      "description": "Thống kê và phân tích hoạt động của từng thành viên trong dự án",
+      "totalCommits": "Tổng commit",
+      "commitsInTopic": "commits trong dự án",
+      "totalAdditions": "Dòng thêm",
+      "additionsInTopic": "dòng code được thêm",
+      "codeAnalysis": "Phân tích code",
+      "codeAnalysisInTopic": "lần phân tích code trong dự án",
+      "codeAnalysisSuccess": "lần thành công",
+      "pullRequests": "Pull Request",
+      "pullRequestsInTopic": "pull request trong dự án",
+      "pullRequestsMerged": "pull request đã gộp"
     },
     "infoTopic": "Thông tin đề tài",
     "infoTopicDescription": "Thông tin về đề tài",
@@ -509,6 +520,10 @@
     "pullRequest_close": "Đóng",
     "pullRequest_merged": "Đã hợp nhất",
     "totalCommits": "Tổng số Commit",
+    "totalAdditions": "Tổng số dòng thêm",
+    "totalDeletions": "Tổng số dòng xóa",
+    "totalPullRequests": "Tổng số Pull Request",
+    "totalCodeAnalysis": "Tổng số phân tích code",
     "Commits": "Commit",
     "contribute": "Đóng góp",
     "contributors": "Người đóng góp",
@@ -665,5 +680,10 @@
       "6m": "6 tháng qua",
       "1y": "1 năm"
     }
+  },
+  "pullRequest": {
+    "open": "Mở",
+    "closed": "Đóng",
+    "merged": "Đã hợp nhất"
   }
 }

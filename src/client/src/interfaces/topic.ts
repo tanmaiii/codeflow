@@ -37,6 +37,28 @@ export interface ITopic extends IBaseEntity {
   repos?: IRepos[];
 }
 
+export interface ITopicStats {
+  topicId: string;
+  commit: {
+    total: number;
+    additions: number;
+    deletions: number;
+  };
+  pullRequest: {
+    total: number;
+    additions: number;
+    deletions: number;
+    open: number;
+    closed: number;
+    merged: number;
+  };
+  codeAnalysis: {
+    total: number;
+    success: number;
+    failure: number;
+  };
+}
+
 export interface ITopicCreateDto {
   title: string;
   description: string;

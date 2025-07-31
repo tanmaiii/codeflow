@@ -27,6 +27,7 @@
     "restore": "Restore",
     "deleteSoft": "Delete Soft",
     "view": "View",
+    "viewOnGithub": "View on Github",
     "action": "Action",
     "status": "Status",
     "register": "Register",
@@ -411,7 +412,17 @@
     "studentChoose": "Student choose",
     "contribute": {
       "title": "Contribute",
-      "description": "Statistics and analysis of each member's activity in the project"
+      "description": "Statistics and analysis of each member's activity in the project",
+      "totalCommits": "Total commits",
+      "commitsInTopic": "commits in topic",
+      "totalAdditions": "Total additions",
+      "additionsInTopic": "additions in topic",
+      "codeAnalysis": "Code analysis",
+      "codeAnalysisInTopic": "times code analysis in topic",
+      "codeAnalysisSuccess": "times success",
+      "pullRequests": "Pull Request",
+      "pullRequestsInTopic": "pull request in topic",
+      "pullRequestsMerged": "pull request merged"
     },
     "infoTopic": "Info topic",
     "infoTopicDescription": "Information about the topic",
@@ -510,6 +521,10 @@
     "pullRequest_close": "Close",
     "pullRequest_merged": "Merged",
     "totalCommits": "Total Commits",
+    "totalAdditions": "Total Additions",
+    "totalDeletions": "Total Deletions",
+    "totalPullRequests": "Total Pull Requests",
+    "totalCodeAnalysis": "Total Code Analysis",
     "Commits": "Commits",
     "contribute": "Contribute",
     "contributors": "Contributors",
@@ -666,5 +681,10 @@
       "6m": "6 months",
       "1y": "1 year"
     }
+  },
+  "pullRequest": {
+    "open": "Open",
+    "closed": "Closed",
+    "merged": "Merged"
   }
 }

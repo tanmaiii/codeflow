@@ -7,6 +7,7 @@ import {
   ITopicEvaluation,
   ITopicEvaluationCreateDto,
   ITopicEvaluationUpdateDto,
+  ITopicStats,
 } from '@/interfaces/topic';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
@@ -41,6 +42,11 @@ class TopicService {
 
   async getById(id: string): Promise<ResponseAPIDto<ITopic>> {
     const res = await this.client.get(`/${id}`);
+    return res.data;
+  }
+
+  async getStats(id: string): Promise<ResponseAPIDto<ITopicStats>> {
+    const res = await this.client.get(`/${id}/stats`);
     return res.data;
   }
 

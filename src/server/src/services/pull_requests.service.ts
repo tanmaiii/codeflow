@@ -1,5 +1,6 @@
 import { DB } from '@/database';
 import { PullRequests, PullRequestsCreate, PullRequestsUpdate } from '@/interfaces/pull_requests.interface';
+import { UserModel } from '@/models';
 import { ReviewAIModel } from '@/models/reviews_ai.model';
 import { Service } from 'typedi';
 
@@ -116,12 +117,20 @@ export class PullRequestsService {
     const contributor = await DB.PullRequests.findOne({
       where: whereCondition,
       attributes: [
-        'authorId',
+        authorId ? 'authorId' : 'reposId',
         [sequelize.fn('COUNT', sequelize.col('pull_requests.id')), 'totalPullRequests'],
         [sequelize.fn('SUM', sequelize.col('pull_requests.additions')), 'totalAdditions'],
         [sequelize.fn('SUM', sequelize.col('pull_requests.deletions')), 'totalDeletions'],
+        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `pull_requests`.`status` = 'open' THEN 1 ELSE NULL END")), 'open'],
+        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `pull_requests`.`status` = 'closed' THEN 1 ELSE NULL END")), 'closed'],
+        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `pull_requests`.`status` = 'merged' THEN 1 ELSE NULL END")), 'merged'],
       ],
-      group: ['authorId'],
+      group: authorId ? ['authorId'] : ['reposId'],
+      include: {
+        model: UserModel,
+        as: 'author',
+        attributes: [],
+      },
       raw: false,
     });
 
@@ -138,6 +147,9 @@ export class PullRequestsService {
         total: parseInt(contributor.dataValues?.totalPullRequests || contributor.totalPullRequests) || 0,
         additions: parseInt(contributor.dataValues?.totalAdditions || contributor.totalAdditions) || 0,
         deletions: parseInt(contributor.dataValues?.totalDeletions || contributor.totalDeletions) || 0,
+        open: parseInt(contributor.dataValues?.open || contributor.open) || 0,
+        closed: parseInt(contributor.dataValues?.closed || contributor.closed) || 0,
+        merged: parseInt(contributor.dataValues?.merged || contributor.merged) || 0,
       },
     };
   }

@@ -137,12 +137,12 @@ export class CodeAnalysisService {
     const contributor = await DB.CodeAnalysis.findOne({
       where: whereCondition,
       attributes: [
-        'authorId',
+        authorId ? 'authorId' : 'reposId',
         [sequelize.fn('COUNT', sequelize.col('CodeAnalysis.id')), 'total'],
         [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `CodeAnalysis`.`status` = 'success' THEN 1 ELSE NULL END")), 'success'],
         [sequelize.fn('COUNT', sequelize.literal("CASE WHEN `CodeAnalysis`.`status` = 'failure' THEN 1 ELSE NULL END")), 'failure'],
       ],
-      group: ['authorId'],
+      group: authorId ? ['authorId'] : ['reposId'],
       raw: false,
       include: {
         model: UserModel,

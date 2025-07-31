@@ -1,6 +1,6 @@
 import { ENUM_TOPIC_STATUS, ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { Notification } from '@/interfaces/notification.interface';
-import { Topic, TopicCreate } from '@/interfaces/topics.interface';
+import { Topic, TopicCreate, TopicStats } from '@/interfaces/topics.interface';
 import { UserContributes } from '@/interfaces/users.interface';
 import { logger } from '@/utils/logger';
 import { isEmpty } from '@/utils/util';
@@ -16,6 +16,7 @@ import { PullRequestsService } from './pull_requests.service';
 import { ReposService } from './repos.service';
 import { TagService } from './tag.service';
 import { TopicMemberService } from './topic_member.service';
+import { ReposStats } from '@/interfaces/repos.interface';
 @Service()
 export class TopicService {
   private readonly defaultPageSize = 10;
@@ -286,8 +287,6 @@ export class TopicService {
     const topic = await this.findTopicById(id, true);
     if (!topic) throw new HttpException(409, "Topic doesn't exist");
 
-    const topicMembers = await this.topicMemberService.findTopicMembersByTopicId(id);
-
     const repos = await this.reposService.findByByTopicId(id);
 
     const contributorPromises = repos.map(async repo => {
@@ -333,5 +332,63 @@ export class TopicService {
     });
 
     return Array.from(contributorMap.values());
+  }
+
+  public async getTopicStats(id: string): Promise<TopicStats> {
+    const topic = await this.findTopicById(id, true);
+    if (!topic) throw new HttpException(409, "Topic doesn't exist");
+
+    const repos = await this.reposService.findByByTopicId(id);
+
+    const contributorPromises = repos.map(async repo => {
+      const repoContributors = await this.reposService.getRepoStats(repo.id);
+      return repoContributors;
+    });
+
+    const contributorResults = await Promise.all(contributorPromises);
+    const allContributors = contributorResults.flat();
+
+    const mergedContributors = this.mergeStatsById(allContributors, topic.id);
+
+    return mergedContributors;      
+  }
+
+  private async mergeStatsById(stats: ReposStats[], topicId: string): Promise<TopicStats> {
+    if (stats.length === 0) {
+      return {
+        topicId: '',
+        commit: { total: 0, additions: 0, deletions: 0 },
+        pullRequest: { total: 0, additions: 0, deletions: 0, open: 0, closed: 0, merged: 0 },
+        codeAnalysis: { total: 0, success: 0, failure: 0 }
+      };
+    }
+
+    // Khởi tạo tổng stats với giá trị đầu tiên
+    const mergedStats: TopicStats = {
+      topicId: topicId,
+      commit: { total: 0, additions: 0, deletions: 0 },
+      pullRequest: { total: 0, additions: 0, deletions: 0, open: 0, closed: 0, merged: 0 },
+      codeAnalysis: { total: 0, success: 0, failure: 0 }
+    };
+
+    // Cộng tất cả các stats lại với nhau
+    stats.forEach(stat => {
+      mergedStats.commit.total += stat.commit.total;
+      mergedStats.commit.additions += stat.commit.additions;
+      mergedStats.commit.deletions += stat.commit.deletions;
+
+      mergedStats.pullRequest.total += stat.pullRequest.total;
+      mergedStats.pullRequest.additions += stat.pullRequest.additions;
+      mergedStats.pullRequest.deletions += stat.pullRequest.deletions;
+      mergedStats.pullRequest.open += stat.pullRequest.open;
+      mergedStats.pullRequest.closed += stat.pullRequest.closed;
+      mergedStats.pullRequest.merged += stat.pullRequest.merged;
+
+      mergedStats.codeAnalysis.total += stat.codeAnalysis.total;
+      mergedStats.codeAnalysis.success += stat.codeAnalysis.success;
+      mergedStats.codeAnalysis.failure += stat.codeAnalysis.failure;
+    });
+
+    return mergedStats;
   }
 }

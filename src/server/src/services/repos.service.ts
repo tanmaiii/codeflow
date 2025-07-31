@@ -1,4 +1,4 @@
-import { RepoCreate, Repos, RepoUpdate } from '@/interfaces/repos.interface';
+import { RepoCreate, Repos, ReposStats, RepoUpdate } from '@/interfaces/repos.interface';
 import { UserContributes } from '@/interfaces/users.interface';
 import { logger } from '@/utils/logger';
 import { cleanSpecialCharacters, isEmpty } from '@/utils/util';
@@ -308,6 +308,9 @@ export class ReposService {
             total: 0,
             additions: 0,
             deletions: 0,
+            open: 0,
+            closed: 0,
+            merged: 0,
           },
         }),
         ...(analysisService ?? {
@@ -324,5 +327,42 @@ export class ReposService {
     contributors.push(...contributorResults);
 
     return contributors;
+  }
+
+  public async getRepoStats(id: string): Promise<ReposStats> {
+    const repo = await this.findById(id);
+    if (!repo) throw new HttpException(409, "Repo doesn't exist");
+
+    const commit = await this.commitService.getContributorsByRepoIdOrAuthorId(id);
+    const pullRequest = await this.pullRequestService.getContributorsByRepoIdOrAuthorId(id);
+    const analysisService = await this.codeAnalysisService.getContributorsByRepoIdOrAuthorId(id);
+
+    return {
+      reposId: repo.id,
+      ...(commit ?? {
+        commit: {
+          total: 0,
+          additions: 0,
+          deletions: 0,
+        },
+      }),
+      ...(pullRequest ?? {
+        pullRequest: {
+          total: 0,
+          additions: 0,
+          deletions: 0,
+          open: 0,
+          closed: 0,
+          merged: 0,
+        },
+      }),
+      ...(analysisService ?? {
+        codeAnalysis: {
+          total: 0,
+          success: 0,
+          failure: 0,
+        },
+      }),
+    };
   }
 }

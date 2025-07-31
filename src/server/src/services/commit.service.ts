@@ -1,5 +1,6 @@
 import { DB } from '@/database';
 import { CommitCreate, Commits, CommitUpdate } from '@/interfaces/commits.interface';
+import { UserModel } from '@/models';
 import { Service } from 'typedi';
 
 @Service()
@@ -67,12 +68,17 @@ export class CommitService {
     const contributor = await DB.Commits.findOne({
       where: whereCondition,
       attributes: [
-        'authorId',
+        authorId ? 'authorId' : 'reposId',
         [sequelize.fn('COUNT', sequelize.col('Commits.id')), 'totalCommits'],
         [sequelize.fn('SUM', sequelize.col('Commits.additions')), 'totalAdditions'],
         [sequelize.fn('SUM', sequelize.col('Commits.deletions')), 'totalDeletions'],
       ],
-      group: ['authorId'],
+      group: authorId ? ['authorId'] : ['reposId'],
+      include: {
+        model: UserModel,
+        as: 'author',
+        attributes: [],
+      },
       raw: false,
     });
 

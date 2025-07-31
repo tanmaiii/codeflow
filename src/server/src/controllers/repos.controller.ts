@@ -88,6 +88,18 @@ export class ReposController {
     }
   };
 
+  public getRepoStats = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const repo = await this.reposService.getRepoStats(req.params.id);
+      res.status(200).json({
+        data: repo,
+        message: 'Repository stats',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public createRepo = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const repo = await this.reposService.createRepo({ ...req.body, authorId: req.user.id });

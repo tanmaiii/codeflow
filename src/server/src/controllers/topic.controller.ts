@@ -244,4 +244,14 @@ export class TopicController {
       next(error);
     }
   };
+
+  public getTopicStats = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const topicId = req.params.id;
+      const stats = await this.topic.getTopicStats(topicId);
+      res.status(200).json({ data: stats, message: 'get topic stats' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

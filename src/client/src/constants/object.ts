@@ -293,3 +293,18 @@ export const STATUS_CODE_ANLYSIS: IStatusObj[] = [
     labelKey: 'codeAnalysis.running',
   },
 ];
+
+export const STATUS_PULL_REQUEST: IStatusObj[] = [
+  {
+    value: 'open',
+    labelKey: 'pullRequest.open',
+  },
+  {
+    value: 'closed',
+    labelKey: 'pullRequest.closed',
+  },
+  {
+    value: 'merged',
+    labelKey: 'pullRequest.merged',
+  },
+];

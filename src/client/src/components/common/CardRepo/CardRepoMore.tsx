@@ -3,10 +3,11 @@ import { Dialog } from '@/components/ui/dialog';
 import { IRepos } from '@/interfaces/repos';
 import reposService from '@/services/repos.service';
 import { useUserStore } from '@/stores/user_store';
-import { IconEye, IconTrash } from '@tabler/icons-react';
+import { IconBrandGithub, IconEye, IconTrash } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { EllipsisIcon, PenIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import MoreDropdown, { DropdownAction } from '../MoreDropdown';
@@ -22,8 +23,13 @@ export default function CardRepoMore({ repos, className }: CardRepo_MoreProps) {
   const queryClient = useQueryClient();
   const t_common = useTranslations('common');
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const router = useRouter();
 
   const onView = () => {
+    router.push(`/repos/${repos.id}`);
+  };
+
+  const onViewOnGithub = () => {
     window.open(repos.url, '_blank');
   };
 
@@ -50,21 +56,28 @@ export default function CardRepoMore({ repos, className }: CardRepo_MoreProps) {
   const actions: DropdownAction[] = [
     {
       id: 'view',
-      label: 'View Repo',
+      label: t_common('view'),
       icon: <IconEye size={16} />,
       onClick: onView,
       isVisible: true,
     },
     {
+      id: 'viewGithub',
+      label: t_common('viewOnGithub'),
+      icon: <IconBrandGithub size={16} />,
+      onClick: onViewOnGithub,
+      isVisible: true,
+    },
+    {
       id: 'update',
-      label: 'Update Repo',
+      label: t_common('update'),
       icon: <PenIcon size={16} />,
       onClick: onUpdate,
       isVisible: isAuthor || isAdmin,
     },
     {
       id: 'delete',
-      label: 'Delete Repo',
+      label: t_common('delete'),
       icon: <IconTrash size={16} />,
       onClick: () => {},
       isVisible: isAuthor || isAdmin,

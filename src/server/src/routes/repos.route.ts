@@ -25,6 +25,7 @@ export class ReposRoute implements Routes {
     this.router.delete(`${this.path}/:id/force`, AuthMiddleware, this.repos.destroyRepo);
     this.router.put(`${this.path}/:id/restore`, AuthMiddleware, this.repos.restoreRepo);
 
-    this.router.get(`${this.path}/:id/contributors`, AuthMiddleware, this.repos.getRepoContributors); 
+    this.router.get(`${this.path}/:id/contributors`, AuthMiddleware, this.repos.getRepoContributors);
+    this.router.get(`${this.path}/:id/stats`, AuthMiddleware, this.repos.getRepoStats);
   }
 }

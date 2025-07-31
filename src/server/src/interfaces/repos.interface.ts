@@ -8,6 +8,32 @@ export interface Repos {
   language: string;
   framework: string;
   sonarKey: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+}
+
+export interface ReposStats {
+  reposId: string;
+  commit: {
+    total: number;
+    additions: number;
+    deletions: number;
+  };
+  pullRequest: {
+    total: number;
+    additions: number;
+    deletions: number;
+    open: number;
+    closed: number;
+    merged: number;
+  };
+  codeAnalysis: {
+    total: number;
+    success: number;
+    failure: number;
+  };
 }
 
 export interface RepoCreate {

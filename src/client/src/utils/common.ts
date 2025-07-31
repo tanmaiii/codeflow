@@ -127,12 +127,14 @@ export function util_object_to_color(obj: IStatusObj) {
     failed: 'red',
     failure: 'red',
     error: 'red',
+    closed: 'red',
 
     // Green group
     approved: 'green',
     visible: 'green',
     finished: 'green',
     user: 'green',
+    merged: 'green',
 
     // Green variant group
     success: 'green',
@@ -141,6 +143,7 @@ export function util_object_to_color(obj: IStatusObj) {
     'in progress': 'blue',
     started: 'blue',
     admin: 'blue',
+    open: 'blue',
 
     // Yellow group
     not_started: 'yellow',
