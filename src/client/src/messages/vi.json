@@ -385,6 +385,7 @@
     "teacher": "Giáo viên",
     "typeTopic": "Loại đề tài",
     "members": "Thành viên",
+    "membersDescription": "Chi tiết đóng góp của từng thành viên",
     "groupName": "Tên nhóm",
     "all": "Tất cả",
     "approved": "Đã duyệt",
@@ -428,7 +429,10 @@
     "completed": "Đã hoàn thành",
     "remaining": "Còn lại",
     "totalMembers": "Tổng số thành viên: {count}",
-    "repositories": "kho lưu trữ"
+    "repositories": "kho lưu trữ",
+    "contributionChart": "Biểu đồ đóng góp",
+    "contributionChartDescription": "Phân tích chi tiết về đóng góp và hiệu suất",
+    "codeAnalysic": "Phân tích code"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"

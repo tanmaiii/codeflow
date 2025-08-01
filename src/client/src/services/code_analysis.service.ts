@@ -1,4 +1,4 @@
-import { ICodeAnalysis } from '@/interfaces/code_analysis';
+import { ICodeAnalysis, ITopicMetrics } from '@/interfaces/code_analysis';
 import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
@@ -33,13 +33,8 @@ class CodeAnalysisService {
     return res.data;
   }
 
-  async getByTopicIdWithTimeFilter(
-    topicId: string,
-    timeframe: string,
-  ): Promise<ResponseAPIDto<ICodeAnalysis[]>> {
-    const res = await this.client.get(`/topic/${topicId}/timeframe`, {
-      params: { timeframe },
-    });
+  async getByTopicId(topicId: string): Promise<ResponseAPIDto<ITopicMetrics[]>> {
+    const res = await this.client.get(`/topic/${topicId}`);
     return res.data;
   }
 }

@@ -4,6 +4,7 @@ import TextHeading, { TextDescription } from '@/components/ui/text';
 import useQ_Topic_Contributors from '@/hooks/query-hooks/Topic/useQ_Topic_Contributors';
 import { ITopic } from '@/interfaces/topic';
 import { ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 export default function ContributeMembers({ topic }: { topic: ITopic }) {
@@ -11,7 +12,8 @@ export default function ContributeMembers({ topic }: { topic: ITopic }) {
     id: topic.id,
   });
   const [isExpanded, setIsExpanded] = useState(false);
-  const initialCount = 2;
+  const initialCount = 3;
+  const t = useTranslations('topic');
 
   const displayedContributors = contributors?.data || [];
   const visibleContributors = isExpanded
@@ -25,9 +27,9 @@ export default function ContributeMembers({ topic }: { topic: ITopic }) {
           <Users className="w-6 h-6 text-white" />
         </div>
         <div>
-          <TextHeading className="text-xl/4 font-bold">Thành viên dự án</TextHeading>
+          <TextHeading className="text-xl/4 font-bold">{t('members')}</TextHeading>
           <TextDescription className="text-gray-600 dark:text-gray-300">
-            Chi tiết đóng góp của từng thành viên
+            {t('membersDescription')}
           </TextDescription>
         </div>
       </div>

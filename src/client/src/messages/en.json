@@ -386,6 +386,7 @@
     "teacher": "Teacher",
     "typeTopic": "Type topic",
     "members": "Members",
+    "membersDescription": "Detailed contribution of each member",
     "groupName": "Group name",
     "all": "All",
     "approved": "Approved",
@@ -429,7 +430,10 @@
     "completed": "Completed",
     "remaining": "Remaining",
     "totalMembers": "Total members: {count}",
-    "repositories": "repositories"
+    "repositories": "repositories",
+    "contributionChart": "Contribution Chart",
+    "contributionChartDescription": "Detailed analysis of contributions and performance",
+    "codeAnalysic": "Phân tích code"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"

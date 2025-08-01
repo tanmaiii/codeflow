@@ -21,7 +21,7 @@ export const MetricItem = ({ metric }: { metric: IMetrics }) => {
     switch (name.toLowerCase()) {
       // Rating metrics - display as letter grades
       case ENUM_METRICS_CODE_ANALYSIS.SECURITY_RATING:
-        case ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS:
+      case ENUM_METRICS_CODE_ANALYSIS.SECURITY_HOTSPOTS:
       case ENUM_METRICS_CODE_ANALYSIS.RELIABILITY_RATING:
       case ENUM_METRICS_CODE_ANALYSIS.SQALE_RATING:
       case ENUM_METRICS_CODE_ANALYSIS.SECURITY_REVIEW_RATING:
@@ -205,7 +205,7 @@ export const MetricItem = ({ metric }: { metric: IMetrics }) => {
 
         {metric.bestValue !== null && (
           <span className="text-xs">
-            {metric.bestValue ? (
+            {metric.bestValue === true ? (
               <span className="text-green-600">✓ {t('codeAnalysis.optimized')}</span>
             ) : (
               <span className="text-amber-600">⚠ {t('codeAnalysis.notOptimized')}</span>

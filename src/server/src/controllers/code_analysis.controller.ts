@@ -79,25 +79,69 @@ export class CodeAnalysisController {
   };
 
   // Lấy tất cả đánh giá code theo topic và thời gian
-  public getCodeAnalysisByTopicIdWithTimeFilter = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+  public getCodeAnalysisByTopicId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
-      const { timeframe = '7d' } = req.query;
-
       const repos = await this.reposService.findByByTopicId(id);
+      const allMetrics = [];
 
-      const codeAnalyses = [];
-
+      // Lấy tất cả metrics từ các repos
       for (const repo of repos) {
-        const codeAnalysis = await this.codeAnalysisService.findByRepoIdWithTimeFilter(repo.id, String(timeframe));
-        codeAnalyses.push(...codeAnalysis);
+        const codeAnalysis = await this.codeAnalysisService.findByTopic(repo.id);
+        if (codeAnalysis?.metrics && Array.isArray(codeAnalysis.metrics)) {
+          allMetrics.push(...codeAnalysis.metrics);
+        }
       }
 
-      // Sắp xếp theo analyzedAt (mới nhất trước)
-      codeAnalyses.sort((a, b) => new Date(b.analyzedAt).getTime() - new Date(a.analyzedAt).getTime());
+      // Map lại các metrics có cùng name
+      const metricsMap = new Map();
+
+      for (const metric of allMetrics) {
+        const key = metric.name;
+
+        if (metricsMap.has(key)) {
+          const existing = metricsMap.get(key);
+          // Cộng value lại (convert string to number)
+          const existingValue = parseFloat(existing.value) || 0;
+          const currentValue = parseFloat(metric.value) || 0;
+          existing.value = (existingValue + currentValue).toString();
+
+          // Xử lý bestValue theo các quy tắc:
+          // null + null → null
+          // null + true → true, true + null → true
+          // null + false → false, false + null → false
+          // true + false → false, false + true → false (ưu tiên false)
+          // true + true → true, false + false → false
+          
+          if (existing.bestValue === null && metric.bestValue !== null) {
+            // null + true → true, null + false → false
+            existing.bestValue = metric.bestValue;
+          } else if (existing.bestValue !== null && metric.bestValue === null) {
+            // true + null → true, false + null → false (giữ nguyên existing)
+            // existing.bestValue = existing.bestValue; (không cần thay đổi)
+          } else if (
+            (existing.bestValue === true && metric.bestValue === false) ||
+            (existing.bestValue === false && metric.bestValue === true)
+          ) {
+            // true + false → false, false + true → false (ưu tiên false)
+            existing.bestValue = false;
+          }
+          // Các trường hợp còn lại: true + true → true, false + false → false (giữ nguyên)
+        } else {
+          // Tạo plain object chỉ với properties cần thiết
+          metricsMap.set(key, {
+            name: metric.name,
+            value: metric.value,
+            bestValue: metric.bestValue,
+          });
+        }
+      }
+
+      // Convert Map về Array
+      const aggregatedMetrics = Array.from(metricsMap.values());
 
       res.status(200).json({
-        data: codeAnalyses,
+        data: aggregatedMetrics,
         message: 'Get code analysis by topic id with time filter',
       });
     } catch (error) {

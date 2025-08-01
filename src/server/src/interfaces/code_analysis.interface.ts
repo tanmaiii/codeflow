@@ -33,3 +33,15 @@ export interface CodeAnalysisUpdate {
   status: string;
   workflowRunId: string;
 }
+
+export interface ICodeAnalysisMetrics {
+  id: string;
+  reposId: string;
+  branch: string;
+  commitSha: string; // commit sha của branch
+  status: string;
+  analyzedAt: Date;
+  workflowRunId: string;
+  authorId: string;
+  metrics: CodeAnalysisMetrics[];
+}

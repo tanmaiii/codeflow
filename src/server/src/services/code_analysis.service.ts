@@ -1,5 +1,5 @@
 import { DB } from '@/database';
-import { CodeAnalysis, CodeAnalysisCreate, CodeAnalysisMetrics } from '@/interfaces/code_analysis.interface';
+import { CodeAnalysis, CodeAnalysisCreate, CodeAnalysisMetrics, ICodeAnalysisMetrics } from '@/interfaces/code_analysis.interface';
 import { UserModel } from '@/models';
 import { Op } from 'sequelize';
 import { Service } from 'typedi';
@@ -74,8 +74,27 @@ export class CodeAnalysisService {
     });
   }
 
-  public async findByTopicId(topicId: string): Promise<CodeAnalysis[]> {
-    return [];
+  public async findByTopic(reposId: string): Promise<ICodeAnalysisMetrics> {
+    const codeAnalysis = await DB.CodeAnalysis.findOne({
+      where: { reposId, branch: 'master', status: 'success' },
+      order: [['analyzedAt', 'DESC']],
+      include: [
+        {
+          model: DB.CodeAnalysisMetrics,
+          as: 'metrics',
+        }
+      ],
+      nest: true,
+      raw: false,
+    });
+    
+    if (!codeAnalysis) {
+      return null;
+    }
+    
+    // Convert Sequelize instance to plain object
+    const plainResult = codeAnalysis.toJSON();
+    return plainResult as ICodeAnalysisMetrics;
   }
 
   public async findByRepoIdWithTimeFilter(repoId: string, timeframe: string): Promise<CodeAnalysis[]> {

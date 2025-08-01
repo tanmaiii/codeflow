@@ -26,7 +26,7 @@ export default function TopicInfo({ topic }: { topic: ITopic }) {
           <IconChartBar className="w-6 h-6 text-white" />
         </div>
         <div>
-          <TextHeading className="text-lg/4 font-bold">Info topic</TextHeading>
+          <TextHeading className="text-lg/4 font-bold">{t('infoTopic')}</TextHeading>
         </div>
 
         {isLeader && (

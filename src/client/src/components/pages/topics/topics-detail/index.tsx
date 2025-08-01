@@ -57,7 +57,6 @@ export default function Topics_Detail() {
               <TopicInfo topic={dataTopic?.data} />
               <TopicsRepos topic={dataTopic?.data} />
               {dataTopic?.data && <ContributeMembers topic={dataTopic.data} />}
-              {/* {dataTopic?.data && <TopicsAbout topic={dataTopic?.data} />} */}
             </div>
           </div>
         </div>

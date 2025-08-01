@@ -29,11 +29,6 @@ export class CodeAnalysisRoute implements Routes {
       ValidationMiddleware(CodeAnalysisTimeframeQueryDto, 'query'),
       this.codeAnalysis.getCodeAnalysisByRepoIdWithTimeFilter,
     );
-    this.router.get(
-      `${this.path}/topic/:id/timeframe`,
-      AuthMiddleware,
-      ValidationMiddleware(CodeAnalysisTimeframeQueryDto, 'query'),
-      this.codeAnalysis.getCodeAnalysisByTopicIdWithTimeFilter,
-    );
+    this.router.get(`${this.path}/topic/:id`, AuthMiddleware, this.codeAnalysis.getCodeAnalysisByTopicId);
   }
 }
