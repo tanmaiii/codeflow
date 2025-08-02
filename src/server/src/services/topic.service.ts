@@ -286,6 +286,7 @@ export class TopicService {
   public async contributors(id: string): Promise<UserContributes[]> {
     const topic = await this.findTopicById(id, true);
     if (!topic) throw new HttpException(409, "Topic doesn't exist");
+    const topicMembers = await this.topicMemberService.findTopicMembersByTopicId(id);
 
     const repos = await this.reposService.findByByTopicId(id);
 
@@ -350,7 +351,7 @@ export class TopicService {
 
     const mergedContributors = this.mergeStatsById(allContributors, topic.id);
 
-    return mergedContributors;      
+    return mergedContributors;
   }
 
   private async mergeStatsById(stats: ReposStats[], topicId: string): Promise<TopicStats> {
@@ -359,7 +360,7 @@ export class TopicService {
         topicId: '',
         commit: { total: 0, additions: 0, deletions: 0 },
         pullRequest: { total: 0, additions: 0, deletions: 0, open: 0, closed: 0, merged: 0 },
-        codeAnalysis: { total: 0, success: 0, failure: 0 }
+        codeAnalysis: { total: 0, success: 0, failure: 0 },
       };
     }
 
@@ -368,7 +369,7 @@ export class TopicService {
       topicId: topicId,
       commit: { total: 0, additions: 0, deletions: 0 },
       pullRequest: { total: 0, additions: 0, deletions: 0, open: 0, closed: 0, merged: 0 },
-      codeAnalysis: { total: 0, success: 0, failure: 0 }
+      codeAnalysis: { total: 0, success: 0, failure: 0 },
     };
 
     // Cộng tất cả các stats lại với nhau

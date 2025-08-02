@@ -269,8 +269,6 @@ export default function CodeAnalysisImprovementChart({
     );
   }
 
-  // if (isLoading) return <div>Loading...</div>;
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 w-full">

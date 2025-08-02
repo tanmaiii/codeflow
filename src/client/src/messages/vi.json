@@ -73,7 +73,9 @@
     "visible": "Hiện",
     "newest": "Mới nhất",
     "oldest": "Cũ nhất",
-    "all": "Tất cả"
+    "all": "Tất cả",
+    "showLess": "Hiển thị ít hơn",
+    "showMore": "Xem tất cả"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
@@ -424,6 +426,7 @@
       "pullRequestsInTopic": "pull request trong dự án",
       "pullRequestsMerged": "pull request đã gộp"
     },
+    "noContributors": "Chưa có thành viên đóng góp",
     "infoTopic": "Thông tin đề tài",
     "infoTopicDescription": "Thông tin về đề tài",
     "completed": "Đã hoàn thành",
@@ -432,7 +435,8 @@
     "repositories": "kho lưu trữ",
     "contributionChart": "Biểu đồ đóng góp",
     "contributionChartDescription": "Phân tích chi tiết về đóng góp và hiệu suất",
-    "codeAnalysic": "Phân tích code"
+    "codeAnalysic": "Phân tích code",
+    "contributeMembers": "Đóng góp của thành viên"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"
@@ -542,7 +546,10 @@
     "reviewSuccess": "Đã review thành công điểm: {score}",
     "reviewFailed": "Review thất bại",
     "reviewing": "Đang review...",
-    "tokenLimitExceeded": "Quá giới hạn token, vui lòng thử lại sau",
+    "tokenLimitExceeded": "Quá giới hạn token, vui lòng thử lại sau"
+  },
+  "codeContribution": {
+    "noData": "Chưa có dữ liệu",
     "codeChanges": "Thay đổi dòng code",
     "codeDistribution": "Phân bổ dòng code thêm mới",
     "memberContributionOverview": "Tổng quan đóng góp thành viên",

@@ -21,11 +21,11 @@ export default function TopicInfo({ topic }: { topic: ITopic }) {
 
   return (
     <Card className="p-3 md:p-6">
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-gradient-to-r from-slate-600 to-zinc-700 shadow-sm">
-          <IconChartBar className="w-6 h-6 text-white" />
-        </div>
-        <div>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-to-r from-slate-600 to-zinc-700 shadow-sm">
+            <IconChartBar className="w-6 h-6 text-white" />
+          </div>
           <TextHeading className="text-lg/4 font-bold">{t('infoTopic')}</TextHeading>
         </div>
 
@@ -44,6 +44,11 @@ export default function TopicInfo({ topic }: { topic: ITopic }) {
         <div>
           <span className="text-md">{topic?.description}</span>
         </div>
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-muted-foreground">{t('groupName')}</span>
+          <span className="text-sm">{topic?.groupName}</span>
+        </div>
+        <Separator />
         <div className="flex justify-between items-center">
           <span className="text-sm text-muted-foreground">{t('members')}</span>
           <span className="text-sm">{topic?.members?.length}</span>

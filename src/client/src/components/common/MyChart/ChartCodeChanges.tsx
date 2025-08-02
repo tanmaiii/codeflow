@@ -2,11 +2,12 @@ import TextHeading from '@/components/ui/text';
 import { useDarkMode } from '@/hooks';
 import { IReposContributors } from '@/interfaces/repos';
 import ReactECharts from 'echarts-for-react';
+import { ChartArea } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export default function ChartCodeChanges({ contributors }: { contributors: IReposContributors[] }) {
   const { theme } = useDarkMode();
-  const t = useTranslations('repos');
+  const t = useTranslations('codeContribution');
 
   const contributorNames = contributors?.map(c => c.author.name) || [];
   const additionsData = contributors?.map(c => c.commit.additions || 0) || [];
@@ -113,7 +114,20 @@ export default function ChartCodeChanges({ contributors }: { contributors: IRepo
     <div className="gap-0 border rounded-lg p-4">
       <TextHeading className="text-lg">{t('codeChanges')}</TextHeading>
       <div>
-        <ReactECharts option={option} style={{ height: '300px', width: '100%' }} opts={{ renderer: 'svg' }} />
+        {contributors?.length <= 0 ? (
+          <div className="min-h-[300px] flex flex-col items-center justify-center">
+            {/* <div className="p-6 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4"> */}
+              <ChartArea className="w-12 h-12 text-zinc-400" />
+            {/* </div> */}
+            <p className="text-md opacity-50 font-medium mt-2 text-center">{t('noData')}</p>
+          </div>
+        ) : (
+          <ReactECharts
+            option={option}
+            style={{ height: '300px', width: '100%' }}
+            opts={{ renderer: 'svg' }}
+          />
+        )}
       </div>
     </div>
   );

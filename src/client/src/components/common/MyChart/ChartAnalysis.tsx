@@ -2,11 +2,12 @@ import TextHeading from '@/components/ui/text';
 import { useDarkMode } from '@/hooks';
 import { IReposContributors } from '@/interfaces/repos';
 import ReactECharts from 'echarts-for-react';
+import { ChartArea } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export default function ChartAnalysis({ contributors }: { contributors: IReposContributors[] }) {
   const { theme } = useDarkMode();
-  const t = useTranslations('repos');
+  const t = useTranslations('codeContribution');
 
   const contributorNames = contributors?.map(c => c.author.name) || [];
   const successData = contributors?.map(c => c.codeAnalysis.success) || [];
@@ -17,9 +18,12 @@ export default function ChartAnalysis({ contributors }: { contributors: IReposCo
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      formatter: (params: Array<{axisValue: string, marker: string, seriesName: string, value: number}>) => 
-        `<strong>${params[0].axisValue}</strong><br/>${params.map(p => 
-          `${p.marker} ${p.seriesName}: ${p.value} lần`).join('<br/>')}`,
+      formatter: (
+        params: Array<{ axisValue: string; marker: string; seriesName: string; value: number }>,
+      ) =>
+        `<strong>${params[0].axisValue}</strong><br/>${params
+          .map(p => `${p.marker} ${p.seriesName}: ${p.value} lần`)
+          .join('<br/>')}`,
       backgroundColor: theme.backgroundColor,
       textStyle: { color: theme.textColor },
       borderWidth: 0,
@@ -40,7 +44,7 @@ export default function ChartAnalysis({ contributors }: { contributors: IReposCo
         type: 'bar',
         stack: 'codeAnalysis',
         emphasis: { focus: 'series' },
-        itemStyle: { color: '#10b981', },
+        itemStyle: { color: '#10b981' },
         data: successData,
       },
       {
@@ -58,7 +62,20 @@ export default function ChartAnalysis({ contributors }: { contributors: IReposCo
     <div className="gap-0 border rounded-lg p-4">
       <TextHeading className="text-lg">{t('codeAnalysisResult')}</TextHeading>
       <div>
-        <ReactECharts option={option} style={{ height: '340px', width: '100%' }} opts={{ renderer: 'svg' }} />
+        {contributors?.length <= 0 ? (
+          <div className="min-h-[300px] flex flex-col items-center justify-center">
+            {/* <div className="p-6 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4"> */}
+            <ChartArea className="w-12 h-12 text-zinc-400" />
+            {/* </div> */}
+            <p className="text-md opacity-50 font-medium mt-2 text-center">{t('noData')}</p>
+          </div>
+        ) : (
+          <ReactECharts
+            option={option}
+            style={{ height: '340px', width: '100%' }}
+            opts={{ renderer: 'svg' }}
+          />
+        )}
       </div>
     </div>
   );

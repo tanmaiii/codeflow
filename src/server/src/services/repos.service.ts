@@ -286,24 +286,53 @@ export class ReposService {
 
     const topicMembers = await this.topicMemberService.findTopicMembersByTopicId(repo.topicId);
 
-    const contributors = [];
-
-    // Sử dụng Promise.all để đợi tất cả async operations hoàn thành
+    // Đảm bảo luôn trả về tất cả thành viên, ngay cả khi không có contributions
     const contributorPromises = topicMembers.map(async member => {
-      const contributor = await this.commitService.getContributorsByRepoIdOrAuthorId(id, member.userId);
-      const pullRequest = await this.pullRequestService.getContributorsByRepoIdOrAuthorId(id, member.userId);
-      const analysisService = await this.codeAnalysisService.getContributorsByRepoIdOrAuthorId(id, member.userId);
-      return {
-        authorId: member.userId,
-        author: member.user,
-        ...(contributor ?? {
+      try {
+        // Parallel execution để tối ưu performance
+        const [commit, pullRequest, analysisService] = await Promise.all([
+          this.commitService.getContributorsByRepoIdOrAuthorId(id, member.userId),
+          this.pullRequestService.getContributorsByRepoIdOrAuthorId(id, member.userId),
+          this.codeAnalysisService.getContributorsByRepoIdOrAuthorId(id, member.userId)
+        ]);
+
+        // Đảm bảo luôn có dữ liệu mặc định cho mỗi thành viên
+        return {
+          authorId: member.userId,
+          author: member.user,
+          // Commit data với fallback values
+          commit: commit?.commit ?? {
+            total: 0,
+            additions: 0,
+            deletions: 0,
+          },
+          // Pull Request data với fallback values
+          pullRequest: pullRequest?.pullRequest ?? {
+            total: 0,
+            additions: 0,
+            deletions: 0,
+            open: 0,
+            closed: 0,
+            merged: 0,
+          },
+          // Code Analysis data với fallback values
+          codeAnalysis: analysisService?.codeAnalysis ?? {
+            total: 0,
+            success: 0,
+            failure: 0,
+          },
+        };
+      } catch (error) {
+        // Nếu có lỗi, vẫn trả về thành viên với dữ liệu mặc định
+        console.error(`Error getting contributions for member ${member.userId}:`, error);
+        return {
+          authorId: member.userId,
+          author: member.user,
           commit: {
             total: 0,
             additions: 0,
             deletions: 0,
           },
-        }),
-        ...(pullRequest ?? {
           pullRequest: {
             total: 0,
             additions: 0,
@@ -312,20 +341,16 @@ export class ReposService {
             closed: 0,
             merged: 0,
           },
-        }),
-        ...(analysisService ?? {
           codeAnalysis: {
             total: 0,
             success: 0,
             failure: 0,
           },
-        }),
-      };
+        };
+      }
     });
 
-    const contributorResults = await Promise.all(contributorPromises);
-    contributors.push(...contributorResults);
-
+    const contributors = await Promise.all(contributorPromises);
     return contributors;
   }
 

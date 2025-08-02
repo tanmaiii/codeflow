@@ -73,7 +73,9 @@
     "visible": "Visible",
     "newest": "Newest",
     "oldest": "Oldest",
-    "all": "All"
+    "all": "All",
+    "showLess": "Show less",
+    "showMore": "Show more"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -425,6 +427,7 @@
       "pullRequestsInTopic": "pull request in topic",
       "pullRequestsMerged": "pull request merged"
     },
+    "noContributors": "No contributors yet",
     "infoTopic": "Info topic",
     "infoTopicDescription": "Information about the topic",
     "completed": "Completed",
@@ -433,7 +436,8 @@
     "repositories": "repositories",
     "contributionChart": "Contribution Chart",
     "contributionChartDescription": "Detailed analysis of contributions and performance",
-    "codeAnalysic": "Phân tích code"
+    "codeAnalysic": "Code Analysic",
+    "contributeMembers": "Contribute Members"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"
@@ -543,7 +547,10 @@
     "reviewSuccess": "Review success: {score}",
     "reviewFailed": "Review failed",
     "reviewing": "Reviewing...",
-    "tokenLimitExceeded": "Token limit exceeded, please try again later",
+    "tokenLimitExceeded": "Token limit exceeded, please try again later"
+  },
+  "codeContribution": {
+    "noData": "Empty data",
     "codeChanges": "Code Changes",
     "codeDistribution": "Code Distribution",
     "memberContributionOverview": "Member Contribution Overview",

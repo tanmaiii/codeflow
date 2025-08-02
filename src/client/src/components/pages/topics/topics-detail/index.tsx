@@ -12,6 +12,7 @@ import ContributionChart from './contribute/ContributionChart';
 import TopicsEvaluation from './evaluation/TopicsEvaluation';
 import TopicsRepos from './repository/TopicsRepos';
 import TopicInfo from './TopicInfo';
+import TopicMember from './TopicMember';
 
 export default function Topics_Detail() {
   const params = useParams();
@@ -49,6 +50,8 @@ export default function Topics_Detail() {
             </Card>
 
             {dataTopic?.data && <ContributionChart topic={dataTopic.data} />}
+
+            {dataTopic?.data && <ContributeMembers topic={dataTopic.data} />}
           </div>
 
           {/* Sidebar */}
@@ -56,7 +59,7 @@ export default function Topics_Detail() {
             <div className="sticky top-24 flex flex-col gap-6">
               <TopicInfo topic={dataTopic?.data} />
               <TopicsRepos topic={dataTopic?.data} />
-              {dataTopic?.data && <ContributeMembers topic={dataTopic.data} />}
+              <TopicMember topic={dataTopic?.data} />
             </div>
           </div>
         </div>

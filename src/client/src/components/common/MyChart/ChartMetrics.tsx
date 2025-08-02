@@ -1,12 +1,11 @@
 import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
 import { METRICS_CODE_ANALYSIS } from '@/constants/object';
 import { ITopicMetrics } from '@/interfaces/code_analysis';
+import { ChartArea } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) {
   const t = useTranslations();
-
-  if (!metrics || metrics.length === 0) return null;
 
   const formatMetricsValue = (value: number, name: string) => {
     const numValue = typeof value === 'number' ? value : parseInt(value) || 0;
@@ -171,63 +170,74 @@ export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) 
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 my-6">
-      {metrics.map((metric, index) => {
-        const formattedValue = formatMetricsValue(metric.value, metric.name);
-        const metricLabel = t(
-          METRICS_CODE_ANALYSIS.find(m => m.value === metric.name)?.labelKey || '',
-        );
-        return (
-          <div
-            key={index}
-            className="bg-white dark:bg-zinc-800 p-4 cursor-pointer rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
-          >
-            {/* Visual indicator */}
-            <div className="flex flex-col items-center mb-3">
-              {isRatingMetric(metric.name) ? (
-                <div
-                  className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-lg font-bold ${getRatingColor(
-                    formattedValue,
-                  )}`}
-                >
-                  {formattedValue}
+    <div>
+      {true ? (
+        <div className="w-full min-h-[300px] flex flex-col items-center justify-center border mt-2 rounded-md">
+          <ChartArea className="w-12 h-12 text-zinc-400" />
+          <p className="text-md opacity-50 font-medium mt-2 text-center">
+            {t('codeContribution.noData')}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 my-6">
+          {metrics.map((metric, index) => {
+            const formattedValue = formatMetricsValue(metric.value, metric.name);
+            const metricLabel = t(
+              METRICS_CODE_ANALYSIS.find(m => m.value === metric.name)?.labelKey || '',
+            );
+            return (
+              <div
+                key={index}
+                className="bg-white dark:bg-zinc-800 p-4 cursor-pointer rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+              >
+                {/* Visual indicator */}
+                <div className="flex flex-col items-center mb-3">
+                  {isRatingMetric(metric.name) ? (
+                    <div
+                      className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-lg font-bold ${getRatingColor(
+                        formattedValue,
+                      )}`}
+                    >
+                      {formattedValue}
+                    </div>
+                  ) : isPercentageMetric(metric.name) ? (
+                    <CircularProgress
+                      percentage={metric.value}
+                      colors={getPercentageProgressColor(metric.value, metric.name)}
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 h-12 flex items-center justify-center">
+                        {formattedValue}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              ) : isPercentageMetric(metric.name) ? (
-                <CircularProgress
-                  percentage={metric.value}
-                  colors={getPercentageProgressColor(metric.value, metric.name)}
-                />
-              ) : (
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 h-12 flex items-center justify-center">
-                    {formattedValue}
+
+                {/* Metric name */}
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center mb-2 flex items-center justify-center">
+                  {metricLabel}: {metric.value}
+                </h3>
+
+                {/* Value and optimization status */}
+                <div className="text-center space-y-1">
+                  <div className="text-xs mt-2">
+                    {metric.bestValue === true ? (
+                      <span className="text-green-600 dark:text-green-400 flex items-center justify-center gap-1">
+                        <span>✓</span> {t('codeAnalysis.optimized')}
+                      </span>
+                    ) : metric.bestValue === false ? (
+                      <span className="text-amber-600 dark:text-amber-400 flex items-center justify-center gap-1">
+                        <span>⚠</span> {t('codeAnalysis.notOptimized')}
+                      </span>
+                    ) : null}
                   </div>
                 </div>
-              )}
-            </div>
-
-            {/* Metric name */}
-            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center mb-2 flex items-center justify-center">
-              {metricLabel}: {metric.value}
-            </h3>
-
-            {/* Value and optimization status */}
-            <div className="text-center space-y-1">
-              <div className="text-xs mt-2">
-                {metric.bestValue === true ? (
-                  <span className="text-green-600 dark:text-green-400 flex items-center justify-center gap-1">
-                    <span>✓</span> {t('codeAnalysis.optimized')}
-                  </span>
-                ) : metric.bestValue === false ? (
-                  <span className="text-amber-600 dark:text-amber-400 flex items-center justify-center gap-1">
-                    <span>⚠</span> {t('codeAnalysis.notOptimized')}
-                  </span>
-                ) : null}
               </div>
-            </div>
-          </div>
-        );
-      })}
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
