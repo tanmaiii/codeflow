@@ -56,7 +56,7 @@ export default function ContributionChart({ topic }: { topic: ITopic }) {
           <div className="my-4">
             <div className="flex flex-row justify-between">
               <TextHeading className="text-xl font-bold">{t('topic.codeAnalysic')}</TextHeading>
-              <TopicMetricsModal metrics={metrics?.data} />
+              <TopicMetricsModal metrics={metrics?.data} topic={topic} />
             </div>
             <div>{metrics?.data && <ChartMetrics metrics={metrics?.data?.slice(0, 5)} />}</div>
           </div>

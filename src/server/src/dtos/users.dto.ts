@@ -107,3 +107,35 @@ export class CreateUserGithub {
   @IsString()
   avatar_url: string;
 }
+
+export class ForgotPasswordDto {
+  @IsEmail()
+  @IsNotEmpty()
+  public email: string;
+}
+
+export class ResetPasswordDto {
+  @IsString()
+  @IsNotEmpty()
+  public token: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(32)
+  public newPassword: string;
+}
+
+export class ChangePasswordDto {
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(32)
+  public currentPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(32)
+  public newPassword: string;
+}

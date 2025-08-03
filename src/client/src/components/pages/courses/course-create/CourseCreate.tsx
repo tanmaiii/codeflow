@@ -166,7 +166,12 @@ export default function CoursesCreate() {
               registration={register('title')}
               error={errors.title?.message}
             />
-
+            <TextInput
+              label={t('password')}
+              className="w-full"
+              registration={register('password')}
+              error={errors.password?.message}
+            />
             <div className="flex flex-col gap-2">
               <Label className="text-color-2">{t('description')}</Label>
               <Controller

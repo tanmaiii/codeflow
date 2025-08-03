@@ -105,6 +105,7 @@ export function ProfileTab() {
             <div className="space-y-2">
               <TextInput
                 id="email"
+                disabled
                 label={t('email')}
                 max={255}
                 {...register('email')}

@@ -65,9 +65,9 @@ export default function ChartMemberRadar({ contributors }: { contributors: IRepo
         return `<strong>${data.name}</strong><br/>
                 Commits: ${contributor.commit.total}<br/>
                 Pull Requests: ${contributor.pullRequest.total}<br/>
-                Code Analysis: ${contributor.codeAnalysis.total}<br/>
-                Lines Added: ${contributor.commit.additions || 0}<br/>
-                Success Rate: ${Math.round(data.value[4])}%`;
+                ${t('codeAnalysis')}: ${contributor.codeAnalysis.total}<br/>
+                ${t('lineCode')}: ${contributor.commit.additions || 0}<br/>
+                ${t('successRate')}: ${Math.round(data.value[4])}%`;
       },
       backgroundColor: theme.backgroundColor,
       textStyle: { color: theme.textColor },
@@ -86,12 +86,12 @@ export default function ChartMemberRadar({ contributors }: { contributors: IRepo
         { name: 'Commits', max: 100, color: theme.textColor },
         { name: 'Pull Requests', max: 100, color: theme.textColor },
         { name: 'Code Analysis', max: 100, color: theme.textColor },
-        { name: 'Lines Added', max: 100, color: theme.textColor },
-        { name: 'Success Rate (%)', max: 100, color: theme.textColor },
+        { name: t('lineAdd'), max: 100, color: theme.textColor },
+        { name: `${t('successRate')} (%)`, max: 100, color: theme.textColor },
       ],
       shape: 'polygon',
       radius: '65%',
-      center: ['50%', '45%'],
+      center: ['50%', '50%'],
       axisName: {
         fontSize: 11,
         color: theme.textColor,

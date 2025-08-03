@@ -1,22 +1,22 @@
-import { DangerZoneSection } from './DangerZoneSection';
+import { PasswordSection } from './PasswordSection';
 import { SecuritySettingsSection } from './SecuritySettingsSection';
 
 export function SecurityTab() {
-  const onDeleteAccount = () => {
-    console.log('delete account');
-  };
-
   return (
     <div className="space-y-6">
-      {/* <PasswordSection 
-        passwords={passwords}
-        onPasswordsChange={onPasswordsChange}
-        onPasswordChange={onPasswordChange}
-      /> */}
+      <PasswordSection
+        passwords={{
+          current: '123123',
+          new: '123123',
+          confirm: '12312',
+        }}
+        onPasswordsChange={() => {}}
+        onPasswordChange={() => {}}
+      />
 
       <SecuritySettingsSection />
 
-      <DangerZoneSection onDeleteAccount={onDeleteAccount} />
+      {/* <DangerZoneSection onDeleteAccount={onDeleteAccount} /> */}
     </div>
   );
 }

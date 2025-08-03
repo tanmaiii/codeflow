@@ -101,34 +101,17 @@ export class CodeAnalysisController {
 
         if (metricsMap.has(key)) {
           const existing = metricsMap.get(key);
-          // Cộng value lại (convert string to number)
           const existingValue = parseFloat(existing.value) || 0;
           const currentValue = parseFloat(metric.value) || 0;
           existing.value = (existingValue + currentValue).toString();
 
-          // Xử lý bestValue theo các quy tắc:
-          // null + null → null
-          // null + true → true, true + null → true
-          // null + false → false, false + null → false
-          // true + false → false, false + true → false (ưu tiên false)
-          // true + true → true, false + false → false
-          
           if (existing.bestValue === null && metric.bestValue !== null) {
-            // null + true → true, null + false → false
             existing.bestValue = metric.bestValue;
           } else if (existing.bestValue !== null && metric.bestValue === null) {
-            // true + null → true, false + null → false (giữ nguyên existing)
-            // existing.bestValue = existing.bestValue; (không cần thay đổi)
-          } else if (
-            (existing.bestValue === true && metric.bestValue === false) ||
-            (existing.bestValue === false && metric.bestValue === true)
-          ) {
-            // true + false → false, false + true → false (ưu tiên false)
+          } else if ((existing.bestValue === true && metric.bestValue === false) || (existing.bestValue === false && metric.bestValue === true)) {
             existing.bestValue = false;
           }
-          // Các trường hợp còn lại: true + true → true, false + false → false (giữ nguyên)
         } else {
-          // Tạo plain object chỉ với properties cần thiết
           metricsMap.set(key, {
             name: metric.name,
             value: metric.value,

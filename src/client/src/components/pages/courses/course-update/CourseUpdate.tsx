@@ -192,7 +192,7 @@ export default function CoursesUpdate() {
 
           <Card className="p-4">
             <MySelect
-              label={t('type')}
+              label={t('typeCourse')}
               name="type"
               control={control}
               defaultValue={Q_Course.data?.data?.type}
@@ -205,7 +205,12 @@ export default function CoursesUpdate() {
               registration={register('title')}
               error={errors.title?.message}
             />
-
+            <TextInput
+              label={t('password')}
+              className="w-full"
+              registration={register('password')}
+              error={errors.password?.message}
+            />
             <div className="flex flex-col gap-2">
               <Label className="text-color-2">{t('description')}</Label>
               <Controller

@@ -67,7 +67,7 @@ export default function ChartContribution({
     },
     yAxis: {
       type: 'value',
-      name: 'Số lượng',
+      name: t('count'),
       nameTextStyle: { color: theme.textColor },
       axisLabel: { color: theme.textColor },
       axisLine: {
@@ -120,9 +120,7 @@ export default function ChartContribution({
       <div>
         {contributors?.length <= 0 ? (
           <div className="min-h-[300px] flex flex-col items-center justify-center">
-            {/* <div className="p-6 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4"> */}
-              <ChartArea className="w-12 h-12 text-zinc-400" />
-            {/* </div> */}
+            <ChartArea className="w-12 h-12 text-zinc-400" />
             <p className="text-md opacity-50 font-medium mt-2 text-center">{t('noData')}</p>
           </div>
         ) : (

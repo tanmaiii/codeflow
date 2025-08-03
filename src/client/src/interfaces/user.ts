@@ -13,6 +13,10 @@ export interface IUser extends IBaseEntity {
   bio?: string;
 }
 
+export interface IUserSetting extends IUser{
+  settings: IUserSettings;
+}
+
 export interface IUserCreate {
   name: string;
   username: string;
@@ -20,7 +24,6 @@ export interface IUserCreate {
   password?: string;
   role: string;
 }
-
 
 export interface IUserSettings extends IBaseEntity {
   userId: string;

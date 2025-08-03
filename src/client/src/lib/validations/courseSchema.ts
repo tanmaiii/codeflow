@@ -46,6 +46,7 @@ const courseSchema = ({
         .min(1, { message: t('min', { field: tCourse('maxGroupMembers'), length: 1 }) })
         .max(100, { message: t('max', { field: tCourse('maxGroupMembers'), length: 100 }) }),
       documents: z.array(z.string()).optional(),
+      password: z.string().max(255, { message: t('maxLength', { field: tCourse('password'), length: 255 }) }).optional(),
     })
     .refine(
       data => {

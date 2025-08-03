@@ -108,6 +108,8 @@
   --text-1: oklch(0.129 0.042 264.695);
   --text-2: oklch(0.554 0.046 257.417);
   --text-3: oklch(0.704 0.04 256.788);
+
+  --scrollbar-bg: oklch(0.704 0.04 256.788);
 }
 
 .dark {
@@ -154,6 +156,8 @@
   --text-1: oklch(0.984 0.003 247.858);
   --text-2: oklch(0.704 0.04 256.788);
   --text-3: oklch(0.551 0.027 264.364);
+
+  --scrollbar-bg: oklch(0.279 0.041 260.031);
 }
 
 @layer base {
@@ -189,4 +193,23 @@
   bottom: 0 !important;
   z-index: 2147483647 !important;
   pointer-events: auto !important;
+}
+
+* {
+  /* width */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-bg);
+    border: none;
+    border-radius: 4px;
+  }
 }

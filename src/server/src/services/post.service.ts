@@ -73,6 +73,38 @@ export class PostService {
     });
   }
 
+  public async findPostByAuthorId(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    authorId: string,
+    isAdmin = false,
+    search = '',
+  ): Promise<{ count: number; rows: Post[] }> {
+    const whereClause = {
+      ...(!isAdmin && { status: true }),
+      ...(authorId && { authorId }),
+      ...(search && { title: { [Op.like]: `%${search}%` } }),
+    };
+
+    return await DB.Posts.findAndCountAll({
+      attributes: {
+        include: [
+          [this.getCommentCountLiteral(), 'commentCount'],
+          [this.getLikeCountLiteral(), 'likeCount'],
+        ],
+      },
+      where: whereClause,
+      order: [[sortBy, sortOrder]],
+      limit: pageSize == -1 ? undefined : pageSize,
+      offset: pageSize == -1 ? undefined : (page - 1) * pageSize,
+      distinct: true,
+      col: 'posts.id',
+      paranoid: !isAdmin,
+    });
+  }
+
   public async findPostByTagIdAlternative(
     page = 1,
     pageSize = 10,

@@ -1,5 +1,5 @@
+import ActionIcon from '@/components/common/Action/ActionIcon';
 import MyBadge from '@/components/common/MyBadge';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import TextHeading from '@/components/ui/text';
@@ -8,10 +8,10 @@ import { paths } from '@/data/path';
 import { ITopic } from '@/interfaces/topic';
 import { useUserStore } from '@/stores/user_store';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
-import { IconChartBar, IconPencil } from '@tabler/icons-react';
+import { IconChartBar } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 
 export default function TopicInfo({ topic }: { topic: ITopic }) {
   const { user } = useUserStore();
@@ -30,14 +30,10 @@ export default function TopicInfo({ topic }: { topic: ITopic }) {
         </div>
 
         {isLeader && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push(paths.TOPIC_UPDATE(topic?.id))}
-            className="border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300"
-          >
-            <IconPencil className="w-4 h-4" />
-          </Button>
+          <ActionIcon
+            actionType="update"
+            onClick={() => router.push(paths.TOPIC_UPDATE(topic.id))}
+          />
         )}
       </div>
       <div className="space-y-3">

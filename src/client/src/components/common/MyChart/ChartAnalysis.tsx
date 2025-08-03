@@ -32,7 +32,7 @@ export default function ChartAnalysis({ contributors }: { contributors: IReposCo
     },
     legend: {
       top: 'bottom',
-      data: ['Success', 'Failure'],
+      data: [t('success'), t('failure')],
       textStyle: { fontSize: 12, color: theme.textColor },
     },
     grid: { left: '3%', right: '4%', bottom: '10%', containLabel: true },
@@ -40,7 +40,7 @@ export default function ChartAnalysis({ contributors }: { contributors: IReposCo
     yAxis: { type: 'value', name: '', textStyle: { fontSize: 12, color: theme.textColor } },
     series: [
       {
-        name: 'Success',
+        name: t('success'),
         type: 'bar',
         stack: 'codeAnalysis',
         emphasis: { focus: 'series' },
@@ -48,7 +48,7 @@ export default function ChartAnalysis({ contributors }: { contributors: IReposCo
         data: successData,
       },
       {
-        name: 'Failure',
+        name: t('failure'),
         type: 'bar',
         stack: 'codeAnalysis',
         emphasis: { focus: 'series' },

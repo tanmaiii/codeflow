@@ -101,9 +101,9 @@ export default function JoinOrganization() {
             Or
           </TextDescription>
         </div>
-        <Link href={localPath(paths.REGISTER)}>
+        <Link href={localPath(paths.LOGIN)}>
           <TextDescription className="text-primary hover:text-primary/80 cursor-pointer ml-1">
-            {t('signUp')}
+            {t('signIn')}
           </TextDescription>
         </Link>
       </div>

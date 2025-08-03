@@ -1,5 +1,5 @@
 import { AuthController } from '@controllers/auth.controller';
-import { CreateUserDto, CreateUserGithubDto, LoginUserDto } from '@dtos/users.dto';
+import { CreateUserDto, CreateUserGithubDto, LoginUserDto, ForgotPasswordDto, ResetPasswordDto, ChangePasswordDto } from '@dtos/users.dto';
 import { Routes } from '@interfaces/routes.interface';
 import { AuthMiddleware } from '@middlewares/auth.middleware';
 import { ValidationMiddleware } from '@middlewares/validation.middleware';
@@ -20,5 +20,8 @@ export class AuthRoute implements Routes {
     this.router.get('/checkJoinOrganization', AuthMiddleware, this.auth.checkJoinOrganization);
     this.router.get('/info', AuthMiddleware, this.auth.getInfoUser);
     this.router.post('/logout', AuthMiddleware, this.auth.logOut);
+    this.router.post('/forgot-password', ValidationMiddleware(ForgotPasswordDto), this.auth.forgotPassword);
+    this.router.post('/reset-password', ValidationMiddleware(ResetPasswordDto), this.auth.resetPassword);
+    this.router.post('/change-password', AuthMiddleware, ValidationMiddleware(ChangePasswordDto), this.auth.changePassword);
   }
 }

@@ -9,6 +9,8 @@ export interface User {
   status?: string;
   avatar?: string;
   bio?: string;
+  resetToken?: string;
+  resetTokenExpires?: Date;
 }
 
 export interface UserGithub {

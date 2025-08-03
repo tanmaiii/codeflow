@@ -1,4 +1,3 @@
-import Register from '@/components/pages/auth/register';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -6,5 +5,8 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <Register />;
+  return (
+    <div>Tính năng đang được phát triển...</div>
+    // <Register />;
+  );
 }

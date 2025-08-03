@@ -1,8 +1,11 @@
 import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
 import { METRICS_CODE_ANALYSIS } from '@/constants/object';
 import { ITopicMetrics } from '@/interfaces/code_analysis';
-import { ChartArea } from 'lucide-react';
+import { cx } from 'class-variance-authority';
+import { ChartArea, Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import MyTooltip from '../MyTooltip';
+// import MyTooltip from '../MyTooltip';
 
 export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) {
   const t = useTranslations();
@@ -52,10 +55,10 @@ export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) 
       case ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES:
       case ENUM_METRICS_CODE_ANALYSIS.FUNCTIONS:
       case ENUM_METRICS_CODE_ANALYSIS.CLASSES:
-        return Math.round(numValue).toLocaleString();
+        return numValue > 999 ? '+999' : Math.round(numValue).toLocaleString();
 
       default:
-        return numValue.toString();
+        return numValue > 99 ? '+99' : numValue.toString();
     }
   };
 
@@ -92,86 +95,26 @@ export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) 
     }
   };
 
-  const getPercentageProgressColor = (value: number, metricName: string) => {
-    // Coverage metrics - higher is better
-    if (
-      metricName === ENUM_METRICS_CODE_ANALYSIS.COVERAGE ||
-      metricName === ENUM_METRICS_CODE_ANALYSIS.LINE_COVERAGE
-    ) {
-      if (value >= 80) return { stroke: '#15803d', text: 'text-green-700' };
-      if (value >= 60) return { stroke: '#1d4ed8', text: 'text-blue-700' };
-      if (value >= 40) return { stroke: '#a16207', text: 'text-yellow-700' };
-      if (value >= 20) return { stroke: '#c2410c', text: 'text-orange-700' };
-      return { stroke: '#dc2626', text: 'text-red-700' };
-    }
-
-    // Duplicated lines density - lower is better
-    if (metricName === ENUM_METRICS_CODE_ANALYSIS.DUPLICATED_LINES_DENSITY) {
-      if (value <= 3) return { stroke: '#15803d', text: 'text-green-700' };
-      if (value <= 5) return { stroke: '#1d4ed8', text: 'text-blue-700' };
-      if (value <= 10) return { stroke: '#a16207', text: 'text-yellow-700' };
-      if (value <= 20) return { stroke: '#c2410c', text: 'text-orange-700' };
-      return { stroke: '#dc2626', text: 'text-red-700' };
-    }
-
-    return { stroke: '#6b7280', text: 'text-gray-700' };
-  };
-
-  // Circular Progress Component
-  const CircularProgress = ({
-    percentage,
-    size = 48,
-    strokeWidth = 4,
-    colors,
-  }: {
-    percentage: number;
-    size?: number;
-    strokeWidth?: number;
-    colors: { stroke: string; text: string };
-  }) => {
-    const radius = (size - strokeWidth) / 2;
-    const circumference = radius * 2 * Math.PI;
-    const strokeDasharray = circumference;
-    const strokeDashoffset = circumference - (percentage / 100) * circumference;
-
-    return (
-      <div className="relative mx-auto" style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="transform -rotate-90">
-          {/* Background circle */}
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="#e5e7eb"
-            strokeWidth={strokeWidth}
-            fill="transparent"
-            className="dark:stroke-gray-600"
-          />
-          {/* Progress circle */}
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke={colors.stroke}
-            strokeWidth={strokeWidth}
-            fill="transparent"
-            strokeDasharray={strokeDasharray}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            className="transition-all duration-300 ease-out"
-          />
-        </svg>
-        {/* Percentage text */}
-        <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold">
-          {Math.round(percentage)}%
-        </span>
-      </div>
-    );
+  const getPercentageProgressColor = (value: number, best?: boolean) => {
+    // Nếu best = false, đảo ngược logic màu sắc (giá trị cao = xấu, giá trị thấp = tốt)
+    if (best === true)
+      return {
+        stroke: 'stroke-green-400',
+        strokeBG: 'dark:stroke-green-800 stroke-green-800',
+        text: 'text-green-700 dark:text-green-300',
+        bg: 'bg-green-100 dark:bg-green-900',
+      };
+    return {
+      stroke: 'stroke-yellow-400',
+      strokeBG: 'dark:stroke-yellow-600 stroke-yellow-600',
+      text: 'text-yellow-700 dark:text-yellow-300',
+      bg: 'bg-yellow-100 dark:bg-yellow-900',
+    };
   };
 
   return (
     <div>
-      {true ? (
+      {metrics?.length === 0 ? (
         <div className="w-full min-h-[300px] flex flex-col items-center justify-center border mt-2 rounded-md">
           <ChartArea className="w-12 h-12 text-zinc-400" />
           <p className="text-md opacity-50 font-medium mt-2 text-center">
@@ -179,7 +122,7 @@ export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) 
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 my-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-2">
           {metrics.map((metric, index) => {
             const formattedValue = formatMetricsValue(metric.value, metric.name);
             const metricLabel = t(
@@ -188,8 +131,14 @@ export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) 
             return (
               <div
                 key={index}
-                className="bg-white dark:bg-zinc-800 p-4 cursor-pointer rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+                className="flex flex-col justify-between bg-white dark:bg-zinc-800 p-4 cursor-pointer rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 relative"
               >
+                {/* Info icon to indicate clickable */}
+                <MyTooltip content={t(`codeAnalysis.metrics.desc.${metric.name}`)}>
+                  <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors cursor-pointer absolute top-2 right-2" />
+                </MyTooltip>
+                {/* {metric.name} */}
+
                 {/* Visual indicator */}
                 <div className="flex flex-col items-center mb-3">
                   {isRatingMetric(metric.name) ? (
@@ -202,12 +151,12 @@ export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) 
                     </div>
                   ) : isPercentageMetric(metric.name) ? (
                     <CircularProgress
-                      percentage={metric.value}
-                      colors={getPercentageProgressColor(metric.value, metric.name)}
+                      percentage={metric?.value}
+                      colors={getPercentageProgressColor(40, metric.bestValue)}
                     />
                   ) : (
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 h-12 flex items-center justify-center">
+                    <div className="text-center border-3 border-blue-600/70 bg-blue-600/20 relative h-12 w-12 rounded-full flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center text-blue-600 dark:text-blue-400 justify-center text-md font-semibold">
                         {formattedValue}
                       </div>
                     </div>
@@ -215,12 +164,12 @@ export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) 
                 </div>
 
                 {/* Metric name */}
-                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center mb-2 flex items-center justify-center">
+                <h3 className="text-sm mb-auto font-medium text-gray-700 dark:text-gray-300 text-center flex items-center justify-center">
                   {metricLabel}: {metric.value}
                 </h3>
 
                 {/* Value and optimization status */}
-                <div className="text-center space-y-1">
+                <div className="text-center space-y-1 mt-auto">
                   <div className="text-xs mt-2">
                     {metric.bestValue === true ? (
                       <span className="text-green-600 dark:text-green-400 flex items-center justify-center gap-1">
@@ -241,3 +190,63 @@ export default function ChartMetrics({ metrics }: { metrics: ITopicMetrics[] }) 
     </div>
   );
 }
+
+// Circular Progress Component
+export const CircularProgress = ({
+  percentage,
+  size = 48,
+  strokeWidth = 3,
+  colors,
+}: {
+  percentage: number;
+  size?: number;
+  strokeWidth?: number;
+  colors: { stroke: string; strokeBG: string; text: string; bg: string };
+}) => {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const strokeDasharray = circumference;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+  return (
+    <div
+      className={cx('relative mx-auto rounded-full', colors.bg)}
+      style={{ width: size, height: size }}
+    >
+      <svg width={size} height={size} className="transform -rotate-90">
+        {/* Background circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          // stroke={colors.strokeBG}
+          strokeWidth={strokeWidth}
+          fill="transparent"
+          className={cx(colors?.strokeBG)}
+        />
+        {/* Progress circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          // stroke={colors.stroke}
+          strokeWidth={strokeWidth}
+          fill="transparent"
+          strokeDasharray={strokeDasharray}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+          className={cx('transition-all duration-300 ease-out', colors?.stroke)}
+        />
+      </svg>
+      {/* Percentage text */}
+      <span
+        className={cx(
+          'absolute inset-0 flex items-center justify-center text-xs font-semibold',
+          colors?.text,
+        )}
+      >
+        {Math.round(percentage)}%
+      </span>
+    </div>
+  );
+};

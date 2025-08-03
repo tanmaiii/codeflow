@@ -25,7 +25,7 @@ export default function ChartAdditions({ contributors }: { contributors: IReposC
     },
     tooltip: {
       trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} dòng ({d}%)',
+      formatter: `{a} <br/>{b}: {c} ${t('row')} ({d}%)`,
       backgroundColor: theme.backgroundColor,
       textStyle: {
         color: theme.textColor,
@@ -46,7 +46,7 @@ export default function ChartAdditions({ contributors }: { contributors: IReposC
     },
     series: [
       {
-        name: 'Dòng code',
+        name: t('rowCode'),
         type: 'pie',
         radius: ['40%', '70%'],
         center: ['50%', '45%'],

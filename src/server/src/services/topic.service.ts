@@ -118,8 +118,8 @@ export class TopicService {
 
     // Lấy thông tin đầy đủ của các topic và tất cả thành viên
     return DB.Topics.findAndCountAll({
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
+      limit: pageSize === -1 ? undefined : pageSize,
+      offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
       where: {

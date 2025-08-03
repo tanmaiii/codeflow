@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import MyImage from '../common/MyImage';
 import { useOnlineUsersStore } from '@/stores/online_users_store';
+import useQ_User_GetDetail from '@/hooks/query-hooks/User/useQ_User_GetDetail';
 
 interface MemberAvatarProps {
   avatar?: string;
@@ -30,8 +31,15 @@ export default function MemberAvatar({
   const router = useRouter();
   const t = useTranslations();
   const { isUserOnline } = useOnlineUsersStore();
-  
+  const { data: user } = useQ_User_GetDetail({
+    id: id ?? '',
+    options: {
+      enabled: !!id,
+    },
+  });
+
   const isOnline = id ? isUserOnline(id) : false;
+
   return (
     <div
       onClick={() => {
@@ -50,7 +58,7 @@ export default function MemberAvatar({
           className={`rounded-full `}
           defaultSrc={apiConfig.avatar(name)}
         />
-        {isOnline && (
+        {isOnline && user?.data?.settings?.onlineStatus && (
           <div className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white" />
         )}
       </div>

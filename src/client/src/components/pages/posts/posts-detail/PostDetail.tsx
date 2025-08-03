@@ -177,7 +177,6 @@ export default function PostDetail({
                 height={64}
                 defaultSrc={apiConfig.avatar(initialPostData.author?.name ?? 'c')}
               />
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white" />
             </div>
             <div>
               <TextHeading className="text-xl">{initialPostData.author?.name}</TextHeading>

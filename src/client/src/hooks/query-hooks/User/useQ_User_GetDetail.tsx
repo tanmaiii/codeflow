@@ -1,5 +1,5 @@
 import { ResponseAPIDto } from '@/interfaces/common';
-import { IUser } from '@/interfaces/user';
+import { IUserSetting } from '@/interfaces/user';
 import userService from '@/services/user.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
@@ -7,7 +7,7 @@ export default function useQ_User_GetDetail({
   options,
   id,
 }: {
-  options?: Partial<UseQueryOptions<ResponseAPIDto<IUser>, Error>>;
+  options?: Partial<UseQueryOptions<ResponseAPIDto<IUserSetting>, Error>>;
   id: string;
 }) {
   const query = useQuery({

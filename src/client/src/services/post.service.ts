@@ -26,6 +26,11 @@ class PostService {
     return res.data;
   }
 
+  async getAllByUser(params: IGetAllQuery, userId: string): Promise<PaginatedResponseAPIDto<IPost[]>> {
+    const res = await this.client.get(`/${userId}/user`, { params });
+    return res.data;
+  }
+
   async create(data: ICreatePostDto): Promise<ResponseAPIDto<IPost>> {
     const res = await this.client.post('/', data);
     return res.data;

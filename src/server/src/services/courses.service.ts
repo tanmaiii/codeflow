@@ -113,8 +113,8 @@ export class CourseService {
         ],
       },
       where: { id: { [Op.in]: courseIds } },
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
+      limit: pageSize == -1 ? undefined : pageSize,
+      offset: pageSize == -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
     });
 
@@ -139,8 +139,8 @@ export class CourseService {
       where: {
         authorId,
       },
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
+      limit: pageSize == -1 ? undefined : pageSize,
+      offset: pageSize == -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
     });
 
@@ -270,6 +270,10 @@ export class CourseService {
   public async updateCourse(courseId: string, courseData: Partial<CourseCreate>): Promise<Course> {
     const findCourse: Course = await DB.Courses.findByPk(courseId);
     if (!findCourse) throw new HttpException(409, "Course doesn't exist");
+
+    if (courseData.password) {
+      courseData.password = await hash(courseData.password, 10);
+    }
 
     const { tags, documents, ...courseDetails } = courseData;
     await DB.Courses.update(courseDetails, { where: { id: courseId } });

@@ -1,15 +1,18 @@
+import ActionIcon from '@/components/common/Action/ActionIcon';
 import MyImage from '@/components/common/MyImage';
 import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
+import { paths } from '@/data/path';
 import useQ_GitHub_GetUserInfo from '@/hooks/query-hooks/Github/useQ_GitHub_GetUserInfo';
 import { IUser } from '@/interfaces/user';
 import apiConfig from '@/lib/api';
-import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { IconMail, IconUsersGroup } from '@tabler/icons-react';
 import { ExternalLink, Pen, Star } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function UserDetail({ user }: { user: IUser }) {
+  const router = useRouter();
   const { data: GitHubUser } = useQ_GitHub_GetUserInfo({
     username: user?.username ?? '',
     options: {
@@ -22,18 +25,17 @@ export default function UserDetail({ user }: { user: IUser }) {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between gap-2">
           <TextHeading className="text-2xl font-bold">Profile</TextHeading>
-          <Button variant="outline" size="icon">
-            <Pen size={16} />
-          </Button>
+          <ActionIcon actionType={'update'} onClick={() => router.push(paths.SETTINGS)} />
         </div>
         <div className="flex items-center gap-2 bg-background-1 rounded-xl w-full">
           <div className="flex items-center gap-2 w-[120px] h-[120px] justify-center">
-            <MyImage  
-              src={user?.avatar ?? apiConfig.avatar(user?.name)}
-              alt={user?.avatar ?? ''}
-              className="object-cover w-full h-full circle rounded-xl"
+            <MyImage
+              src={!user?.avatar ? apiConfig.avatar(user?.name) : user?.avatar}
+              alt={user?.name}
               width={100}
               height={100}
+              className="object-cover w-full h-full circle rounded-xl"
+              defaultSrc={apiConfig.avatar(user?.name)}
             />
           </div>
         </div>
@@ -41,9 +43,7 @@ export default function UserDetail({ user }: { user: IUser }) {
           <TextHeading className="text-lg font-bold">{user?.name}</TextHeading>
           <div className="flex flex-row gap-1">
             <TextDescription>{'@' + user?.username}</TextDescription>
-            <TextDescription className="text-gray-500">
-              {'Tham gia ' + utils_DateToDDMMYYYY(user?.createdAt ?? new Date())}
-            </TextDescription>
+            <TextDescription className="text-gray-500"></TextDescription>
           </div>
         </div>
         <div className="flex flex-row items-center gap-2 mt-2">
@@ -72,6 +72,10 @@ export default function UserDetail({ user }: { user: IUser }) {
                 </TextDescription>
                 <TextDescription>repositories</TextDescription>
               </div>
+            </div>
+            <div className="flex flex-row gap-1 items-center mt-2">
+              <Pen className="text-color-2" size={16} />
+              <TextDescription>{user?.bio}</TextDescription>
             </div>
             <Button variant="outline" size="icon" className="w-full mt-4">
               <Link

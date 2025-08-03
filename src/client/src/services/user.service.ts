@@ -1,7 +1,7 @@
 import createHttpClient from '@/lib/createHttpClient';
 import { IGetAllQuery, ResponseAPIDto, PaginatedResponseAPIDto } from '@/interfaces/common';
 import { AxiosInstance } from 'axios';
-import { IUser, IUserCreate } from '@/interfaces/user';
+import { IUser, IUserCreate, IUserSetting } from '@/interfaces/user';
 
 class UserService {
   private client: AxiosInstance;
@@ -15,7 +15,7 @@ class UserService {
     return res.data;
   }
 
-  async getById(id: string): Promise<ResponseAPIDto<IUser>> {
+  async getById(id: string): Promise<ResponseAPIDto<IUserSetting>> {
     const res = await this.client.get(`/${id}`);
     return res.data;
   }

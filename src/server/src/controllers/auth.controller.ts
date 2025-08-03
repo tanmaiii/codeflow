@@ -1,6 +1,6 @@
 import { EmailService } from '@/services/email.service';
 import { logger } from '@/utils/logger';
-import { CreateUserDto, CreateUserGithubDto, LoginUserDto } from '@dtos/users.dto';
+import { CreateUserDto, CreateUserGithubDto, LoginUserDto, ForgotPasswordDto, ResetPasswordDto, ChangePasswordDto } from '@dtos/users.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
@@ -103,6 +103,40 @@ export class AuthController {
 
       // res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
       res.status(200).json({ data: logOutUserData, message: 'logout' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const forgotPasswordData: ForgotPasswordDto = req.body;
+      const result = await this.auth.forgotPassword(forgotPasswordData);
+
+      res.status(200).json({ data: result, message: 'forgot password' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const resetPasswordData: ResetPasswordDto = req.body;
+      const result = await this.auth.resetPassword(resetPasswordData);
+
+      res.status(200).json({ data: result, message: 'reset password' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public changePassword = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const userId: string = req.user.id;
+      const changePasswordData: ChangePasswordDto = req.body;
+      const result = await this.auth.changePassword(userId, changePasswordData);
+
+      res.status(200).json({ data: result, message: 'change password' });
     } catch (error) {
       next(error);
     }

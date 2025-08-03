@@ -47,6 +47,21 @@ class AuthService {
     const res = await this.client.post('/logout');
     return res.data;
   }
+
+  async forgotPassword(body: { email: string }): Promise<ResponseAPIDto<{ message: string }>> {
+    const res = await this.client.post('/forgot-password', body);
+    return res.data;
+  }
+
+  async resetPassword(body: { token: string; newPassword: string }): Promise<ResponseAPIDto<{ message: string }>> {
+    const res = await this.client.post('/reset-password', body);
+    return res.data;
+  }
+
+  async changePassword(body: { currentPassword: string; newPassword: string }): Promise<ResponseAPIDto<{ message: string }>> {
+    const res = await this.client.post('/change-password', body);
+    return res.data;
+  }
 }
 
 export default new AuthService() as AuthService;

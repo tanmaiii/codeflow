@@ -28,11 +28,11 @@ export default function ChartCodeChanges({ contributors }: { contributors: IRepo
         const additions = params.find(p => p.seriesName === 'Thêm')?.value || 0;
         const deletions = Math.abs(params.find(p => p.seriesName === 'Xóa')?.value || 0);
         return `<strong>${params[0].axisValue}</strong><br/>
-                <span style="color: #10b981;">+ ${additions} dòng thêm</span><br/>
-                <span style="color: #ef4444;">- ${deletions} dòng xóa</span><br/>
-                <span style="color: ${theme.textColor};">Tổng: ${
+                <span style="color: #10b981;">+ ${additions} ${t('add')}</span><br/>
+                <span style="color: #ef4444;">- ${deletions} ${t('delete')}</span><br/>
+                <span style="color: ${theme.textColor};">${t('total')}: ${
           additions + deletions
-        } dòng thay đổi</span>`;
+        }</span>`;
       },
       backgroundColor: theme.backgroundColor,
       textStyle: { color: theme.textColor },
@@ -42,7 +42,7 @@ export default function ChartCodeChanges({ contributors }: { contributors: IRepo
     },
     legend: {
       top: 'top',
-      data: ['Thêm', 'Xóa'],
+      data: [t('add'), t('delete')],
       textStyle: { fontSize: 12, color: theme.textColor },
       itemGap: 20,
     },
@@ -68,7 +68,7 @@ export default function ChartCodeChanges({ contributors }: { contributors: IRepo
     },
     yAxis: {
       type: 'value',
-      name: 'Dòng code',
+      name: t('lineCode'),
       nameTextStyle: { color: theme.textColor },
       axisLabel: {
         color: theme.textColor,
@@ -86,7 +86,7 @@ export default function ChartCodeChanges({ contributors }: { contributors: IRepo
     },
     series: [
       {
-        name: 'Thêm',
+        name: t('add'),
         type: 'bar',
         stack: 'total',
         emphasis: { focus: 'series' },
@@ -97,7 +97,7 @@ export default function ChartCodeChanges({ contributors }: { contributors: IRepo
         data: additionsData,
       },
       {
-        name: 'Xóa',
+        name: t('delete'),
         type: 'bar',
         stack: 'total',
         emphasis: { focus: 'series' },
@@ -117,7 +117,7 @@ export default function ChartCodeChanges({ contributors }: { contributors: IRepo
         {contributors?.length <= 0 ? (
           <div className="min-h-[300px] flex flex-col items-center justify-center">
             {/* <div className="p-6 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4"> */}
-              <ChartArea className="w-12 h-12 text-zinc-400" />
+            <ChartArea className="w-12 h-12 text-zinc-400" />
             {/* </div> */}
             <p className="text-md opacity-50 font-medium mt-2 text-center">{t('noData')}</p>
           </div>

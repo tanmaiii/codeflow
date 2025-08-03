@@ -29,7 +29,7 @@ import {
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import MyImage from '../common/MyImage';
 
 const iconMap: Record<string, LucideIcon> = {
@@ -103,6 +103,7 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
   const { theme } = useThemeStore();
   const t = useTranslations('auth');
   const { user } = useUserStore();
+  const router = useRouter();
 
   return (
     <motion.aside
@@ -157,7 +158,8 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
           <>
             <motion.div
               whileHover={{ scale: 1.02 }}
-              className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
+              onClick={() => router.push(paths.USER_DETAIL(user.id))}
+              className="flex items-center cursor-pointer gap-2 px-3 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-background-2"
             >
               <MyImage
                 src={user?.avatar ?? apiConfig.avatar(user?.name)}

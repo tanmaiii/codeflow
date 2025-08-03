@@ -62,7 +62,8 @@ export default function Login() {
 
   return (
     <div className="flex flex-col w-full h-fit gap-0">
-      <TextDescription className="text-left text-base font-light mb-4">
+      {t('welcome')}
+      <TextDescription className="text-left text-base font-normal mb-4">
         {t('pleaseLogin')}
       </TextDescription>
       {error[0] && (
@@ -100,13 +101,13 @@ export default function Login() {
         <Button
           disabled={isSubmitting}
           onClick={() => localPath(paths.REGISTER)}
-          className="w-full h-12  bg-primary text-white hover:bg-primary/80"
+          className="w-full h-12 bg-primary text-white hover:bg-primary/80"
         >
           {isLoading[0] ? <IconLoading className="bg-white" /> : t('signIn')}
         </Button>
       </form>
 
-      <div className="flex items-center justify-center mt-2">
+      {/* <div className="flex items-center justify-center mt-2">
         <TextDescription className=" text-gray-500 dark:text-gray-400">
           {t('dontHaveAnAccount')}
         </TextDescription>
@@ -115,7 +116,7 @@ export default function Login() {
             {t('signUp')}
           </TextDescription>
         </Link>
-      </div>
+      </div> */}
 
       <div className="relative my-3 w-full text-center">
         <div className="absolute inset-0 flex items-center">

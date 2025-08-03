@@ -1,7 +1,7 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Bell, Palette, Shield, User } from 'lucide-react';
+import { Palette, Shield, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { AppearanceTab } from './AppearanceTab';
 import { NotificationsTab } from './NotificationsTab';
@@ -19,7 +19,7 @@ export default function Settings() {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <User className="h-4 w-4" />
             {t('profile')}
@@ -28,10 +28,10 @@ export default function Settings() {
             <Palette className="h-4 w-4" />
             {t('appearance')}
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
+          {/* <TabsTrigger value="notifications" className="flex items-center gap-2">
             <Bell className="h-4 w-4" />
             {t('notifications')}
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger value="security" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
             {t('security')}
@@ -51,8 +51,7 @@ export default function Settings() {
         </TabsContent>
 
         <TabsContent value="security" className="space-y-6">
-          <SecurityTab
-          />
+          <SecurityTab />
         </TabsContent>
       </Tabs>
     </div>

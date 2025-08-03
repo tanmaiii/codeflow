@@ -5,6 +5,7 @@ import { User } from '@interfaces/users.interface';
 import { hash } from 'bcrypt';
 import { Service } from 'typedi';
 import { Op } from 'sequelize';
+import { UserSettingsModel } from '@/models/user_settings.model';
 @Service()
 export class UserService {
   public async findAllUser(): Promise<User[]> {
@@ -38,7 +39,15 @@ export class UserService {
   }
 
   public async findUserById(userId: string): Promise<User> {
-    const findUser: User = await DB.Users.findByPk(userId);
+    const findUser: User = await DB.Users.findOne({
+      where: { id: userId },
+      include: [
+        {
+          model: UserSettingsModel,
+          as: 'settings',
+        },
+      ],
+    });
     if (!findUser) throw new HttpException(409, "User doesn't exist");
 
     return findUser;

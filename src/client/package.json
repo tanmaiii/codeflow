@@ -57,6 +57,7 @@
     "dompurify": "^3.2.5",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.2",
+    "embla-carousel-react": "^8.6.0",
     "emoji-mart": "^5.6.0",
     "firebase": "^11.6.0",
     "framer-motion": "^12.6.5",

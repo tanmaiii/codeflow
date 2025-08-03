@@ -99,6 +99,36 @@ export class PostController {
     }
   };
 
+  public getPostByUserId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', search } = req.query;
+      const isAdmin = req.user?.role === 'admin';
+
+      const { count, rows } = await this.post.findPostByAuthorId(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        req.params.userId,
+        isAdmin,
+        String(search ?? ''),
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'find by user id',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public createPost = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id: authorId } = req.user;

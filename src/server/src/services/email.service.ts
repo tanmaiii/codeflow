@@ -121,7 +121,7 @@ export class EmailService {
    * @param token Mã đặt lại mật khẩu
    */
   public async sendPasswordResetEmail(to: string, token: string): Promise<void> {
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+    const resetUrl = `${process.env.FRONTEND_URL}/en/reset-password?token=${token}`;
     const html = await this.loadTemplate('password-reset', { resetUrl });
 
     await this.sendEmail({

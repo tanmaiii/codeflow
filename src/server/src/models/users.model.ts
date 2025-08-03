@@ -1,8 +1,9 @@
 import { ENUM_USER_ROLE, ENUM_USER_STATUS } from '@/data/enum';
 import { User } from '@interfaces/users.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { UserSettingsModel } from './user_settings.model';
 
-export type UserCreationAttributes = Optional<User, 'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar' | 'bio'>;
+export type UserCreationAttributes = Optional<User, 'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar' | 'bio' | 'resetToken' | 'resetTokenExpires'>;
 
 export class UserModel extends Model<User, UserCreationAttributes> implements User {
   public id!: string;
@@ -15,6 +16,8 @@ export class UserModel extends Model<User, UserCreationAttributes> implements Us
   public status!: string;
   public avatar!: string;
   public bio!: string;
+  public resetToken!: string;
+  public resetTokenExpires!: Date;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -64,6 +67,14 @@ export default function (sequelize: Sequelize): typeof UserModel {
       bio: {
         allowNull: true,
         type: DataTypes.STRING(255),
+      },
+      resetToken: {
+        allowNull: true,
+        type: DataTypes.STRING(255),
+      },
+      resetTokenExpires: {
+        allowNull: true,
+        type: DataTypes.DATE,
       },
     },
     {

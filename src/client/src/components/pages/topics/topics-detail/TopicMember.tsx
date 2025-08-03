@@ -55,6 +55,7 @@ export default function TopicMember({ topic }: { topic: ITopic }) {
 const Member = ({ contributor }: { contributor: ITopicMember | undefined }) => {
   const roleConfig = getRoleConfig(contributor?.role || '');
   const IconComponent = roleConfig.icon;
+  const t = useTranslations('topic');
 
   return (
     <div className="border rounded-lg p-3 hover:shadow-md transition-all flex items-center justify-between duration-200">
@@ -71,7 +72,7 @@ const Member = ({ contributor }: { contributor: ITopicMember | undefined }) => {
         className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${roleConfig.bgColor} ${roleConfig.textColor}`}
       >
         <IconComponent className="w-3.5 h-3.5" />
-        <span className="capitalize">{contributor?.role || 'Member'}</span>
+        <span className="">{t(`role.${contributor?.role ?? 'member'}`)}</span>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ export default function CardTopic({ topic }: CardTopicProps) {
 
   return (
     <Card
-      className="px-3 py-4 hover:border-white/30 rounded-md cursor-pointer bg-background-1 group/item"
+      className="px-3 py-4 hover:border-white/30 rounded-md cursor-pointer bg-background-1 group/item h-full"
     >
       <CardContent className="p-0 h-full flex flex-col gap-2 justify-between">
         <div className="flex flex-row justify-between items-center gap-2">
