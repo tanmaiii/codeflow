@@ -86,7 +86,12 @@ export default function TopicsUpdate() {
           onSubmit={handleSubmit(data => mutation.mutate(data))}
           className="flex flex-col gap-3"
         >
-          <TextInput label={tTopic('title')} error={errors.title?.message} {...register('title')} />
+          <TextInput
+            label={tTopic('title')}
+            disabled
+            error={errors.title?.message}
+            {...register('title')}
+          />
           <TextareaInput
             label={tTopic('description')}
             className="min-h-[200px]"
@@ -98,21 +103,29 @@ export default function TopicsUpdate() {
             error={errors.groupName?.message}
             {...register('groupName')}
           />
-          {Q_Topic?.data?.members && Q_Topic?.data?.course?.maxGroupMembers && Q_Topic?.data?.course?.maxGroupMembers > 1 && (
-            <MyMultiSelect
-              label={tTopic('members')}
-              name="members"
-              control={control}
-              maxLength={(Q_Topic.data.course?.maxGroupMembers ?? 3) - 1}
-              defaultValue={Q_Topic?.data?.members?.filter(member => member.userId !== user?.id).map(member => member.userId) ?? []}
-              options={
-                Q_Members?.data?.filter(member => member.id !== user?.id).map(member => ({
-                  value: member.id,
-                  label: member.name,
-                })) ?? []
-              }
-            />
-          )}
+          {Q_Topic?.data?.members &&
+            Q_Topic?.data?.course?.maxGroupMembers &&
+            Q_Topic?.data?.course?.maxGroupMembers > 1 && (
+              <MyMultiSelect
+                label={tTopic('members')}
+                name="members"
+                control={control}
+                maxLength={(Q_Topic.data.course?.maxGroupMembers ?? 3) - 1}
+                defaultValue={
+                  Q_Topic?.data?.members
+                    ?.filter(member => member.userId !== user?.id)
+                    .map(member => member.userId) ?? []
+                }
+                options={
+                  Q_Members?.data
+                    ?.filter(member => member.id !== user?.id)
+                    .map(member => ({
+                      value: member.id,
+                      label: member.name,
+                    })) ?? []
+                }
+              />
+            )}
           <div className="flex justify-end gap-2">
             <Button type="submit" disabled={isSubmitting}>
               {t('update')}

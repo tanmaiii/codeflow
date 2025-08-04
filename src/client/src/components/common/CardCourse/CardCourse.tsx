@@ -40,7 +40,7 @@ export default function CardCourse({ course }: CardCourseProps) {
   });
 
   return (
-    <Card className="w-full gap-4 pt-3 overflow-hidden group">
+    <Card className="w-full h-full gap-4 pt-3 overflow-hidden group">
       <CardHeader className="px-3">
         <div className="relative">
           <MyImage

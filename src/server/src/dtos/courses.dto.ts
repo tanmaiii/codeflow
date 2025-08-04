@@ -51,6 +51,11 @@ export class JoinCourseDto {
   public password: string;
 }
 
+export class AddCourseDto {
+  @IsString()
+  public memberId: string;
+}
+
 export class GetAllCoursesDto extends GetAllQueryDto {
   @IsOptional()
   @IsBoolean()

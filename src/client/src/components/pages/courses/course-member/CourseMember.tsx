@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import CoureseMemberCreate from './CoureseMemberCreate';
 
 export default function CoursesMember() {
   const tCommon = useTranslations('common');
@@ -105,6 +106,7 @@ export default function CoursesMember() {
 
     return (
       <div>
+        <CoureseMemberCreate/>
         {selectedRowsCount > 0 && (
           <Button
             variant="destructive"
@@ -117,6 +119,7 @@ export default function CoursesMember() {
       </div>
     );
   };
+  
   return (
     <Card className="p-2 lg:p-6 flex flex-col gap-4 min-h-[calc(100vh-100px)]">
       <TitleHeader title={tCourse('member')} description={tCourse('memberDescription')} onBack />

@@ -17,7 +17,9 @@ export default function TopicInfo({ topic }: { topic: ITopic }) {
   const { user } = useUserStore();
   const router = useRouter();
   const t = useTranslations('topic');
-  const isLeader = user?.id === topic?.members?.find(member => member.role === 'leader')?.userId;
+  const isLeader =
+    user?.id === topic?.members?.find(member => member.role === 'leader')?.userId ||
+    topic?.members?.[0]?.userId === user?.id;
 
   return (
     <Card className="p-3 md:p-6">

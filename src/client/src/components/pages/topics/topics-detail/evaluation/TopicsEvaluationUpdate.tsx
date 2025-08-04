@@ -1,18 +1,17 @@
-import React, { useRef } from 'react';
 import ActionModal from '@/components/common/Action/ActionModal';
 import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
 import { Button } from '@/components/ui/button';
-import { useEvaluationSchema } from '@/lib/validations/evaluationSchema';
-import { evaluationSchemaType } from '@/lib/validations/evaluationSchema';
-import topicService from '@/services/topic.service';
+import { ITopic, ITopicEvaluation } from '@/interfaces/topic';
+import { evaluationSchemaType, useEvaluationSchema } from '@/lib/validations/evaluationSchema';
+import topicEvaluationService from '@/services/topic_evaluation.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogClose } from '@radix-ui/react-dialog';
+import { IconDeviceFloppy, IconEdit } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { ITopic, ITopicEvaluation } from '@/interfaces/topic';
-import { IconEdit, IconDeviceFloppy } from '@tabler/icons-react';
 
 export default function TopicsEvaluationUpdate({
   topic,
@@ -40,7 +39,10 @@ export default function TopicsEvaluationUpdate({
   const mutation = useMutation({
     mutationFn: async (data: evaluationSchemaType) => {
       try {
-        return await topicService.updateEvaluation(topic.id, evaluation.id, data);
+        return await topicEvaluationService.update(evaluation.id, {
+          topicId: topic?.id,
+          evaluation: data?.evaluation,
+        });
       } catch (error) {
         throw error;
       }
@@ -49,7 +51,7 @@ export default function TopicsEvaluationUpdate({
       toast.success(tCommon('updateSuccess'));
       reset();
       closeRef.current?.click();
-      queryClient.invalidateQueries({ queryKey: ['topic', 'detail', topic.id] });
+      queryClient.invalidateQueries({ queryKey: ['evaluations', 'topic', topic?.id] });
     },
     onError: error => {
       console.error('Error updating evaluation:', error);
@@ -70,13 +72,13 @@ export default function TopicsEvaluationUpdate({
 
         <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="space-y-6">
           {/* Content Input */}
-              <TextareaInput
-                label="Cập nhật nội dung đánh giá"
-                placeholder="Chỉnh sửa nhận xét và đánh giá về dự án..."
-                className="min-h-[200px]"
-                {...register('evaluation')}
-                error={errors.evaluation?.message}
-              />
+          <TextareaInput
+            label="Cập nhật nội dung đánh giá"
+            placeholder="Chỉnh sửa nhận xét và đánh giá về dự án..."
+            className="min-h-[200px]"
+            {...register('evaluation')}
+            error={errors.evaluation?.message}
+          />
 
           {/* Action Buttons */}
           <div className="flex justify-end gap-3">
@@ -89,10 +91,7 @@ export default function TopicsEvaluationUpdate({
                 {tCommon('cancel')}
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>

@@ -4,21 +4,27 @@ import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { ROLE } from '@/constants/enum';
 import { ITopic, ITopicEvaluation } from '@/interfaces/topic';
-import topicService from '@/services/topic.service';
+import topicEvaluationService from '@/services/topic_evaluation.service';
 import { useUserStore } from '@/stores/user_store';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { IconCalendarTime, IconMessageCircle } from '@tabler/icons-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import TopicsEvaluationCreate from './TopicsEvaluationCreate';
 import TopicsEvaluationUpdate from './TopicsEvaluationUpdate';
 import TopicsEvaluationView from './TopicsEvaluationView';
+import useQ_Evaluation_GetAllByTopic from '@/hooks/query-hooks/Evaluation/useQ_Evaluation_GetAllByTopic';
+import { MyPagination } from '@/components/common/MyPagination/MyPagination';
+import { useDebounce } from '@/hooks/useDebounce';
 
 // Nhận xét chủ đề
 export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
   const t = useTranslations('topic');
   const { user } = useUserStore();
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const debouncedKeyword = useDebounce(search, 300);
 
   const columns = useMemo<ColumnDef<ITopicEvaluation>[]>(
     () => [
@@ -37,11 +43,12 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
         header: t('author'),
         accessorKey: 'user.name',
         cell: ({ row }) => (
-            <MemberAvatar
-              size={32}
-              avatar={row.original.user?.avatar}
-              name={row.original.user?.name || ''}
-            />
+          <MemberAvatar
+            size={28}
+            id={row.original.user?.id}
+            avatar={row.original.user?.avatar}
+            name={row.original.user?.name || ''}
+          />
         ),
       },
       {
@@ -49,7 +56,7 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
         accessorKey: 'evaluation',
         cell: ({ row }) => (
           <div className="max-w-md">
-            <TextDescription className="text-sm line-clamp-3">
+            <TextDescription lineClamp={3} className="text-sm text-color-1 line-clamp-3">
               {row.original.evaluation}
             </TextDescription>
           </div>
@@ -64,6 +71,15 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
       (a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime(),
     ) || [];
 
+  const { data } = useQ_Evaluation_GetAllByTopic({
+    topicId: topic.id,
+    params: {
+      page: page,
+      limit: 10,
+      search: debouncedKeyword,
+    },
+  });
+
   const canManageEvaluations = user?.role === ROLE.ADMIN || user?.role === ROLE.TEACHER;
 
   return (
@@ -76,13 +92,15 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
             <DataTable
               fieldFilter="evaluation"
               columns={columns}
-              pagination={true}
+              searchValue={search}
+              onSearchChange={value => setSearch(value)}
+              pagination={false}
               toolbarCustom={() => {
                 if (canManageEvaluations) {
                   return <TopicsEvaluationCreate topic={topic} />;
                 }
               }}
-              data={sortedEvaluations}
+              data={data?.data || []}
               showIndexColumn={true}
               renderActions={({ row }) => {
                 return (
@@ -94,7 +112,7 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
                         <ActionDelete
                           deleteKey={row.original.id}
                           handleSubmit={async () => {
-                            await topicService.deleteEvaluation(topic.id, row.original.id);
+                            await topicEvaluationService.delete(topic.id);
                           }}
                         />
                       </>
@@ -104,6 +122,12 @@ export default function TopicsEvaluation({ topic }: { topic: ITopic }) {
               }}
             />
           </div>
+
+          <MyPagination
+            currentPage={Number(page)}
+            totalPages={data?.pagination.totalPages ?? 1}
+            onPageChange={(page: number) => setPage(page)}
+          />
         </div>
       )}
 

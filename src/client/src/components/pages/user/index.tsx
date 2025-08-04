@@ -91,9 +91,9 @@ export default function User() {
           </div>
         )}
 
-        <div className="mt-4">
-          <TitleHeader title={t('coursesRegistered')} />
-          {registeredCourses?.data && registeredCourses?.data.length > 0 ? (
+        {registeredCourses?.data && registeredCourses?.data.length > 0 && (
+          <div className="mt-4">
+            <TitleHeader title={t('coursesRegistered')} />
             <div>
               <Carousel opts={{ align: 'start' }} className="w-full">
                 <CarouselContent className="py-2">
@@ -107,16 +107,12 @@ export default function User() {
                 <CarouselNext className="mr-7" />
               </Carousel>
             </div>
-          ) : (
-            <div className="flex justify-center items-center h-full min-h-[300px]">
-              <p className="text-sm text-gray-500">{t('noCourses')}</p>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        <div className="mt-4">
-          <TitleHeader title={t('topics')} />
-          {topics?.data && topics?.data.length > 0 ? (
+        {topics?.data && topics?.data.length > 0 && (
+          <div className="mt-4">
+            <TitleHeader title={t('topics')} />
             <div>
               <Carousel opts={{ align: 'start' }} className="w-full">
                 <CarouselContent className="py-2">
@@ -130,16 +126,12 @@ export default function User() {
                 <CarouselNext className="mr-7" />
               </Carousel>
             </div>
-          ) : (
-            <div className="flex justify-center items-center h-full  min-h-[300px]">
-              <p className="text-sm text-gray-500">{t('noTopics')}</p>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        <div className="mt-4">
-          <TitleHeader title={t('posts')} />
-          {posts?.data && posts?.data.length > 0 ? (
+        {posts?.data && posts?.data.length > 0 && (
+          <div className="mt-4">
+            <TitleHeader title={t('posts')} />
             <div>
               <Carousel opts={{ align: 'start' }} className="w-full">
                 <CarouselContent className="py-2">
@@ -153,12 +145,8 @@ export default function User() {
                 <CarouselNext className="mr-7" />
               </Carousel>
             </div>
-          ) : (
-            <div className="flex justify-center items-center h-full min-h-[300px]">
-              <p className="text-sm text-gray-500">{t('noPosts')}</p>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div className="w-[100%] md:w-[300px] lg:w-[400px] col-span-12 border-l">

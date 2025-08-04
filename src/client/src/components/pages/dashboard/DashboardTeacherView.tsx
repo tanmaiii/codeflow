@@ -1,4 +1,5 @@
 'use client';
+import CardCourse from '@/components/common/CardCourse/CardCourse';
 import { DashboardFullSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { paths } from '@/data/path';
@@ -13,9 +14,9 @@ import {
   IconUsers,
 } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { CourseCard, EmptyState, QuickActions, RecentActivity, StatCard, TeachingAnalytics } from './components';
+import { useRouter } from 'next/navigation';
+import { EmptyState, QuickActions, StatCard, TeachingAnalytics } from './components';
 
 interface TeacherDashboardStats {
   totalCourses: number;
@@ -39,8 +40,12 @@ export default function DashboardTeacherView() {
   // Calculate statistics
   const stats: TeacherDashboardStats = {
     totalCourses: teacherCourses?.data?.length || 0,
-    totalStudents: teacherCourses?.data?.reduce((sum: number, course: ICourse & {enrollmentCount?: number}) => 
-      sum + (course.enrollmentCount || 0), 0) || 0,
+    totalStudents:
+      teacherCourses?.data?.reduce(
+        (sum: number, course: ICourse & { enrollmentCount?: number }) =>
+          sum + (course.enrollmentCount || 0),
+        0,
+      ) || 0,
     pendingTopics: 0, // Would need topics API
     activeCourses: teacherCourses?.data?.filter((course: ICourse) => course.status).length || 0,
   };
@@ -60,7 +65,6 @@ export default function DashboardTeacherView() {
           description={t('created')}
           color="default"
           onClick={() => router.push(paths.COURSES)}
-          progress={80}
         />
         <StatCard
           title={t('students')}
@@ -68,7 +72,6 @@ export default function DashboardTeacherView() {
           icon={IconUsers}
           description={t('totalRegistrations')}
           color="success"
-          progress={65}
         />
         <StatCard
           title={t('pendingTopics')}
@@ -83,7 +86,6 @@ export default function DashboardTeacherView() {
           icon={IconTrendingUp}
           description={t('inProgress')}
           color="success"
-          progress={90}
         />
       </div>
 
@@ -97,8 +99,8 @@ export default function DashboardTeacherView() {
             <h3 className="text-2xl font-bold">{t('myCourses')}</h3>
             <p className="text-muted-foreground">{t('manageTrackCourses')}</p>
           </div>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => router.push(paths.COURSES)}
             className="hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700"
           >
@@ -109,13 +111,8 @@ export default function DashboardTeacherView() {
 
         {teacherCourses?.data && teacherCourses.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {teacherCourses.data.slice(0, 6).map((course: ICourse) => (
-              <CourseCard 
-                key={course.id} 
-                course={course} 
-                variant="teacher"
-                gradientColor="from-indigo-500 to-purple-500"
-              />
+            {teacherCourses.data.slice(0, 3).map((course: ICourse) => (
+              <CardCourse key={course.id} course={course} />
             ))}
           </div>
         ) : (
@@ -124,16 +121,13 @@ export default function DashboardTeacherView() {
       </div>
 
       {/* Teaching Analytics */}
-      <TeachingAnalytics 
+      <TeachingAnalytics
         stats={{
           totalStudents: stats.totalStudents,
           activeCourses: stats.activeCourses,
           pendingTopics: stats.pendingTopics,
         }}
       />
-
-      {/* Recent Activity */}
-      <RecentActivity variant="teacher" />
     </div>
   );
-} 
+}

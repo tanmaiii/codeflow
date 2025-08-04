@@ -15,7 +15,7 @@ import topicService from '@/services/topic.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CourseTopicsUpdate from './Update';
 import CourseTopicsCreate from './Create';
+import { useUserStore } from '@/stores/user_store';
 
 export default function TopicsTable() {
   const params = useParams();
@@ -37,11 +38,12 @@ export default function TopicsTable() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const router = useRouter();
+  const { user } = useUserStore();
 
   const { data: topicsData } = useQ_Topic_GetAllByCourseId({
     params: {
       page: page,
-      limit: 2,
+      limit: 10,
       courseId: params?.id as string,
     },
   });
@@ -67,7 +69,7 @@ export default function TopicsTable() {
         cell: ({ row }) => (
           <Link href={`${paths.TOPICS_DETAIL(row.original.id)}`}>{row.original.title}</Link>
         ),
-        size: 100,
+        size: 200,
       },
       {
         header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
@@ -137,6 +139,8 @@ export default function TopicsTable() {
       </div>
     );
   };
+
+  if (user?.id !== course?.data?.authorId) return notFound();
 
   return (
     <Card className="p-6 flex flex-col gap-4 min-h-[calc(100vh-100px)]">

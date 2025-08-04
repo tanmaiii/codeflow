@@ -1,21 +1,22 @@
 'use client';
+import CardCourse from '@/components/common/CardCourse/CardCourse';
+import { DashboardFullSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
-import { 
-  IconBook, 
-  IconClock, 
-  IconTrendingUp, 
-  IconTarget,
-  IconArrowRight,
-} from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
 import { paths } from '@/data/path';
-import { useQuery } from '@tanstack/react-query';
+import { ICourse } from '@/interfaces/course';
 import courseService from '@/services/course.service';
 import { useUserStore } from '@/stores/user_store';
-import { ICourse } from '@/interfaces/course';
-import { StatCard, CourseCard, QuickActions, RecentActivity, EmptyState } from './components';
-import { DashboardFullSkeleton } from '@/components/skeletons';
+import {
+  IconArrowRight,
+  IconBook,
+  IconClock,
+  IconTarget,
+  IconTrendingUp,
+} from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { EmptyState, QuickActions, StatCard } from './components';
 
 interface DashboardStats {
   totalCourses: number;
@@ -39,12 +40,13 @@ export default function DashboardStudentView() {
   // Mock statistics - in real app, this would come from API
   const stats: DashboardStats = {
     totalCourses: enrolledCourses?.data?.length || 0,
-    activeCourses: enrolledCourses?.data?.filter((course: ICourse) => {
-      const currentDate = new Date();
-      const startDate = new Date(course.startDate);
-      const endDate = new Date(course.endDate);
-      return currentDate >= startDate && currentDate <= endDate;
-    }).length || 0,
+    activeCourses:
+      enrolledCourses?.data?.filter((course: ICourse) => {
+        const currentDate = new Date();
+        const startDate = new Date(course.startDate);
+        const endDate = new Date(course.endDate);
+        return currentDate >= startDate && currentDate <= endDate;
+      }).length || 0,
     completedTopics: 0, // Would need topics API
     upcomingDeadlines: 0, // Would need deadlines API
   };
@@ -63,7 +65,6 @@ export default function DashboardStudentView() {
           icon={IconBook}
           description={t('enrolled')}
           color="default"
-          progress={75}
         />
         <StatCard
           title={t('activeCourses')}
@@ -71,7 +72,6 @@ export default function DashboardStudentView() {
           icon={IconTrendingUp}
           description={t('currentCourses')}
           color="success"
-          progress={85}
         />
         <StatCard
           title={t('completedTopics')}
@@ -79,7 +79,6 @@ export default function DashboardStudentView() {
           icon={IconTarget}
           description={t('thisTermCompleted')}
           color="success"
-          progress={60}
         />
         <StatCard
           title={t('upcomingDeadlines')}
@@ -100,8 +99,8 @@ export default function DashboardStudentView() {
             <h3 className="text-2xl font-bold">{t('enrolledCourses')}</h3>
             <p className="text-muted-foreground">{t('continueJourney')}</p>
           </div>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => router.push(paths.COURSES)}
             className="hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
           >
@@ -112,22 +111,14 @@ export default function DashboardStudentView() {
 
         {enrolledCourses?.data && enrolledCourses.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {enrolledCourses.data.slice(0, 6).map((course: ICourse) => (
-              <CourseCard 
-                key={course.id} 
-                course={course} 
-                variant="student"
-                gradientColor="from-blue-500 to-indigo-500"
-              />
+            {enrolledCourses.data.slice(0, 3).map((course: ICourse) => (
+              <CardCourse key={course.id} course={course} />
             ))}
           </div>
         ) : (
           <EmptyState variant="student" />
         )}
       </div>
-
-      {/* Recent Activity */}
-      <RecentActivity variant="student" />
     </div>
   );
 }

@@ -5,18 +5,12 @@ import { Notification } from '@/interfaces/notification.interface';
 import { TopicEvaluations } from '@/interfaces/topics.interface';
 import { Service } from 'typedi';
 import { NotificationService } from './notification.service';
-import { SocketService } from './socket.service';
-import { TopicService } from './topic.service';
 import { TopicMemberService } from './topic_member.service';
+import { Op } from 'sequelize';
 
 @Service()
 export class TopicEvaluationsService {
-  constructor(
-    private socketService: SocketService,
-    private notificationService: NotificationService,
-    private topicService: TopicService,
-    private topicMemberService: TopicMemberService,
-  ) {}
+  constructor(private notificationService: NotificationService, private topicMemberService: TopicMemberService) {}
 
   public async findAll(): Promise<TopicEvaluations[]> {
     const allTopicEvaluations: TopicEvaluations[] = await DB.TopicEvaluations.findAll();
@@ -31,6 +25,29 @@ export class TopicEvaluationsService {
     return { count, rows };
   }
 
+  public async findAndCountAllWithPaginationByTopicId(
+    page = 1,
+    pageSize = 10,
+    sortBy = 'created_at',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+    topicId: string,
+    search: string = '',
+  ): Promise<{ count: number; rows: TopicEvaluations[] }> {
+    const offset = (page - 1) * pageSize;
+
+    const { count, rows } = await DB.TopicEvaluations.findAndCountAll({
+      where: {
+        ...(search && { evaluation: { [Op.like]: `%${search}%` } }),
+        topicId,
+      },
+      limit: pageSize == -1 ? undefined : pageSize,
+      offset: pageSize == -1 ? undefined : offset,
+      order: [[sortBy, sortOrder]],
+    });
+    return { count, rows };
+  }
+
+  //Giu
   public async findTopicEvaluationById(topicEvaluationId: string): Promise<TopicEvaluations> {
     const findTopicEvaluation: TopicEvaluations = await DB.TopicEvaluations.findByPk(topicEvaluationId);
     if (!findTopicEvaluation) throw new HttpException(409, "Topic evaluation doesn't exist");
@@ -38,11 +55,13 @@ export class TopicEvaluationsService {
     return findTopicEvaluation;
   }
 
+  //Giu
   public async findTopicEvaluationsByTopicId(topicId: string): Promise<TopicEvaluations[]> {
     const findTopicEvaluations: TopicEvaluations[] = await DB.TopicEvaluations.findAll({ where: { topicId } });
     return findTopicEvaluations;
   }
 
+  //Xoa
   public async findTopicEvaluationsByUserId(userId: string): Promise<TopicEvaluations[]> {
     const findTopicEvaluations: TopicEvaluations[] = await DB.TopicEvaluations.findAll({ where: { userId } });
     return findTopicEvaluations;

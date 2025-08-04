@@ -9,6 +9,7 @@ import { Github } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import TopicsReposCreate from './TopicsReposCreate';
 import { useUserStore } from '@/stores/user_store';
+import { ENUM_STATUS_TOPIC } from '@/constants/enum';
 
 export default function TopicsRepos({ topic }: { topic: ITopic }) {
   const MAX_REPOS = 3;
@@ -37,7 +38,7 @@ export default function TopicsRepos({ topic }: { topic: ITopic }) {
             <TextHeading className="text-lg/4 font-bold">Repositories</TextHeading>
           </div>
 
-          {canAddRepo && (
+          {canAddRepo && topic.status == ENUM_STATUS_TOPIC.APPROVED && (
             <div className="ml-auto">
               <TopicsReposCreate topicId={topic.id} />
             </div>
@@ -75,7 +76,9 @@ export default function TopicsRepos({ topic }: { topic: ITopic }) {
               <Github className="w-8 h-8 text-zinc-400" />
             </div>
             <TextDescription className="text-center text-zinc-500 dark:text-zinc-400">
-              Empty repositories
+              {topic.status != ENUM_STATUS_TOPIC.APPROVED
+                ? 'Waiting for approval'
+                : 'Empty repositories'}
             </TextDescription>
           </div>
         )}

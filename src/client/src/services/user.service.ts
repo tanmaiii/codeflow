@@ -15,6 +15,11 @@ class UserService {
     return res.data;
   }
 
+  async getAllStudent(params: IGetAllQuery): Promise<PaginatedResponseAPIDto<IUser[]>> {
+    const res = await this.client.get('/student', { params });
+    return res.data;
+  }
+
   async getById(id: string): Promise<ResponseAPIDto<IUserSetting>> {
     const res = await this.client.get(`/${id}`);
     return res.data;

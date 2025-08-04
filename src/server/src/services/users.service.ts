@@ -38,6 +38,35 @@ export class UserService {
     return { rows, count };
   }
 
+  public async findAllStudentWithPagination(
+    page: number,
+    limit: number,
+    sortBy: string,
+    order: 'ASC' | 'DESC',
+    search?: string,
+  ): Promise<{ rows: User[]; count: number }> {
+    const whereCondition = search
+      ? {
+          [Op.or]: [{ name: { [Op.like]: `%${search}%` } }, { email: { [Op.like]: `%${search}%` } }, { username: { [Op.like]: `%${search}%` } }],
+        }
+      : {};
+
+    const { count, rows }: { count: number; rows: User[] } = await DB.Users.findAndCountAll({
+      where: {
+        ...whereCondition,
+        role: 'user',
+        status: 'active',
+      },
+      offset: limit == -1 ? undefined : (page - 1) * limit,
+      limit: limit == -1 ? undefined : limit,
+      order: [[sortBy, order]],
+      distinct: true,
+      col: 'users.id',
+    });
+
+    return { rows, count };
+  }
+
   public async findUserById(userId: string): Promise<User> {
     const findUser: User = await DB.Users.findOne({
       where: { id: userId },

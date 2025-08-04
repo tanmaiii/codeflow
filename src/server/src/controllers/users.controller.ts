@@ -36,6 +36,32 @@ export class UserController {
     }
   };
 
+  public getStudents = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', search } = req.query;
+      const { rows, count }: { rows: User[]; count: number } = await this.user.findAllStudentWithPagination(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        search ? String(search) : undefined,
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getMe = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const findOneUserData: User = await this.user.findUserById(req.user.id);
@@ -107,17 +133,17 @@ export class UserController {
     try {
       const socketService = Container.get(SocketService);
       const onlineUserIds = socketService.getOnlineUsers();
-      
+
       // Get user details for online users
       const onlineUsers = await Promise.all(
-        onlineUserIds.map(async (userId) => {
+        onlineUserIds.map(async userId => {
           try {
             return await this.user.findUserById(userId);
           } catch (error) {
             // User might be deleted but still in online list
             return null;
           }
-        })
+        }),
       );
 
       // Filter out null values (deleted users)
@@ -127,10 +153,10 @@ export class UserController {
         success: true,
         message: 'Online users retrieved successfully',
         data: validOnlineUsers,
-        count: validOnlineUsers.length
+        count: validOnlineUsers.length,
       });
     } catch (error) {
       next(error);
     }
-  }
+  };
 }

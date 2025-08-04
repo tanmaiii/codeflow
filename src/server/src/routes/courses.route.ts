@@ -1,6 +1,6 @@
 import { CourseController } from '@/controllers/courses.controller';
 import { GetAllQueryDto } from '@/dtos/common.dto';
-import { CreateCourseDto, JoinCourseDto } from '@/dtos/courses.dto';
+import { AddCourseDto, CreateCourseDto, JoinCourseDto } from '@/dtos/courses.dto';
 import { AuthMiddleware, isTeacherOrAdmin } from '@/middlewares/auth.middleware';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
 import { Routes } from '@interfaces/routes.interface';
@@ -18,8 +18,9 @@ export class CourseRoute implements Routes {
   private initializeRoutes() {
     // Course enrollment routes
     this.router.post(`${this.path}/:id/join`, AuthMiddleware, ValidationMiddleware(JoinCourseDto, 'body'), this.course.joinCourse);
-    this.router.get(`${this.path}/:id/check`, AuthMiddleware, this.course.checkEnrollment);
+    this.router.get(`${this.path}/:id/check/:userId`, AuthMiddleware, this.course.checkEnrollment);
     this.router.get(`${this.path}/:id/members`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getMembersByCourseId);
+    this.router.post(`${this.path}/:id/members`, isTeacherOrAdmin, ValidationMiddleware(AddCourseDto, 'body'), this.course.addMembersByCourseId);
 
     // Course listing routes
     this.router.get(`${this.path}/registered`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getRegisteredCourses);

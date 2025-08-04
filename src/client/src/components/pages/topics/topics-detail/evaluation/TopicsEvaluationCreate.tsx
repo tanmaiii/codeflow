@@ -3,7 +3,7 @@ import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput
 import { Button } from '@/components/ui/button';
 import { ITopic } from '@/interfaces/topic';
 import { evaluationSchemaType, useEvaluationSchema } from '@/lib/validations/evaluationSchema';
-import topicService from '@/services/topic.service';
+import topicEvaluationService from '@/services/topic_evaluation.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { IconMessageCircle, IconPlus, IconStar } from '@tabler/icons-react';
@@ -31,7 +31,10 @@ export default function TopicsEvaluationCreate({ topic }: { topic: ITopic }) {
   const mutation = useMutation({
     mutationFn: async (data: evaluationSchemaType) => {
       try {
-        return await topicService.createEvaluation(topic.id, data);
+        return topicEvaluationService.create({
+          evaluation: data.evaluation,
+          topicId: topic.id,
+        });
       } catch (error) {
         throw error;
       }
@@ -40,7 +43,7 @@ export default function TopicsEvaluationCreate({ topic }: { topic: ITopic }) {
       toast.success(tCommon('createSuccess'));
       reset();
       closeRef.current?.click();
-      queryClient.invalidateQueries({ queryKey: ['topic', 'detail', topic.id] });
+      queryClient.invalidateQueries({ queryKey: ['evaluations', 'topic', topic?.id], });
     },
     onError: error => {
       console.error('Error creating evaluation:', error);

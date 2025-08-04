@@ -81,14 +81,14 @@ export interface ITopicUpdateDto {
 
 export interface ITopicEvaluationCreateDto {
   evaluation: string;
+  topicId: string;
 }
 
 export interface ITopicEvaluationUpdateDto {
   evaluation: string;
+  topicId: string;
 }
-
 
 export interface IGetAllTopicParams extends IGetAllQuery {
   status?: string;
 }
-

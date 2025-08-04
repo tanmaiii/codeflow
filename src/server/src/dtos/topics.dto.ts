@@ -90,6 +90,7 @@ export class CreateTopicEvaluationDto {
   @IsString()
   @IsNotEmpty()
   public evaluation: string;
+  public topicId: string;
 }
 
 export class GetTopicAllDto extends GetAllQueryDto {

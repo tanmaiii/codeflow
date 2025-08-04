@@ -203,6 +203,7 @@ export class TopicService {
     return createdTopic;
   }
 
+  // Đăng ký bằng chủ đề của teacher
   public async updateTopic(id: string, topicData: Partial<TopicCreate>, isAdmin = false): Promise<Topic> {
     if (isEmpty(id)) throw new HttpException(400, 'TopicId is empty');
 
@@ -229,7 +230,7 @@ export class TopicService {
           this.topicMemberService.createTopicMember({
             topicId: topic.id,
             userId: memberId,
-            role: authorId === memberId ? 'leader' : 'member',
+            role: topicData.authorId === memberId ? 'leader' : 'member',
           }),
         ),
       );

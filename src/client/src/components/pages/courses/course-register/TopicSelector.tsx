@@ -26,19 +26,18 @@ interface TopicSelectorProps {
 }
 
 // Chọn chủ đề
-export default function TopicSelector({
-  onSelect,
-  courseId,
-}: TopicSelectorProps) {
+export default function TopicSelector({ onSelect, courseId }: TopicSelectorProps) {
   const tCommon = useTranslations('common');
   const [page, setPage] = useState(1);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [search, setSearch] = useState('');
   const { data: topicsData } = useQ_Topic_GetAllByCourseId({
     params: {
       page: page,
       limit: 10,
       courseId: courseId,
       isCustom: false,
+      search: search
     },
   });
 
@@ -50,7 +49,7 @@ export default function TopicSelector({
         cell: ({ row }) => (
           <Link href={`${paths.TOPICS_DETAIL(row.original.id)}`}>{row.original.title}</Link>
         ),
-        size: 100,
+        size: 200,
       },
       {
         header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
@@ -120,7 +119,8 @@ export default function TopicSelector({
         <DataTable
           columns={columns}
           data={topicsData?.data || []}
-          fieldFilter="title"
+          searchValue={search}
+          onSearchChange={(value) => setSearch(value)}
           pagination={false}
           showIndexColumn={true}
           renderActions={({ row }) => {

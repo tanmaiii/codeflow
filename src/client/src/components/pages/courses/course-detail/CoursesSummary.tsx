@@ -96,7 +96,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
             </div>
 
             <Link
-              href={paths.COURSE_MEMBER(course.id)}
+              href={isOwner ? paths.COURSE_MEMBER(course.id) : ''}
               className="text-center p-3 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/80 border border-emerald-200/50 dark:from-emerald-900/30 dark:to-emerald-800/20 dark:border-emerald-700/30 hover:shadow-md transition-all duration-200 hover:scale-105"
             >
               <div className="flex justify-center mb-2">
@@ -113,7 +113,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
             </Link>
 
             <Link
-              href={paths.COURSE_TOPICS(course.id)}
+              href={isOwner ? paths.COURSE_TOPICS(course.id) : ''}
               className="text-center p-3 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/80 border border-purple-200/50 dark:from-purple-900/30 dark:to-purple-800/20 dark:border-purple-700/30 hover:shadow-md transition-all duration-200 hover:scale-105"
             >
               <div className="flex justify-center mb-2">
@@ -147,7 +147,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
               <TextDescription className="text-sm text-red-700 dark:text-red-300">
                 {t('courseExpired')}
               </TextDescription>
-            ) : (
+            ) : !isOwner && (
               <Button
                 className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 dark:from-emerald-500 dark:to-emerald-600 dark:hover:from-emerald-600 dark:hover:to-emerald-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
                 onClick={() => router.push(paths.COURSE_REGISTER(course.id))}

@@ -4,10 +4,7 @@ import {
   IGetAllTopicParams,
   ITopic,
   ITopicCreateDto,
-  ITopicEvaluation,
-  ITopicEvaluationCreateDto,
-  ITopicEvaluationUpdateDto,
-  ITopicStats,
+  ITopicStats
 } from '@/interfaces/topic';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
@@ -85,30 +82,30 @@ class TopicService {
     return res.data;
   }
 
-  async createEvaluation(
-    id: string,
-    data: ITopicEvaluationCreateDto,
-  ): Promise<ResponseAPIDto<ITopicEvaluation>> {
-    const res = await this.client.post(`/${id}/evaluations`, data);
-    return res.data;
-  }
+  // async createEvaluation(
+  //   id: string,
+  //   data: ITopicEvaluationCreateDto,
+  // ): Promise<ResponseAPIDto<ITopicEvaluation>> {
+  //   const res = await this.client.post(`/${id}/evaluations`, data);
+  //   return res.data;
+  // }
 
-  async updateEvaluation(
-    topicId: string,
-    evaluationId: string,
-    data: ITopicEvaluationUpdateDto,
-  ): Promise<ResponseAPIDto<ITopicEvaluation>> {
-    const res = await this.client.put(`/${topicId}/evaluations/${evaluationId}`, data);
-    return res.data;
-  }
+  // async updateEvaluation(
+  //   topicId: string,
+  //   evaluationId: string,
+  //   data: ITopicEvaluationUpdateDto,
+  // ): Promise<ResponseAPIDto<ITopicEvaluation>> {
+  //   const res = await this.client.put(`/${topicId}/evaluations/${evaluationId}`, data);
+  //   return res.data;
+  // }
 
-  async deleteEvaluation(
-    topicId: string,
-    evaluationId: string,
-  ): Promise<ResponseAPIDto<ITopicEvaluation>> {
-    const res = await this.client.delete(`/${topicId}/evaluations/${evaluationId}`);
-    return res.data;
-  }
+  // async deleteEvaluation(
+  //   topicId: string,
+  //   evaluationId: string,
+  // ): Promise<ResponseAPIDto<ITopicEvaluation>> {
+  //   const res = await this.client.delete(`/${topicId}/evaluations/${evaluationId}`);
+  //   return res.data;
+  // }
 }
 
 export default new TopicService() as TopicService;

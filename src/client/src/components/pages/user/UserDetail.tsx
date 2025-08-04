@@ -46,7 +46,11 @@ export default function UserDetail({ user }: { user: IUser }) {
             <TextDescription className="text-gray-500"></TextDescription>
           </div>
         </div>
-        <div className="flex flex-row items-center gap-2 mt-2">
+        <div className="flex flex-row gap-1 items-center mt-2">
+          <Pen className="text-color-2" size={16} />
+          <TextDescription>{user?.bio}</TextDescription>
+        </div>
+        <div className="flex flex-row items-center gap-2">
           <IconMail className="text-color-2" size={16} />
           <TextDescription>{user?.email}</TextDescription>
         </div>
@@ -73,10 +77,7 @@ export default function UserDetail({ user }: { user: IUser }) {
                 <TextDescription>repositories</TextDescription>
               </div>
             </div>
-            <div className="flex flex-row gap-1 items-center mt-2">
-              <Pen className="text-color-2" size={16} />
-              <TextDescription>{user?.bio}</TextDescription>
-            </div>
+
             <Button variant="outline" size="icon" className="w-full mt-4">
               <Link
                 href={`https://github.com/${GitHubUser?.login}`}

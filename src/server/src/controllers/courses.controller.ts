@@ -4,18 +4,22 @@ import { CommentService } from '@/services/comment.service';
 import { CourseEnrollmentService } from '@/services/course_enrollment.service';
 import { CourseService } from '@/services/courses.service';
 import { ENUM_USER_ROLE } from '@/data/enum';
+import { HttpException } from '@/exceptions/HttpException';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
+import { UserService } from '@/services/users.service';
 
 export class CourseController {
   private readonly course: CourseService;
   private readonly comment: CommentService;
   private readonly courseEnrollment: CourseEnrollmentService;
+  private readonly user: UserService;
 
   constructor() {
     this.course = Container.get(CourseService);
     this.comment = Container.get(CommentService);
     this.courseEnrollment = Container.get(CourseEnrollmentService);
+    this.user = Container.get(UserService);
   }
 
   private createPaginationResponse(count: number | string, page: number | string, limit: number | string) {
@@ -145,6 +149,29 @@ export class CourseController {
     }
   };
 
+  public addMembersByCourseId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const course = await this.course?.findCourseById(req?.params?.id);
+      if (!course) throw new HttpException(404, 'Course not found');
+
+      const user = await this.user?.findUserById(req.body?.memberId);
+      if (!user) throw new HttpException(404, 'User not found');
+
+      const enrollments = await this.courseEnrollment.findEnrollmentByCourseId(req.params.id);
+
+      if (enrollments.some(enrollment => enrollment.userId === req.body?.memberId)) throw new HttpException(400, 'User already in course');
+
+      await this.courseEnrollment.createEnrollment({ courseId: req.params?.id, userId: req.body?.memberId });
+
+      res.status(200).json({
+        data: user,
+        message: 'addMember',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getCourseById = async (req: Request, res: Response, next: NextFunction) => {
     await this.handleRequest(req, res, next, async () => {
       const isAdmin = (req as any).user?.role === ENUM_USER_ROLE.ADMIN;
@@ -159,9 +186,10 @@ export class CourseController {
   };
 
   public checkEnrollment = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    const userId = req.params?.userId;
     await this.handleRequest(req, res, next, async () => {
       const enrollments = await this.courseEnrollment.findEnrollmentByCourseId(req.params.id);
-      return enrollments.some(enrollment => enrollment.userId === req.user.id);
+      return enrollments.some(enrollment => enrollment.userId === (userId ? userId : req.user.id));
     });
   };
 

@@ -20,6 +20,7 @@ import { CodeAnalysisRoute } from './routes/code_analysis.route';
 import { CommitRoute } from './routes/commit.route';
 import { PullRequestsRoute } from './routes/pull_requests.route';
 import { ReviewsAIRoute } from './routes/reviews_ai.route';
+import { TopicEvaluationRoute } from './routes/topic_evaluation.route';
 ValidateEnv();
 
 const app = new App([
@@ -33,6 +34,7 @@ const app = new App([
   new TagRoute(),
   new CommentRoute(),
   new TopicRoute(),
+  new TopicEvaluationRoute(),
   new GitHubRoute(),
   new NotificationRoute(),
   new SearchRoute(),
