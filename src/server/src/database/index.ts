@@ -14,14 +14,12 @@ import PostModel from '@/models/posts.model';
 import PullRequestsModel from '@/models/pull_requests.model';
 import ReposModel from '@/models/repos.model';
 import ReviewAIModel from '@/models/reviews_ai.model';
-import SubmissionModel from '@/models/submissions.model';
 import SystemSettingsModel from '@/models/system_settings.model';
 import TagModel from '@/models/tags.model';
 import TopicEvaluationsModel from '@/models/topic_evaluations.model';
 import TopicMemberModel from '@/models/topic_member.mode';
 import TopicTagModel from '@/models/topic_tag.model';
 import TopicModel from '@/models/topics.model';
-import { logger } from '@/utils/logger';
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER, NODE_ENV } from '@config';
 import UserSettingsModel from '@models/user_settings.model';
 import UserModel from '@models/users.model';
@@ -57,7 +55,7 @@ export const DB = {
   Posts: PostModel(sequelize),
   Courses: CourseModel(sequelize),
   Topics: TopicModel(sequelize),
-  Submission: SubmissionModel(sequelize),
+  // Submission: SubmissionModel(sequelize),
   Comments: CommentModel(sequelize),
   Tags: TagModel(sequelize),
   CourseTag: CourseTagModel(sequelize),

@@ -1,12 +1,22 @@
-# 📌 Hệ thống Theo Dõi Dự Án Phần Mềm Làm Việc Nhóm Của Sinh Viên Qua GitHub Action
+# 📌 CodeFlow - Hệ Thống Quản Lý Dự Án Phần Mềm Tích Hợp GitHub
 
 ## 🔗 Yêu cầu đề tài
 
-Hệ thống đăng ký đề tài, thành viên nhóm, cho phép SV nộp bài qua GitHub, sử dụng GitHub Action để đánh giá chất lượng mã tĩnh sử dụng GitHub API để đếm số lần nộp bài của mỗi thành viên, đánh giá đóng góp của mỗi thành viên, xây dựng dashboard thể hiện đóng góp.
+Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tích hợp GitHub để theo dõi tiến độ, đánh giá chất lượng mã nguồn tự động, và cung cấp dashboard phân tích đóng góp chi tiết của từng thành viên nhóm.
 
 ## 📖 Giới thiệu
 
-Hệ thống hỗ trợ giảng viên và sinh viên theo dõi tiến độ dự án phần mềm làm việc nhóm thông qua GitHub. Sinh viên đăng nhập bằng GitHub OAuth, nộp bài qua repository riêng, hệ thống tự động kiểm tra chất lượng mã nguồn qua GitHub Actions và thống kê đóng góp của từng thành viên nhóm.
+**CodeFlow** là nền tảng quản lý dự án phần mềm hiện đại được thiết kế dành riêng cho môi trường giáo dục. Hệ thống tích hợp sâu với GitHub để cung cấp trải nghiệm quản lý dự án liền mạch, từ việc tạo môn học, phân công đề tài đến theo dõi tiến độ và đánh giá chất lượng mã nguồn tự động.
+
+> ### 🤖 **Tính năng nổi bật: AI Code Review với Google Gemini**
+> 
+> **CodeFlow** tích hợp **Google Gemini 1.5 Flash AI** để review code tự động! 
+> 
+> - ✨ **AI review Pull Request** bằng tiếng Việt
+> - 🎯 **Chấm điểm 0-10** cho chất lượng code  
+> - 💬 **Comment trực tiếp** trên GitHub PR
+> - 🔍 **Phân tích đa chiều**: Bug, Security, Performance, Readability
+> - 🚀 **One-click review** - Click và AI sẽ analyze toàn bộ PR
 
 ---
 
@@ -22,50 +32,140 @@ Hệ thống hỗ trợ giảng viên và sinh viên theo dõi tiến độ dự
 
 ## 🛠️ Công nghệ sử dụng
 
-- **Backend**: Node.js, Express.js, Sequelize (MySQL)
-- **Frontend**: Next.js
-- **Authentication**: GitHub OAuth
-- **Tự động kiểm tra mã**: GitHub Actions
-- **Realtime dữ liệu**: Webhook GitHub
-- **API**: RESTful API
-- **Triển khai**: Railway / Vercel / Render
-- **Đánh giá chất lượng mã tĩnh** : SonarCloud 
+### Backend
+- **Runtime**: Node.js với TypeScript
+- **Framework**: Express.js
+- **Database**: MySQL với Sequelize ORM
+- **Authentication**: GitHub OAuth 2.0
+- **API**: RESTful API với Swagger documentation
+- **Real-time**: GitHub Webhooks
+
+### Frontend
+- **Framework**: Next.js 14 với TypeScript
+- **Styling**: Tailwind CSS + Shadcn/ui
+- **State Management**: React Query (TanStack Query)
+- **Internationalization**: next-intl (Tiếng Việt, English, Japanese)
+- **Charts**: Recharts, Chart.js
+- **Rich Text Editor**: TipTap
+
+### GitHub Integration & AI
+- **GitHub API**: Repositories, Commits, Pull Requests
+- **GitHub Actions**: Automated CI/CD workflows
+- **GitHub Webhooks**: Real-time event processing
+- **🤖 Google Gemini AI**: Advanced AI code review và analysis
+- **Code Analysis**: SonarCloud + Gemini AI dual analysis
+- **Intelligent Code Review**: AI-powered suggestions và feedback
+
+### DevOps & Deployment
+- **Containerization**: Docker
+- **Deployment**: Railway / Vercel / Render
+- **Environment**: Docker Compose for development 
 
 ---
 
 ## 📌 Các chức năng chính
 
-### 👩‍🏫 Vai trò Giảng viên
+### 🔐 Hệ thống Xác thực & Phân quyền
+- **GitHub OAuth**: Đăng nhập bằng tài khoản GitHub
+- **Multi-role system**: Admin, Teacher, Student
+- **Permission management**: Phân quyền chi tiết theo vai trò
+- **Session management**: Quản lý phiên đăng nhập an toàn
 
-- Tạo môn học.
-- Tạo sẵn đề tài cho môn học.
-- Xem danh sách sinh viên, nhóm, đề tài.
-- Theo dõi tiến độ và thống kê đóng góp từng nhóm, từng sinh viên.
+### 👩‍🏫 Dashboard Giảng viên
+- **Course Management**: Tạo, chỉnh sửa, quản lý môn học
+- **Topic Management**: Tạo đề tài, phân công nhóm
+- **Student Oversight**: Theo dõi sinh viên, quản lý thành viên
+- **Progress Tracking**: Giám sát tiến độ dự án real-time
+- **Analytics Dashboard**: Thống kê đóng góp, hiệu suất nhóm
+- **Code Quality Reports**: Báo cáo chất lượng mã tự động
+- **Evaluation System**: Hệ thống đánh giá dự án
 
-### 👨‍🎓 Vai trò Sinh viên
+### 👨‍🎓 Portal Sinh viên
+- **Course Registration**: Đăng ký môn học, xem thông tin khóa học
+- **Topic Selection**: Chọn đề tài có sẵn hoặc đề xuất đề tài mới
+- **Team Formation**: Tạo nhóm, mời thành viên, quản lý team
+- **Repository Integration**: Kết nối GitHub repository với dự án
+- **Progress Dashboard**: Theo dõi tiến độ cá nhân và nhóm
+- **Contribution Analytics**: Xem thống kê đóng góp chi tiết
+- **Code Quality Metrics**: Theo dõi chất lượng mã của nhóm
 
-- Đăng nhập bằng tài khoản GitHub.
-- Xem danh sách môn học, đề tài.
-- Đăng ký đề tài có sẵn hoặc đề xuất đề tài mới.
-- Tạo nhóm và thêm thành viên.
-- Nộp bài bằng cách commit/pull request lên repository.
-- Theo dõi đóng góp bản thân và nhóm qua dashboard.
+### 🏢 Quản trị Hệ thống (Admin)
+- **User Management**: Quản lý người dùng toàn hệ thống
+- **System Settings**: Cấu hình hệ thống, parameters
+- **Content Moderation**: Kiểm duyệt bài viết, comments
+- **Analytics Overview**: Tổng quan thống kê toàn hệ thống
+- **Tag Management**: Quản lý tags, categories
+- **Notification System**: Hệ thống thông báo tập trung
+
+### 📊 GitHub Integration & Analytics
+- **Repository Tracking**: Theo dõi repositories tự động
+- **Commit Analysis**: Phân tích commits, tracking contributions
+- **Pull Request Management**: Quản lý PR với AI-powered review
+- **🤖 Gemini AI Code Review**: Tự động review PR bằng Google Gemini AI
+- **Code Quality Assessment**: Đánh giá chất lượng mã tự động với scoring
+- **Intelligent Comments**: AI comment trực tiếp trên GitHub PR
+- **Contributor Statistics**: Thống kê đóng góp từng thành viên
+- **Activity Timeline**: Timeline hoạt động development
+- **Workflow Automation**: Tự động hóa quy trình với GitHub Actions
+
+### 💬 Social & Communication Features
+- **Discussion Posts**: Hệ thống bài viết, thảo luận
+- **Comment System**: Bình luận đa cấp với mentions
+- **Notification Center**: Trung tâm thông báo real-time
+- **User Profiles**: Hồ sơ người dùng với GitHub integration
+- **Activity Feed**: Luồng hoạt động cập nhật
+
+### 🔍 Search & Discovery
+- **Advanced Search**: Tìm kiếm nâng cao courses, topics, posts
+- **Tag-based Filtering**: Lọc content theo tags
+- **User Search**: Tìm kiếm người dùng, members
+- **Content Discovery**: Khám phá nội dung liên quan
+
+### ⚙️ System Features
+- **Multi-language Support**: Hỗ trợ đa ngôn ngữ (VI, EN, JP)
+- **Responsive Design**: Giao diện responsive mọi thiết bị
+- **Dark/Light Mode**: Chế độ sáng/tối
+- **File Management**: Upload, quản lý files
+- **Data Export**: Xuất báo cáo, thống kê
+- **Backup & Recovery**: Sao lưu và khôi phục dữ liệu
 
 ---
 
-## ⚙️ Quy trình thực hiện
+## ⚙️ Kiến trúc Hệ thống
 
-- **Cài đặt môi trường**: Thiết lập Next.js, Express.js, MySQL, Sequelize và công cụ kiểm tra mã.
-- **Xây dựng hệ thống**:
-  - Phát triển backend, frontend theo thiết kế.
-  - Tích hợp OAuth GitHub, webhook, API lấy commit.
-  - Thiết lập GitHub Actions kiểm tra chất lượng mã nguồn.
-- **Kiểm thử**:
-  - Kiểm tra từng tính năng độc lập.
-  - Kiểm thử luồng đăng nhập, nộp bài, thống kê đóng góp và kiểm tra mã.
-- **Triển khai thử nghiệm**:
-  - Demo hệ thống cho nhóm sinh viên, giảng viên sử dụng thử.
-  - Ghi nhận phản hồi, chỉnh sửa và tối ưu.
+### 🏗️ Architecture Overview
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Next.js UI    │────│  Express API    │────│   MySQL DB      │
+│   (Frontend)    │    │   (Backend)     │    │   (Database)    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         │              ┌─────────────────┐              │
+         └──────────────│  GitHub API     │──────────────┘
+                        │  & Webhooks     │
+                        └─────────────────┘
+```
+
+### 📂 Database Schema
+- **Users**: Thông tin người dùng, GitHub integration
+- **Courses**: Môn học, metadata, settings
+- **Topics**: Đề tài dự án, requirements, deadlines
+- **Repositories**: GitHub repos liên kết với topics
+- **Commits**: Tracking commits từ GitHub
+- **CodeAnalysis**: Kết quả phân tích chất lượng mã
+- **PullRequests**: Quản lý pull requests
+- **Comments**: Hệ thống bình luận đa cấp
+- **Posts**: Bài viết, thảo luận
+- **Tags**: Tagging system cho content
+- **Notifications**: Hệ thống thông báo
+
+### 🔧 Development Workflow
+1. **Environment Setup**: Docker-based development environment
+2. **Code Development**: TypeScript với strict type checking
+3. **Testing**: Unit tests, integration tests
+4. **Code Quality**: ESLint, Prettier, SonarCloud
+5. **CI/CD**: GitHub Actions cho automated testing
+6. **Deployment**: Containerized deployment
 
 ---
 
@@ -125,12 +225,31 @@ Hệ thống hỗ trợ giảng viên và sinh viên theo dõi tiến độ dự
 - Khi sinh viên push code hoặc tạo pull request, GitHub gửi webhook về hệ thống
 - Hệ thống ghi nhận thời gian nộp bài, commit, người thực hiện
 
-## 5. Đánh giá tự động qua GitHub Action
+## 5. Đánh giá tự động đa tầng
+
+### 🤖 AI Code Review với Gemini
+Hệ thống tích hợp **Google Gemini 1.5 Flash** để review code tự động:
+- **Trigger thủ công**: Giảng viên/sinh viên click nút "AI Review" trên PR
+- **Smart Analysis**: AI phân tích diff code và đưa ra nhận xét chi tiết
+- **Vietnamese Commentary**: AI comment bằng tiếng Việt dễ hiểu
+- **Scoring System**: Chấm điểm 0-10 cho chất lượng tổng thể
+- **GitHub Integration**: Comment trực tiếp lên PR trên GitHub
+
+### 🔧 GitHub Actions Workflow
 GitHub Actions được kích hoạt để:
-- Kiểm thử (unit test)
-- Kiểm tra coding convention (ESLint)
-- Phân tích chất lượng code (SonarCloud)
-- Kết quả được gửi lại cho hệ thống để lưu trữ và hiển thị
+- **Unit Testing**: Kiểm thử tự động
+- **Code Linting**: ESLint, Prettier formatting
+- **Security Scan**: Vulnerability detection
+- **SonarCloud Analysis**: Static code analysis
+- **Performance Testing**: Load testing cho web apps
+- **Build Verification**: Đảm bảo code compile thành công
+
+### 📊 Dual Analysis System
+Kết hợp cả **AI Review** và **Static Analysis**:
+- **Gemini AI**: Đánh giá logic, best practices, security patterns
+- **SonarCloud**: Technical debt, code smells, complexity metrics
+- **Combined Scoring**: Điểm tổng hợp từ nhiều nguồn
+- **Detailed Reports**: Báo cáo chi tiết cho giảng viên và sinh viên
 ### C1: Xinh quyền OAuth + Repository access
 - Khi sinh viên đăng nhập bằng GitHub, yêu cầu quyền:
 
@@ -145,24 +264,252 @@ GitHub Actions được kích hoạt để:
 
 - Khi họ push code, GitHub Action tự chạy đánh giá và gửi kết quả về server qua webhook.
 
-## 6. Thống kê và hiển thị kết quả
-Hệ thống sử dụng GitHub API để:
-- Đếm số commit, pull request của từng thành viên
-- Hiển thị ai đóng góp nhiều/lần cuối cùng
+## 6. Analytics & Reporting Engine
+Hệ thống cung cấp analytics toàn diện với:
 
-Dashboard giảng viên cho phép:
-- Xem thống kê theo đề tài, nhóm, sinh viên
-- Tải báo cáo tổng hợp nếu cần
+### 📈 Student Analytics
+- **Contribution Metrics**: Lines of code, commits, PRs
+- **Activity Patterns**: Thời gian làm việc, frequency
+- **Code Quality Trends**: Improvement over time
+- **Collaboration Index**: Interaction với team members
 
-## 7. Đánh giá và nghiệm thu
-Dựa vào kết quả thống kê và chất lượng code tự động, giảng viên đánh giá:
-- Đóng góp từng thành viên
-- Tình trạng hoàn thành đề tài
-- Chất lượng kỹ thuật
+### 👥 Team Analytics  
+- **Team Performance**: Collective metrics, velocity
+- **Member Comparison**: Relative contributions
+- **Collaboration Network**: Team interaction patterns
+- **Progress Tracking**: Milestone completion rates
+
+### 🏫 Course Analytics
+- **Class Performance**: Overall course statistics
+- **Topic Difficulty**: Success rates per topic
+- **Engagement Metrics**: Student participation levels
+- **Resource Utilization**: Popular topics, tools
+
+### 📊 Real-time Dashboards
+- **Live Activity Feeds**: Real-time commit streams
+- **Interactive Charts**: Recharts-based visualizations
+- **Filterable Reports**: Time range, member, topic filters
+- **Export Capabilities**: PDF, CSV, JSON formats
+
+## 7. Automated Assessment System
+Hệ thống đánh giá tự động đa chiều:
+
+### 🤖 Code Quality Assessment
+- **Static Analysis**: SonarCloud integration
+- **Code Coverage**: Test coverage tracking  
+- **Security Scan**: Vulnerability detection
+- **Performance Metrics**: Code efficiency analysis
+
+### 📝 AI-Powered Code Review với Gemini
+- **🤖 Gemini 1.5 Flash Integration**: Sử dụng Google Gemini AI cho code review
+- **Automated Pull Request Review**: Tự động phân tích và comment trên GitHub PR
+- **Smart Code Analysis**: Đánh giá logic, performance, security, maintainability
+- **Vietnamese Language Support**: AI review và comment bằng tiếng Việt
+- **Scoring System**: Chấm điểm PR từ 0-10 dựa trên chất lượng code
+- **Line-specific Comments**: Comment chi tiết trên từng dòng code có vấn đề
+- **Multi-criteria Evaluation**: 
+  - 🐛 **Bug Detection**: Phát hiện lỗi logic và potential bugs
+  - 🔒 **Security Analysis**: Kiểm tra lỗ hổng bảo mật
+  - ⚡ **Performance Review**: Gợi ý cải thiện hiệu suất
+  - 📖 **Code Readability**: Đánh giá độ dễ đọc và maintainability
+  - 🔧 **Best Practices**: Kiểm tra coding standards và conventions
+
+### 🏆 Grading & Evaluation
+- **Multi-criteria Scoring**: Code quality + contribution + collaboration
+- **Weighted Assessment**: Customizable evaluation criteria
+- **Progress-based Grading**: Continuous assessment model
+- **Peer Review Integration**: Student peer evaluation system
 
 
-### Thêm
-Tìm hiểu sử dụng Github origin
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ và npm/yarn
+- MySQL 8.0+
+- Docker & Docker Compose (optional)
+- GitHub OAuth App credentials
+
+### Installation
+
+```bash
+# Clone repository
+git clone https://github.com/your-org/codeflow.git
+cd codeflow
+
+# Setup backend
+cd src/server
+npm install
+cp .env.example .env
+# Configure database và GitHub OAuth trong .env
+
+# Setup frontend  
+cd ../client
+npm install
+cp .env.example .env.local
+# Configure API endpoints
+
+# Run with Docker Compose
+docker-compose up -d
+
+# Or run manually
+cd src/server && npm run dev
+cd src/client && npm run dev
+```
+
+### GitHub Integration Setup
+1. **GitHub OAuth App**:
+   - Tạo tại https://github.com/settings/applications/new
+   - Callback URL: `http://localhost:3000/api/auth/github/callback`
+   - Copy Client ID và Client Secret vào `.env`
+
+2. **Gemini AI Configuration**:
+   ```bash
+   # Lấy Gemini API key từ Google AI Studio
+   GEMINI_TOKEN=your_gemini_api_key_here
+   ```
+
+3. **GitHub Webhooks**: 
+   - Cấu hình webhook cho repositories cần tracking
+   - Events: `push`, `pull_request`, `pull_request_review`
+
+4. **Repository Permissions**:
+   - Đảm bảo GitHub App có quyền:
+   - `repo`, `pull_requests:write`, `contents:read`
+
+---
+
+## 🤖 Hướng dẫn sử dụng AI Review với Gemini
+
+### 🔧 Cấu hình ban đầu
+
+1. **Admin Configuration**:
+   - Đăng nhập với tài khoản Admin
+   - Vào `Settings > AI Configuration`
+   - Nhập **Gemini API Key** (lấy từ [Google AI Studio](https://aistudio.google.com/))
+   - Test connection để đảm bảo API hoạt động
+
+2. **Repository Setup**:
+   - Đảm bảo repository đã được kết nối với hệ thống
+   - GitHub App cần có quyền `pull_requests:write` để comment
+
+### 📝 Quy trình Review
+
+1. **Tạo Pull Request**:
+   ```bash
+   # Sinh viên tạo branch và push code
+   git checkout -b feature/new-feature
+   git add .
+   git commit -m "Add new feature"
+   git push origin feature/new-feature
+   
+   # Tạo PR trên GitHub
+   ```
+
+2. **Trigger AI Review**:
+   - Vào trang `Repository > Pull Requests` trong hệ thống
+   - Click nút **"🤖 AI Review"** trên PR muốn review
+   - Hệ thống sẽ gửi code diff tới Gemini AI
+
+3. **Kết quả Review**:
+   - **GitHub Comments**: AI sẽ comment trực tiếp trên PR
+   - **Score Display**: Điểm 0-10 hiển thị trên UI
+   - **Summary**: Tóm tắt đánh giá tổng quan
+
+### 🎯 Tiêu chí Đánh giá
+
+AI sẽ phân tích code theo 5 tiêu chí chính:
+
+| Tiêu chí | Mô tả | Ví dụ |
+|----------|--------|-------|
+| 🐛 **Bug Detection** | Phát hiện lỗi logic | Null pointer, off-by-one errors |
+| 🔒 **Security** | Kiểm tra bảo mật | SQL injection, XSS vulnerabilities |
+| ⚡ **Performance** | Tối ưu hiệu suất | Inefficient loops, memory leaks |
+| 📖 **Readability** | Độ dễ đọc | Variable naming, code structure |
+| 🔧 **Best Practices** | Coding standards | Design patterns, conventions |
+
+### 📊 Scoring System
+
+- **9-10**: Excellent - Code chất lượng cao, ít hoặc không có vấn đề
+- **7-8**: Good - Code tốt với một vài cải thiện nhỏ
+- **5-6**: Average - Code ổn nhưng cần cải thiện đáng kể
+- **3-4**: Below Average - Nhiều vấn đề cần sửa
+- **0-2**: Poor - Code có nhiều lỗi nghiêm trọng
+
+### 💡 Tips cho Sinh viên
+
+1. **Trước khi tạo PR**:
+   - Self-review code trước khi push
+   - Viết commit message rõ ràng
+   - Thêm mô tả chi tiết cho PR
+
+2. **Sau khi nhận AI Review**:
+   - Đọc kỹ từng comment của AI
+   - Implement suggestions quan trọng
+   - Push updates và request review lại nếu cần
+
+3. **Best Practices**:
+   - Tạo PR nhỏ, focused (dưới 500 lines)
+   - Viết code comments cho logic phức tạp
+   - Follow team coding standards
+
+### ⚠️ Lưu ý quan trọng
+
+- **Token Limits**: Gemini có giới hạn token, PR quá lớn có thể bị reject
+- **Language**: AI review chủ yếu bằng tiếng Việt
+- **Manual Review**: AI không thay thế hoàn toàn human review
+- **Cost Management**: Admin cần monitor API usage
+
+---
+
+## 📱 Screenshots & Demo
+
+
+### Dashboard Overview
+![Dashboard](docs/images/db.svg)
+
+## 🤝 Contributing
+
+Chúng tôi hoan nghênh mọi đóng góp! Vui lòng đọc [CONTRIBUTING.md](CONTRIBUTING.md) để biết thêm chi tiết.
+
+### Development Guidelines
+1. Fork repository và tạo feature branch
+2. Commit với conventional commits format
+3. Viết tests cho features mới
+4. Đảm bảo pass tất cả tests và linting
+5. Tạo Pull Request với mô tả chi tiết
+
+---
+
+## 🐛 Bug Reports & Feature Requests
+
+- 🐛 **Bug Reports**: Sử dụng [GitHub Issues](https://github.com/your-org/codeflow/issues)
+- 💡 **Feature Requests**: Tạo [Feature Request](https://github.com/your-org/codeflow/issues/new?template=feature_request.md)
+- 📧 **Support**: Email hỗ trợ tại support@codeflow.edu.vn
+
+---
+
+## 📈 Roadmap
+
+### Phase 1 (Completed)
+- [x] Basic course & topic management
+- [x] GitHub OAuth integration
+- [x] Repository tracking
+- [x] Basic analytics dashboard
+
+### Phase 2 (In Progress)  
+- [x] **Gemini AI Code Review**: ✅ Đã hoàn thành
+- [ ] Advanced AI features (GPT-4, Claude integration)
+- [ ] Mobile app development
+- [ ] Integration với LMS platforms (Moodle, Canvas)
+- [ ] Advanced reporting features
+
+### Phase 3 (Planned)
+- [ ] Multi-university support
+- [ ] Blockchain-based certification
+- [ ] Advanced ML analytics
+- [ ] API marketplace for plugins
 
 ## 📌 License
 

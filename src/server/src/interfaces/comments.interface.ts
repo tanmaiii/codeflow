@@ -1,7 +1,7 @@
 export interface Comment {
   id: string;
   content: string;
-  submissionId?: string;
+  // submissionId?: string;
   authorId: string;
   postId?: string;
   courseId?: string;

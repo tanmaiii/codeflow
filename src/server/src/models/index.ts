@@ -40,7 +40,7 @@ export const initModels = () => {
   UserModel.hasMany(CommitsModel, { foreignKey: 'authorId', as: 'commits' });
   UserModel.hasMany(PullRequestsModel, { foreignKey: 'authorId', as: 'pullRequests' });
   UserModel.hasMany(ReviewAIModel, { foreignKey: 'authorId', as: 'reviewsAI' });
-  
+
   // UserSettings Model Relations
   UserSettingsModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
 
@@ -87,7 +87,7 @@ export const initModels = () => {
 
   // Submission Model Relations
   SubmissionModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
-  SubmissionModel.belongsTo(CommentModel, { foreignKey: 'submissionId', as: 'submission' });
+  // SubmissionModel.belongsTo(CommentModel, { foreignKey: 'submissionId', as: 'submission' });
 
   // CourseDocument Model Relations
   CourseDocumentModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });

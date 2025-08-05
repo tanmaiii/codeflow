@@ -2,16 +2,13 @@ import { Comment } from '@/interfaces/comments.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { UserModel } from './users.model';
 
-export type CommentCreationAttributes = Optional<
-  Comment,
-  'id' | 'parentId' | 'status' | 'authorId' | 'submissionId' | 'postId' | 'courseId' | 'content'
->;
+export type CommentCreationAttributes = Optional<Comment, 'id' | 'parentId' | 'status' | 'authorId' | 'postId' | 'courseId' | 'content'>;
 
 export class CommentModel extends Model<Comment, CommentCreationAttributes> implements Comment {
   public id!: string;
   public parentId?: string;
   public authorId!: string;
-  public submissionId?: string;
+  // public submissionId?: string;
   public postIds?: string;
   public courseId?: string;
   public content!: string;
@@ -37,14 +34,14 @@ export default function (sequelize: Sequelize): typeof CommentModel {
           key: 'id',
         },
       },
-      submissionId: {
-        allowNull: true,
-        type: DataTypes.UUID,
-        references: {
-          model: 'submissions',
-          key: 'id',
-        },
-      },
+      // submissionId: {
+      //   allowNull: true,
+      //   type: DataTypes.UUID,
+      //   references: {
+      //     model: 'submissions',
+      //     key: 'id',
+      //   },
+      // },
       authorId: {
         allowNull: true,
         type: DataTypes.UUID,
