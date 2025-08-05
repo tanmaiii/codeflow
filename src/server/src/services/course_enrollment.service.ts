@@ -87,11 +87,22 @@ export class CourseEnrollmentService {
     return updateEnrollment;
   }
 
+  public async deleteEnrollmentByCourseIdAndUserId(courseId: string, userId: string): Promise<CourseEnrollment> {
+    const findEnrollment: CourseEnrollment = await DB.CourseEnrollment.findOne({
+      where: { courseId, userId },
+    });
+    if (!findEnrollment) throw new HttpException(409, "Enrollment doesn't exist");
+
+    await DB.CourseEnrollment.destroy({ where: { courseId, userId } });
+
+    return findEnrollment;
+  }
+
   public async deleteEnrollment(enrollmentId: string): Promise<CourseEnrollment> {
     const findEnrollment: CourseEnrollment = await DB.CourseEnrollment.findByPk(enrollmentId);
     if (!findEnrollment) throw new HttpException(409, "Enrollment doesn't exist");
 
-    await DB.CourseEnrollment.destroy({ where: { courseId: enrollmentId } });
+    // await DB.CourseEnrollment.destroy({ where: { courseId: enrollmentId } });
 
     const softDeletedEnrollment: CourseEnrollment = await DB.CourseEnrollment.findByPk(enrollmentId);
     return softDeletedEnrollment;

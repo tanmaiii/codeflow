@@ -71,7 +71,10 @@ class CourseService {
     return res.data;
   }
 
-  async joinCourse(courseId: string, password: string): Promise<ResponseAPIDto<ICourseEnrollment>> {
+  async joinCourse(
+    courseId: string,
+    password?: string,
+  ): Promise<ResponseAPIDto<ICourseEnrollment>> {
     const res = await this.client.post(`/${courseId}/join`, { password });
     return res.data;
   }
@@ -81,8 +84,11 @@ class CourseService {
     return res.data;
   }
 
-  async leaveCourse(courseId: string): Promise<ResponseAPIDto<ICourseEnrollment>> {
-    const res = await this.client.post(`/${courseId}/leave`);
+  async removeMember(
+    courseId: string,
+    memberId: string,
+  ): Promise<ResponseAPIDto<ICourseEnrollment>> {
+    const res = await this.client.delete(`/${courseId}/members/${memberId}`);
     return res.data;
   }
 

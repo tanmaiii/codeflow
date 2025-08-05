@@ -11,15 +11,15 @@ import { TextDescription } from '@/components/ui/text';
 import { ROLE_USER } from '@/constants/object';
 import useQ_Course_GetMembers from '@/hooks/query-hooks/Course/useQ_Course_GetMembers';
 import { IUser } from '@/interfaces/user';
-import userService from '@/services/user.service';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { toast } from 'sonner';
 import CoureseMemberCreate from './CoureseMemberCreate';
+import courseService from '@/services/course.service';
 
 export default function CoursesMember() {
   const tCommon = useTranslations('common');
@@ -29,6 +29,7 @@ export default function CoursesMember() {
   const id = params?.id as string;
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const tableRef = useRef<Table<IUser> | null>(null);
   const { data } = useQ_Course_GetMembers({
     id: id,
     params: { page: Number(page), limit: 10, search: search },
@@ -38,12 +39,12 @@ export default function CoursesMember() {
     () => [
       {
         header: 'Name',
-        accessorKey: 'name',
+        // accessorKey: 'name',
         cell: ({ row }) => (
           <MemberAvatar
             avatar={row.original.avatar ?? ''}
             id={row.original.id}
-            name={row.original.name}
+            name={row.original.name ?? ''}
           />
         ),
       },
@@ -84,16 +85,20 @@ export default function CoursesMember() {
         },
       },
     ],
-    [],
+    [data],
   );
 
   const mutationDelete = useMutation({
     mutationFn: async (selectedRowsData: IUser[]) => {
-      await Promise.all(selectedRowsData.map(item => userService.delete(item.id)));
+      await Promise.all(selectedRowsData.map(item => courseService.removeMember(id, item.id)));
     },
     onSuccess: () => {
       toast.success(tCommon('deleteSuccess'));
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['courses', 'members', id] });
+      // Reset row selection after successful deletion
+      if (tableRef.current) {
+        tableRef.current.resetRowSelection();
+      }
     },
     onError: () => {
       toast.error(tCommon('deleteError'));
@@ -105,8 +110,8 @@ export default function CoursesMember() {
     const selectedRowsCount = table.getFilteredSelectedRowModel().rows.length;
 
     return (
-      <div>
-        <CoureseMemberCreate/>
+      <div className="flex justify-center items-center gap-2">
+        <CoureseMemberCreate />
         {selectedRowsCount > 0 && (
           <Button
             variant="destructive"
@@ -119,13 +124,13 @@ export default function CoursesMember() {
       </div>
     );
   };
-  
+
   return (
     <Card className="p-2 lg:p-6 flex flex-col gap-4 min-h-[calc(100vh-100px)]">
       <TitleHeader title={tCourse('member')} description={tCourse('memberDescription')} onBack />
       <div className="min-h-[60vh]">
         <DataTable
-          fieldFilter="name"
+          // fieldFilter="name"
           showIndexColumn={true}
           showSelectionColumn={true}
           onSearchChange={value => {
@@ -135,13 +140,15 @@ export default function CoursesMember() {
           columns={columns}
           data={data?.data || []}
           toolbarCustom={customToolbar}
+          onTableReady={table => {
+            tableRef.current = table;
+          }}
           renderActions={({ row }) => (
             <>
-              {/* <Users_Update user={row.original} /> */}
               <ActionDelete
                 deleteKey={row.original.name}
                 handleSubmit={async () => {
-                  await userService.delete(row.original.id);
+                  await courseService.removeMember(id, row.original.id);
                 }}
               />
             </>

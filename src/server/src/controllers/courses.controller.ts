@@ -172,6 +172,25 @@ export class CourseController {
     }
   };
 
+  public removeMember = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const course = await this.course?.findCourseById(req?.params?.id);
+      if (!course) throw new HttpException(404, 'Course not found');
+
+      const user = await this.user?.findUserById(req.params?.userId);
+      if (!user) throw new HttpException(404, 'User not found');
+
+      await this.courseEnrollment.deleteEnrollmentByCourseIdAndUserId(req.params.id, req.params.userId);
+
+      res.status(200).json({
+        data: user,
+        message: 'removeMember',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getCourseById = async (req: Request, res: Response, next: NextFunction) => {
     await this.handleRequest(req, res, next, async () => {
       const isAdmin = (req as any).user?.role === ENUM_USER_ROLE.ADMIN;

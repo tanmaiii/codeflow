@@ -42,6 +42,7 @@
     "select": "Select",
     "loading": "Loading...",
     "error": "An error occurred",
+    "success": "Success",
     "enter": "Enter",
     "deleteConfirmTitle": "Confirm delete",
     "deleteDestroyConfirmTitle": "Confirm delete permanently",
@@ -385,7 +386,9 @@
     "enterPassword": "Enter password",
     "joining": "Joining...",
     "registrationEnded": "Registration ended",
-    "joinCourse":"Join Course"
+    "joinCourse": "Join Course",
+    "addMember": "Add member",
+    "alreadyJoined": "Already joined"
   },
   "topic": {
     "topic": "Topic",

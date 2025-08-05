@@ -51,6 +51,7 @@ interface DataTableProps<TData, TValue> {
   onSearchChange?: (value: string) => void;
   enableLocalSearch?: boolean;
   isLoading?: boolean;
+  onTableReady?: (table: TableInstance<TData>) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -69,6 +70,7 @@ export function DataTable<TData, TValue>({
   onSearchChange,
   enableLocalSearch = true,
   isLoading = false,
+  onTableReady,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -117,6 +119,13 @@ export function DataTable<TData, TValue>({
       },
     },
   });
+
+  // Call onTableReady callback when table is ready
+  React.useEffect(() => {
+    if (onTableReady) {
+      onTableReady(table);
+    }
+  }, [table, onTableReady]);
 
   return (
     <div className={cn('space-y-4', className)}>

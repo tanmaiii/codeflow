@@ -42,6 +42,7 @@
     "softDeleted": "Đã xóa mềm",
     "loading": "Đang tải...",
     "error": "Đã xảy ra lỗi",
+    "success": "Thành công",
     "enter": "Nhập",
     "deleteConfirmTitle": "Xác nhận xóa",
     "deleteDestroyConfirmTitle": "Xác nhận xóa vĩnh viễn",
@@ -385,7 +386,9 @@
     "enterPassword": "Nhập mật khẩu",
     "joining": "Đang tham gia...",
     "registrationEnded": "Đã hết hạn đăng ký",
-    "joinCourse": "Tham gia khóa học"
+    "joinCourse": "Tham gia khóa học",
+    "addMember": "Thêm học viên vào khóa học",
+    "alreadyJoined": "Đã tham gia"
   },
   "topic": {
     "topic": "Đề tài",

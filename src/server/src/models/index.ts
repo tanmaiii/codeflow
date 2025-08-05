@@ -13,7 +13,7 @@ import { PostModel } from './posts.model';
 import { PullRequestsModel } from './pull_requests.model';
 import { ReposModel } from './repos.model';
 import { ReviewAIModel } from './reviews_ai.model';
-import { SubmissionModel } from './submissions.model';
+// import { SubmissionModel } from './submissions.model';
 import { TagModel } from './tags.model';
 import { TopicEvaluationsModel } from './topic_evaluations.model';
 import { TopicMemberModel } from './topic_member.mode';
@@ -29,7 +29,7 @@ export const initModels = () => {
   UserModel.hasMany(TopicModel, { foreignKey: 'authorId' });
   UserModel.hasMany(TopicModel, { foreignKey: 'teacherId' });
   UserModel.hasMany(CommentModel, { foreignKey: 'authorId' });
-  UserModel.hasMany(SubmissionModel, { foreignKey: 'authorId', as: 'submissions' });
+  // UserModel.hasMany(SubmissionModel, { foreignKey: 'authorId', as: 'submissions' });
   UserModel.hasMany(TopicMemberModel, { foreignKey: 'userId', as: 'members' });
   UserModel.hasMany(TopicEvaluationsModel, { foreignKey: 'userId', as: 'evaluations' });
   UserModel.hasMany(CourseEnrollmentModel, { foreignKey: 'userId', as: 'enrollments' });
@@ -86,7 +86,7 @@ export const initModels = () => {
   CommentModel.belongsTo(PostModel, { foreignKey: 'postId', as: 'post' });
 
   // Submission Model Relations
-  SubmissionModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
+  // SubmissionModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
   // SubmissionModel.belongsTo(CommentModel, { foreignKey: 'submissionId', as: 'submission' });
 
   // CourseDocument Model Relations

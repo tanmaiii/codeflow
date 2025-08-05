@@ -18,9 +18,11 @@ export class CourseRoute implements Routes {
   private initializeRoutes() {
     // Course enrollment routes
     this.router.post(`${this.path}/:id/join`, AuthMiddleware, ValidationMiddleware(JoinCourseDto, 'body'), this.course.joinCourse);
+    this.router.get(`${this.path}/:id/check`, AuthMiddleware, this.course.checkEnrollment);
     this.router.get(`${this.path}/:id/check/:userId`, AuthMiddleware, this.course.checkEnrollment);
     this.router.get(`${this.path}/:id/members`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getMembersByCourseId);
     this.router.post(`${this.path}/:id/members`, isTeacherOrAdmin, ValidationMiddleware(AddCourseDto, 'body'), this.course.addMembersByCourseId);
+    this.router.delete(`${this.path}/:id/members/:userId`, isTeacherOrAdmin, this.course.removeMember);
 
     // Course listing routes
     this.router.get(`${this.path}/registered`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getRegisteredCourses);
