@@ -28,7 +28,6 @@ import {
 import {
   IconCalendar,
   IconClockHour1,
-  IconDownload,
   IconPencil,
   IconShare,
   IconUsers,
@@ -37,6 +36,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { cx } from 'class-variance-authority';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import CoursesSummary from './CoursesSummary';
 import Courses_Topics from './CoursesTopics';
 
@@ -85,6 +85,11 @@ export default function CoursesDetail() {
     new Date(dataCourse?.data?.regStartDate) < new Date() &&
     new Date(dataCourse?.data?.regEndDate) > new Date();
 
+  const onClickCopy = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success('Copied to clipboard');
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -94,7 +99,12 @@ export default function CoursesDetail() {
           <div className="flex items-center justify-between mb-6">
             <TitleHeader title="" onBack={true} className="text-white" />
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onClickCopy}
+                className="text-white hover:bg-white/20"
+              >
                 <IconShare className="size-5" />
               </Button>
               {isOwner && (
@@ -203,7 +213,7 @@ export default function CoursesDetail() {
                   <div className="flex items-center gap-3 mb-4">
                     <IconClockHour1 className="size-6 text-white" />
                     <div>
-                      <TextHeading className='text-white'>
+                      <TextHeading className="text-white">
                         {new Date(dataCourse?.data?.regStartDate) > new Date()
                           ? tCourse('registrationNotStarted')
                           : isRegistrationOpen
@@ -215,7 +225,9 @@ export default function CoursesDetail() {
                   {isRegistrationOpen && (
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <TextDescription className="text-white/80">{tCourse('registrationProgress')}</TextDescription>
+                        <TextDescription className="text-white/80">
+                          {tCourse('registrationProgress')}
+                        </TextDescription>
                         <TextDescription className="text-white/80">
                           {utils_CalculateProgress(
                             dataCourse.data?.regStartDate ?? '',
@@ -347,9 +359,6 @@ export default function CoursesDetail() {
                     <div className="w-1 h-6 bg-green-600 rounded-full"></div>
                     {tCourse('documents')}
                   </TextHeading>
-                  <Button variant="outline" size="sm">
-                    <IconDownload className="size-4" />
-                  </Button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                   {dataCourse.data?.documents?.map(file => (

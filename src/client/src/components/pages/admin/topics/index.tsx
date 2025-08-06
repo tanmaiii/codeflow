@@ -54,7 +54,7 @@ export default function Topics() {
         cell: ({ row }) => (
           <div className="flex flex-col">
             <Link className="text-base" href={localPath(paths.TOPICS_DETAIL(row.original.id))}>
-              {row.original.title}
+              <TextDescription lineClamp={2} className='text-color-1'>{row.original.title}</TextDescription>
             </Link>
             {row.original.deletedAt && (
               <span className="text-xs text-red-500 font-semibold">
@@ -69,7 +69,7 @@ export default function Topics() {
         header: ({ column }) => <DataTableColumnHeader column={column} title="Course" />,
         accessorKey: 'course',
         cell: ({ row }) => (
-          <TextDescription className="text-color-1">{row.original.course?.title}</TextDescription>
+          <TextDescription lineClamp={1} className="text-color-1">{row.original.course?.title}</TextDescription>
         ),
         size: 200,
       },
@@ -178,7 +178,6 @@ export default function Topics() {
       </>
     );
   };
-
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">

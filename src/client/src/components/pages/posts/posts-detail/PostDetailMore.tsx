@@ -121,13 +121,6 @@ export default function PostDetailMore() {
           ))}
         </div>
       </div>
-
-      {/* View more button */}
-      <div className="text-center px-4 pb-4">
-        <button className="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200 hover:underline">
-          {t('post.viewMore')} →
-        </button>
-      </div>
     </Card>
   );
 }

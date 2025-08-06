@@ -17,7 +17,7 @@ export default function CoursesTopics() {
   const t = useTranslations('topic');
   const tCourse = useTranslations('course');
   const [page, setPage] = useState(1);
-  const params = useParams(); 
+  const params = useParams();
 
   const { data: topicsData } = useQ_Topic_GetAllByCourseId({
     params: {
@@ -34,9 +34,11 @@ export default function CoursesTopics() {
         header: ({ column }) => <DataTableColumnHeader column={column} title={t('title')} />,
         accessorKey: 'title',
         cell: ({ row }) => (
-          <Link href={`${paths.TOPICS_DETAIL(row.original.id)}`}>{row.original.title}</Link>
+          <Link href={`${paths.TOPICS_DETAIL(row.original.id)}`}>
+            <TextDescription className="line-clamp-2 font-normal">{row.original.title}</TextDescription>
+          </Link>
         ),
-        size: 100,
+        size: 200,
       },
       {
         header: ({ column }) => <DataTableColumnHeader column={column} title={t('description')} />,

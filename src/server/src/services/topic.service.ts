@@ -75,8 +75,8 @@ export class TopicService {
     const whereClause = this.buildWhereClause({ courseId, isCustom });
 
     return DB.Topics.findAndCountAll({
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
+      limit: pageSize === -1 ? undefined : pageSize,
+      offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
       col: 'id',
@@ -216,8 +216,8 @@ export class TopicService {
       await Promise.all(tags.map(tagId => this.tagService.createTopicTag(id, tagId)));
     }
 
-    if (topicData.authorId !== topic.authorId && members) {
-      members.push(topicData.authorId);
+    if (authorId !== topic.authorId && members) {
+      members.push(authorId);
     }
 
     if (members?.length) {
@@ -226,13 +226,13 @@ export class TopicService {
 
       // Create new members
       await Promise.all(
-        members.map(memberId =>
-          this.topicMemberService.createTopicMember({
+        members.map(memberId => {
+          return this.topicMemberService.createTopicMember({
             topicId: topic.id,
             userId: memberId,
-            role: topicData.authorId === memberId ? 'leader' : 'member',
-          }),
-        ),
+            role: authorId === memberId ? 'leader' : 'member',
+          });
+        }),
       );
     }
 

@@ -22,7 +22,8 @@ export interface ChartData {
 export interface MetricCardProps {
   title: string;
   value: string;
-  growth: number;
+  // growth: number;
+  description?: string
   icon: React.ComponentType<{ className?: string }>;
   color: string;
 }

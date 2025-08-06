@@ -16,7 +16,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import { notFound, useParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import ActionIcon from '@/components/common/Action/ActionIcon';
@@ -140,7 +140,10 @@ export default function TopicsTable() {
     );
   };
 
-  if (user?.id !== course?.data?.authorId) return notFound();
+  useEffect(() => {
+    if (!user || !course?.data) return;
+    if (user?.id !== course?.data?.authorId) return notFound();
+  }, [user, course]);
 
   return (
     <Card className="p-6 flex flex-col gap-4 min-h-[calc(100vh-100px)]">

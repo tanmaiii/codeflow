@@ -79,9 +79,9 @@ export default function CardCourse({ course }: CardCourseProps) {
             {course?.author?.name}
           </TextDescription>
         </Link>
-        <div className="text-lg">
+        <Link href={paths.COURSES_DETAIL(course.id)} className="text-lg">
           <TextHeading className="line-clamp-2 hover:underline">{course.title}</TextHeading>
-        </div>
+        </Link>
         <NameTags className="mt-auto" tags={course?.tags} />
       </CardContent>
       <CardFooter className="flex flex-col px-4 w-full gap-2 items-start mt-auto">

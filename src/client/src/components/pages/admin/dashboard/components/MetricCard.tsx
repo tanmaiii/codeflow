@@ -1,13 +1,11 @@
+import TextHeading, { TextDescription } from '@/components/ui/text';
 import React from 'react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
 import { MetricCardProps } from '../types';
-import { TextDescription } from '@/components/ui/text';
-import TextHeading from '@/components/ui/text';
 
 export const MetricCard: React.FC<MetricCardProps> = ({
   title,
   value,
-  growth,
+  description,
   icon: Icon,
   color,
 }) => (
@@ -17,7 +15,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         <TextDescription className="text-sm">{title}</TextDescription>
         <TextHeading className="text-2xl">{value}</TextHeading>
         <div className="flex items-center mt-2 gap-2">
-          {growth >= 0 ? (
+          {/* {growth >= 0 ? (
             <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
           ) : (
             <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
@@ -27,8 +25,8 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           >
             {growth >= 0 ? '+' : ''}
             {growth}%
-          </span>
-          <TextDescription className="text-sm">so với kỳ trước</TextDescription>
+          </span> */}
+          <TextDescription className="text-sm">{description}</TextDescription>
         </div>
       </div>
       <div className={`p-3 rounded-full ${color}`}>

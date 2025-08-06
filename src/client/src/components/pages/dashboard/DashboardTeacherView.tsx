@@ -13,10 +13,13 @@ import {
   IconTrendingUp,
   IconUsers,
 } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { EmptyState, QuickActions, StatCard, TeachingAnalytics } from './components';
+import topicService from '@/services/topic.service';
+import { ENUM_STATUS_TOPIC } from '@/constants/enum';
+import { useEffect, useState } from 'react';
 
 interface TeacherDashboardStats {
   totalCourses: number;
@@ -29,6 +32,7 @@ export default function DashboardTeacherView() {
   const router = useRouter();
   const { user } = useUserStore();
   const t = useTranslations('dashboard');
+  const [totalPendingTopics, setTotalPendingTopics] = useState(0);
 
   // Fetch teacher's courses
   const { data: teacherCourses, isLoading: coursesLoading } = useQuery({
@@ -46,9 +50,35 @@ export default function DashboardTeacherView() {
           sum + (course.enrollmentCount || 0),
         0,
       ) || 0,
-    pendingTopics: 0, // Would need topics API
+    pendingTopics: totalPendingTopics,
     activeCourses: teacherCourses?.data?.filter((course: ICourse) => course.status).length || 0,
   };
+
+  const mutationTopic = useMutation({
+    mutationFn: (courseId: string) =>
+      topicService.getAllByCourseId(
+        {
+          page: 1,
+          limit: 0,
+          status: ENUM_STATUS_TOPIC.PENDING,
+        },
+        courseId,
+      ),
+    onSuccess: data => {
+      setTotalPendingTopics(prev => prev + data.pagination.totalItems);
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+
+  useEffect(() => {
+    if (teacherCourses?.data) {
+      teacherCourses.data.forEach(course => {
+        mutationTopic.mutate(course.id);
+      });
+    }
+  }, [teacherCourses?.data]);
 
   if (coursesLoading) {
     return <DashboardFullSkeleton />;

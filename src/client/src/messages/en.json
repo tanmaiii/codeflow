@@ -332,6 +332,7 @@
     "topicDeadline": "Topic Deadline",
     "registrationPeriod": "Registration Period",
     "courseDuration": "Course Duration",
+    "notInRegistrationPeriod": "Not in registration period",
     "tags": "Tags",
     "cancel": "Cancel",
     "save": "Save",

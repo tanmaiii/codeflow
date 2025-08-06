@@ -5,7 +5,7 @@ import { paths } from '@/data/path';
 import { ITopic } from '@/interfaces/topic';
 import { cn } from '@/lib/utils';
 import { utils_CalculateProgress, utils_DateToDDMMYYYY } from '@/utils/date';
-import { IconCalendar, IconUser } from '@tabler/icons-react';
+import { IconBook2, IconCalendar, IconUser } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import MyBadge from '../MyBadge';
 import CardTopic_More from './CardTopicMore';
@@ -31,8 +31,11 @@ export default function CardTopic({ topic }: CardTopicProps) {
           />
           <CardTopic_More topic={topic} />
         </div>
-        <TextDescription lineClamp={1}>{topic.course?.title}</TextDescription>
-        <TextHeading className="text-xl mb-auto" onClick={onClick}>
+        <TextDescription lineClamp={1} className="flex flex-row items-center gap-1">
+          <IconBook2 className="size-4 text-color-2" />
+          {topic.course?.title}
+        </TextDescription>
+        <TextHeading lineClamp={2} className="text-xl mb-auto" onClick={onClick}>
           {topic.title}
         </TextHeading>
         <TextDescription lineClamp={2}>{topic.description}</TextDescription>

@@ -332,6 +332,7 @@
     "topicDeadline": "Hạn nộp bài",
     "registrationPeriod": "Thời gian đăng ký",
     "courseDuration": "Thời gian khóa học",
+    "notInRegistrationPeriod": "Không trong thời gian đăng ký",
     "tags": "Thẻ",
     "cancel": "Thoát",
     "save": "Lưu",

@@ -14,7 +14,6 @@ import PostModel from '@/models/posts.model';
 import PullRequestsModel from '@/models/pull_requests.model';
 import ReposModel from '@/models/repos.model';
 import ReviewAIModel from '@/models/reviews_ai.model';
-import SubmissionModel from '@/models/submissions.model';
 import SystemSettingsModel from '@/models/system_settings.model';
 import TagModel from '@/models/tags.model';
 import TopicEvaluationsModel from '@/models/topic_evaluations.model';
@@ -44,7 +43,7 @@ const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   },
   logQueryParameters: NODE_ENV === 'development',
   logging: (query, time) => {
-    logger.info(time + 'ms' + ' ' + query);
+    // logger.info(time + 'ms' + ' ' + query);
   },
   benchmark: true,
 });

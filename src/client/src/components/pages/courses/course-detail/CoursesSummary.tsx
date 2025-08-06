@@ -147,15 +147,17 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
               <TextDescription className="text-sm text-red-700 dark:text-red-300">
                 {t('courseExpired')}
               </TextDescription>
-            ) : !isOwner && (
-              <Button
-                className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 dark:from-emerald-500 dark:to-emerald-600 dark:hover:from-emerald-600 dark:hover:to-emerald-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
-                onClick={() => router.push(paths.COURSE_REGISTER(course.id))}
-              >
-                <IconAward className="size-4 mr-2" />
-                {t('register')}
-                <IconChevronRight className="size-4 ml-auto" />
-              </Button>
+            ) : (
+              !isOwner && (
+                <Button
+                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 dark:from-emerald-500 dark:to-emerald-600 dark:hover:from-emerald-600 dark:hover:to-emerald-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                  onClick={() => router.push(paths.COURSE_REGISTER(course.id))}
+                >
+                  <IconAward className="size-4 mr-2" />
+                  {t('register')}
+                  <IconChevronRight className="size-4 ml-auto" />
+                </Button>
+              )
             )}
           </div>
         </div>
@@ -202,7 +204,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
       </Card>
 
       {/* Achievement Badge */}
-      <Card className="p-4 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-900/40 dark:via-yellow-900/30 dark:to-orange-900/20 border border-amber-200/50 dark:border-amber-700/30 shadow-lg">
+      {/* <Card className="p-4 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-900/40 dark:via-yellow-900/30 dark:to-orange-900/20 border border-amber-200/50 dark:border-amber-700/30 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-full shadow-sm">
             <IconAward className="size-5 text-amber-600 dark:text-amber-400" />
@@ -216,7 +218,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
             </TextDescription>
           </div>
         </div>
-      </Card>
+      </Card> */}
     </div>
   );
 }

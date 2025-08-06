@@ -1,36 +1,34 @@
 'use client';
-import { Award, BookOpen, GraduationCap, RefreshCw, Users } from 'lucide-react';
+import { BookOpen, Folder, RefreshCw, Users } from 'lucide-react';
 import { useState } from 'react';
 
 // Import types and components
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { ChartWrapper } from '@/components/common/ChartWrapper';
+import TextHeading, { TextDescription } from '@/components/ui/text';
+import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
+import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
+import useQ_Repos_GetAll from '@/hooks/query-hooks/Repos/useQ_Repos_GetAll';
+import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
+import { IconMessageCircle } from '@tabler/icons-react';
 import { MetricCard } from './components/MetricCard';
 import { QuickActions } from './components/QuickActions';
-import { DashboardStats, TimeRange } from './types';
+import { TimeRange } from './types';
 import { useChartData } from './utils/useChartData';
 import { useChartOptions } from './utils/useChartOptions';
-import TextHeading, { TextDescription } from '@/components/ui/text';
-import { ChartWrapper } from '@/components/common/ChartWrapper';
 
 export default function Dashboard() {
-  const [dashboardStats] = useState<DashboardStats>({
-    totalStudents: 1420,
-    totalProjects: 876,
-    totalTeachers: 45,
-    averageScore: 7.8,
-    studentGrowth: 8.5,
-    projectGrowth: 12.3,
-    teacherGrowth: 3.2,
-    scoreGrowth: 2.1,
-  });
+  // const [dashboardStats] = useState<DashboardStats>({
+  //   totalStudents: 1420,
+  //   totalProjects: 876,
+  //   totalTeachers: 45,
+  //   averageScore: 7.8,
+  //   studentGrowth: 8.5,
+  //   projectGrowth: 12.3,
+  //   teacherGrowth: 3.2,
+  //   scoreGrowth: 2.1,
+  // });
 
-  const [timeRange, setTimeRange] = useState<TimeRange>('7d');
+  const [timeRange] = useState<TimeRange>('7d');
   const [isLoading, setIsLoading] = useState(false);
 
   const { chartData, generateSampleData } = useChartData(timeRange);
@@ -43,6 +41,34 @@ export default function Dashboard() {
       setIsLoading(false);
     }, 1000);
   };
+
+  const { data: users } = useQ_User_GetAll({
+    params: {
+      page: 1,
+      limit: 0,
+    },
+  });
+
+  const { data: courses } = useQ_Course_GetAll({
+    params: {
+      page: 1,
+      limit: 0,
+    },
+  });
+
+  const { data: repos } = useQ_Repos_GetAll({
+    params: {
+      page: 1,
+      limit: 0,
+    },
+  });
+
+  const { data: posts } = useQ_Post_GetAll({
+    params: {
+      page: 1,
+      limit: 0,
+    },
+  });
 
   return (
     <div className="min-h-screen p-6">
@@ -57,7 +83,7 @@ export default function Dashboard() {
               </TextDescription>
             </div>
             <div className="flex items-center space-x-4">
-              <Select value={timeRange} onValueChange={value => setTimeRange(value as TimeRange)}>
+              {/* <Select value={timeRange} onValueChange={value => setTimeRange(value as TimeRange)}>
                 <SelectTrigger className="bg-background-1">
                   <SelectValue placeholder="Chọn khoảng thời gian" />
                 </SelectTrigger>
@@ -66,7 +92,7 @@ export default function Dashboard() {
                   <SelectItem value="30d">30 ngày qua</SelectItem>
                   <SelectItem value="90d">90 ngày qua</SelectItem>
                 </SelectContent>
-              </Select>
+              </Select> */}
               <button
                 onClick={handleRefresh}
                 disabled={isLoading}
@@ -82,31 +108,27 @@ export default function Dashboard() {
         {/* Metrics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <MetricCard
-            title="Tổng sinh viên"
-            value={dashboardStats.totalStudents.toLocaleString('vi-VN')}
-            growth={dashboardStats.studentGrowth}
+            title="Tổng người dùng"
+            value={users?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
             icon={Users}
             color="bg-blue-500"
           />
           <MetricCard
-            title="Tổng dự án"
-            value={dashboardStats.totalProjects.toLocaleString('vi-VN')}
-            growth={dashboardStats.projectGrowth}
+            title="Tổng khóa học"
+            value={courses?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
             icon={BookOpen}
             color="bg-green-500"
           />
           <MetricCard
-            title="Tổng giảng viên"
-            value={dashboardStats.totalTeachers.toLocaleString('vi-VN')}
-            growth={dashboardStats.teacherGrowth}
-            icon={GraduationCap}
+            title="Tổng đề tài"
+            value={repos?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
+            icon={Folder}
             color="bg-purple-500"
           />
           <MetricCard
-            title="Điểm trung bình"
-            value={`${dashboardStats.averageScore}/10`}
-            growth={dashboardStats.scoreGrowth}
-            icon={Award}
+            title="Tổng bài viết"
+            value={posts?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
+            icon={IconMessageCircle}
             color="bg-orange-500"
           />
         </div>

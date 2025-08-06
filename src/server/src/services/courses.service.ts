@@ -27,18 +27,21 @@ export class CourseService {
     SELECT COUNT(*)
     FROM comments AS c
     WHERE c.course_id = courses.id
+    AND c.deleted_at is NULL
   )`);
 
   private readonly enrollmentCountLiteral = Sequelize.literal(`(
     SELECT COUNT(*)
     FROM course_enrollments AS ce
     WHERE ce.course_id = courses.id
+    AND ce.deleted_at is NULL
   )`);
 
   private readonly topicCountLiteral = Sequelize.literal(`(
     SELECT COUNT(*)
     FROM topics AS t
     WHERE t.course_id = courses.id
+    AND t.deleted_at is NULL
   )`);
 
   public async findAll(): Promise<Course[]> {
@@ -84,8 +87,8 @@ export class CourseService {
         ...(search && { title: { [Op.like]: `%${search}%` } }),
         ...(type && { type }),
       },
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
+      limit: pageSize == -1 ? undefined : pageSize,
+      offset: pageSize == -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
       col: 'id',
@@ -173,8 +176,8 @@ export class CourseService {
           },
         },
       ],
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
+      limit: pageSize == -1 ? undefined : pageSize,
+      offset: pageSize == -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
       col: 'id',

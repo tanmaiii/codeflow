@@ -15,11 +15,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useMemo, useState, useRef } from 'react';
+import { notFound, useParams } from 'next/navigation';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import CoureseMemberCreate from './CoureseMemberCreate';
 import courseService from '@/services/course.service';
+import { useUserStore } from '@/stores/user_store';
+import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 
 export default function CoursesMember() {
   const tCommon = useTranslations('common');
@@ -30,6 +32,9 @@ export default function CoursesMember() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const tableRef = useRef<Table<IUser> | null>(null);
+  const { user } = useUserStore();
+  const { data: course } = useQ_Course_GetDetail({ id: params?.id as string });
+
   const { data } = useQ_Course_GetMembers({
     id: id,
     params: { page: Number(page), limit: 10, search: search },
@@ -125,9 +130,14 @@ export default function CoursesMember() {
     );
   };
 
+  useEffect(() => {
+    if (!user || !course?.data) return;
+    if (user?.id !== course?.data?.authorId) return notFound();
+  }, [user, course]);
+
   return (
     <Card className="p-2 lg:p-6 flex flex-col gap-4 min-h-[calc(100vh-100px)]">
-      <TitleHeader title={tCourse('member')} description={tCourse('memberDescription')} onBack />
+      <TitleHeader title={tCourse('member')} description={course?.data?.title} onBack />
       <div className="min-h-[60vh]">
         <DataTable
           // fieldFilter="name"
