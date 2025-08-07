@@ -5,7 +5,7 @@ interface StatCardProps {
   title: string;
   value: number;
   icon: React.ElementType;
-  description: string;
+  description?: string;
   color?: 'default' | 'success' | 'warning' | 'danger';
   onClick?: () => void;
   progress?: number;

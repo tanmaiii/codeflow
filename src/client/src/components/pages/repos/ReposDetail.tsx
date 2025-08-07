@@ -67,12 +67,7 @@ export default function ReposDetail() {
           <div className="sticky space-y-6 top-24">
             {/* Author Info */}
             {dataRepos.data?.author && (
-              <AuthorInfo
-                email={dataRepos.data?.author.email}
-                name={dataRepos.data?.author.name}
-                avatar={dataRepos.data?.author.avatar ?? ''}
-                bio={dataRepos.data?.author.bio}
-              />
+              <AuthorInfo user={dataRepos.data?.author} />
             )}
 
             {/* Repository Stats */}

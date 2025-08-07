@@ -1,18 +1,14 @@
-import MyImage from '@/components/common/MyImage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import TextHeading from '@/components/ui/text';
-import apiConfig from '@/lib/api';
+import MemberAvatar from '@/components/ui/member-avatar';
+import { IUser } from '@/interfaces/user';
 import { IconUser } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
 interface AuthorInfoProps {
-  email: string;
-  name: string;
-  avatar: string;
-  bio?: string;
+  user: IUser;
 }
 
-export default function AuthorInfo({ email, name, avatar, bio }: AuthorInfoProps) {
+export default function AuthorInfo({ user }: AuthorInfoProps) {
   const t = useTranslations('repos');
   return (
     <Card>
@@ -24,19 +20,13 @@ export default function AuthorInfo({ email, name, avatar, bio }: AuthorInfoProps
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-3">
-          <MyImage
-            src={avatar}
-            alt="logo"
-            width={60}
-            height={60}
-            className="w-16 h-16 object-cover rounded-full"
-            defaultSrc={apiConfig.avatar(name ?? 'c')}
+          <MemberAvatar
+            name={user.name || ''}
+            avatar={user.avatar}
+            description={user?.username}
+            size={56}
+            id={user.id}
           />
-          <div>
-            <TextHeading className="font-semibold">{name || email}</TextHeading>
-            <p className="text-sm text-muted-foreground">{email}</p>
-            {bio && <p className="text-xs text-muted-foreground mt-1">{bio}</p>}
-          </div>
         </div>
       </CardContent>
     </Card>

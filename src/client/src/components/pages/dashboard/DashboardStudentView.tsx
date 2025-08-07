@@ -17,11 +17,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { EmptyState, QuickActions, StatCard } from './components';
+import useQ_Topic_GetAllByUserId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByUserId';
 
 interface DashboardStats {
   totalCourses: number;
   activeCourses: number;
-  completedTopics: number;
+  totalTopics: number;
   upcomingDeadlines: number;
 }
 
@@ -37,6 +38,17 @@ export default function DashboardStudentView() {
     enabled: !!user,
   });
 
+  const { data: topics } = useQ_Topic_GetAllByUserId({
+    params: {
+      userId: user?.id || '',
+      page: 1,
+      limit: 0,
+    },
+    options: {
+      enabled: !!user?.id,
+    },
+  });
+
   // Mock statistics - in real app, this would come from API
   const stats: DashboardStats = {
     totalCourses: enrolledCourses?.data?.length || 0,
@@ -47,8 +59,20 @@ export default function DashboardStudentView() {
         const endDate = new Date(course.endDate);
         return currentDate >= startDate && currentDate <= endDate;
       }).length || 0,
-    completedTopics: 0, // Would need topics API
-    upcomingDeadlines: 0, // Would need deadlines API
+    totalTopics: topics?.pagination.totalItems ?? 0,
+    upcomingDeadlines:
+      enrolledCourses?.data?.filter((course: ICourse) => {
+        const currentDate = new Date();
+        const topicDeadline = new Date(course.topicDeadline);
+        const sevenDaysFromNow = new Date();
+        sevenDaysFromNow.setDate(currentDate.getDate() + 7);
+        
+        return (
+          course.topicDeadline &&
+          topicDeadline > currentDate &&
+          topicDeadline <= sevenDaysFromNow
+        );
+      }).length || 0,
   };
 
   if (coursesLoading) {
@@ -74,10 +98,9 @@ export default function DashboardStudentView() {
           color="success"
         />
         <StatCard
-          title={t('completedTopics')}
-          value={stats.completedTopics}
+          title={t('topics')}
+          value={stats.totalTopics}
           icon={IconTarget}
-          description={t('thisTermCompleted')}
           color="success"
         />
         <StatCard

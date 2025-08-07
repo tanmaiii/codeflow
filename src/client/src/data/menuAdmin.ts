@@ -58,11 +58,11 @@ export const menuAdmin: ILinkItem[] = [
     icon: 'comment',
     href: paths.COMMENTS,
   },
-  {
-    en: 'Settings',
-    vi: 'Cài đặt',
-    labelKey: 'path.settings',
-    icon: 'settings',
-    href: paths.SETTINGS,
-  },
+  // {
+  //   en: 'Settings',
+  //   vi: 'Cài đặt',
+  //   labelKey: 'path.settings',
+  //   icon: 'settings',
+  //   href: paths.SETTINGS,
+  // },
 ];

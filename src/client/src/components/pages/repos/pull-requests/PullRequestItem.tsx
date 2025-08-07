@@ -5,8 +5,11 @@ import { Button } from '@/components/ui/button';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading from '@/components/ui/text';
 import { STATUS_PULL_REQUEST } from '@/constants/object';
+import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
+import useQ_Topic_GetDetail from '@/hooks/query-hooks/Topic/useQ_Topic_GetDetail';
 import { IPullRequest, IRepos } from '@/interfaces/repos';
 import reviews_aiService from '@/services/reviews_ai.service';
+import { useUserStore } from '@/stores/user_store';
 import { utils_DateToDDMMYYYY_HHMM } from '@/utils/date';
 import {
   IconCheck,
@@ -32,6 +35,11 @@ export default function PullRequestItem({
 }) {
   const [score, setScore] = useState<number | null>(null);
   const t = useTranslations();
+  const { user } = useUserStore();
+
+  const Topic = useQ_Topic_GetDetail({ id: repos.topicId });
+  const Course = useQ_Course_GetDetail({ id: repos?.courseId });
+
   const getPRStatusIcon = (status: string) => {
     switch (status) {
       case 'open':
@@ -56,7 +64,6 @@ export default function PullRequestItem({
       toast.success(t('repos.reviewSuccess', { score: data?.data.score }));
     },
     onError: error => {
-      console.log(error);
       if (error.message === 'Token limit exceeded') {
         toast.error(t('repos.tokenLimitExceeded'));
       } else {
@@ -70,6 +77,10 @@ export default function PullRequestItem({
       window.open(`${repos.url}/pull/${pullRequest.pullNumber}`, '_blank');
     }
   };
+
+  const isReviewed =
+    Topic.data?.data?.members?.some(member => member.userId === user?.id) ||
+    Course.data?.data?.authorId === user?.id;
 
   return (
     <div className="border rounded-lg p-4 space-y-3 hover:shadow-md transition-shadow">
@@ -117,6 +128,7 @@ export default function PullRequestItem({
           <Button
             size="sm"
             variant="outline"
+            hidden={!isReviewed}
             onClick={() => {
               mutation.mutate();
             }}

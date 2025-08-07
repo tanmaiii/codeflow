@@ -68,7 +68,7 @@ export default function CardPost({ post }: CardPostProps) {
   };
 
   return (
-    <Card className="p-2 hover:border-white/30 cursor-pointer bg-background-1 group/item">
+    <Card className="p-2 hover:border-white/30 cursor-pointer bg-background-1 group/item h-full">
       <CardContent className="px-2 h-full flex flex-col justify-between">
         <div className="pt-2 mb-auto">
           <div className="flex items-center justify-between">

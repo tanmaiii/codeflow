@@ -15,11 +15,11 @@ export interface ICourse extends IBaseEntity {
   thumbnail?: string;
   description: string;
   authorId: string;
-  startDate: string;
-  endDate: string;
-  regStartDate: string;
-  regEndDate: string;
-  topicDeadline: string;
+  startDate: string; // ngày bắt đầu khóa học
+  endDate: string; // ngày kết thúc khóa học
+  regStartDate: string; // ngày bắt đầu đăng ký 
+  regEndDate: string; // ngày kết thúc đăng ký
+  topicDeadline: string; // ngày kết thúc đề tài
   status: boolean;
   maxGroupMembers: number;
   topicCount: number;

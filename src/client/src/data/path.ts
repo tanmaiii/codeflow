@@ -31,6 +31,7 @@ export const paths = {
   COURSE_REGISTER: (id: string) => `/courses/${id}/register`,
   COURSE_TOPICS: (id: string) => `/courses/${id}/topics`,
   COURSE_MEMBER: (id: string) => `/courses/${id}/member`,
+  COURSE_DASHBOARD: (id: string) => `/courses/${id}/dashboard`,
 
   USER_DETAIL: (id: string) => `/user/${id}`,
 
