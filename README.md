@@ -8,16 +8,6 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 
 **CodeFlow** là nền tảng quản lý dự án phần mềm hiện đại được thiết kế dành riêng cho môi trường giáo dục. Hệ thống tích hợp sâu với GitHub để cung cấp trải nghiệm quản lý dự án liền mạch, từ việc tạo môn học, phân công đề tài đến theo dõi tiến độ và đánh giá chất lượng mã nguồn tự động.
 
-> ### 🤖 **Tính năng nổi bật: AI Code Review với Google Gemini**
-> 
-> **CodeFlow** tích hợp **Google Gemini 1.5 Flash AI** để review code tự động! 
-> 
-> - ✨ **AI review Pull Request** bằng tiếng Việt
-> - 🎯 **Chấm điểm 0-10** cho chất lượng code  
-> - 💬 **Comment trực tiếp** trên GitHub PR
-> - 🔍 **Phân tích đa chiều**: Bug, Security, Performance, Readability
-> - 🚀 **One-click review** - Click và AI sẽ analyze toàn bộ PR
-
 ---
 
 ## 🎯 Mục tiêu dự án
@@ -166,6 +156,18 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 4. **Code Quality**: ESLint, Prettier, SonarCloud
 5. **CI/CD**: GitHub Actions cho automated testing
 6. **Deployment**: Containerized deployment
+
+
+> ### 🤖 ** AI Code Review với Google Gemini**
+> 
+> **CodeFlow** tích hợp **Google Gemini 1.5 Flash AI** để review code tự động! 
+> 
+> - ✨ **AI review Pull Request** bằng tiếng Việt
+> - 🎯 **Chấm điểm 0-10** cho chất lượng code  
+> - 💬 **Comment trực tiếp** trên GitHub PR
+> - 🔍 **Phân tích đa chiều**: Bug, Security, Performance, Readability
+> - 🚀 **One-click review** - Click và AI sẽ analyze toàn bộ PR
+
 
 ---
 
