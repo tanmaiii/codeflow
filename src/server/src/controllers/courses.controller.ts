@@ -269,4 +269,28 @@ export class CourseController {
       next(error);
     }
   };
+
+  // Dashboard 
+  public getCourseCodeActivity = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const courseId: string = req.params.id;
+      const days: number = parseInt(req.query.days as string) || 7;
+      
+      const codeActivity = await this.course.getCourseAllActivity(courseId, days);
+      
+      res.status(200).json({ data: codeActivity, message: 'getCourseCodeActivity' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getContributors = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const topicId = req.params.id;
+      const contributors = await this.course.contributors(topicId);
+      res.status(200).json({ data: contributors, message: 'get contributors' });
+    } catch (error) {
+      next(error);
+    }
+  }; 
 }

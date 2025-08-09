@@ -1,4 +1,3 @@
-export { default as StatCard } from './StatCard';
 export { default as CourseCard } from './CourseCard';
 export { default as QuickActions } from './QuickActions';
 export { default as EmptyState } from './EmptyState';

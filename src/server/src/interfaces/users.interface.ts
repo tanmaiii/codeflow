@@ -11,6 +11,27 @@ export interface User {
   bio?: string;
   resetToken?: string;
   resetTokenExpires?: Date;
+  topicMembers?: TopicMember[];
+}
+
+export interface TopicMember {
+  id: string;
+  topicId: string;
+  userId: string;
+  role: string;
+  topic?: Topic;
+}
+
+export interface Topic {
+  id: string;
+  title: string;
+  description: string;
+  courseId: string;
+  teacherId: string;
+  authorId: string;
+  isCustom: boolean;
+  status: string;
+  groupName: string;
 }
 
 export interface UserGithub {

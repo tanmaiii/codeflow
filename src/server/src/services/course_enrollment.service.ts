@@ -26,21 +26,33 @@ export class CourseEnrollmentService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     courseId: string,
   ): Promise<{ count: number; rows: CourseEnrollment[] }> {
-    if (pageSize == -1) {
-      const { count, rows }: { count: number; rows: CourseEnrollment[] } = await DB.CourseEnrollment.findAndCountAll({
-        where: { courseId },
-        col: 'course_enrollments.id',
-      });
-      return { count, rows };
-    }
-
     const { count, rows }: { count: number; rows: CourseEnrollment[] } = await DB.CourseEnrollment.findAndCountAll({
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
+      limit: pageSize === -1 ? undefined : pageSize,
+      offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
       where: { courseId },
-      col: 'course_enrollments.id',
+      include: [
+        {
+          model: DB.Users,
+          as: 'user',
+          include: [
+            {
+              model: DB.TopicMember.scope(null), // Loại bỏ defaultScope để không tự động include user
+              as: 'topicMembers',
+              include: [
+                {
+                  model: DB.Topics,
+                  as: 'topic',
+                  where: { courseId },
+                  required: false,
+                },
+              ],
+              required: false,
+            },
+          ],
+        },
+      ],
     });
     return { count, rows };
   }

@@ -30,7 +30,7 @@ export const initModels = () => {
   UserModel.hasMany(TopicModel, { foreignKey: 'teacherId' });
   UserModel.hasMany(CommentModel, { foreignKey: 'authorId' });
   // UserModel.hasMany(SubmissionModel, { foreignKey: 'authorId', as: 'submissions' });
-  UserModel.hasMany(TopicMemberModel, { foreignKey: 'userId', as: 'members' });
+  UserModel.hasMany(TopicMemberModel, { foreignKey: 'userId', as: 'topicMembers' });
   UserModel.hasMany(TopicEvaluationsModel, { foreignKey: 'userId', as: 'evaluations' });
   UserModel.hasMany(CourseEnrollmentModel, { foreignKey: 'userId', as: 'enrollments' });
   UserModel.hasMany(NotificationModel, { foreignKey: 'authorId', as: 'sentNotifications' });

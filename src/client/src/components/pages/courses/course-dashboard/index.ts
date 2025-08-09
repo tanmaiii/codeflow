@@ -1,1 +1,10 @@
-export { default } from './CourseDashboard';
+export { default as ActiveStudentsList } from './ActiveStudentsList';
+export { default as BestProjectsList } from './BestProjectsList';
+export { default as CourseDashboard } from './CourseDashboard';
+export { default as CourseStatsCards } from './CourseStatsCards';
+export { default as DailyActivityChart } from './DailyActivityChart';
+export { default as PerformanceRadarChart } from './PerformanceRadarChart';
+export { default as QuickStatsCard } from './QuickStatsCard';
+export { default as CodeActivityChart } from './StudentProgressChart';
+export { default as ProjectProgressChart } from './ProjectProgressChart';
+export * from './mockData';

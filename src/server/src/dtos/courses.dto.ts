@@ -65,3 +65,8 @@ export class GetAllCoursesDto extends GetAllQueryDto {
   @IsString()
   public type?: string;
 }
+
+export class GetCodeActivityDto {
+  @IsString()
+  public days: string;
+}

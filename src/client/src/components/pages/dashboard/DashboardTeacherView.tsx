@@ -16,10 +16,11 @@ import {
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { EmptyState, QuickActions, StatCard, TeachingAnalytics } from './components';
+import { EmptyState, QuickActions, TeachingAnalytics } from './components';
 import topicService from '@/services/topic.service';
 import { ENUM_STATUS_TOPIC } from '@/constants/enum';
 import { useEffect, useState } from 'react';
+import StatCard from '@/components/common/StatCard';
 
 interface TeacherDashboardStats {
   totalCourses: number;

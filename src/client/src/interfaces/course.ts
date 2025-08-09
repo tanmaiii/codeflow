@@ -1,5 +1,6 @@
 import { IBaseEntity } from './common';
 import { ITag } from './tags';
+import { ITopic, ITopicMember } from './topic';
 import { IUser } from './user';
 
 export interface IDocument {
@@ -17,7 +18,7 @@ export interface ICourse extends IBaseEntity {
   authorId: string;
   startDate: string; // ngày bắt đầu khóa học
   endDate: string; // ngày kết thúc khóa học
-  regStartDate: string; // ngày bắt đầu đăng ký 
+  regStartDate: string; // ngày bắt đầu đăng ký
   regEndDate: string; // ngày kết thúc đăng ký
   topicDeadline: string; // ngày kết thúc đề tài
   status: boolean;
@@ -38,6 +39,10 @@ export interface ICourseEnrollment {
   user?: IUser;
 }
 
+export interface ICourseMembers extends IUser {
+  topicMembers: (ITopicMember & { topic: ITopic })[];
+}
+
 export interface ICreateCourseDto {
   title: string;
   description: string;
@@ -51,4 +56,16 @@ export interface ICreateCourseDto {
   tags?: Array<string>;
   maxGroupMembers?: number;
   type?: string;
+}
+
+export interface ICodeActivity {
+  activities: {
+    date: string;
+    commits: number;
+    pullRequests: number;
+    codeAnalysis: number;
+  }[];
+  totalCommits: number;
+  totalPullRequests: number;
+  totalCodeAnalysis: number;
 }

@@ -2,7 +2,7 @@ import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 import { HttpException } from '@/exceptions/HttpException';
 import { Course, CourseCreate, CourseEnrollment } from '@/interfaces/courses.interface';
 import { Notification } from '@/interfaces/notification.interface';
-import { User } from '@/interfaces/users.interface';
+import { User, UserContributes } from '@/interfaces/users.interface';
 import { DB } from '@database';
 import { compare, hash } from 'bcrypt';
 import { Op, Sequelize } from 'sequelize';
@@ -12,16 +12,35 @@ import { CourseEnrollmentService } from './course_enrollment.service';
 import { NotificationService } from './notification.service';
 import { TagService } from './tag.service';
 import { UserService } from './users.service';
+import { logger } from '@/utils/logger';
+import { ReposService } from './repos.service';
 
 @Service()
 export class CourseService {
-  constructor(
-    private notificationService = Container.get(NotificationService),
-    public Tag = Container.get(TagService),
-    public CourseDocument = Container.get(CourseDocumentService),
-    public CourseEnrollment = Container.get(CourseEnrollmentService),
-    public User = Container.get(UserService),
-  ) {}
+  private notificationService: NotificationService;
+  private tagService: TagService;
+  private courseDocumentService: CourseDocumentService;
+  private courseEnrollmentService: CourseEnrollmentService;
+  private userService: UserService;
+  private _reposService: ReposService;
+
+  constructor() {
+    this.notificationService = Container.get(NotificationService);
+    this.tagService = Container.get(TagService);
+    this.courseDocumentService = Container.get(CourseDocumentService);
+    this.courseEnrollmentService = Container.get(CourseEnrollmentService);
+    this.userService = Container.get(UserService);
+  }
+
+  // Lazy getter để tránh circular dependency
+  private get reposService(): ReposService {
+    if (!this._reposService) {
+      this._reposService = Container.get(ReposService);
+    }
+    return this._reposService;
+  }
+
+  // Lazy getter để tránh circular dependency
 
   private readonly commentCountLiteral = Sequelize.literal(`(
     SELECT COUNT(*)
@@ -104,7 +123,7 @@ export class CourseService {
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     userId: string,
   ): Promise<{ count: number; rows: Course[] }> {
-    const enrollments = await this.CourseEnrollment.findEnrollmentByUserId(userId);
+    const enrollments = await this.courseEnrollmentService.findEnrollmentByUserId(userId);
     const courseIds = enrollments.map(enrollment => enrollment.courseId);
 
     const registeredCourses = await DB.Courses.findAndCountAll({
@@ -289,13 +308,13 @@ export class CourseService {
   // Phương thức thêm tags và documents cho course
   private async attachTagsAndDocuments(courseId: string, tags?: string[], documents?: string[]): Promise<void> {
     if (tags?.length) {
-      await Promise.all(tags.map(tagId => this.Tag.createCourseTag(courseId, tagId)));
+      await Promise.all(tags.map(tagId => this.tagService.createCourseTag(courseId, tagId)));
     }
 
     if (documents?.length) {
       await Promise.all(
         documents.map(url =>
-          this.CourseDocument.createDocument({
+          this.courseDocumentService.createDocument({
             courseId,
             url,
             title: url,
@@ -307,7 +326,7 @@ export class CourseService {
 
   public async joinCourse(courseId: string, userId: string, password: string): Promise<CourseEnrollment> {
     const findCourse: Course = await DB.Courses.scope('withPassword').findByPk(courseId);
-    const user: User = await this.User.findUserById(userId);
+    const user: User = await this.userService.findUserById(userId);
     if (!findCourse) throw new HttpException(409, "Course doesn't exist");
 
     if (findCourse.password) {
@@ -326,7 +345,7 @@ export class CourseService {
     };
 
     await this.notificationService.createNotification(notificationData);
-    return this.CourseEnrollment.createEnrollment({ courseId, userId });
+    return this.courseEnrollmentService.createEnrollment({ courseId, userId });
   }
 
   public async deleteCourse(courseId: string): Promise<Course> {
@@ -365,5 +384,208 @@ export class CourseService {
       ],
     });
     return courseTagsData;
+  }
+
+  public async getCourseAllActivity(courseId: string, days: number = 7) {
+    const course = await this.findCourseById(courseId);
+    if (!course) throw new HttpException(409, "Course doesn't exist");
+
+    const repos = await DB.Repos.findAll({ where: { courseId: course.id } });
+
+    // Tìm ngày commit mới nhất
+    let latestDate: Date | null = null;
+
+    for (const repo of repos) {
+      // Check latest commit
+      const latestCommit = await DB.Commits.findOne({
+        where: { reposId: repo.id },
+        order: [['createdAt', 'DESC']],
+        limit: 1,
+      });
+
+      if (latestCommit) {
+        const commitDate = new Date(latestCommit.createdAt);
+        if (!latestDate || commitDate > latestDate) {
+          latestDate = commitDate;
+        }
+      }
+    }
+
+    // Nếu không có hoạt động nào, trả về empty activity
+    if (!latestDate) {
+      return {
+        activities: [],
+        totalCommits: 0,
+        totalPullRequests: 0,
+        totalCodeAnalysis: 0,
+      };
+    }
+
+    // Set endDate to the latest activity date and calculate startDate (ngày cuối cùng và ngày đầu tiên)
+    const endDate = latestDate;
+    const startDate = new Date(latestDate);
+    startDate.setDate(startDate.getDate() - days);
+
+    logger.info(`Getting all activities from ${startDate.toISOString()} to ${endDate.toISOString()} (${days} days)`);
+
+    // Get all activities from all repos
+    const [allCommits, allPRs, allAnalysis] = await Promise.all([
+      // Get commits
+      Promise.all(
+        repos.map(async repo => {
+          const commits = await DB.Commits.findAll({
+            where: { reposId: repo.id },
+          });
+          return commits;
+        }),
+      ),
+      // Get pull requests
+      Promise.all(
+        repos.map(async repo => {
+          const pullRequests = await DB.PullRequests.findAll({
+            where: { reposId: repo.id },
+          });
+          return pullRequests;
+        }),
+      ),
+      // Get code analysis
+      Promise.all(
+        repos.map(async repo => {
+          const codeAnalysis = await DB.CodeAnalysis.findAll({
+            where: { reposId: repo.id },
+          });
+          return codeAnalysis;
+        }),
+      ),
+    ]);
+
+    // Flatten all activities into single arrays
+    const flattenedCommits = allCommits.flat();
+    const flattenedPRs = allPRs.flat();
+    const flattenedAnalysis = allAnalysis.flat();
+
+    // Filter activities by date range
+    const filteredCommits = flattenedCommits.filter(commit => {
+      const commitDate = new Date(commit.createdAt);
+      return commitDate >= startDate && commitDate <= endDate;
+    });
+
+    const filteredPRs = flattenedPRs.filter(pr => {
+      const prDate = new Date(pr.createdAt);
+      return prDate >= startDate && prDate <= endDate;
+    });
+
+    const filteredAnalysis = flattenedAnalysis.filter(analysis => {
+      const analysisDate = new Date(analysis.analyzedAt);
+      return analysisDate >= startDate && analysisDate <= endDate;
+    });
+
+    // Initialize all dates in range with 0 activities
+    const activitiesByDate: { [date: string]: { commits: number; pullRequests: number; codeAnalysis: number } } = {};
+
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      const dateStr = d.toISOString().split('T')[0]; // YYYY-MM-DD format
+      activitiesByDate[dateStr] = {
+        commits: 0,
+        pullRequests: 0,
+        codeAnalysis: 0,
+      };
+    }
+
+    // Count commits for each date
+    filteredCommits.forEach(commit => {
+      const commitDate = new Date(commit.createdAt);
+      const dateStr = commitDate.toISOString().split('T')[0];
+      if (activitiesByDate.hasOwnProperty(dateStr)) {
+        activitiesByDate[dateStr].commits++;
+      }
+    });
+
+    // Count pull requests for each date
+    filteredPRs.forEach(pr => {
+      const prDate = new Date(pr.createdAt);
+      const dateStr = prDate.toISOString().split('T')[0];
+      if (activitiesByDate.hasOwnProperty(dateStr)) {
+        activitiesByDate[dateStr].pullRequests++;
+      }
+    });
+
+    // Count code analysis for each date
+    filteredAnalysis.forEach(analysis => {
+      const analysisDate = new Date(analysis.analyzedAt);
+      const dateStr = analysisDate.toISOString().split('T')[0];
+      if (activitiesByDate.hasOwnProperty(dateStr)) {
+        activitiesByDate[dateStr].codeAnalysis++;
+      }
+    });
+
+    // Convert to array format for easier frontend consumption
+    // Filter out dates where all activities are 0
+    const dailyActivities = Object.entries(activitiesByDate)
+      .filter(([date, activities]) => {
+        return activities.commits > 0 || activities.pullRequests > 0 || activities.codeAnalysis > 0;
+      })
+      .map(([date, activities]) => ({
+        date,
+        ...activities,
+      }));
+
+    return {
+      activities: dailyActivities,
+      totalCommits: filteredCommits.length,
+      totalPullRequests: filteredPRs.length,
+      totalCodeAnalysis: filteredAnalysis.length,
+    };
+  }
+
+  public async contributors(courseId: string): Promise<any[]> {
+    const course = await this.findCourseById(courseId);
+    if (!course) throw new HttpException(409, "Course doesn't exist");
+
+    const repos = await DB.Repos.findAll({ where: { courseId: course.id } });
+
+    const contributorPromises = repos.map(async repo => {
+      const repoContributors = await this.reposService.getRepoContributors(repo.id);
+      return repoContributors;
+    });
+
+    const contributorResults = await Promise.all(contributorPromises);
+    const allContributors = contributorResults.flat();
+
+    // Gộp contributors có cùng authorId
+    const mergedContributors = this.mergeContributorsByAuthorId(allContributors);
+
+    return mergedContributors;
+  }
+
+  private mergeContributorsByAuthorId(contributors: UserContributes[]): UserContributes[] {
+    const contributorMap = new Map<string, UserContributes>();
+
+    contributors.forEach(contributor => {
+      const { authorId } = contributor;
+
+      if (contributorMap.has(authorId)) {
+        // Nếu đã có contributor này, gộp các thống kê
+        const existing = contributorMap.get(authorId);
+        if (existing) {
+          existing.commit.total += contributor.commit.total;
+          existing.commit.additions += contributor.commit.additions;
+          existing.commit.deletions += contributor.commit.deletions;
+
+          existing.pullRequest.total += contributor.pullRequest.total;
+          existing.pullRequest.additions += contributor.pullRequest.additions;
+          existing.pullRequest.deletions += contributor.pullRequest.deletions;
+
+          existing.codeAnalysis.total += contributor.codeAnalysis.total;
+          existing.codeAnalysis.success += contributor.codeAnalysis.success;
+          existing.codeAnalysis.failure += contributor.codeAnalysis.failure;
+        }
+      } else {
+        // Nếu chưa có, thêm mới vào map
+        contributorMap.set(authorId, { ...contributor });
+      }
+    });
+
+    return Array.from(contributorMap.values());
   }
 }

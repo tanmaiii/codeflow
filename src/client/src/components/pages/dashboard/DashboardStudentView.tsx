@@ -16,8 +16,9 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { EmptyState, QuickActions, StatCard } from './components';
+import { EmptyState, QuickActions } from './components';
 import useQ_Topic_GetAllByUserId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByUserId';
+import StatCard from '@/components/common/StatCard';
 
 interface DashboardStats {
   totalCourses: number;
@@ -66,11 +67,9 @@ export default function DashboardStudentView() {
         const topicDeadline = new Date(course.topicDeadline);
         const sevenDaysFromNow = new Date();
         sevenDaysFromNow.setDate(currentDate.getDate() + 7);
-        
+
         return (
-          course.topicDeadline &&
-          topicDeadline > currentDate &&
-          topicDeadline <= sevenDaysFromNow
+          course.topicDeadline && topicDeadline > currentDate && topicDeadline <= sevenDaysFromNow
         );
       }).length || 0,
   };
@@ -97,12 +96,7 @@ export default function DashboardStudentView() {
           description={t('currentCourses')}
           color="success"
         />
-        <StatCard
-          title={t('topics')}
-          value={stats.totalTopics}
-          icon={IconTarget}
-          color="success"
-        />
+        <StatCard title={t('topics')} value={stats.totalTopics} icon={IconTarget} color="success" />
         <StatCard
           title={t('upcomingDeadlines')}
           value={stats.upcomingDeadlines}

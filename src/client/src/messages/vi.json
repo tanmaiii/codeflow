@@ -76,7 +76,8 @@
     "oldest": "Cũ nhất",
     "all": "Tất cả",
     "showLess": "Hiển thị ít hơn",
-    "showMore": "Xem tất cả"
+    "showMore": "Xem tất cả",
+    "noData": "No data"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
@@ -769,5 +770,80 @@
     "open": "Mở",
     "closed": "Đóng",
     "merged": "Đã hợp nhất"
+  },
+  "courseDashboard": {
+    "title": "Bảng điều khiển khóa học",
+    "description": "Theo dõi tiến độ và hiệu suất của học viên trong khóa học",
+    "stats": {
+      "totalStudents": "Tổng học viên",
+      "activeStudents": "Học viên hoạt động",
+      "completionRate": "Tỷ lệ hoàn thành",
+      "totalTopics": "Tổng đề tài",
+      "enrolledDescription": "Đã đăng ký khóa học",
+      "activeDescription": "Học viên đã đăng ký đề tài",
+      "completionDescription": "% bài tập đã nộp",
+      "topicsDescription": "Đề tài khóa học",
+      "completionProgress": "Tiến độ hoàn thành",
+      "progressDescription": "Tiến độ hoàn thành của khóa học"
+    },
+    "charts": {
+      "codeActivity": {
+        "title": "Hoạt động phát triển code theo ngày",
+        "description": "Thống kê số lượng commit, pull request và phân tích code theo từng ngày",
+        "commits": "Commit",
+        "pullRequests": "Pull Request",
+        "codeAnalysis": "Phân tích code",
+        "7d": "7 ngày qua",
+        "30d": "30 ngày qua",
+        "3m": "3 tháng qua",
+        "6m": "6 tháng qua",
+        "1y": "1 năm"
+      },
+      "projectProgress": {
+        "title": "Tiến độ theo đề tài",
+        "description": "Thống kê tỷ lệ hoàn thành và mức độ tham gia theo từng đề tài dự án",
+        "completionRate": "Tỷ lệ hoàn thành",
+        "participation": "Tỷ lệ tham gia",
+        "milestones": "Mốc thời gian",
+        "studentsWorking": "Sinh viên tham gia",
+        "status": "Trạng thái dự án"
+      },
+      "dailyActivity": {
+        "title": "Hoạt động hàng ngày (7 ngày qua)",
+        "description": "Theo dõi hoạt động đăng nhập, nộp bài và thảo luận của học viên",
+        "logins": "Đăng nhập",
+        "submissions": "Nộp bài",
+        "discussions": "Thảo luận"
+      },
+      "performanceRadar": {
+        "title": "Đánh giá tổng quan hiệu suất lớp học",
+        "description": "Biểu đồ radar thể hiện các chỉ số hiệu suất trung bình của lớp học",
+        "classPerformance": "Hiệu suất lớp học",
+        "attendance": "Chuyên cần",
+        "completion": "Hoàn thành",
+        "participation": "Tham gia",
+        "engagement": "Tương tác",
+        "punctuality": "Đúng giờ",
+        "collaboration": "Hợp tác"
+      }
+    },
+    "lists": {
+      "bestProjects": {
+        "title": "Đề tài xuất sắc",
+        "description": "Danh sách các đề tài có hiệu suất và đánh giá cao nhất",
+        "students": "sinh viên",
+        "commits": "commits",
+        "mentor": "GVHD",
+        "avgScore": "Điểm TB",
+        "completionRate": "hoàn thành"
+      },
+      "activeStudents": {
+        "title": "Học viên hoạt động tích cực",
+        "description": "Danh sách học viên có mức độ tham gia cao nhất",
+        "assignments": "bài tập",
+        "participation": "tham gia",
+        "lastActive": "hoạt động cuối"
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { CourseController } from '@/controllers/courses.controller';
 import { GetAllQueryDto } from '@/dtos/common.dto';
-import { AddCourseDto, CreateCourseDto, JoinCourseDto } from '@/dtos/courses.dto';
+import { AddCourseDto, CreateCourseDto, GetCodeActivityDto, JoinCourseDto } from '@/dtos/courses.dto';
 import { AuthMiddleware, isTeacherOrAdmin } from '@/middlewares/auth.middleware';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
 import { Routes } from '@interfaces/routes.interface';
@@ -37,6 +37,10 @@ export class CourseRoute implements Routes {
     this.router.delete(`${this.path}/:id/force`, isTeacherOrAdmin, this.course.destroyCourse);
     this.router.post(`${this.path}/:id/restore`, isTeacherOrAdmin, this.course.restoreCourse);
     this.router.get(`${this.path}`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getCourses);
+
+    // Dashboard Analytics routes
+    this.router.get(`${this.path}/:id/code-activity`, AuthMiddleware, ValidationMiddleware(GetCodeActivityDto, 'query'), this.course.getCourseCodeActivity);
+    this.router.get(`${this.path}/:id/contributors`, AuthMiddleware, this.course.getContributors);
 
     // Public routes
     this.router.get(`${this.path}/:id`, this.course.getCourseById);

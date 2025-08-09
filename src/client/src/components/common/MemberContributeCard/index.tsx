@@ -3,41 +3,49 @@ import { IReposContributors } from '@/interfaces/repos';
 import { IconCode } from '@tabler/icons-react';
 import { GitCommit, GitPullRequest } from 'lucide-react';
 
-export function MemberContributeCard({ contributor }: { contributor: IReposContributors }) {
-  return (
-    <div className="border rounded-lg p-3 space-y-3 hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-2 justify-between">
-        <MemberAvatar
-          name={contributor.author.name}
-          avatar={contributor.author.avatar}
-          id={contributor.authorId}
-          size={30}
-          description={contributor.author.email}
-          className="cursor-pointer"
-        />
+interface MemberContributeProps {
+  contributor: IReposContributors;
+  number?: number;
+}
 
-        <div className="text-right">
-          <div className="text-sm font-medium text-gray-900 dark:text-white">
-            <span className="text-green-600">+{contributor.commit.additions ?? 0}</span>
-            <span className="text-gray-400 mx-1">/</span>
-            <span className="text-red-500">-{contributor.commit.deletions ?? 0}</span>
+export function MemberContributeCard({ contributor, number }: MemberContributeProps) {
+  return (
+    <div className="border rounded-lg p-3 space-y-3 hover:shadow-md transition-shadow flex flex-row gap-2">
+      {number && (
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center text-white font-semibold text-sm shadow-sm">
+          #{number}
+        </div>
+      )}
+      <div className="flex items-start gap-3 justify-between w-full">
+        <div className="flex flex-col gap-2">
+          <MemberAvatar
+            name={contributor.author.name}
+            avatar={contributor.author.avatar}
+            id={contributor.authorId}
+            size={40}
+            description={contributor.author.email}
+            className="cursor-pointer flex-shrink-0"
+          />
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1 text-sm">
+              <IconCode className="w-4 h-4" />
+              <span>{contributor.codeAnalysis.total} analysis</span>
+            </div>
+            <div className="flex items-center gap-1 text-sm">
+              <GitCommit className="w-4 h-4" />
+              <span>{contributor.commit.total} commits</span>
+            </div>
+
+            <div className="flex items-center gap-1 text-sm">
+              <GitPullRequest className="w-4 h-4" />
+              <span>{contributor.pullRequest.total} pull requests</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-        <div className="flex items-center gap-1 text-sm">
-          <IconCode className="w-4 h-4" />
-          <span>{contributor.codeAnalysis.total} analysis</span>
-        </div>
-        <div className="flex items-center gap-1 text-sm">
-          <GitCommit className="w-4 h-4" />
-          <span>{contributor.commit.total} commits</span>
-        </div>
-
-        <div className="flex items-center gap-1 text-sm">
-          <GitPullRequest className="w-4 h-4" />
-          <span>{contributor.pullRequest.total} pull requests</span>
+        <div className="text-sm font-medium text-gray-900 dark:text-white">
+          <span className="text-green-600 font-semibold">+{contributor.commit.additions ?? 0}</span>
+          <span className="text-gray-400 mx-1">/</span>
+          <span className="text-red-500 font-semibold">-{contributor.commit.deletions ?? 0}</span>
         </div>
       </div>
     </div>

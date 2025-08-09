@@ -144,17 +144,19 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
               </Button>
             )}
 
-            <Button
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 dark:from-purple-500 dark:to-purple-600 dark:hover:from-purple-600 dark:hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
-              onClick={() => router.push(paths.COURSE_DASHBOARD(course.id))}
-            >
-              <IconChartBar className="size-4 mr-2" />
-              {'Dashboard'}
-              <IconChevronRight className="size-4 ml-auto" />
-            </Button>
+            {isOwner && (
+              <Button
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 dark:from-purple-500 dark:to-purple-600 dark:hover:from-purple-600 dark:hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                onClick={() => router.push(paths.COURSE_DASHBOARD(course.id))}
+              >
+                <IconChartBar className="size-4 mr-2" />
+                {'Dashboard'}
+                <IconChevronRight className="size-4 ml-auto" />
+              </Button>
+            )}
 
             {isExpired ? (
-              <div className='flex justify-center pt-4'>
+              <div className="flex justify-center pt-4">
                 <TextDescription className="text-sm text-red-700 text-center dark:text-red-300">
                   {t('courseExpired')}
                 </TextDescription>

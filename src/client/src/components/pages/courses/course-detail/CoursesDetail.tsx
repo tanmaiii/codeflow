@@ -210,7 +210,7 @@ export default function CoursesDetail() {
 
               {!hasStarted && (
                 <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-6">
-                  <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-3">
                     <IconClockHour1 className="size-6 text-white" />
                     <div>
                       <TextHeading className="text-white">
@@ -223,7 +223,7 @@ export default function CoursesDetail() {
                     </div>
                   </div>
                   {isRegistrationOpen && (
-                    <div className="space-y-2">
+                    <div className="space-y-2 mt-4">
                       <div className="flex justify-between text-sm">
                         <TextDescription className="text-white/80">
                           {tCourse('registrationProgress')}

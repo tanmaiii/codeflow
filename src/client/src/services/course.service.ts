@@ -1,7 +1,13 @@
 import { IComment } from '@/interfaces/comment';
 import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
-import { ICourse, ICourseEnrollment, ICreateCourseDto } from '@/interfaces/course';
-import { IUser } from '@/interfaces/user';
+import {
+  ICourse,
+  ICourseEnrollment,
+  ICourseMembers,
+  ICreateCourseDto,
+  ICodeActivity,
+} from '@/interfaces/course';
+import { IReposContributors } from '@/interfaces/repos';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 
@@ -100,13 +106,28 @@ class CourseService {
   async memberInCourse(
     courseId: string,
     params: IGetAllQuery,
-  ): Promise<PaginatedResponseAPIDto<IUser[]>> {
+  ): Promise<PaginatedResponseAPIDto<ICourseMembers[]>> {
     const res = await this.client.get(`/${courseId}/members`, { params });
     return res.data;
   }
 
   async comments(id: string): Promise<ResponseAPIDto<IComment[]>> {
     const res = await this.client.get(`/${id}/comments`);
+    return res.data;
+  }
+
+  async getCodeActivity(
+    courseId: string,
+    days: number = 7,
+  ): Promise<ResponseAPIDto<ICodeActivity>> {
+    const res = await this.client.get(`/${courseId}/code-activity`, {
+      params: { days },
+    });
+    return res.data;
+  }
+
+  async getContributors(courseId: string): Promise<ResponseAPIDto<IReposContributors[]>> {
+    const res = await this.client.get(`/${courseId}/contributors`);
     return res.data;
   }
 }

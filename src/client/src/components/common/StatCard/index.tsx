@@ -3,7 +3,7 @@ import { Progress } from '@/components/ui/progress';
 
 interface StatCardProps {
   title: string;
-  value: number;
+  value: number | string;
   icon: React.ElementType;
   description?: string;
   color?: 'default' | 'success' | 'warning' | 'danger';
@@ -11,11 +11,11 @@ interface StatCardProps {
   progress?: number;
 }
 
-export default function StatCard({ 
-  title, 
-  value, 
-  icon: Icon, 
-  description, 
+export default function StatCard({
+  title,
+  value,
+  icon: Icon,
+  description,
   color = 'default',
   onClick,
   progress,
@@ -28,8 +28,10 @@ export default function StatCard({
   };
 
   return (
-    <Card 
-      className={`relative p-0 overflow-hidden border-0 shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300 group ${onClick ? 'cursor-pointer' : ''}`}
+    <Card
+      className={`relative p-0 overflow-hidden border-0 shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300 group ${
+        onClick ? 'cursor-pointer' : ''
+      }`}
       onClick={onClick}
     >
       <CardContent className="p-6">
@@ -54,4 +56,4 @@ export default function StatCard({
       ></div>
     </Card>
   );
-} 
+}

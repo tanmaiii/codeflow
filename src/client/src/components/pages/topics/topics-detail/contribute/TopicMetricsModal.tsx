@@ -28,7 +28,7 @@ export default function TopicMetricsModal({
         </Button>
       }
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 pb-4">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
             <span className="text-md text-muted-foreground">{t('topic.title')}:</span>

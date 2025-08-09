@@ -76,7 +76,8 @@
     "oldest": "Oldest",
     "all": "All",
     "showLess": "Show less",
-    "showMore": "Show more"
+    "showMore": "Show more",
+    "noData": "No data"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -770,5 +771,80 @@
     "open": "Open",
     "closed": "Closed",
     "merged": "Merged"
+  },
+  "courseDashboard": {
+    "title": "Course Dashboard",
+    "description": "Track student progress and performance in the course",
+    "stats": {
+      "totalStudents": "Total Students",
+      "activeStudents": "Active Students",
+      "completionRate": "Completion Rate",
+      "totalTopics": "Total Topics",
+      "enrolledDescription": "Enrolled in course",
+      "activeDescription": "Students have registered topics",
+      "completionDescription": "% assignments submitted",
+      "topicsDescription": "Course topics",
+      "completionProgress": "Completion Progress",
+      "progressDescription": "Completion progress of the course"
+    },
+    "charts": {
+      "codeActivity": {
+        "title": "Daily Code Development Activity",
+        "description": "Statistics of commits, pull requests, and code analysis by day",
+        "commits": "Commits",
+        "pullRequests": "Pull Requests",
+        "codeAnalysis": "Code Analysis",
+        "7d": "7 days",
+        "30d": "30 days",
+        "3m": "3 months",
+        "6m": "6 months",
+        "1y": "1 year"
+      },
+      "projectProgress": {
+        "title": "Progress by Project",
+        "description": "Statistics of completion rates and participation levels by project topic",
+        "completionRate": "Completion Rate",
+        "participation": "Participation Rate",
+        "milestones": "Milestones",
+        "studentsWorking": "Students Working",
+        "status": "Project Status"
+      },
+      "dailyActivity": {
+        "title": "Daily Activity (Last 7 Days)",
+        "description": "Track student login, submission, and discussion activities",
+        "logins": "Logins",
+        "submissions": "Submissions",
+        "discussions": "Discussions"
+      },
+      "performanceRadar": {
+        "title": "Class Performance Overview",
+        "description": "Radar chart showing average class performance indicators",
+        "classPerformance": "Class Performance",
+        "attendance": "Attendance",
+        "completion": "Completion",
+        "participation": "Participation",
+        "engagement": "Engagement",
+        "punctuality": "Punctuality",
+        "collaboration": "Collaboration"
+      }
+    },
+    "lists": {
+      "bestProjects": {
+        "title": "Excellent Projects",
+        "description": "List of projects with highest performance and ratings",
+        "students": "students",
+        "commits": "commits",
+        "mentor": "Mentor",
+        "avgScore": "Avg Score",
+        "completionRate": "completed"
+      },
+      "activeStudents": {
+        "title": "Most Active Students",
+        "description": "List of students with highest participation levels",
+        "assignments": "assignments",
+        "participation": "participation",
+        "lastActive": "last active"
+      }
+    }
   }
 }
