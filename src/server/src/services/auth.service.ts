@@ -2,17 +2,17 @@ import { ENUM_USER_ROLE, ENUM_USER_STATUS } from '@/data/enum';
 import { HttpException } from '@/exceptions/HttpException';
 import { SECRET_KEY } from '@config';
 import { DB } from '@database';
-import { CreateUserDto, CreateUserGithub, LoginUserDto, ForgotPasswordDto, ResetPasswordDto, ChangePasswordDto } from '@dtos/users.dto';
+import { ChangePasswordDto, CreateUserDto, CreateUserGithub, ForgotPasswordDto, LoginUserDto, ResetPasswordDto } from '@dtos/users.dto';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import { compare, hash } from 'bcrypt';
+import crypto from 'crypto';
 import { sign } from 'jsonwebtoken';
 import { Service } from 'typedi';
-import { GitHubService } from './github.service';
-import { UserService } from './users.service';
-import { UserSettingsService } from './user_settings.service';
 import { EmailService } from './email.service';
-import crypto from 'crypto';
+import { GitHubService } from './github.service';
+import { UserSettingsService } from './user_settings.service';
+import { UserService } from './users.service';
 
 export const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { user: user };
@@ -28,10 +28,10 @@ export const createCookie = (tokenData: TokenData): string => {
 @Service()
 export class AuthService {
   constructor(
-    private githubService: GitHubService, 
-    private userService: UserService, 
+    private githubService: GitHubService,
+    private userService: UserService,
     private userSettingsService: UserSettingsService,
-    private emailService: EmailService
+    private emailService: EmailService,
   ) {}
 
   public async createToken(user: User): Promise<TokenData> {
@@ -62,11 +62,16 @@ export class AuthService {
       if (checkUserInOrganization) {
         findUser.status = ENUM_USER_STATUS.ACTIVE;
         await DB.Users.update({ status: ENUM_USER_STATUS.ACTIVE }, { where: { id: findUser.id } });
+      } else {
+        findUser.status = ENUM_USER_STATUS.INACTIVE;
+        await DB.Users.update({ status: ENUM_USER_STATUS.INACTIVE }, { where: { id: findUser.id } });
+        await this.githubService.inviteUserToOrganization(userBody.login);
       }
 
       return { tokenData, findUser };
     }
 
+    //Mời vào org
     if (!checkUserInOrganization) await this.githubService.inviteUserToOrganization(userBody.login);
 
     const createUserData: User = await DB.Users.create({
@@ -124,6 +129,8 @@ export class AuthService {
     //FIXME: Tạm ẩn
     // if (findUser.uid) throw new HttpException(409, `The account ${userData.email} is linked to Github. Please login with Github`);
 
+    if (!findUser.password) throw new HttpException(409, `The account ${userData.email} is linked to Github. Please login with Github`);
+
     const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
     if (!isPasswordMatching) throw new HttpException(409, 'Password not matching');
 
@@ -150,11 +157,11 @@ export class AuthService {
 
     // Cập nhật user với reset token
     await DB.Users.update(
-      { 
+      {
         resetToken,
-        resetTokenExpires 
+        resetTokenExpires,
       },
-      { where: { id: findUser.id } }
+      { where: { id: findUser.id } },
     );
 
     // Gửi email reset password
@@ -166,10 +173,10 @@ export class AuthService {
   public async resetPassword(resetPasswordData: ResetPasswordDto): Promise<{ message: string }> {
     const { token, newPassword } = resetPasswordData;
 
-    const findUser: User = await DB.Users.findOne({ 
-      where: { 
+    const findUser: User = await DB.Users.findOne({
+      where: {
         resetToken: token,
-      } 
+      },
     });
 
     if (!findUser) throw new HttpException(400, 'Invalid reset token');
@@ -184,12 +191,12 @@ export class AuthService {
 
     // Cập nhật password và xóa reset token
     await DB.Users.update(
-      { 
+      {
         password: hashedPassword,
         resetToken: null,
-        resetTokenExpires: null
+        resetTokenExpires: null,
       },
-      { where: { id: findUser.id } }
+      { where: { id: findUser.id } },
     );
 
     return { message: 'Password reset successfully' };
@@ -209,10 +216,7 @@ export class AuthService {
     const hashedNewPassword = await hash(newPassword, 10);
 
     // Cập nhật password
-    await DB.Users.update(
-      { password: hashedNewPassword },
-      { where: { id: userId } }
-    );
+    await DB.Users.update({ password: hashedNewPassword }, { where: { id: userId } });
 
     return { message: 'Password changed successfully' };
   }

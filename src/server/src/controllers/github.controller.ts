@@ -68,6 +68,30 @@ export class GitHubController {
     }
   };
 
+  public checkUserInOrganization = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const { username } = req.params;
+      const user = await this.userService.findUserByUsername(username);
+      if (!user) throw new HttpException(404, 'User not found');
+      const userInOrg = await this.github.checkUserInOrganization(user.username);
+      res.status(200).json({ data: userInOrg, message: 'github-user-in-organization' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public inviteUserToOrganization = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const { username } = req.params;
+      const user = await this.userService.findUserByUsername(username);
+      if (!user) throw new HttpException(404, 'User not found');
+      const userInOrg = await this.github.inviteUserToOrganization(user.username);
+      res.status(200).json({ data: userInOrg, message: 'github-user-in-organization' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   /**
    * Thêm webhook commit
    */
@@ -91,7 +115,6 @@ export class GitHubController {
   /**
    * Xử lý webhook commit
    */
-  // TODO: Xử lý Webhook commit
   public handleWebhookCommit = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { body } = req;
