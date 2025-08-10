@@ -233,6 +233,7 @@
     "name": "Tên",
     "email": "Email",
     "password": "Mật khẩu",
+    "newPassword": "Mật khẩu mới",
     "confirmPassword": "Xác nhận mật khẩu",
     "short": "{field} quá ngắn",
     "required": "{field} là bắt buộc",

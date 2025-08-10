@@ -10,15 +10,17 @@ const changePasswordSchema = (t: ReturnType<typeof useTranslations>) =>
   z
     .object({
       currentPassword: z
-        .string()
+        .string({message:t('required', { field: t('password') })})
         .min(6, t('short', { field: t('password') }))
         .max(255),
       newPassword: z
-        .string()
+        .string({message:t('required', { field: t('newPassword') })})
         .min(6, t('short', { field: t('password') }))
         .regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/, t('passwordStrength'))
         .max(255),
-      confirmPassword: z.string(),
+      confirmPassword: z
+        .string({ message: t('required', { field: t('confirmPassword') }) })
+        .min(6, t('short', { field: t('password') })),
     })
     .refine(data => data.newPassword === data.confirmPassword, {
       message: t('passwordNotMatch'),

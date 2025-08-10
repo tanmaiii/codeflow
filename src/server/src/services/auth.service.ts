@@ -208,6 +208,13 @@ export class AuthService {
     const findUser: User = await DB.Users.scope('withPassword').findByPk(userId);
     if (!findUser) throw new HttpException(404, 'User not found');
 
+    if (!findUser.password) {
+      const hashedNewPassword = await hash(newPassword, 10);
+      await DB.Users.update({ password: hashedNewPassword }, { where: { id: userId } });
+
+      return { message: 'Password changed successfully' };
+    }
+
     // Kiểm tra mật khẩu hiện tại
     const isCurrentPasswordValid = await compare(currentPassword, findUser.password);
     if (!isCurrentPasswordValid) throw new HttpException(400, 'Current password is incorrect');

@@ -233,6 +233,7 @@
     "name": "Name",
     "email": "Email",
     "password": "Password",
+    "newPassword": "New password",
     "confirmPassword": "Confirm Password",
     "short": "{field} is too short",
     "required": "{field} is required",

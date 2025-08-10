@@ -15,9 +15,9 @@ export default function GithubProvide({ children }: { children: React.ReactNode 
         try {
           const response = await githubService.checkUserInOrganization(user.username);
           if (response.data === false) {
-              removeUser();
-              tokenService.clearTokens();
-              route.push('/login');
+            removeUser();
+            tokenService.clearTokens();
+            route.push('/login');
           }
         } catch (error) {
           console.error('Error fetching user info:', error);
@@ -28,5 +28,5 @@ export default function GithubProvide({ children }: { children: React.ReactNode 
     }
   }, [user, route, removeUser]);
 
-  return <div>{children}</div>;
+  return <>{children}</>;
 }
