@@ -38,6 +38,7 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
   }
 };
 
+//Cho phép truy cập mà không cần token
 export const OptionalAuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
     const Authorization = getAuthorization(req);

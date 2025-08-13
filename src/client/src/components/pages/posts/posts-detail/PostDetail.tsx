@@ -11,9 +11,8 @@ import { IMAGES } from '@/data/images';
 import { paths } from '@/data/path';
 import useQ_Post_CheckLike from '@/hooks/query-hooks/Post/useQ_Post_CheckLike';
 import useQ_Post_GetComments from '@/hooks/query-hooks/Post/useQ_Post_GetComments';
+import useQ_Post_GetDetail from '@/hooks/query-hooks/Post/useQ_Post_GetDetail';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
-import { IComment } from '@/interfaces/comment';
-import { IPost } from '@/interfaces/post';
 import apiConfig from '@/lib/api';
 import commentService from '@/services/comment.service';
 import postService from '@/services/post.service';
@@ -28,43 +27,39 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 interface Post_Detail_Props {
-  initialPostData: IPost;
-  initialCommentsData: IComment[];
   postId: string;
 }
 
 export default function PostDetail({
-  initialPostData,
-  initialCommentsData,
   postId,
 }: Post_Detail_Props) {
   const { localPath } = useH_LocalPath();
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user } = useUserStore();
+
+  const {data: PostData, isLoading, isError} = useQ_Post_GetDetail({id: postId});
+
   const uesQ_Post_Like = useQ_Post_CheckLike({
-    id: initialPostData.id ?? '',
+    id: postId,
   });
 
   // Use SSR data as initial data for React Query
   const { data: commentData } = useQ_Post_GetComments({
     id: postId,
-    options: {
-      initialData: { data: initialCommentsData, message: 'success' },
-    },
   });
 
   const mutationComment = useMutation({
     mutationFn: (value: string) => {
       const res = commentService.create({
         content: value,
-        postId: initialPostData.id,
+        postId: postId,
       });
       return res;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['post', 'comments', initialPostData.id],
+        queryKey: ['post', 'comments', postId],
       });
     },
   });
@@ -76,17 +71,20 @@ export default function PostDetail({
         return;
       }
       if (uesQ_Post_Like?.data?.data?.isLike) {
-        await postService.unlike(initialPostData.id ?? '');
+        await postService.unlike(postId);
       } else {
-        await postService.like(initialPostData.id ?? '');
+        await postService.like(postId);
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['post', 'like', initialPostData.id],
+        queryKey: ['post', 'like', postId],
       });
     },
   });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error</div>;
 
   return (
     <div className="space-y-8">
@@ -96,11 +94,11 @@ export default function PostDetail({
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
           <MyImage
             src={
-              initialPostData.thumbnail
-                ? utils_ApiImageToLocalImage(initialPostData.thumbnail)
+              PostData?.data?.thumbnail
+                ? utils_ApiImageToLocalImage(PostData?.data?.thumbnail)
                 : IMAGES.DEFAULT_COURSE
             }
-            alt={initialPostData.title}
+            alt={PostData?.data?.title ?? ''}
             width={1200}
             height={500}
             priority
@@ -125,7 +123,7 @@ export default function PostDetail({
                 size="icon"
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    window.location.origin + localPath(paths.POSTS + '/' + initialPostData.id),
+                    window.location.origin + localPath(paths.POSTS + '/' + postId),
                   );
                   toast.success('Copied to clipboard');
                 }}
@@ -151,9 +149,9 @@ export default function PostDetail({
           {/* Title Overlay */}
           <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
             <div className="max-w-4xl">
-              <NameTags tags={initialPostData.tags} className="mb-4 opacity-90" max={3} />
+              <NameTags tags={PostData?.data?.tags ?? []} className="mb-4 opacity-90" max={3} />
               <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4 drop-shadow-lg">
-                {initialPostData.title}
+                {PostData?.data?.title}
               </h1>
             </div>
           </div>
@@ -168,22 +166,22 @@ export default function PostDetail({
               <MyImage
                 className="w-16 h-16 object-cover rounded-full ring-4 ring-blue-100 shadow-md"
                 src={
-                  initialPostData.author?.avatar
-                    ? utils_ApiImageToLocalImage(initialPostData.author.avatar)
-                    : apiConfig.avatar(initialPostData.author?.name ?? 'c')
+                  PostData?.data?.author?.avatar
+                    ? utils_ApiImageToLocalImage(PostData?.data?.author.avatar)
+                    : apiConfig.avatar(PostData?.data?.author?.name ?? 'c')
                 }
-                alt={initialPostData.author?.name || 'Author'}
+                alt={PostData?.data?.author?.name || 'Author'}
                 width={64}
                 height={64}
-                defaultSrc={apiConfig.avatar(initialPostData.author?.name ?? 'c')}
+                defaultSrc={apiConfig.avatar(PostData?.data?.author?.name ?? 'c')}
               />
             </div>
             <div>
-              <TextHeading className="text-xl">{initialPostData.author?.name}</TextHeading>
-              {initialPostData.createdAt && (
+              <TextHeading className="text-xl">{PostData?.data?.author?.name}</TextHeading>
+              {PostData?.data?.createdAt && (
                 <TextDescription className="text-sm">
-                  {utils_DateToDDMonth(new Date(initialPostData.createdAt))} •{' '}
-                  {utils_TimeAgo(new Date(initialPostData.createdAt))}
+                  {utils_DateToDDMonth(new Date(PostData?.data?.createdAt))} •{' '}
+                  {utils_TimeAgo(new Date(PostData?.data?.createdAt))}
                 </TextDescription>
               )}
             </div>
@@ -193,13 +191,13 @@ export default function PostDetail({
           <div className="flex items-center gap-6 text-sm text-gray-600">
             <div className="flex items-center gap-1">
               <HeartIcon className="w-4 h-4" />
-              <span>{initialPostData.likeCount ?? 0} likes</span>
+              <span>{PostData?.data?.likeCount ?? 0} likes</span>
             </div>
           </div>
         </div>
 
         <div className="prose prose-lg prose-blue max-w-none">
-          <SwapperHTML content={initialPostData.content} />
+          <SwapperHTML content={PostData?.data?.content ?? ''} />
         </div>
 
         <Comments

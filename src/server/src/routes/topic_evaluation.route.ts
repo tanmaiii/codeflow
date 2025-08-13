@@ -16,14 +16,14 @@ export class TopicEvaluationRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:topicId/topic`,AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.topicEvaluation.getAllByTopicId);
-    this.router.get(`${this.path}/:id`,AuthMiddleware, this.topicEvaluation.getById);
-    this.router.post(
-      `${this.path}`,
-      isTeacherOrAdmin,
-      ValidationMiddleware(CreateTopicEvaluationDto, 'body'),
-      this.topicEvaluation.create,
+    this.router.get(
+      `${this.path}/:topicId/topic`,
+      AuthMiddleware,
+      ValidationMiddleware(GetAllQueryDto, 'query'),
+      this.topicEvaluation.getAllByTopicId,
     );
+    this.router.get(`${this.path}/:id`, AuthMiddleware, this.topicEvaluation.getById);
+    this.router.post(`${this.path}`, isTeacherOrAdmin, ValidationMiddleware(CreateTopicEvaluationDto, 'body'), this.topicEvaluation.create);
     this.router.put(`${this.path}/:id`, isTeacherOrAdmin, this.topicEvaluation.update);
     this.router.delete(`${this.path}/:id`, isTeacherOrAdmin, this.topicEvaluation.delete);
   }

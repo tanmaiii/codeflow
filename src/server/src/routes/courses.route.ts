@@ -39,7 +39,12 @@ export class CourseRoute implements Routes {
     this.router.get(`${this.path}`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getCourses);
 
     // Dashboard Analytics routes
-    this.router.get(`${this.path}/:id/code-activity`, AuthMiddleware, ValidationMiddleware(GetCodeActivityDto, 'query'), this.course.getCourseCodeActivity);
+    this.router.get(
+      `${this.path}/:id/code-activity`,
+      AuthMiddleware,
+      ValidationMiddleware(GetCodeActivityDto, 'query'),
+      this.course.getCourseCodeActivity,
+    );
     this.router.get(`${this.path}/:id/contributors`, AuthMiddleware, this.course.getContributors);
 
     // Public routes

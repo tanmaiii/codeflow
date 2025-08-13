@@ -1,21 +1,14 @@
-import { IComment } from '@/interfaces/comment';
-import { IPost } from '@/interfaces/post';
+'use client'
+import { useTranslations } from 'next-intl';
 import PostDetail from './PostDetail';
 import PostDetailMore from './PostDetailMore';
-import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 
-interface Post_Detail_Layout_Props {
-  initialPostData: IPost;
-  initialCommentsData: IComment[];
-  postId: string;
-}
-
-export default function PostDetailLayout({
-  initialPostData,
-  initialCommentsData,
-  postId,
-}: Post_Detail_Layout_Props) {
+export default function PostDetailLayout() {
   const t = useTranslations();
+  const params = useParams();
+  const postId = params?.id as string;
+
   return (
     <div className="min-h-screen">
       <div className="">
@@ -24,8 +17,6 @@ export default function PostDetailLayout({
           <div className="col-span-1 lg:col-span-8 xl:col-span-9">
             <div className="space-y-6">
               <PostDetail
-                initialPostData={initialPostData}
-                initialCommentsData={initialCommentsData}
                 postId={postId}
               />
             </div>
