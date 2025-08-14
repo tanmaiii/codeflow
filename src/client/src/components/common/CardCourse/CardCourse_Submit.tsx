@@ -59,7 +59,7 @@ export default function CardCourse_Submit({ courseId }: CardCourse_SubmitProps) 
 
   return (
     <ActionModal
-      title="Submit"
+      title={t('join')}
       icon={
         <Button ref={ButtonRef} className="w-full dark:text-white">
           {t('join')}

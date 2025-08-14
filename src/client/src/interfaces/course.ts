@@ -24,9 +24,9 @@ export interface ICourse extends IBaseEntity {
   status: boolean;
   maxGroupMembers: number;
   topicCount: number;
-  documents: IDocument[];
+  documents?: IDocument[];
   enrollmentCount: number;
-  tags: ITag[];
+  tags?: ITag[];
   author?: IUser;
   type: string;
 }

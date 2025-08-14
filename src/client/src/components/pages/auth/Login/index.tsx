@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import LoginWithGitHub from '../login-with-github';
+import { ROLE } from '@/constants/enum';
 
 export default function Login() {
   const t = useTranslations('auth');
@@ -51,7 +52,7 @@ export default function Login() {
     onSuccess: data => {
       tokenService.accessToken = data.accessToken.token;
       setUser(data.data);
-      if (data.data.role === 'admin') {
+      if (data.data.role === ROLE.ADMIN) {
         router.push(localPath(paths.ADMIN));
       } else {
         router.push(localPath(paths.HOME));

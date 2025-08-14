@@ -1,11 +1,12 @@
-import { HttpException } from '@exceptions/HttpException';
+import { ENUM_USER_ROLE } from '@/data/enum';
+import { UserSettingsModel } from '@/models/user_settings.model';
 import { DB } from '@database';
 import { CreateUserDto, UpdateUserDto } from '@dtos/users.dto';
+import { HttpException } from '@exceptions/HttpException';
 import { User } from '@interfaces/users.interface';
 import { hash } from 'bcrypt';
-import { Service } from 'typedi';
 import { Op } from 'sequelize';
-import { UserSettingsModel } from '@/models/user_settings.model';
+import { Service } from 'typedi';
 @Service()
 export class UserService {
   public async findAllUser(): Promise<User[]> {
@@ -94,7 +95,11 @@ export class UserService {
     if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: User = await DB.Users.create({ ...userData, password: hashedPassword });
+    const createUserData: User = await DB.Users.create({
+      ...userData,
+      status: userData?.role === ENUM_USER_ROLE.TEACHER || userData?.role === ENUM_USER_ROLE.ADMIN ? 'suspended' : 'inactive',
+      password: hashedPassword,
+    });
     return createUserData;
   }
 
@@ -107,7 +112,13 @@ export class UserService {
       userData.password = hashedPassword;
     }
 
-    await DB.Users.update({ ...userData }, { where: { id: userId } });
+    await DB.Users.update(
+      {
+        ...userData,
+        status: userData?.role === ENUM_USER_ROLE.TEACHER || userData?.role === ENUM_USER_ROLE.ADMIN ? 'suspended' : 'inactive',
+      },
+      { where: { id: userId } },
+    );
 
     const updateUser: User = await DB.Users.findByPk(userId);
     return updateUser;

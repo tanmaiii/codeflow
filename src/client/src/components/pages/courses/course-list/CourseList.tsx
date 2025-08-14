@@ -20,7 +20,6 @@ const COURSE_TABS = [
   { id: 'author', label: 'authorCourses' },
 ] as const;
 
-const DEFAULT_PAGE_SIZE = 8;
 const DEFAULT_SORT = { sortBy: 'createdAt', order: 'DESC' as const };
 
 export default function CourseList() {
@@ -34,7 +33,7 @@ export default function CourseList() {
 
   const queryParams = {
     page,
-    limit: DEFAULT_PAGE_SIZE,
+    limit: 10,
     ...DEFAULT_SORT,
   };
 
@@ -89,7 +88,7 @@ export default function CourseList() {
           </Button>
         )}
       </div>
-      <div className="min-h-[600px]">
+      <div className="min-h-[600px] mt-4">
         {!currentData.data?.length && <NoData />}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3 2xl:grid-cols-5 py-2">
           {currentData.data?.map(course => (

@@ -32,7 +32,7 @@ export function TextDescription({
     <span
       className={cn(
         'text-sm font-normal text-muted-foreground leading-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-20',
-        lineClamp && `line-clamp-${lineClamp} break-all overflow-hidden text-ellipsis`,
+        lineClamp && `line-clamp-${lineClamp} overflow-hidden text-ellipsis `,
         className,
       )}
       {...props}

@@ -269,7 +269,7 @@ export default function CoursesDetail() {
             <NameTags
               className="mt-2 p-4 rounded-sm bg-background-1 mb-6"
               tags={dataCourse.data?.tags}
-              max={dataCourse.data?.tags.length}
+              max={dataCourse.data?.tags?.length ?? 3}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -352,7 +352,7 @@ export default function CoursesDetail() {
             </Card>
 
             {/* Documents */}
-            {dataCourse.data?.documents.length > 0 && (
+            {dataCourse.data?.documents && dataCourse.data?.documents?.length > 0 && (
               <Card className="p-8">
                 <div className="flex items-center justify-between mb-6">
                   <TextHeading className="text-2xl font-bold flex items-center gap-2">

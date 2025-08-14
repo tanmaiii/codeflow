@@ -53,6 +53,10 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsString()
+  public role: string;
+
+  @IsOptional()
+  @IsString()
   @IsEmail()
   public email: string;
 

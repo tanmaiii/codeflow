@@ -4,6 +4,7 @@ import TextInput from '@/components/common/Input/TextInput/TextInput';
 import MySelect from '@/components/common/MySelect';
 import { Button } from '@/components/ui/button';
 import { DialogClose } from '@/components/ui/dialog';
+import { ROLE } from '@/constants/enum';
 import { ROLE_USER } from '@/constants/object';
 import { IUser } from '@/interfaces/user';
 import { UserUpdateSchemaType, useUserSchema } from '@/lib/validations/userSchema';
@@ -71,7 +72,12 @@ export default function UsersUpdate({ user }: { user: IUser }) {
           label={t('role')}
           name="role"
           control={control}
-          options={ROLE_USER}
+          options={ROLE_USER.filter(item => {
+            if (!user.uid) {
+              return item.value !== ROLE.USER;
+            }
+            return item;
+          })}
           error={errors.role}
           required={true}
         />

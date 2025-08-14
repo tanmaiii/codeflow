@@ -5,7 +5,7 @@ import { cx } from "class-variance-authority";
 import { useRouter } from "next/navigation";
 interface NameTagsProps extends Omit<React.HTMLAttributes<HTMLParagraphElement>, 'onClick'> {
   max?: number;
-  tags: ITag[];
+  tags?: ITag[];
   className?: string;
 }
 
@@ -16,14 +16,14 @@ export default function NameTags({
   ...rest
 }: NameTagsProps) {
   const router = useRouter();
-  if (tags.length === 0) return null;
+  if (tags?.length === 0 || !tags) return null;
 
   return (
     <p
       className={cx("flex flex-wrap gap-1.5 mt-2", className)}
       {...rest}
     >
-      {tags.slice(0, max).map((tag, index) => {
+      {tags?.slice(0, max).map((tag, index) => {
         return (
           <span
             key={tag.id || index}
@@ -39,7 +39,7 @@ export default function NameTags({
           </span>
         );
       })}
-      {tags.length > max && (
+      {tags?.length > max && (
         <span
           className={cn(
             "text-xs font-medium px-2 py-0.5 rounded-full",
@@ -47,7 +47,7 @@ export default function NameTags({
             "dark:bg-muted/50 dark:hover:bg-muted/70"
           )}
         >
-          +{tags.length - max} more
+          +{tags?.length - max} more
         </span>
       )}
     </p>

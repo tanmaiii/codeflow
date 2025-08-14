@@ -178,7 +178,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
       </Card>
 
       {/* Course Progress Card */}
-      <Card className="p-6 bg-gradient-to-br from-indigo-50 via-purple-50/50 to-pink-50/30 dark:from-indigo-900/40 dark:via-purple-900/30 dark:to-pink-900/20 border border-indigo-200/50 dark:border-indigo-700/30 shadow-lg">
+      {/* <Card className="p-6 bg-gradient-to-br from-indigo-50 via-purple-50/50 to-pink-50/30 dark:from-indigo-900/40 dark:via-purple-900/30 dark:to-pink-900/20 border border-indigo-200/50 dark:border-indigo-700/30 shadow-lg">
         <div className="flex items-center justify-between mb-4">
           <TextHeading className="font-semibold text-indigo-900 dark:text-indigo-100">
             {t('courseProgress')}
@@ -215,7 +215,7 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
             </TextDescription>
           </div>
         </div>
-      </Card>
+      </Card> */}
 
       {/* Achievement Badge */}
       {/* <Card className="p-4 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-900/40 dark:via-yellow-900/30 dark:to-orange-900/20 border border-amber-200/50 dark:border-amber-700/30 shadow-lg">

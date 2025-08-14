@@ -97,7 +97,7 @@ export default function HeaderSearch() {
     <div ref={ref} className="relative w-full">
       <div
         className={cx(
-          'flex items-center bg-background-2 dark:bg-background-1  p-2 h-11',
+          'flex items-center bg-background-2 dark:bg-background-1  p-2 h-11 border',
           isFocused ? (keyword ? 'border rounded-t-lg' : 'rounded-lg') : 'rounded-lg',
         )}
       >

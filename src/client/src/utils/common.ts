@@ -256,3 +256,27 @@ export const util_chart_generate_color = (name: string): string => {
 
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
+
+export const util_progress_color = (progress: number): { bg: string; text: string } => {
+  if (progress <= 30) {
+    return {
+      bg: 'bg-green-600/10 dark:bg-green-600/20',
+      text: 'bg-green-500/40',
+    };
+  } else if (progress <= 70) {
+    return {
+      bg: 'bg-yellow-600/10 dark:bg-yellow-600/20',
+      text: 'bg-yellow-500/40',
+    };
+  } else if (progress <= 99) {
+    return {
+      bg: 'bg-orange-600/10 dark:bg-orange-600/20',
+      text: 'bg-orange-500/40',
+    };
+  } else {
+    return {
+      bg: 'bg-gray-600/10 dark:bg-gray-600/20',
+      text: 'bg-gray-500/40',
+    };
+  }
+};

@@ -66,10 +66,9 @@ export default function Topics() {
         {isLoading && <TopicListSkeleton />}
         {Q_Topics?.data?.length === 0 && <NoData />}
         <div className="grid grid-cols-1 gap-4 md:gap-4 xl:gap-6 md:grid-cols-3 xl:grid-cols-4 py-2 mt-6">
-          {Q_Topics?.data &&
-            Q_Topics?.data?.map((topic: ITopic) => {
-              return <CardTopic key={topic.id} topic={topic} />;
-            })}
+          {Q_Topics?.data?.map((topic: ITopic) => {  
+            return <CardTopic key={topic.id} topic={topic} />;
+          })}
         </div>
       </div>
       <div className="my-6">

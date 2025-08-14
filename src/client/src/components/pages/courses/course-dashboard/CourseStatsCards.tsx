@@ -43,13 +43,13 @@ export default function CourseStatsCards({ course }: { course: ICourse }) {
       />
       <StatCard
         title={t('activeStudents')}
-        value={members?.data?.filter(item => item.topicMembers.length > 0).length ?? 0}
+        value={members?.data?.filter(item => item?.topicMembers.length > 0).length ?? 0}
         icon={GraduationCap}
         description={t('activeDescription')}
         color="success"
         progress={
           members?.data && members?.pagination?.totalItems 
-            ? (members.data.filter(item => item.topicMembers.length > 0).length / members.pagination.totalItems) * 100
+            ? (members.data.filter(item => item?.topicMembers.length > 0).length / members.pagination.totalItems) * 100
             : 0
         }
       />
