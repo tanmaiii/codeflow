@@ -810,6 +810,13 @@
         "studentsWorking": "Students Working",
         "status": "Project Status"
       },
+      "topicApproval": {
+        "title": "Topic Approval Statistics",
+        "description": "Chart showing the number of topics by approval status",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
       "dailyActivity": {
         "title": "Daily Activity (Last 7 Days)",
         "description": "Track student login, submission, and discussion activities",

@@ -809,6 +809,13 @@
         "studentsWorking": "Sinh viên tham gia",
         "status": "Trạng thái dự án"
       },
+      "topicApproval": {
+        "title": "Thống kê phê duyệt đề tài",
+        "description": "Biểu đồ thống kê số lượng đề tài theo trạng thái phê duyệt",
+        "pending": "Chờ duyệt",
+        "approved": "Đã chấp nhận",
+        "rejected": "Đã từ chối"
+      },
       "dailyActivity": {
         "title": "Hoạt động hàng ngày (7 ngày qua)",
         "description": "Theo dõi hoạt động đăng nhập, nộp bài và thảo luận của học viên",

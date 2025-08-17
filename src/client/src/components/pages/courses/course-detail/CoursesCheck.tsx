@@ -223,13 +223,13 @@ export default function CoursesCheck({ children }: { children: React.ReactNode }
                   </div>
 
                   {/* Tags */}
-                  {course.tags.length > 0 && (
+                  {course?.tags && course?.tags?.length > 0 && (
                     <div>
                       <h3 className="text-xl font-semibold mb-4">{t('tags')}</h3>
                       <NameTags
                         className="p-4 rounded-lg border"
                         tags={course.tags}
-                        max={course.tags.length}
+                        max={course?.tags?.length}
                       />
                     </div>
                   )}

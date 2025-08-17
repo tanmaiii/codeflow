@@ -150,3 +150,60 @@ export const mockBestProjects = [
     mentor: 'TS. Hoàng Văn E',
   },
 ];
+
+export const mockTopicApproval = [
+  { 
+    topicName: 'Hệ thống quản lý thư viện', 
+    studentName: 'Nguyễn Văn A',
+    mentor: 'TS. Trần Thị B',
+    category: 'Web Development',
+    difficulty: 'Trung cấp',
+    submittedDate: '2024-01-15',
+    status: 'pending'
+  },
+  { 
+    topicName: 'Website thương mại điện tử', 
+    studentName: 'Lê Văn C',
+    mentor: 'TS. Phạm Thị D',
+    category: 'E-commerce',
+    difficulty: 'Nâng cao',
+    submittedDate: '2024-01-10',
+    status: 'approved'
+  },
+  { 
+    topicName: 'Ứng dụng mobile quản lý chi tiêu', 
+    studentName: 'Hoàng Văn E',
+    mentor: 'TS. Vũ Thị F',
+    category: 'Mobile Development',
+    difficulty: 'Trung cấp',
+    submittedDate: '2024-01-08',
+    status: 'rejected'
+  },
+  { 
+    topicName: 'Hệ thống IoT giám sát môi trường', 
+    studentName: 'Nguyễn Thị G',
+    mentor: 'TS. Đỗ Văn H',
+    category: 'IoT',
+    difficulty: 'Nâng cao',
+    submittedDate: '2024-01-12',
+    status: 'pending'
+  },
+  { 
+    topicName: 'AI chatbot hỗ trợ học tập', 
+    studentName: 'Trần Văn I',
+    mentor: 'TS. Lê Thị K',
+    category: 'AI/ML',
+    difficulty: 'Nâng cao',
+    submittedDate: '2024-01-05',
+    status: 'approved'
+  },
+  { 
+    topicName: 'Hệ thống quản lý bán hàng', 
+    studentName: 'Phạm Văn L',
+    mentor: 'TS. Nguyễn Văn M',
+    category: 'Business Management',
+    difficulty: 'Cơ bản',
+    submittedDate: '2024-01-03',
+    status: 'rejected'
+  },
+];

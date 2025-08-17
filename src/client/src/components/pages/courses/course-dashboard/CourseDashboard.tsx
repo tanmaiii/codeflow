@@ -1,18 +1,17 @@
 'use client';
 
 import TitleHeader from '@/components/layout/TitleHeader';
+import { Skeleton } from '@/components/ui/skeleton';
 import { TextDescription } from '@/components/ui/text';
 import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDetail';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import ActiveStudentsList from './ActiveStudentsList';
-import BestProjectsList from './BestProjectsList';
+import ActiveStudentsList from './components/ActiveStudentsList';
+import BestProjectsList from './components/BestProjectsList';
 import CourseStatsCards from './CourseStatsCards';
-import DailyActivityChart from './DailyActivityChart';
-import PerformanceRadarChart from './PerformanceRadarChart';
-import CodeActivityChart from './StudentProgressChart';
-import ProjectProgressChart from './ProjectProgressChart';
-import { Skeleton } from '@/components/ui/skeleton';
+import LanguageChart from './components/LanguageChart';
+import CodeActivityChart from './components/StudentProgressChart';
+import TopicApprovalChart from './components/TopicApprovalChart';
 
 export default function CourseDashboard() {
   const params = useParams();
@@ -42,18 +41,19 @@ export default function CourseDashboard() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <CodeActivityChart courseId={id} />
-        <ProjectProgressChart />
+        {/* TODO: Mockdata */}
+        <TopicApprovalChart courseId={id} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DailyActivityChart />
-        <PerformanceRadarChart />
+        {/* TODO: Mockdata */}
+        <LanguageChart />
+        {/* TODO: Mockdata */}
       </div>
 
-      {/* Best Projects */}
+      {/* TODO: Mockdata */}
       <BestProjectsList />
 
-      {/* Additional Stats and Student List */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ActiveStudentsList courseId={id} />
       </div>

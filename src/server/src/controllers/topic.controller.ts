@@ -48,6 +48,9 @@ export class TopicController {
       const courseId = req.params.courseId;
       const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom, status, search } = req.query;
+      
+      logger.info(JSON.stringify(isCustom));
+      
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
         Number(page),
         Number(limit),

@@ -61,7 +61,7 @@ export default function CoursesUpdate() {
       const courseData = Q_Course.data.data;
       reset({
         title: courseData.title,
-        tags: courseData.tags.map(tag => tag.id),
+        tags: courseData?.tags?.map(tag => tag.id),
         type: courseData.type,
         description: courseData.description,
         regStartDate: new Date(courseData.regStartDate),
@@ -185,7 +185,7 @@ export default function CoursesUpdate() {
                 control={control}
                 error={errors.tags?.message}
                 options={Q_Tag.data.data.map(tag => ({ label: tag.name, value: tag.id }))}
-                defaultValue={Q_Course.data?.data?.tags.map(tag => tag.id)}
+                defaultValue={Q_Course.data?.data?.tags?.map(tag => tag.id)}
               />
             )}
           </Card>

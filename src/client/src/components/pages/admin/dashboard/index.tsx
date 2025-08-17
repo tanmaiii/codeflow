@@ -8,22 +8,21 @@ import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
 import { IconMessageCircle } from '@tabler/icons-react';
 import { BookOpen, Folder, Users } from 'lucide-react';
 import ChartCommit from './components/ChartCommit';
+import ChartComplexity from './components/ChartComplexity';
+import ChartIssues from './components/ChartIssues';
+import ChartPieCoursesStatus from './components/ChartPieCoursesStatus';
 import ChartPieCoursesType from './components/ChartPieCoursesType';
 import ChartPieLanguage from './components/ChartPieLanguage';
 import ChartTags from './components/ChartTags';
-import ChartTopic from './components/ChartTopic';
-import ChartCodeQuality from './components/ChartCodeQuality';
-import ChartIssues from './components/ChartIssues';
 import ChartTestPerformance from './components/ChartTestPerformance';
-import ChartSecurity from './components/ChartSecurity';
-import ChartComplexity from './components/ChartComplexity';
+import ChartTopic from './components/ChartTopic';
 
 export default function Dashboard() {
   const { data: users } = useQ_User_GetAll({ params: { page: 1, limit: 0 } });
   const { data: courses } = useQ_Course_GetAll({ params: { page: 1, limit: 0 } });
   const { data: repos } = useQ_Repos_GetAll({ params: { page: 1, limit: 0 } });
   const { data: posts } = useQ_Post_GetAll({ params: { page: 1, limit: 0 } });
-  
+
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-full">
@@ -87,10 +86,10 @@ export default function Dashboard() {
 
         {/* Test & Performance Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ChartCodeQuality />
-            <ChartSecurity />
-          </div>
+          </div> */}
+          <ChartPieCoursesStatus />
           <ChartComplexity />
         </div>
       </div>
