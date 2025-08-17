@@ -1,52 +1,52 @@
-import { ChartWrapper } from "@/components/common/ChartWrapper";
-import { useDarkMode } from "@/hooks";
+import { ChartWrapper } from '@/components/common/ChartWrapper';
+import { useDarkMode } from '@/hooks';
 
 export default function ChartComplexity() {
   const { theme } = useDarkMode();
 
   const complexityData = [
-    { 
-      module: 'User Management', 
-      complexity: 8.5, 
-      duplication: 12, 
+    {
+      module: 'User Management',
+      complexity: 8.5,
+      duplication: 12,
       maintainability: 75,
-      lines: 1200 
+      lines: 1200,
     },
-    { 
-      module: 'Authentication', 
-      complexity: 6.2, 
-      duplication: 8, 
+    {
+      module: 'Authentication',
+      complexity: 6.2,
+      duplication: 8,
       maintainability: 85,
-      lines: 800 
+      lines: 800,
     },
-    { 
-      module: 'File Upload', 
-      complexity: 9.1, 
-      duplication: 15, 
+    {
+      module: 'File Upload',
+      complexity: 9.1,
+      duplication: 15,
       maintainability: 65,
-      lines: 1500 
+      lines: 1500,
     },
-    { 
-      module: 'API Gateway', 
-      complexity: 7.8, 
-      duplication: 10, 
+    {
+      module: 'API Gateway',
+      complexity: 7.8,
+      duplication: 10,
       maintainability: 78,
-      lines: 1100 
+      lines: 1100,
     },
-    { 
-      module: 'Database Layer', 
-      complexity: 5.5, 
-      duplication: 6, 
+    {
+      module: 'Database Layer',
+      complexity: 5.5,
+      duplication: 6,
       maintainability: 90,
-      lines: 600 
+      lines: 600,
     },
-    { 
-      module: 'Frontend UI', 
-      complexity: 8.9, 
-      duplication: 18, 
+    {
+      module: 'Frontend UI',
+      complexity: 8.9,
+      duplication: 18,
       maintainability: 70,
-      lines: 2000 
-    }
+      lines: 2000,
+    },
   ];
 
   const Option = {
@@ -65,7 +65,7 @@ export default function ChartComplexity() {
       textStyle: {
         color: theme.textColor,
       },
-      formatter: function(params: any) {
+      formatter: function (params: { dataIndex: number }[]) {
         const data = complexityData[params[0].dataIndex];
         return `${data.module}<br/>
                 Độ phức tạp: ${data.complexity}/10<br/>
