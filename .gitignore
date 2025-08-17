@@ -33,8 +33,14 @@ src/server/npm-debug.log*
 src/server/yarn-debug.log*
 src/server/yarn-error.log*
 
-src/server/# env files (can opt-in for committing if needed)
-src/server/.env*
+src/server/.env
+src/server/.env.development.local
+src/server/.env.production.local
+src/server/.env.test.local
+src/server/.env.development
+src/server/.env.production
+src/server/.env.test
+
 # vercel
 src/server/.vercel
 
@@ -78,7 +84,7 @@ src/client/yarn-error.log*
 # src/client
 
 src/client/# env files (can opt-in for committing if needed)
-src/client/.env*
+src/client/.env
 src/client/.next
 # vercel
 src/client/.vercel

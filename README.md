@@ -280,8 +280,6 @@ cd src/client && npm run dev
 ## 📱 Screenshots & Demo
 ![Dashboard](docs/images/courses.png)
 
-### Dashboard Overview
-
 ## 🤝 Contributing
 
 Chúng tôi hoan nghênh mọi đóng góp! Vui lòng đọc [CONTRIBUTING.md](https://github.com/tanmaiii/tn-da21ttb-110121063-dinhtanmai-codeflow?tab=contributing-ov-file) để biết thêm chi tiết.
