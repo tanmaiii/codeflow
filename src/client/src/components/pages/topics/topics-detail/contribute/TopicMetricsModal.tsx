@@ -1,5 +1,5 @@
 import ActionModal from '@/components/common/Action/ActionModal';
-import ChartMetrics from '@/components/common/MyChart/ChartMetrics';
+import CardMetric from '@/components/common/CardMetric/inrdex';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ITopicMetrics } from '@/interfaces/code_analysis';
@@ -40,7 +40,7 @@ export default function TopicMetricsModal({
           </div>
         </div>
         <Separator />
-        <ChartMetrics metrics={metrics} />
+        <CardMetric metrics={metrics} />
       </div>
     </ActionModal>
   );

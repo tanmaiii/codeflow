@@ -1,4 +1,4 @@
-import { ENUM_TOPIC_STATUS, ENUM_TYPE_NOTIFICATION } from '@/data/enum';
+import { ENUM_TOPIC_STATUS, ENUM_TYPE_NOTIFICATION, ENUM_USER_ROLE } from '@/data/enum';
 import { Notification } from '@/interfaces/notification.interface';
 import { Topic, TopicCreate, TopicStats } from '@/interfaces/topics.interface';
 import { UserContributes } from '@/interfaces/users.interface';
@@ -17,6 +17,7 @@ import { ReposService } from './repos.service';
 import { TagService } from './tag.service';
 import { TopicMemberService } from './topic_member.service';
 import { ReposStats } from '@/interfaces/repos.interface';
+import { UserService } from './users.service';
 @Service()
 export class TopicService {
   private readonly defaultPageSize = 10;
@@ -30,8 +31,10 @@ export class TopicService {
   public commitService: CommitService;
   public codeAnalysisService: CodeAnalysisService;
   public pullRequestService: PullRequestsService;
+  public userService: UserService;
 
   constructor() {
+    this.userService = Container.get(UserService);
     this.tagService = Container.get(TagService);
     this.topicMemberService = Container.get(TopicMemberService);
     this.notificationService = Container.get(NotificationService);
@@ -177,13 +180,15 @@ export class TopicService {
 
     if (members?.length) {
       await Promise.all(
-        members.map(memberId =>
-          this.topicMemberService.createTopicMember({
+        members.map(async memberId => {
+          const user = await this.userService.findUserById(memberId);
+          if (user && user.role === ENUM_USER_ROLE.ADMIN) return;
+          return this.topicMemberService.createTopicMember({
             topicId: createdTopic.id,
             userId: memberId,
             role: topicData.authorId === memberId ? 'leader' : 'member',
-          }),
-        ),
+          });
+        }),
       );
     }
 
@@ -208,9 +213,10 @@ export class TopicService {
     if (isEmpty(id)) throw new HttpException(400, 'TopicId is empty');
 
     const topic = await this.findTopicById(id, isAdmin);
+
     const { tags, members, authorId, ...topicDataWithoutTags } = topicData;
 
-    await DB.Topics.update(topicDataWithoutTags, { where: { id } });
+    await DB.Topics.update(topicDataWithoutTags, { where: { id }, paranoid: false });
 
     if (tags?.length) {
       await Promise.all(tags.map(tagId => this.tagService.createTopicTag(id, tagId)));
@@ -226,7 +232,9 @@ export class TopicService {
 
       // Create new members
       await Promise.all(
-        members.map(memberId => {
+        members.map(async memberId => {
+          const user = await this.userService.findUserById(memberId);
+          if (user && user.role === ENUM_USER_ROLE.ADMIN) return;
           return this.topicMemberService.createTopicMember({
             topicId: topic.id,
             userId: memberId,

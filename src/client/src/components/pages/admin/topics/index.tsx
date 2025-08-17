@@ -31,6 +31,7 @@ export default function Topics() {
   const page = searchParams?.get('page') || 1;
   const t = useTranslations('topic');
   const tCommon = useTranslations('common');
+  const tAdmin = useTranslations('admin');
   const { localPath } = useH_LocalPath();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -181,7 +182,7 @@ export default function Topics() {
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Topics" description="Manage your topics" />
+      <TitleHeader title={tAdmin('topics.title')} description={tAdmin('topics.description')} />
       <DataTable
         isLoading={Q_Topics.isLoading}
         showIndexColumn={true}

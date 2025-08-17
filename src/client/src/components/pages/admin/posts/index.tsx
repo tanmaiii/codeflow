@@ -33,6 +33,7 @@ export default function Posts() {
   const page = searchParams?.get('page') || 1;
   const t = useTranslations('post');
   const tCommon = useTranslations('common');
+  const tAdmin = useTranslations('admin');
   const { localPath } = useH_LocalPath();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -185,7 +186,7 @@ export default function Posts() {
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Posts" description="Manage your posts" />
+      <TitleHeader title={tAdmin('posts.title')} description={tAdmin('posts.description')} />
       <DataTable
         isLoading={Q_Posts.isLoading}
         showIndexColumn={true}

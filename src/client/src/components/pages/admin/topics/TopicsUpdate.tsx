@@ -108,6 +108,7 @@ export default function TopicsUpdate() {
           <MySelect
             label={tTopic('course')}
             name="courseId"
+            isTranslate={false}
             options={
               Q_Course.data?.data.map(course => ({
                 value: course.id,
@@ -147,11 +148,12 @@ export default function TopicsUpdate() {
               maxLength={Q_CourseDetail?.data?.maxGroupMembers ?? 3}
               defaultValue={Q_Topic?.data?.members?.map(member => member.userId) ?? []}
               options={
-                Q_Members?.data?.map(member => ({
-                  value: member.id,
-                  label: member.name,
+                Q_Members?.data?.filter(member => member?.id).map(member => ({
+                  value: member?.id,
+                  label: member?.name ?? member?.username,
                 })) ?? []
               }
+              onChange={value => setMembers(value)}
             />
           )}
           <div className="flex justify-end gap-2">

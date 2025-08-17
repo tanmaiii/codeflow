@@ -31,18 +31,18 @@ export const menuAdmin: ILinkItem[] = [
     href: paths.TOPICS,
   },
   {
-    en: 'Posts',
-    vi: 'Bài viết',
-    labelKey: 'path.posts',
-    icon: 'article',
-    href: paths.POSTS,
-  },
-  {
     en: 'Repository',
     vi: 'Kho lưu trữ',
     labelKey: 'path.repos',
     icon: 'repos',
     href: paths.REPOS,
+  },
+  {
+    en: 'Posts',
+    vi: 'Bài viết',
+    labelKey: 'path.posts',
+    icon: 'article',
+    href: paths.POSTS,
   },
   {
     en: 'Tags',

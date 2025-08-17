@@ -1,9 +1,9 @@
+import CardMetric from '@/components/common/CardMetric/inrdex';
 import ChartAdditions from '@/components/common/MyChart/ChartAdditions';
 import ChartAnalysis from '@/components/common/MyChart/ChartAnalysis';
 import ChartCodeChanges from '@/components/common/MyChart/ChartCodeChanges';
 import ChartContribution from '@/components/common/MyChart/ChartContribution';
 import ChartMemberRadar from '@/components/common/MyChart/ChartMemberRadar';
-import ChartMetrics from '@/components/common/MyChart/ChartMetrics';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import TextHeading, { TextDescription } from '@/components/ui/text';
@@ -58,7 +58,7 @@ export default function ContributionChart({ topic }: { topic: ITopic }) {
               <TextHeading className="text-xl font-bold">{t('topic.codeAnalysic')}</TextHeading>
               <TopicMetricsModal metrics={metrics?.data} topic={topic} />
             </div>
-            <div>{metrics?.data && <ChartMetrics metrics={metrics?.data?.slice(0, 5)} />}</div>
+            <div>{metrics?.data && <CardMetric metrics={metrics?.data?.slice(0, 5)} />}</div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <ChartCodeChanges contributors={contributors?.data ?? []} />

@@ -847,5 +847,35 @@
         "lastActive": "last active"
       }
     }
+  },
+  "admin": {
+    "users": {
+      "title": "Manage users",
+      "description": "Manage users in the system"
+    },
+    "courses": {
+      "title": "Manage courses",
+      "description": "Manage courses in the system"
+    },
+    "topics": {
+      "title": "Manage topics",
+      "description": "Manage topics in the system"
+    },
+    "posts": {
+      "title": "Manage posts",
+      "description": "Manage posts in the system"
+    },
+    "repos": {
+      "title": "Manage repos",
+      "description": "Manage repos in the system"
+    },
+    "tags": {
+      "title": "Manage tags",
+      "description": "Manage tags in the system"
+    },
+    "comments": {
+      "title": "Manage comments",
+      "description": "Manage comments in the system"
+    }
   }
 }

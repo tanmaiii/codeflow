@@ -28,6 +28,7 @@ import TableSkeleton from '@/components/skeletons/TableSkeleton';
 export default function Users() {
   const router = useRouter();
   const tCommon = useTranslations('common');
+  const tAdmin = useTranslations('admin');
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const page = Number(searchParams?.get('page')) || 1;
@@ -45,7 +46,11 @@ export default function Users() {
         header: 'Name',
         accessorKey: 'name',
         cell: ({ row }) => (
-          <MemberAvatar id={row.original.id} name={row.original.name || ''} avatar={row.original.avatar} />
+          <MemberAvatar
+            id={row.original.id}
+            name={row.original.name || ''}
+            avatar={row.original.avatar}
+          />
         ),
       },
       {
@@ -104,7 +109,7 @@ export default function Users() {
     const selectedRowsCount = table.getFilteredSelectedRowModel().rows.length;
 
     return (
-      <div>
+      <>
         <UsersCreate />
         {selectedRowsCount > 0 && (
           <Button
@@ -115,7 +120,7 @@ export default function Users() {
             {`${tCommon('delete')} (${selectedRowsCount})`}
           </Button>
         )}
-      </div>
+      </>
     );
   };
 
@@ -123,7 +128,7 @@ export default function Users() {
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Users" description="Manage your users" />
+      <TitleHeader title={tAdmin('users.title')} description={tAdmin('users.description')} />
       <DataTable
         fieldFilter="name"
         showIndexColumn={true}

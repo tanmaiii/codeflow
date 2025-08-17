@@ -40,7 +40,6 @@ export class TopicMemberService {
     const findTopicMember: TopicMember[] = await DB.TopicMember.findAll({
       where: { topicId: topicMemberData.topicId, userId: topicMemberData.userId },
     });
-    logger.info(`------------------------FIND TOPIC MEMBER: ${topicMemberData.userId} ${topicMemberData.topicId} ${findTopicMember}`);
     if (findTopicMember.length) return;
     const createTopicMemberData: TopicMember = await DB.TopicMember.create(topicMemberData);
     return createTopicMemberData;

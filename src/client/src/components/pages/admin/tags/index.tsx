@@ -28,6 +28,7 @@ export default function Tags() {
   const search = searchParams?.get('search') || '';
   const t = useTranslations('tag');
   const tCommon = useTranslations('common');
+  const tAdmin = useTranslations('admin');
   const { localPath } = useH_LocalPath();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -115,7 +116,7 @@ export default function Tags() {
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Tags" description="Manage your posts" />
+      <TitleHeader title={tAdmin('tags.title')} description={tAdmin('tags.description')} />
       <DataTable
         isLoading={Q_Tags.isLoading}  
         showIndexColumn={true}

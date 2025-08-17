@@ -846,5 +846,35 @@
         "lastActive": "hoạt động cuối"
       }
     }
+  },
+  "admin": {
+    "users": {
+      "title": "Quản lý người dùng",
+      "description": "Quản lý người dùng trong hệ thống"
+    },
+    "courses": {
+      "title": "Quản lý khóa học",
+      "description": "Quản lý khóa học trong hệ thống"
+    },
+    "topics": {
+      "title": "Quản lý đề tài",
+      "description": "Quản lý đề tài trong hệ thống"
+    },
+    "posts": {
+      "title": "Quản lý bài viết",
+      "description": "Quản lý bài viết trong hệ thống"
+    },
+    "repos": {
+      "title": "Quản lý kho lưu trữ",
+      "description": "Quản lý kho lưu trữ trong hệ thống"
+    },
+    "tags": {
+      "title": "Quản lý thẻ",
+      "description": "Quản lý thẻ trong hệ thống"
+    },
+    "comments": {
+      "title": "Quản lý bình luận",
+      "description": "Quản lý bình luận trong hệ thống"
+    }
   }
 }

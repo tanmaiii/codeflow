@@ -26,8 +26,8 @@ import { toast } from 'sonner';
 export default function Courses() {
   const searchParams = useSearchParams();
   const page = searchParams?.get('page') || 1;
-  // const search = searchParams?.get('search') || '';
   const [search, setSearch] = useState('');
+  const tAdmin = useTranslations('admin');
   const t = useTranslations('course');
   const tCommon = useTranslations('common');
   const { localPath } = useH_LocalPath();
@@ -72,6 +72,7 @@ export default function Courses() {
           <MemberAvatar
             name={row.original.author?.name || ''}
             avatar={row.original.author?.avatar}
+            size={30}
             description={row.original.author?.username}
           />
         ),
@@ -162,7 +163,7 @@ export default function Courses() {
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Courses" description="Manage your courses" />
+      <TitleHeader title={tAdmin('courses.title')} description={tAdmin('courses.description')} />
       <DataTable
         isLoading={Q_Courses.isLoading}
         enableLocalSearch={false}

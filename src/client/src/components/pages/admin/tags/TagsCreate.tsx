@@ -31,7 +31,7 @@ export default function TagsCreate() {
   });
 
   useEffect(() => {
-    reset({});
+    reset();
   }, [reset]);
 
   const mutation = useMutation({
@@ -42,6 +42,7 @@ export default function TagsCreate() {
       toast.success(tCommon('updateSuccess'));
       closeRef.current?.click();
       queryClient.invalidateQueries({ queryKey: ['tags'] });
+      reset();
     },
     onError: () => {
       toast.error(tCommon('updateError'));

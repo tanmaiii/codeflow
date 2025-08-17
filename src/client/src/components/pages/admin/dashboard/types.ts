@@ -15,6 +15,7 @@ export interface ChartData {
   submissions: Array<{ date: string; value: number }>;
   scoreDistribution: Array<{ name: string; value: number }>;
   projectTypes: Array<{ name: string; value: number }>;
+  courseTypes: Array<{ name: string; value: number }>;
   projectStatus: Array<{ name: string; value: number }>;
   activity: Array<{ hour: number; value: number }>;
 }

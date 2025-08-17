@@ -4,6 +4,7 @@ import { Topic, TopicCreate, TopicEvaluations } from '@/interfaces/topics.interf
 import { User } from '@/interfaces/users.interface';
 import { TopicService } from '@/services/topic.service';
 import { TopicEvaluationsService } from '@/services/topic_evaluations.service';
+import { logger } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
 
@@ -137,6 +138,7 @@ export class TopicController {
       const userData: User = req.user;
       const isAdmin = userData.role === ENUM_USER_ROLE.ADMIN;
       const topicData: Partial<TopicCreate> = req.body;
+      
       const updateTopicData: Topic = await this.topic.updateTopic(
         topicId,
         {
@@ -145,6 +147,9 @@ export class TopicController {
         },
         isAdmin,
       );
+
+      // logger.info(JSON.stringify(updateTopicData));
+
       res.status(200).json({ data: updateTopicData, message: 'updated' });
     } catch (error) {
       next(error);

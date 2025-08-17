@@ -88,7 +88,7 @@ export default function CodeAnalysisItem({ data, repos }: CodeAnalysisItemProps)
 
         {/* Action Button */}
         <div className="flex items-center gap-2">
-          {isAnalysisCompleted() && <CodeAnalysisModal data={data} />}
+          {isAnalysisCompleted() && <CodeAnalysisModal metrics={metrics} codeAnalysis={data} />}
         </div>
       </div>
 

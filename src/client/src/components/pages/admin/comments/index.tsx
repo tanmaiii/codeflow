@@ -28,6 +28,7 @@ export default function Comments() {
   const page = params?.get('page') || 1;
   const queryClient = useQueryClient();
   const search = params?.get('search') || '';
+  const tAdmin = useTranslations('admin');
   const { data: Q_Comments, isLoading  } = useQ_Comments_GetAll({
     params: {
       page: Number(page),
@@ -93,7 +94,7 @@ export default function Comments() {
 
   return (
     <div className="bg-background-1 dark:bg-background-3 rounded-lg p-4 min-h-[100vh]">
-      <TitleHeader title="Comments" description="Manage your comments" />
+      <TitleHeader title={tAdmin('comments.title')} description={tAdmin('comments.description')} />
       <DataTable
         isLoading={isLoading}
         showSelectionColumn={true}

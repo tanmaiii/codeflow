@@ -6,6 +6,7 @@ import { nestjsWorkflow } from './nestjs_workflow';
 import { nextjsWorkflow } from './nextjs_workflow';
 import { reactWorkflow } from './react_workflow';
 import { templateNodejs } from './template_nodejs';
+import { htmlWorkflow } from './html_workflow';
 
 // Export all workflow templates
 export { djangoWorkflow } from './django_workflow';
@@ -15,6 +16,7 @@ export { nextjsWorkflow } from './nextjs_workflow';
 export { reactWorkflow } from './react_workflow';
 export { templateNodejs } from './template_nodejs';
 export { workflowProperties } from './workflow_propeties';
+export { htmlWorkflow } from './html_workflow';
 
 // Workflow map for easy access
 export const workflowTemplates = {
@@ -36,6 +38,6 @@ export const workflowTemplates = {
     [ENUM_FRAMEWORK.ASP_NET]: templateNodejs, // Tạm thời
   },
   [ENUM_LANGUAGE.STATIC]: {
-    [ENUM_FRAMEWORK.HTML]: templateNodejs, // Tạm thời
+    [ENUM_FRAMEWORK.HTML]: htmlWorkflow, // Tạm thời
   },
 };

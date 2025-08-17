@@ -53,7 +53,7 @@ export default function Repos() {
             >
               {row.original.name}
             </Link>
-            <TextDescription className="text-color-2 text-sm">
+            <TextDescription lineClamp={1} className="text-color-2 text-sm">
               {row.original.topic?.title ?? ''}
             </TextDescription>
           </div>
