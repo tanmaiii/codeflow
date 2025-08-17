@@ -285,8 +285,8 @@ Chúng tôi hoan nghênh mọi đóng góp! Vui lòng đọc [CONTRIBUTING.md](C
 ---
 
 ## 🐛 Bug Reports & Feature Requests
-- [⛔ Báo Cáo Lỗi](https://github.com/tanmaiii/cn-da21ttb-dinhtanmai-music-vibely-nextjs/issues/new?template=bug_report.md&title=[Bug])
-- [🆕 Yêu Cầu Tính Năng](https://github.com/tanmaiii/cn-da21ttb-dinhtanmai-music-vibely-nextjs/issues/new?template=feature_request.md&title=[Feature+Request])
+- [⛔ Báo Cáo Lỗi](https://github.com/tanmaiii/tn-da21ttb-110121063-dinhtanmai-codeflow/issues/new?template=bug_report.md&title=[Bug])
+- [🆕 Yêu Cầu Tính Năng](https://github.com/tanmaiii/tn-da21ttb-110121063-dinhtanmai-codeflow/issues/new?template=feature_request.md&title=[Feature+Request])
 
 - 📧 **Support**: Email hỗ trợ tại dinhtanmaivn@gmail.com
 
