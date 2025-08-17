@@ -10,7 +10,6 @@
 - MSSV: 110121063
 - Email: dinhtanmaivn@gmail.com
 
-
 ## 🔗 Yêu cầu đề tài
 
 Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tích hợp GitHub để theo dõi tiến độ, đánh giá chất lượng mã nguồn tự động, và cung cấp dashboard phân tích đóng góp chi tiết của từng thành viên nhóm.
@@ -34,6 +33,7 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 ## 🛠️ Công nghệ sử dụng
 
 ### Backend
+
 - **Runtime**: Node.js với TypeScript
 - **Framework**: Express.js
 - **Database**: MySQL với Sequelize ORM
@@ -42,6 +42,7 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 - **Real-time**: GitHub Webhooks
 
 ### Frontend
+
 - **Framework**: Next.js 14 với TypeScript
 - **Styling**: Tailwind CSS + Shadcn/ui
 - **State Management**: React Query (TanStack Query)
@@ -50,6 +51,7 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 - **Rich Text Editor**: TipTap
 
 ### GitHub Integration & AI
+
 - **GitHub API**: Repositories, Commits, Pull Requests
 - **GitHub Actions**: Automated CI/CD workflows
 - **GitHub Webhooks**: Real-time event processing
@@ -58,16 +60,17 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 - **Intelligent Code Review**: AI-powered suggestions và feedback
 
 ### DevOps & Deployment
+
 - **Containerization**: Docker
 - **Deployment**: Railway / Vercel / Render
-- **Environment**: Docker Compose for development 
+- **Environment**: Docker Compose for development
 
 ---
-
 
 ## ⚙️ Kiến trúc Hệ thống
 
 ### 🏗️ Architecture Overview
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Next.js UI    │────│  Express API    │────│   MySQL DB      │
@@ -81,6 +84,7 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 ```
 
 ### 📂 Database Schema
+
 - **Users**: Thông tin người dùng, GitHub integration
 - **Courses**: Môn học, metadata, settings
 - **Topics**: Đề tài dự án, requirements, deadlines
@@ -94,6 +98,7 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 - **Notifications**: Hệ thống thông báo
 
 ### 🔧 Development Workflow
+
 1. **Environment Setup**: Docker-based development environment
 2. **Code Development**: TypeScript với strict type checking
 3. **Testing**: Unit tests, integration tests
@@ -101,17 +106,15 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 5. **CI/CD**: GitHub Actions cho automated testing
 6. **Deployment**: Containerized deployment
 
-
 > ### 🤖 ** AI Code Review với Google Gemini**
-> 
-> **CodeFlow** tích hợp **Google Gemini 1.5 Flash AI** để review code tự động! 
-> 
+>
+> **CodeFlow** tích hợp **Google Gemini 1.5 Flash AI** để review code tự động!
+>
 > - ✨ **AI review Pull Request** bằng tiếng Việt
-> - 🎯 **Chấm điểm 0-10** cho chất lượng code  
+> - 🎯 **Chấm điểm 0-10** cho chất lượng code
 > - 💬 **Comment trực tiếp** trên GitHub PR
 > - 🔍 **Phân tích đa chiều**: Bug, Security, Performance, Readability
 > - 🚀 **One-click review** - Click và AI sẽ analyze toàn bộ PR
-
 
 ---
 
@@ -154,6 +157,7 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ và npm/yarn
 - MySQL 8.0+
 - Docker & Docker Compose (optional)
@@ -172,7 +176,7 @@ npm install
 cp .env.example .env
 # Configure database và GitHub OAuth trong .env
 
-# Setup frontend  
+# Setup frontend
 cd ../client
 npm install
 cp .env.example .env.local
@@ -187,18 +191,22 @@ cd src/client && npm run dev
 ```
 
 ### GitHub Integration Setup
+
 1. **GitHub OAuth App**:
+
    - Tạo tại https://github.com/settings/applications/new
    - Callback URL: `http://localhost:3000/api/auth/github/callback`
    - Copy Client ID và Client Secret vào `.env`
 
 2. **Gemini AI Configuration**:
+
    ```bash
    # Lấy Gemini API key từ Google AI Studio
    GEMINI_TOKEN=your_gemini_api_key_here
    ```
 
-3. **GitHub Webhooks**: 
+3. **GitHub Webhooks**:
+
    - Cấu hình webhook cho repositories cần tracking
    - Events: `push`, `pull_request`, `pull_request_review`
 
@@ -213,6 +221,7 @@ cd src/client && npm run dev
 ### 🔧 Cấu hình ban đầu
 
 1. **Admin Configuration**:
+
    - Đăng nhập với tài khoản Admin
    - Vào `Settings > AI Configuration`
    - Nhập **Gemini API Key** (lấy từ [Google AI Studio](https://aistudio.google.com/))
@@ -225,17 +234,19 @@ cd src/client && npm run dev
 ### 📝 Quy trình Review
 
 1. **Tạo Pull Request**:
+
    ```bash
    # Sinh viên tạo branch và push code
    git checkout -b feature/new-feature
    git add .
    git commit -m "Add new feature"
    git push origin feature/new-feature
-   
+
    # Tạo PR trên GitHub
    ```
 
 2. **Trigger AI Review**:
+
    - Vào trang `Repository > Pull Requests` trong hệ thống
    - Click nút **"🤖 AI Review"** trên PR muốn review
    - Hệ thống sẽ gửi code diff tới Gemini AI
@@ -245,15 +256,16 @@ cd src/client && npm run dev
    - **Score Display**: Điểm 0-10 hiển thị trên UI
    - **Summary**: Tóm tắt đánh giá tổng quan
 
-
 ### 💡 Tips cho Sinh viên
 
 1. **Trước khi tạo PR**:
+
    - Self-review code trước khi push
    - Viết commit message rõ ràng
    - Thêm mô tả chi tiết cho PR
 
 2. **Sau khi nhận AI Review**:
+
    - Đọc kỹ từng comment của AI
    - Implement suggestions quan trọng
    - Push updates và request review lại nếu cần
@@ -274,17 +286,18 @@ cd src/client && npm run dev
 
 ## 📱 Screenshots & Demo
 
-
 ### Dashboard Overview
+
 ![Dashboard](docs/images/db.svg)
 
 ## 🤝 Contributing
 
-Chúng tôi hoan nghênh mọi đóng góp! Vui lòng đọc [CONTRIBUTING.md](CONTRIBUTING.md) để biết thêm chi tiết.
+Chúng tôi hoan nghênh mọi đóng góp! Vui lòng đọc [CONTRIBUTING.md](https://github.com/tanmaiii/tn-da21ttb-110121063-dinhtanmai-codeflow?tab=contributing-ov-file) để biết thêm chi tiết.
 
 ---
 
 ## 🐛 Bug Reports & Feature Requests
+
 - [⛔ Báo Cáo Lỗi](https://github.com/tanmaiii/tn-da21ttb-110121063-dinhtanmai-codeflow/issues/new?template=bug_report.md&title=[Bug])
 - [🆕 Yêu Cầu Tính Năng](https://github.com/tanmaiii/tn-da21ttb-110121063-dinhtanmai-codeflow/issues/new?template=feature_request.md&title=[Feature+Request])
 
