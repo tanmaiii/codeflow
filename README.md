@@ -68,6 +68,8 @@ Hệ thống toàn diện để quản lý dự án phần mềm sinh viên, tí
 ---
 
 ## ⚙️ Kiến trúc Hệ thống
+![Dashboard](docs/images/codeflow-animation.svg)
+
 
 ### 🏗️ Architecture Overview
 
