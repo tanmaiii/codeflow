@@ -153,7 +153,7 @@ export default function TopicsTable() {
       await topicService.delete(id);
       toast.success(t('deleteSuccess'));
       queryClient.invalidateQueries({ queryKey: ['topics', 'course', courseId] });
-    } catch (error) {
+    } catch {
       toast.error(t('deleteError'));
     }
   };
