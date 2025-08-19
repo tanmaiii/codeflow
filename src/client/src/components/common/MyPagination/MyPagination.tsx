@@ -6,9 +6,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { TextDescription } from '@/components/ui/text';
-import MySelect from '../MySelect';
 import { useTranslations } from 'next-intl';
+import MySelect from '../MySelect';
 
 interface CustomPaginationProps {
   currentPage: number;
