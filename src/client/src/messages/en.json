@@ -77,7 +77,8 @@
     "all": "All",
     "showLess": "Show less",
     "showMore": "Show more",
-    "noData": "No data"
+    "noData": "No data",
+    "total": "Total"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",

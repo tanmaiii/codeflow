@@ -21,30 +21,38 @@ import { toast } from 'sonner';
 
 import ActionIcon from '@/components/common/Action/ActionIcon';
 import AvatarGroup from '@/components/common/AvatarGroup';
+import DataExport from '@/components/common/DataTable/data-export';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
+import MySelect from '@/components/common/MySelect';
 import { paths } from '@/data/path';
+import { useUserStore } from '@/stores/user_store';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import CourseTopicsUpdate from './Update';
 import CourseTopicsCreate from './Create';
-import { useUserStore } from '@/stores/user_store';
+import CourseTopicsUpdate from './Update';
 
 export default function TopicsTable() {
   const params = useParams();
-  const { data: course } = useQ_Course_GetDetail({ id: params?.id as string });
+  const courseId = params?.id as string;
+  const { data: course } = useQ_Course_GetDetail({ id: courseId });
   const t = useTranslations('topic');
   const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [status, setStatus] = useState('all');
+  const [isCustom, setIsCustom] = useState('all');
   const router = useRouter();
   const { user } = useUserStore();
 
   const { data: topicsData } = useQ_Topic_GetAllByCourseId({
     params: {
       page: page,
-      limit: 10,
-      courseId: params?.id as string,
+      limit: limit,
+      courseId: courseId,
+      status: status === 'all' ? '' : status,
+      isCustom: isCustom === 'all' ? undefined : isCustom === 'custom' ? true : false,
     },
   });
 
@@ -64,7 +72,7 @@ export default function TopicsTable() {
   const columns = useMemo<ColumnDef<ITopic>[]>(
     () => [
       {
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
+        header: ({ column }) => <DataTableColumnHeader column={column} title={t('title')} />,
         accessorKey: 'title',
         cell: ({ row }) => (
           <Link href={`${paths.TOPICS_DETAIL(row.original.id)}`}>{row.original.title}</Link>
@@ -72,7 +80,7 @@ export default function TopicsTable() {
         size: 200,
       },
       {
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
+        header: ({ column }) => <DataTableColumnHeader column={column} title={t('description')} />,
         accessorKey: 'description',
         size: 200,
         cell: ({ row }) => (
@@ -81,7 +89,7 @@ export default function TopicsTable() {
       },
       {
         accessorKey: 'group',
-        header: 'Group',
+        header: t('members'),
         size: 100,
         cell: ({ row }) => {
           return (
@@ -102,7 +110,7 @@ export default function TopicsTable() {
       },
       {
         accessorKey: 'isCustom',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Is Custom" />,
+        header: ({ column }) => <DataTableColumnHeader column={column} title={t('isCustom')} />,
         size: 100,
         cell: ({ row }) => {
           const isCustom = row.original.isCustom;
@@ -111,7 +119,7 @@ export default function TopicsTable() {
         },
       },
       {
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+        header: ({ column }) => <DataTableColumnHeader column={column} title={t('status')} />,
         accessorKey: 'status',
         size: 100,
         cell: ({ row }) => {
@@ -120,8 +128,36 @@ export default function TopicsTable() {
         },
       },
     ],
-    [],
+    [t],
   );
+
+  const columnsExport = useMemo(
+    () => [
+      { key: 'title', label: t('title') },
+      { key: 'description', label: t('description') },
+      { key: 'group', label: t('members') },
+      { key: 'isCustom', label: t('isCustom') },
+      { key: 'status', label: t('status') },
+    ],
+    [t],
+  );
+
+  const exportedValues = useMemo(() => {
+    return topicsData?.data?.map(item => ({
+      ...item,
+      group: item.members?.map(member => member.user?.name).join(', '),
+    }));
+  }, [topicsData?.data]);
+
+  const handleDeleteSingle = async (id: string) => {
+    try {
+      await topicService.delete(id);
+      toast.success(t('deleteSuccess'));
+      queryClient.invalidateQueries({ queryKey: ['topics', 'course', courseId] });
+    } catch (error) {
+      toast.error(t('deleteError'));
+    }
+  };
 
   const customToolbar = ({ table }: { table: Table<ITopic> }) => {
     const selectedRowsData = table.getFilteredSelectedRowModel().rows.map(row => row.original);
@@ -129,14 +165,41 @@ export default function TopicsTable() {
 
     return (
       <div className="flex items-center space-x-2">
-        {/* <Courses_Detail_Topics_Create courseId={id as string} /> */}
-        <CourseTopicsCreate courseId={params?.id as string} />
+        <CourseTopicsCreate courseId={courseId} />
         {selectedRowsCount > 0 && (
           <Button variant="destructive" size="sm" onClick={() => mutation.mutate(selectedRowsData)}>
             {`${tCommon('delete')} (${selectedRowsCount})`}
           </Button>
         )}
+        <DataExport
+          values={exportedValues}
+          columns={columnsExport}
+          fileName={`${course?.data?.title}-topics.xlsx`}
+        />
       </div>
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <>
+        <MySelect
+          options={[{ value: 'all', labelKey: 'common.all' }, ...STATUS_TOPIC_CUSTOM]}
+          size="sm"
+          name="selectedTimeframe"
+          className="min-w-[120px]"
+          defaultValue={isCustom}
+          onChange={value => setIsCustom(value)}
+        />
+        <MySelect
+          options={[{ value: 'all', labelKey: 'common.all' }, ...STATUS_TOPIC]}
+          size="sm"
+          name="selectedTimeframe"
+          className="min-w-[120px]"
+          defaultValue={status}
+          onChange={value => setStatus(value)}
+        />
+      </>
     );
   };
 
@@ -157,6 +220,7 @@ export default function TopicsTable() {
         showSelectionColumn={true}
         showIndexColumn={true}
         toolbarCustom={customToolbar}
+        renderHeader={renderHeader}
         renderActions={({ row }) => (
           <div className="flex justify-center">
             <ActionIcon
@@ -164,22 +228,26 @@ export default function TopicsTable() {
               onClick={() => router.push(`${paths.TOPICS_DETAIL(row.original.id)}`)}
               type="button"
             />
-            {/* <Courses_Detail_Topics_Update topic={row.original} /> */}
             <CourseTopicsUpdate topic={row.original} />
             <ActionDelete
               deleteKey={row.original.title}
               handleSubmit={async () => {
-                await topicService.delete(row.original.id);
+                await handleDeleteSingle(row.original.id);
               }}
             />
           </div>
         )}
       />
-      <MyPagination
-        currentPage={topicsData?.pagination?.currentPage ?? 1}
-        totalPages={topicsData?.pagination?.totalPages ?? 1}
-        onPageChange={value => setPage(value)}
-      />
+      <div className="flex justify-center">
+        <MyPagination
+          totalItem={topicsData?.pagination?.totalItems ?? 0}
+          currentPage={topicsData?.pagination?.currentPage ?? 1}
+          totalPages={topicsData?.pagination?.totalPages ?? 1}
+          onPageChange={value => setPage(value)}
+          limit={10}
+          onLimitChange={value => setLimit(value)}
+        />
+      </div>
     </Card>
   );
 }

@@ -3,7 +3,9 @@
 import {
   ColumnDef,
   ColumnFiltersState,
+  Row,
   SortingState,
+  Table as TableInstance,
   VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -13,8 +15,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  Table as TableInstance,
-  Row,
 } from '@tanstack/react-table';
 import * as React from 'react';
 
@@ -27,13 +27,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { DataTableViewOptions } from './data-table-view-options';
-import { DataTablePagination } from './data-table-pagination';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useTranslations } from 'next-intl';
-import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
 import TableSkeleton from '@/components/skeletons/TableSkeleton';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
+import { DataTablePagination } from './data-table-pagination';
+import { DataTableViewOptions } from './data-table-view-options';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,6 +41,7 @@ interface DataTableProps<TData, TValue> {
   fieldFilter?: string;
   pagination?: boolean;
   toolbarCustom?: ((props: { table: TableInstance<TData> }) => React.ReactNode) | React.ReactNode;
+  renderHeader?: ((props: { table: TableInstance<TData> }) => React.ReactNode) | React.ReactNode;
   renderActions?: (props: { row: Row<TData> }) => React.ReactNode;
   showIndexColumn?: boolean;
   showSelectionColumn?: boolean;
@@ -61,6 +62,7 @@ export function DataTable<TData, TValue>({
   pagination = true,
   toolbarCustom,
   renderActions,
+  renderHeader,
   showIndexColumn = false,
   showSelectionColumn = false,
   onPageChange,
@@ -141,7 +143,11 @@ export function DataTable<TData, TValue>({
           {toolbarCustom &&
             (typeof toolbarCustom === 'function' ? toolbarCustom({ table }) : toolbarCustom)}
         </div>
-        <DataTableViewOptions table={table} />
+        <div className="flex items-center space-x-2">
+          {renderHeader &&
+            (typeof renderHeader === 'function' ? renderHeader({ table }) : renderHeader)}
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
       <div className="rounded-md border overflow-x-auto">
         {isLoading ? (

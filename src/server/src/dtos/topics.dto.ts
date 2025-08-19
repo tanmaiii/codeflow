@@ -1,6 +1,6 @@
-import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { GetAllQueryDto } from './common.dto';
-import { Type } from 'class-transformer';
 
 export class CreateTopicDto {
   @IsString()
@@ -97,9 +97,18 @@ export class GetTopicAllDto extends GetAllQueryDto {
   @IsOptional()
   @IsString()
   public status: string;
-    
+
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(({ value }) => {
+    if (value === undefined || value === null || value === '') return undefined;
+    if (value === true || value === false) return value;
+    if (typeof value === 'string') {
+      const lower = value.toLowerCase();
+      if (lower === 'true') return true;
+      if (lower === 'false') return false;
+    }
+    return undefined;
+  })
   isCustom?: boolean;
 }

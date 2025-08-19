@@ -1,18 +1,17 @@
 'use client';
-import ActionModal from '@/components/common/Action/ActionModal';
+import ActionButtonModal from '@/components/common/Action/ActionButtonModal';
 import TextInput from '@/components/common/Input/TextInput/TextInput';
 import TextareaInput from '@/components/common/Input/TextareaInput/TextareaInput';
 import { Button } from '@/components/ui/button';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { IconPlus } from '@tabler/icons-react';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import topicService from '@/services/topic.service';
-import { toast } from 'sonner';
-import { useRef } from 'react';
 import { DialogClose } from '@/components/ui/dialog';
 import { TopicSchemaType, useTopicSchema } from '@/lib/validations/topicSchema';
+import topicService from '@/services/topic.service';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export default function CourseTopicsCreate({ courseId }: { courseId: string }) {
   const t = useTranslations('common');
@@ -51,15 +50,10 @@ export default function CourseTopicsCreate({ courseId }: { courseId: string }) {
   });
 
   return (
-    <ActionModal
+    <ActionButtonModal
       title={tTopic('createTopic')}
-      icon={
-        <>
-          <IconPlus className="w-4 h-4" />
-          {tTopic('createTopic')}
-        </>
-      }
-      actionType={'default'}
+      actionType={'create'}
+      label={tTopic('createTopic')}
       className="max-w-[50vw]"
     >
       <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
@@ -81,6 +75,6 @@ export default function CourseTopicsCreate({ courseId }: { courseId: string }) {
           </Button>
         </div>
       </form>
-    </ActionModal>
+    </ActionButtonModal>
   );
 }

@@ -22,8 +22,8 @@ export class TopicController {
         String(sortBy),
         order as 'ASC' | 'DESC',
         undefined,
-        isCustom !== undefined ? isCustom === 'true' : undefined,
-        status as string,
+        isCustom !== undefined && isCustom !== '' ? isCustom === 'true' : undefined,
+        status !== undefined && status !== '' ? (status as string) : undefined,
         String(search ?? ''),
         isAdmin,
       );
@@ -48,17 +48,17 @@ export class TopicController {
       const courseId = req.params.courseId;
       const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
       const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', isCustom, status, search } = req.query;
-      
-      logger.info(JSON.stringify(isCustom));
-      
+
+      logger.info(`${isCustom}`);
+
       const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPagination(
         Number(page),
         Number(limit),
         String(sortBy),
         order as 'ASC' | 'DESC',
         courseId,
-        isCustom !== undefined ? isCustom === 'true' : undefined,
-        status as string,
+        isCustom !== undefined && isCustom !== '' ? (typeof isCustom === 'boolean' ? isCustom : isCustom === 'true') : undefined,
+        status !== undefined && status !== '' ? (status as string) : undefined,
         String(search ?? ''),
         isAdmin,
       );
@@ -89,7 +89,7 @@ export class TopicController {
         String(sortBy),
         order as 'ASC' | 'DESC',
         userId,
-        status as string,
+        status !== undefined && status !== '' ? (status as string) : undefined,
         isAdmin,
       );
 
@@ -141,7 +141,7 @@ export class TopicController {
       const userData: User = req.user;
       const isAdmin = userData.role === ENUM_USER_ROLE.ADMIN;
       const topicData: Partial<TopicCreate> = req.body;
-      
+
       const updateTopicData: Topic = await this.topic.updateTopic(
         topicId,
         {

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Pencil, Trash, Eye, Plus, CircleCheck, RotateCcw, Archive } from 'lucide-react';
 import { MyTooltip } from '@/components/common/MyTooltip';
 import { useTranslations } from 'next-intl';
-type ActionIconType =
+type ActionType =
   | 'update'
   | 'delete'
   | 'view'
@@ -11,10 +11,11 @@ type ActionIconType =
   | 'non-icon'
   | 'status'
   | 'restore'
-  | 'delete-soft';
+  | 'delete-soft'
+  | 'button';
 
 export interface ActionIconProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  actionType?: ActionIconType;
+  actionType?: ActionType;
   children?: React.ReactNode;
 }
 

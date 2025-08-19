@@ -6,7 +6,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { TextDescription } from '@/components/ui/text';
 import MySelect from '../MySelect';
+import { useTranslations } from 'next-intl';
 
 interface CustomPaginationProps {
   currentPage: number;
@@ -14,6 +16,7 @@ interface CustomPaginationProps {
   onPageChange: (page: number) => void;
   onLimitChange?: (limit: number) => void;
   limit?: number;
+  totalItem?: number;
 }
 
 export const MyPagination = ({
@@ -22,7 +25,9 @@ export const MyPagination = ({
   onPageChange,
   onLimitChange,
   limit,
+  totalItem,
 }: CustomPaginationProps) => {
+  const t = useTranslations('common');
   const getPages = () => {
     const pages = [];
 
@@ -50,7 +55,7 @@ export const MyPagination = ({
   const pages = getPages();
 
   return (
-    <div className="flex items-center gap-2 mt-4">
+    <div className="flex items-center gap-2 mt-4 justify-center">
       {onLimitChange && (
         <MySelect
           defaultValue={limit ? limit.toString() : '10'}
@@ -111,6 +116,11 @@ export const MyPagination = ({
           </PaginationItem>
         </PaginationContent>
       </Pagination>
+      {totalItem && (
+        <span className="whitespace-nowrap text-sm opacity-50">
+          {t('total')} {totalItem}
+        </span>
+      )}
     </div>
   );
 };

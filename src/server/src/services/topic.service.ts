@@ -75,7 +75,9 @@ export class TopicService {
     search?: string,
     isAdmin = false,
   ): Promise<{ count: number; rows: Topic[] }> {
-    const whereClause = this.buildWhereClause({ courseId, isCustom });
+    const whereClause = this.buildWhereClause({ courseId, ...(isCustom !== undefined && { isCustom }) });
+
+    logger.info(isCustom);
 
     return DB.Topics.findAndCountAll({
       limit: pageSize === -1 ? undefined : pageSize,
