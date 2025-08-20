@@ -55,7 +55,108 @@ export class TopicService {
   private readonly memberCountLiteral = Sequelize.literal(`(
     SELECT COUNT(*)
     FROM topic_members AS tm
-    WHERE tm.topic_id = topics.id
+    WHERE tm.topic_id = \`topics\`.\`id\` AND tm.deleted_at IS NULL
+  )`);
+
+  // Thêm các literal để tính toán stats
+  private readonly reposCountLiteral = Sequelize.literal(`(
+    SELECT COUNT(*)
+    FROM repos AS r
+    WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL
+  )`);
+
+  // Commit stats literal
+  private readonly commitStatsLiteral = Sequelize.literal(`(
+    SELECT JSON_OBJECT(
+      'total', COALESCE(SUM(c.total_commits), 0),
+      'additions', COALESCE(SUM(c.total_additions), 0),
+      'deletions', COALESCE(SUM(c.total_deletions), 0)
+    )
+    FROM repos AS r
+    LEFT JOIN (
+      SELECT 
+        repos_id, 
+        COUNT(*) as total_commits,
+        SUM(additions) as total_additions,
+        SUM(deletions) as total_deletions
+      FROM commits
+      GROUP BY repos_id
+    ) AS c ON r.id = c.repos_id
+    WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL
+  )`);
+
+  // Pull Request stats literal
+  private readonly pullRequestStatsLiteral = Sequelize.literal(`(
+    SELECT JSON_OBJECT(
+      'total', COALESCE(SUM(pr.total_prs), 0),
+      'additions', COALESCE(SUM(pr.total_additions), 0),
+      'deletions', COALESCE(SUM(pr.total_deletions), 0),
+      'open', COALESCE(SUM(pr.open_prs), 0),
+      'closed', COALESCE(SUM(pr.closed_prs), 0),
+      'merged', COALESCE(SUM(pr.merged_prs), 0)
+    )
+    FROM repos AS r
+    LEFT JOIN (
+      SELECT 
+        repos_id,
+        COUNT(*) as total_prs,
+        SUM(additions) as total_additions,
+        SUM(deletions) as total_deletions,
+        SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as open_prs,
+        SUM(CASE WHEN status = 'closed' THEN 1 ELSE 0 END) as closed_prs,
+        SUM(CASE WHEN status = 'merged' THEN 1 ELSE 0 END) as merged_prs
+      FROM pull_requests
+      WHERE deleted_at IS NULL
+      GROUP BY repos_id
+    ) AS pr ON r.id = pr.repos_id
+    WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL
+  )`);
+
+  // Code Analysis stats literal
+  private readonly codeAnalysisStatsLiteral = Sequelize.literal(`(
+    SELECT JSON_OBJECT(
+      'total', COALESCE(SUM(ca.total_analyses), 0),
+      'success', COALESCE(SUM(ca.success_analyses), 0),
+      'failure', COALESCE(SUM(ca.failure_analyses), 0)
+    )
+    FROM repos AS r
+    LEFT JOIN (
+      SELECT 
+        repos_id,
+        COUNT(*) as total_analyses,
+        SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) as success_analyses,
+        SUM(CASE WHEN status = 'failure' THEN 1 ELSE 0 END) as failure_analyses
+      FROM code_analysis
+      GROUP BY repos_id
+    ) AS ca ON r.id = ca.repos_id
+    WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL
+  )`);
+
+  private readonly activityScoreLiteral = Sequelize.literal(`(
+    SELECT (
+      COALESCE((
+        SELECT COUNT(*)
+        FROM repos AS r
+        WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL
+      ), 0) * 10 +
+      COALESCE((
+        SELECT COUNT(*)
+        FROM topic_members AS tm
+        WHERE tm.topic_id = \`topics\`.\`id\`
+      ), 0) * 5 +
+      COALESCE((
+        SELECT COUNT(*)
+        FROM commits AS c
+        JOIN repos AS r ON c.repos_id = r.id
+        WHERE r.topic_id = \`topics\`.\`id\`
+      ), 0) * 2 +
+      COALESCE((
+        SELECT COUNT(*)
+        FROM pull_requests AS pr
+        JOIN repos AS r ON pr.repos_id = r.id
+        WHERE r.topic_id = \`topics\`.\`id\` AND pr.deleted_at IS NULL
+      ), 0) * 3
+    ) as activity_score
   )`);
 
   public async findAll(isAdmin = false): Promise<Topic[]> {
@@ -84,7 +185,7 @@ export class TopicService {
       offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
       distinct: true,
-      col: 'id',
+      // col: 'topics.id',
       attributes: {
         include: [[this.memberCountLiteral, 'memberCount']],
       },
@@ -102,6 +203,54 @@ export class TopicService {
         ...(search ? { title: { [Op.like]: `%${search}%` } } : {}),
       },
       paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
+    });
+  }
+
+  public async findAndCountAllWithPaginationAndStats(
+    page = 1,
+    pageSize = this.defaultPageSize,
+    sortBy = this.defaultSortBy,
+    sortOrder = this.defaultSortOrder,
+    courseId?: string,
+  ): Promise<{ count: number; rows: Topic[] }> {
+    const whereClause = this.buildWhereClause({ courseId, status: ENUM_TOPIC_STATUS.APPROVED });
+
+    // Xử lý sắp xếp theo stats
+    let orderClause: any = [[sortBy, sortOrder]];
+
+    // Nếu sắp xếp theo các trường stats, sử dụng literal
+    if (['memberCount', 'reposCount', 'commit', 'pullRequest', 'codeAnalysis'].includes(sortBy)) {
+      const literalMap = {
+        memberCount: this.memberCountLiteral,
+        reposCount: this.reposCountLiteral,
+        commit: this.commitStatsLiteral,
+        pullRequest: this.pullRequestStatsLiteral,
+        codeAnalysis: this.codeAnalysisStatsLiteral,
+      };
+      orderClause = [[literalMap[sortBy], sortOrder]];
+    }
+
+    return DB.Topics.findAndCountAll({
+      limit: pageSize === -1 ? undefined : pageSize,
+      offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
+      order: orderClause,
+      distinct: true,
+      col: 'topics.id',
+      attributes: {
+        include: [
+          [this.memberCountLiteral, 'memberCount'],
+          [this.reposCountLiteral, 'reposCount'],
+          // Legacy fields for backward compatibility
+          [Sequelize.literal(`(SELECT COALESCE(SUM(c.total_commits), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_commits FROM commits GROUP BY repos_id) AS c ON r.id = c.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'commitsCount'],
+          [Sequelize.literal(`(SELECT COALESCE(SUM(pr.total_prs), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_prs FROM pull_requests WHERE deleted_at IS NULL GROUP BY repos_id) AS pr ON r.id = pr.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'pullRequestsCount'],
+          [Sequelize.literal(`(SELECT COALESCE(SUM(ca.total_analyses), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_analyses FROM code_analysis GROUP BY repos_id) AS ca ON r.id = ca.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'codeAnalysisCount'],
+          // New detailed stats
+          [this.commitStatsLiteral, 'commit'],
+          [this.pullRequestStatsLiteral, 'pullRequest'],
+          [this.codeAnalysisStatsLiteral, 'codeAnalysis'],
+        ],
+      },
+      where: whereClause,
     });
   }
 
@@ -131,7 +280,7 @@ export class TopicService {
         id: topicIds,
         ...(status ? { status } : {}),
       },
-      col: 'id',
+      col: 'topics.id',
       attributes: {
         include: [[this.memberCountLiteral, 'memberCount']],
       },
@@ -363,6 +512,52 @@ export class TopicService {
     const mergedContributors = this.mergeStatsById(allContributors, topic.id);
 
     return mergedContributors;
+  }
+
+  /**
+   * Lấy top topics theo các tiêu chí khác nhau
+   */
+  public async getTopTopics(
+    limit = 10,
+    sortBy: 'memberCount' | 'reposCount' | 'codeAnalysis' | 'commit' | 'pullRequest' | 'codeAnalysis',
+    courseId?: string,
+  ): Promise<Topic[]> {
+    const whereClause = this.buildWhereClause({ courseId });
+
+    // Xử lý sắp xếp theo stats
+    const literalMap = {
+      memberCount: this.memberCountLiteral,
+      reposCount: this.reposCountLiteral,
+      codeAnalysis: this.codeAnalysisStatsLiteral,
+    };
+
+    return DB.Topics.findAll({
+      limit,
+      order: [[literalMap[sortBy], 'DESC']],
+      attributes: {
+        include: [
+          [this.memberCountLiteral, 'memberCount'],
+          [this.reposCountLiteral, 'reposCount'],
+          // Legacy fields for backward compatibility
+          [Sequelize.literal(`(SELECT COALESCE(SUM(c.total_commits), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_commits FROM commits GROUP BY repos_id) AS c ON r.id = c.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'commitsCount'],
+          [Sequelize.literal(`(SELECT COALESCE(SUM(pr.total_prs), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_prs FROM pull_requests WHERE deleted_at IS NULL GROUP BY repos_id) AS pr ON r.id = pr.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'pullRequestsCount'],
+          [Sequelize.literal(`(SELECT COALESCE(SUM(ca.total_analyses), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_analyses FROM code_analysis GROUP BY repos_id) AS ca ON r.id = ca.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'codeAnalysisCount'],
+          // New detailed stats
+          [this.commitStatsLiteral, 'commit'],
+          [this.pullRequestStatsLiteral, 'pullRequest'],
+          [this.codeAnalysisStatsLiteral, 'codeAnalysis'],
+        ],
+      },
+      where: whereClause,
+      include: [
+        {
+          model: DB.Courses,
+          as: 'course',
+          required: true,
+          attributes: ['id', 'title'], // Chỉ lấy các trường cần thiết
+        },
+      ],
+    });
   }
 
   private async mergeStatsById(stats: ReposStats[], topicId: string): Promise<TopicStats> {

@@ -3,7 +3,6 @@ import { Topic } from '@interfaces/topics.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { CourseModel } from './courses.model';
 import { TagModel } from './tags.model';
-import { TopicEvaluationsModel } from './topic_evaluations.model';
 import { TopicMemberModel } from './topic_member.mode';
 import { UserModel } from './users.model';
 type PostCreationAttributes = Optional<
@@ -113,10 +112,10 @@ export default function (sequelize: Sequelize): typeof TopicModel {
             model: TopicMemberModel,
             as: 'members',
           },
-          {
-            model: TopicEvaluationsModel,
-            as: 'evaluations',
-          },
+          // {
+          //   model: TopicEvaluationsModel,
+          //   as: 'evaluations',
+          // },
         ],
       },
     },

@@ -1,0 +1,66 @@
+### Test Topic Stats API (Detailed Format)
+
+### 1. Get Top Topics (Activity Score)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=activityScore
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 2. Get Top Topics (Member Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=memberCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 3. Get Top Topics (Repos Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=reposCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 4. Get Top Topics (Code Analysis)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=codeAnalysis
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 5. Get Topics with Stats by Course
+GET http://localhost:3000/api/topics/COURSE_ID/course/stats?page=1&limit=10&sortBy=activityScore&order=DESC
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 5. Get Topic Stats
+GET http://localhost:3000/api/topics/TOPIC_ID/stats
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Expected Response Format:
+```json
+{
+  "data": [
+    {
+      "id": "topic-id",
+      "title": "Topic Title",
+      "memberCount": 5,
+      "reposCount": 3,
+      "commit": {
+        "total": 20,
+        "additions": 75,
+        "deletions": 32
+      },
+      "pullRequest": {
+        "total": 3,
+        "additions": 54,
+        "deletions": 2,
+        "open": 2,
+        "closed": 1,
+        "merged": 0
+      },
+      "codeAnalysis": {
+        "total": 12,
+        "success": 6,
+        "failure": 6
+      },
+      "activityScore": 150
+    }
+  ],
+  "message": "get top topics"
+}
+```
+
+### Notes:
+# - Replace YOUR_TOKEN_HERE with actual JWT token
+# - Replace COURSE_ID with actual course ID
+# - Replace TOPIC_ID with actual topic ID
+# - New format provides detailed stats instead of simple counts
+# - JSON_OBJECT is used in SQL to return structured data

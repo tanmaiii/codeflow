@@ -1,0 +1,44 @@
+### Test Topic Stats API (Fixed)
+
+### 1. Get Top Topics (Activity Score)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=activityScore
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 2. Get Top Topics (Member Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=memberCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 3. Get Top Topics (Repos Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=reposCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 4. Get Top Topics (Commits Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=commitsCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 5. Get Top Topics (Pull Requests Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=pullRequestsCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 6. Get Top Topics (Code Analysis Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=codeAnalysisCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 7. Get Topics with Stats by Course
+GET http://localhost:3000/api/topics/COURSE_ID/course/stats?page=1&limit=10&sortBy=activityScore&order=DESC
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 8. Get Topic Stats
+GET http://localhost:3000/api/topics/TOPIC_ID/stats
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 9. Get Topic Contributors
+GET http://localhost:3000/api/topics/TOPIC_ID/contributors
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Notes:
+# - Replace YOUR_TOKEN_HERE with actual JWT token
+# - Replace COURSE_ID with actual course ID
+# - Replace TOPIC_ID with actual topic ID
+# - All endpoints should now work without "Column 'id' in field list is ambiguous" error
+# - All endpoints should now work without "Table 'codeflow.code_analyses' doesn't exist" error

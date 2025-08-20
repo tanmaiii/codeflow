@@ -19,11 +19,11 @@ export function MemberContributeCard({ contributor, number }: MemberContributePr
       <div className="flex items-start gap-3 justify-between w-full">
         <div className="flex flex-col gap-2">
           <MemberAvatar
-            name={contributor.author.name}
-            avatar={contributor.author.avatar}
+            name={contributor.author?.name}
+            avatar={contributor.author?.avatar}
             id={contributor.authorId}
             size={40}
-            description={contributor.author.email}
+            description={contributor.author?.email}
             className="cursor-pointer flex-shrink-0"
           />
           <div className="flex items-center gap-4 text-sm text-muted-foreground">

@@ -82,7 +82,7 @@ export interface UserContributes {
   pullRequest: {
     total: number;
     additions: number;
-    deletions: 2;
+    deletions: number;
   };
   codeAnalysis: {
     total: number;

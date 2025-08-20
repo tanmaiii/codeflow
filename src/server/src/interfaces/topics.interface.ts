@@ -14,6 +14,33 @@ export interface Topic {
   course?: Course;
   members?: TopicMember[];
   author?: User;
+  // Stats fields
+  memberCount?: number;
+  reposCount?: number;
+  // Legacy fields for backward compatibility
+  commitsCount?: number;
+  pullRequestsCount?: number;
+  codeAnalysisCount?: number;
+  // New detailed stats
+  commit?: {
+    total: number;
+    additions: number;
+    deletions: number;
+  };
+  pullRequest?: {
+    total: number;
+    additions: number;
+    deletions: number;
+    open: number;
+    closed: number;
+    merged: number;
+  };
+  codeAnalysis?: {
+    total: number;
+    success: number;
+    failure: number;
+  };
+  activityScore?: number;
 }
 
 export interface TopicMember {

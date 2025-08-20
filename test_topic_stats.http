@@ -1,0 +1,25 @@
+### Test Topic Stats API
+
+### 1. Get Top Topics (Activity Score)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=activityScore
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 2. Get Top Topics (Member Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=memberCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 3. Get Top Topics (Repos Count)
+GET http://localhost:3000/api/topics/top?limit=5&sortBy=reposCount
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 4. Get Topics with Stats by Course
+GET http://localhost:3000/api/topics/COURSE_ID/course/stats?page=1&limit=10&sortBy=activityScore&order=DESC
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 5. Get Topic Stats
+GET http://localhost:3000/api/topics/TOPIC_ID/stats
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 6. Get Topic Contributors
+GET http://localhost:3000/api/topics/TOPIC_ID/contributors
+Authorization: Bearer YOUR_TOKEN_HERE

@@ -78,6 +78,53 @@ export class TopicController {
     }
   };
 
+  public getTopicsAndStatsByCourseId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const courseId = req.params.courseId;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+
+      const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPaginationAndStats(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        courseId,
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'findAll',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getTopTopics = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const { limit = 10, sortBy = 'activityScore', courseId } = req.query;
+
+      const topTopics: Topic[] = await this.topic.getTopTopics(
+        Number(limit),
+        sortBy as any,
+        courseId as string,
+      );
+
+      res.status(200).json({
+        data: topTopics,
+        message: 'get top topics',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getTopicsByUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;

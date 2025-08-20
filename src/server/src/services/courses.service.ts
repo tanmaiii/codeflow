@@ -538,7 +538,13 @@ export class CourseService {
     };
   }
 
-  public async contributors(courseId: string): Promise<any[]> {
+  public async contributors(
+    courseId: string,
+    page = 1,
+    pageSize = -1,
+    sortBy: 'commit' | 'pullRequest' | 'codeAnalysis' | 'name' = 'commit',
+    sortOrder: 'ASC' | 'DESC' = 'DESC',
+  ): Promise<{ count: number; rows: UserContributes[] }> {
     const course = await this.findCourseById(courseId);
     if (!course) throw new HttpException(409, "Course doesn't exist");
 
@@ -555,7 +561,75 @@ export class CourseService {
     // Gộp contributors có cùng authorId
     const mergedContributors = this.mergeContributorsByAuthorId(allContributors);
 
-    return mergedContributors;
+    // Đảm bảo luôn trả về tất cả học viên trong khóa học, ngay cả khi không có đóng góp nào
+    // Lấy toàn bộ danh sách enrollments kèm thông tin user
+    const { rows: enrollments } = await this.courseEnrollmentService.findAllWithPaginationByCourseId(
+      -1,
+      1,
+      'created_at',
+      'DESC',
+      course.id,
+    );
+
+    const existingIds = new Set(mergedContributors.map(c => c.authorId));
+    const zeroFilledMembers = enrollments
+      .filter(enrollment => !!enrollment.userId)
+      .filter(enrollment => !existingIds.has(enrollment.userId))
+      .map(enrollment => ({
+        authorId: enrollment.userId,
+        author: enrollment.user as unknown as User,
+        commit: {
+          total: 0,
+          additions: 0,
+          deletions: 0,
+        },
+        pullRequest: {
+          total: 0,
+          additions: 0,
+          deletions: 0,
+        },
+        codeAnalysis: {
+          total: 0,
+          success: 0,
+          failure: 0,
+        },
+      }));
+
+    const results: UserContributes[] = [...mergedContributors, ...zeroFilledMembers];
+
+    // Sắp xếp
+    const getSortValue = (c: UserContributes): string | number => {
+      switch (sortBy) {
+        case 'pullRequest':
+          return c.pullRequest?.total || 0;
+        case 'codeAnalysis':
+          return c.codeAnalysis?.total || 0;
+        case 'name':
+          return (c.author?.name || c.author?.username || '').toLowerCase();
+        case 'commit':
+        default:
+          return c.commit?.total || 0;
+      }
+    };
+
+    results.sort((a, b) => {
+      const va = getSortValue(a);
+      const vb = getSortValue(b);
+      if (typeof va === 'number' && typeof vb === 'number') {
+        return sortOrder === 'ASC' ? va - vb : vb - va;
+      }
+      // string compare for name
+      return sortOrder === 'ASC' ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+    });
+
+    const count = results.length;
+    if (pageSize === -1) {
+      return { count, rows: results };
+    }
+
+    const offset = (page - 1) * pageSize;
+    const rows = results.slice(offset, offset + pageSize);
+    return { count, rows };
   }
 
   private mergeContributorsByAuthorId(contributors: UserContributes[]): UserContributes[] {

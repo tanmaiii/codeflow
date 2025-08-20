@@ -286,9 +286,20 @@ export class CourseController {
 
   public getContributors = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const topicId = req.params.id;
-      const contributors = await this.course.contributors(topicId);
-      res.status(200).json({ data: contributors, message: 'get contributors' });
+      const id = req.params.id;
+      const { page = 1, limit = 10, sortBy = 'commit', order = 'DESC' } = req.query as any;
+      const { count, rows } = await this.course.contributors(
+        id,
+        Number(page),
+        Number(limit),
+        String(sortBy) as any,
+        (String(order).toUpperCase() as 'ASC' | 'DESC') || 'DESC',
+      );
+      res.status(200).json({
+        data: rows,
+        pagination: this.createPaginationResponse(count, Number(page), Number(limit)),
+        message: 'get contributors',
+      });
     } catch (error) {
       next(error);
     }

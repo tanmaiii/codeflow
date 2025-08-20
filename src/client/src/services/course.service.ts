@@ -126,8 +126,11 @@ class CourseService {
     return res.data;
   }
 
-  async getContributors(courseId: string): Promise<ResponseAPIDto<IReposContributors[]>> {
-    const res = await this.client.get(`/${courseId}/contributors`);
+  async getContributors(
+    courseId: string,
+    params: IGetAllQuery,
+  ): Promise<PaginatedResponseAPIDto<IReposContributors[]>> {
+    const res = await this.client.get(`/${courseId}/contributors`, { params });
     return res.data;
   }
 }

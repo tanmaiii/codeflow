@@ -7,11 +7,11 @@ import useQ_Course_GetDetail from '@/hooks/query-hooks/Course/useQ_Course_GetDet
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import ActiveStudentsList from './components/ActiveStudentsList';
-import BestProjectsList from './components/BestProjectsList';
-import CourseStatsCards from './CourseStatsCards';
+import BestTopicsList from './components/BestTopicsList';
 import LanguageChart from './components/LanguageChart';
 import CodeActivityChart from './components/StudentProgressChart';
 import TopicApprovalChart from './components/TopicApprovalChart';
+import CourseStatsCards from './CourseStatsCards';
 
 export default function CourseDashboard() {
   const params = useParams();
@@ -41,7 +41,6 @@ export default function CourseDashboard() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <CodeActivityChart courseId={id} />
-        {/* TODO: Mockdata */}
         <TopicApprovalChart courseId={id} />
       </div>
 
@@ -52,7 +51,7 @@ export default function CourseDashboard() {
       </div>
 
       {/* TODO: Mockdata */}
-      <BestProjectsList />
+      <BestTopicsList courseId={id} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ActiveStudentsList courseId={id} />
