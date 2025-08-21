@@ -20,52 +20,7 @@ export interface ITopicEvaluation extends IBaseEntity {
   user?: IUser;
 }
 
-export interface ITopic extends IBaseEntity {
-  id: string;
-  title: string;
-  description: string;
-  authorId: string;
-  isCustom: boolean;
-  courseId: string;
-  status: string;
-  author?: IUser;
-  tags: ITag[];
-  course?: ICourse;
-  groupName?: string;
-  members?: ITopicMember[];
-  evaluations?: ITopicEvaluation[];
-  repos?: IRepos[];
-  // Stats fields
-  memberCount?: number;
-  reposCount?: number;
-  // Legacy fields for backward compatibility
-  commitsCount?: number;
-  pullRequestsCount?: number;
-  codeAnalysisCount?: number;
-  // New detailed stats
-  commit?: {
-    total: number;
-    additions: number;
-    deletions: number;
-  };
-  pullRequest?: {
-    total: number;
-    additions: number;
-    deletions: number;
-    open: number;
-    closed: number;
-    merged: number;
-  };
-  codeAnalysis?: {
-    total: number;
-    success: number;
-    failure: number;
-  };
-  activityScore?: number;
-}
-
-export interface ITopicStats {
-  topicId: string;
+export interface IStats {
   commit: {
     total: number;
     additions: number;
@@ -84,6 +39,37 @@ export interface ITopicStats {
     success: number;
     failure: number;
   };
+}
+
+export interface ITopic extends IBaseEntity {
+  id: string;
+  title: string;
+  description: string;
+  authorId: string;
+  isCustom: boolean;
+  courseId: string;
+  status: string;
+  author?: IUser;
+  tags: ITag[];
+  course?: ICourse;
+  groupName?: string;
+  members?: ITopicMember[];
+  evaluations?: ITopicEvaluation[];
+  repos?: IRepos[];
+}
+
+export interface ITopicDetailStats extends IStats {
+  topicId: string;
+}
+
+export interface ITopicStats extends IStats, ITopic {
+  memberCount: number;
+  reposCount: number;
+}
+
+export interface ITopicContributors extends IStats {
+  authorId: string;
+  author?: IUser;
 }
 
 export interface ITopicCreateDto {

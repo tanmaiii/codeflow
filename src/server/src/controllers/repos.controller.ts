@@ -156,4 +156,14 @@ export class ReposController {
       next(error);
     }
   };
+
+  public getRepoFramework = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const courseId = req.params.courseId;
+      const framework = await this.reposService.getRepoFramework(courseId);
+      res.status(200).json({ data: framework, message: 'Get repo framework' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

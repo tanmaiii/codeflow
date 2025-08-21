@@ -1,23 +1,33 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useDarkMode } from '@/hooks';
+import useQ_Repos_GetFramework from '@/hooks/query-hooks/Repos/useQ_Repos_GetFramework';
 import ReactECharts from 'echarts-for-react';
 import { Code } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
-export default function LanguageChart() {
+export default function LanguageChart({ courseId }: { courseId: string }) {
   const { theme } = useDarkMode();
+  const t = useTranslations('courseDashboard.charts.language');
 
-  // Dữ liệu gộp tất cả công nghệ
-  const technologyData = [
-    { name: 'JavaScript', value: 8, type: 'language' },
-    { name: 'Python', value: 6, type: 'language' },
-    { name: 'React', value: 5, type: 'library' },
-    { name: 'Java', value: 4, type: 'language' },
-    { name: 'Node.js', value: 4, type: 'library' },
-    { name: 'C++', value: 3, type: 'language' },
-    { name: 'Django', value: 3, type: 'library' },
-    { name: 'PHP', value: 2, type: 'language' },
-    { name: 'Spring Boot', value: 2, type: 'library' },
-    { name: 'Laravel', value: 2, type: 'library' },
+  const { data: frameworkResponse, isLoading, isError } = useQ_Repos_GetFramework({ id: courseId });
+
+  const frameworkData = frameworkResponse?.data.map(item => ({
+    framework: item.framework,
+    count: item.count,
+  }));
+
+  const colors = [
+    '#3b82f6', // Blue
+    '#10b981', // Green
+    '#f59e0b', // Yellow
+    '#ef4444', // Red
+    '#8b5cf6', // Purple
+    '#06b6d4', // Cyan
+    '#f97316', // Orange
+    '#ec4899', // Pink
+    '#84cc16', // Lime
+    '#6366f1', // Indigo
   ];
 
   const chartOptions = {
@@ -34,9 +44,7 @@ export default function LanguageChart() {
       borderRadius: 8,
       formatter: function (params: { name: string; value: number }[]) {
         const data = params[0];
-        const tech = technologyData.find(item => item.name === data.name);
-        const type = tech?.type === 'language' ? 'Ngôn ngữ' : 'Thư viện';
-        return `${data.name}<br/>${type}: ${data.value} đề tài`;
+        return `${data.name}<br/>${data.value} topic`;
       },
     },
     legend: {
@@ -46,20 +54,39 @@ export default function LanguageChart() {
     },
     xAxis: {
       type: 'category',
-      data: technologyData.map(item => item.name),
+      data: frameworkData?.map(item => item.framework),
       axisLabel: {
         color: theme.textColor,
         interval: 0,
         rotate: 45,
+        fontSize: 12,
+        margin: 15,
       },
-      axisTick: { show: false },
-      axisLine: { show: false },
+      axisTick: { 
+        show: true,
+        alignWithLabel: true,
+        lineStyle: { color: theme.splitLineColor }
+      },
+      axisLine: { 
+        show: true,
+        lineStyle: { color: theme.splitLineColor }
+      },
     },
     yAxis: {
       type: 'value',
       axisLabel: {
         color: theme.textColor,
-        formatter: '{value} đề tài',
+        formatter: '{value} topic',
+        fontSize: 12,
+        margin: 10,
+      },
+      axisTick: {
+        show: true,
+        lineStyle: { color: theme.splitLineColor }
+      },
+      axisLine: {
+        show: true,
+        lineStyle: { color: theme.splitLineColor }
       },
       splitLine: {
         show: true,
@@ -73,15 +100,15 @@ export default function LanguageChart() {
       {
         name: 'Số lượng đề tài',
         type: 'bar',
-        data: technologyData.map(item => ({
-          value: item.value,
+        data: frameworkData?.map((item, index) => ({
+          value: item.count,
           itemStyle: {
-            color: item.type === 'language' ? '#3b82f6' : '#10b981',
-          },
-        })),
-        barWidth: '60%',
-        label: {
-          show: true,
+              color: colors[index % colors.length],
+            },
+          })),
+          barWidth: '60%',
+          label: {
+            show: true,
           position: 'top',
           color: theme.textColor,
           fontSize: 12,
@@ -91,19 +118,33 @@ export default function LanguageChart() {
   };
 
   return (
-    <Card>
+    <Card className='gap-2'>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Code className="w-5 h-5" />
-          Thống kê công nghệ
+          {t('title')}
         </CardTitle>
         <CardDescription>
-          Phân bố đề tài theo ngôn ngữ lập trình và thư viện trong khóa học
+          {t('description')}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ReactECharts option={chartOptions} style={{ height: '400px' }} />
+      <CardContent className='p-2'>
+        {isLoading ? (
+          <Skeleton className="w-full h-[300px]" />
+        ) : isError ? (
+          <div>Error</div>
+        ) : (
+          <ReactECharts option={chartOptions} style={{ height: '300px' }} />
+        )}
       </CardContent>
     </Card>
   );
 }
+
+// const mockData = [
+//   { framework: 'JavaScript', count: 10 },
+//   { framework: 'Python', count: 8 },
+//   { framework: 'Java', count: 6 },
+//   { framework: 'C++', count: 4 },
+//   { framework: 'C#', count: 2 },
+// ];

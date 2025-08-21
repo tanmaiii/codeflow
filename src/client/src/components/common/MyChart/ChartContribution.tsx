@@ -1,6 +1,6 @@
 import TextHeading from '@/components/ui/text';
 import { useDarkMode } from '@/hooks';
-import { IReposContributors } from '@/interfaces/repos';
+import { IMemberContributors } from '@/interfaces/user';
 import ReactECharts from 'echarts-for-react';
 import { ChartArea } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -8,12 +8,12 @@ import { useTranslations } from 'next-intl';
 export default function ChartContribution({
   contributors,
 }: {
-  contributors: IReposContributors[];
+  contributors: IMemberContributors[];
 }) {
   const { theme } = useDarkMode();
   const t = useTranslations('codeContribution');
 
-  const contributorNames = contributors?.map(c => c.author.name) || [];
+  const contributorNames = contributors?.map(c => c?.author?.name) || [];
   const commitsData = contributors?.map(c => c.commit.total) || [];
   const pullRequestsData = contributors?.map(c => c.pullRequest.total) || [];
   const codeAnalysisData = contributors?.map(c => c.codeAnalysis.total) || [];

@@ -12,6 +12,7 @@ import LanguageChart from './components/LanguageChart';
 import CodeActivityChart from './components/StudentProgressChart';
 import TopicApprovalChart from './components/TopicApprovalChart';
 import CourseStatsCards from './CourseStatsCards';
+import ChartComplexity from './components/ChartComplexity';
 
 export default function CourseDashboard() {
   const params = useParams();
@@ -45,12 +46,11 @@ export default function CourseDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <LanguageChart courseId={id} />
         {/* TODO: Mockdata */}
-        <LanguageChart />
-        {/* TODO: Mockdata */}
+        <ChartComplexity/>
       </div>
 
-      {/* TODO: Mockdata */}
       <BestTopicsList courseId={id} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -1,5 +1,5 @@
 import { IGetAllQuery, PaginatedResponseAPIDto } from '@/interfaces/common';
-import { IReposContributors } from '@/interfaces/repos';
+import { IMemberContributors } from '@/interfaces/user';
 import courseService from '@/services/course.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
@@ -8,7 +8,7 @@ export default function useQ_Course_Contributors({
   id,
   params,
 }: {
-  options?: Partial<UseQueryOptions<PaginatedResponseAPIDto<IReposContributors[]>, Error>>;
+  options?: Partial<UseQueryOptions<PaginatedResponseAPIDto<IMemberContributors[]>, Error>>;
   id: string;
   params: IGetAllQuery;
 }) {

@@ -27,5 +27,6 @@ export class ReposRoute implements Routes {
 
     this.router.get(`${this.path}/:id/contributors`, AuthMiddleware, this.repos.getRepoContributors);
     this.router.get(`${this.path}/:id/stats`, AuthMiddleware, this.repos.getRepoStats);
+    this.router.get(`${this.path}/:courseId/framework`, AuthMiddleware, this.repos.getRepoFramework);
   }
 }

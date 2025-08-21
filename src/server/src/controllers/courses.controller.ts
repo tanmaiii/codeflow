@@ -270,14 +270,14 @@ export class CourseController {
     }
   };
 
-  // Dashboard 
+  // Dashboard
   public getCourseCodeActivity = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const courseId: string = req.params.id;
       const days: number = parseInt(req.query.days as string) || 7;
-      
+
       const codeActivity = await this.course.getCourseAllActivity(courseId, days);
-      
+
       res.status(200).json({ data: codeActivity, message: 'getCourseCodeActivity' });
     } catch (error) {
       next(error);
@@ -303,5 +303,5 @@ export class CourseController {
     } catch (error) {
       next(error);
     }
-  }; 
+  };
 }

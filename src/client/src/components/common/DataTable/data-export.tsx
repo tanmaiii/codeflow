@@ -1,6 +1,10 @@
 import { Button } from '@/components/ui/button';
+import { DialogClose } from '@/components/ui/dialog';
 import { IconPrinter } from '@tabler/icons-react';
+import { useRef } from 'react';
 import * as XLSX from 'xlsx';
+import ActionButtonModal from '../Action/ActionButtonModal';
+import { useTranslations } from 'next-intl';
 
 interface DataExportColumn {
   key: string;
@@ -18,6 +22,9 @@ export default function DataExport<TData extends Record<string, unknown>>({
   columns,
   fileName = 'export.xlsx',
 }: DataExportProps<TData>) {
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const t = useTranslations('common');
+
   const handleExport = () => {
     if (!values || values.length === 0 || !columns || columns.length === 0) return;
 
@@ -39,17 +46,29 @@ export default function DataExport<TData extends Record<string, unknown>>({
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
     XLSX.writeFile(workbook, fileName);
+
+    btnRef.current?.click();
+
   };
 
   return (
-    <Button
-      variant="default"
-      className="bg-blue-400 text-white hover:bg-blue-500 hover:text-white flex items-center gap-2"
-      size="sm"
-      onClick={handleExport}
-    >
-      <IconPrinter className="w-4 h-4" />
-      Export
-    </Button>
+    <>
+
+      <ActionButtonModal
+        title={t('export')}
+        actionType="export"
+        icon={<IconPrinter className="w-4 h-4" />}
+      >
+        <div>
+          {t('exportConfirm')}
+          <div className="flex gap-2 mt-4 justify-end">
+            <DialogClose ref={btnRef} asChild>
+              <Button variant="outline">{t('cancel')}</Button>
+            </DialogClose>
+            <Button onClick={handleExport}>{t('export')}</Button>
+          </div>
+        </div>
+      </ActionButtonModal>
+    </>
   );
 }

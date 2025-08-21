@@ -1,15 +1,15 @@
 import TextHeading from '@/components/ui/text';
 import { useDarkMode } from '@/hooks';
-import { IReposContributors } from '@/interfaces/repos';
+import { IMemberContributors } from '@/interfaces/user';
 import ReactECharts from 'echarts-for-react';
 import { ChartArea } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-export default function ChartAnalysis({ contributors }: { contributors: IReposContributors[] }) {
+export default function ChartAnalysis({ contributors }: { contributors: IMemberContributors[] }) {
   const { theme } = useDarkMode();
   const t = useTranslations('codeContribution');
 
-  const contributorNames = contributors?.map(c => c.author.name) || [];
+  const contributorNames = contributors?.map(c => c?.author?.name ?? 'Unknown') || [];
   const successData = contributors?.map(c => c.codeAnalysis.success) || [];
   const failureData = contributors?.map(c => c.codeAnalysis.failure) || [];
 

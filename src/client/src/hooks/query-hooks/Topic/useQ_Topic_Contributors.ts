@@ -1,5 +1,5 @@
 import { ResponseAPIDto } from '@/interfaces/common';
-import { IReposContributors } from '@/interfaces/repos';
+import { ITopicContributors } from '@/interfaces/topic';
 import topicService from '@/services/topic.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
@@ -7,7 +7,7 @@ export default function useQ_Topic_Contributors({
   options,
   id,
 }: {
-  options?: Partial<UseQueryOptions<ResponseAPIDto<IReposContributors[]>, Error>>;
+  options?: Partial<UseQueryOptions<ResponseAPIDto<ITopicContributors[]>, Error>>;
   id: string;
 }) {
   const query = useQuery({

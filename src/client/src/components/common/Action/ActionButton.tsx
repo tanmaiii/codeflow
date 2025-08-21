@@ -1,6 +1,6 @@
 import { MyTooltip } from '@/components/common/MyTooltip';
 import { Button } from '@/components/ui/button';
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, IconPrinter } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
 type ActionButtonType =
@@ -11,16 +11,19 @@ type ActionButtonType =
   | 'default'
   | 'restore'
   | 'delete-soft'
-  | 'button';
+  | 'button'
+  | 'export';
 
 export interface ActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   actionType?: ActionButtonType;
   label?: string;
+  icon?: React.ReactNode;
 }
 
 export default function ActionButton({
   actionType = 'default',
   label,
+  icon,
   ...props
 }: ActionButtonProps) {
   const t = useTranslations('common');
@@ -29,6 +32,7 @@ export default function ActionButton({
     return (
       <MyTooltip content={t('action')}>
         <Button variant="outline" size="sm" className="w-fit" {...props}>
+          {icon}
           {label}
         </Button>
       </MyTooltip>
@@ -39,6 +43,7 @@ export default function ActionButton({
     return (
       <MyTooltip content={t('restore')}>
         <Button variant="default" size="sm" className="w-fit" {...props}>
+          {icon}
           {label}
         </Button>
       </MyTooltip>
@@ -48,6 +53,7 @@ export default function ActionButton({
     return (
       <MyTooltip content={t('delete')}>
         <Button variant="default" size="sm" className="w-fit" {...props}>
+          {icon}
           {label}
         </Button>
       </MyTooltip>
@@ -57,6 +63,7 @@ export default function ActionButton({
     return (
       <MyTooltip content={t('update')}>
         <Button variant="default" size="sm" className="w-fit" {...props}>
+          {icon}
           {label}
         </Button>
       </MyTooltip>
@@ -75,7 +82,23 @@ export default function ActionButton({
     return (
       <MyTooltip content={t('view')}>
         <Button variant="default" size="sm" className="w-fit" {...props}>
+          {icon}
           {label}
+        </Button>
+      </MyTooltip>
+    );
+  }
+  if (actionType === 'export') {
+    return (
+      <MyTooltip content={t('export')}>
+        <Button
+          variant="default"
+          size="sm"
+          className="bg-blue-400 text-white hover:bg-blue-500 hover:text-white flex items-center gap-2"
+          {...props}
+        >
+          <IconPrinter />
+          Print
         </Button>
       </MyTooltip>
     );
@@ -90,6 +113,7 @@ export default function ActionButton({
           {...props}
         >
           <IconPlus className="w-4 h-4" />
+          {icon}
           {label}
         </Button>
       </MyTooltip>

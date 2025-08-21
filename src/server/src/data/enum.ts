@@ -1,10 +1,3 @@
-import { expressWorkflow } from '../templates/workflow/express_workflow';
-import { templateNodejs } from '../templates/workflow/template_nodejs';
-import { workflowProperties } from '../templates/workflow/workflow_propeties';
-import { nestjsWorkflow } from '../templates/workflow/nestjs_workflow';
-import { reactWorkflow } from '../templates/workflow/react_workflow';
-import { djangoWorkflow } from '../templates/workflow/django_workflow';
-import { nextjsWorkflow } from '../templates/workflow/nextjs_workflow';
 
 export enum ENUM_TOPIC_STATUS {
   PENDING = 'pending', // Trạng thái chờ duyệt

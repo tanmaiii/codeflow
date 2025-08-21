@@ -11,7 +11,7 @@ import useQ_User_GetDetail from '@/hooks/query-hooks/User/useQ_User_GetDetail';
 
 interface MemberAvatarProps {
   avatar?: string;
-  name: string;
+  name?: string;
   role?: string;
   description?: string;
   size?: number;
@@ -52,7 +52,7 @@ export default function MemberAvatar({
       <div className="relative">
         <MyImage
           src={!avatar ? apiConfig.avatar(name) : avatar}
-          alt={name}
+          alt={name || ''}
           width={size}
           height={size}
           className={`rounded-full `}
@@ -64,7 +64,7 @@ export default function MemberAvatar({
       </div>
 
       <div className="flex flex-col">
-        <TextDescription className="text-color-1">{name}</TextDescription>
+        <TextDescription className="text-color-1 truncate">{name}</TextDescription>
         {description && (
           <TextDescription className="text-xs text-color-2">{description}</TextDescription>
         )}

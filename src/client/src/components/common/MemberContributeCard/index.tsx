@@ -1,10 +1,10 @@
 import MemberAvatar from '@/components/ui/member-avatar';
-import { IReposContributors } from '@/interfaces/repos';
+import { IMemberContributors } from '@/interfaces/user';
 import { IconCode } from '@tabler/icons-react';
 import { GitCommit, GitPullRequest } from 'lucide-react';
 
 interface MemberContributeProps {
-  contributor: IReposContributors;
+  contributor: IMemberContributors;
   number?: number;
 }
 
@@ -19,8 +19,8 @@ export function MemberContributeCard({ contributor, number }: MemberContributePr
       <div className="flex items-start gap-3 justify-between w-full">
         <div className="flex flex-col gap-2">
           <MemberAvatar
-            name={contributor.author?.name}
-            avatar={contributor.author?.avatar}
+            name={contributor.author?.name || ''}
+            avatar={contributor.author?.avatar || ''}
             id={contributor.authorId}
             size={40}
             description={contributor.author?.email}

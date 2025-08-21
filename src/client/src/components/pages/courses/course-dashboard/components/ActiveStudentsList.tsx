@@ -67,9 +67,7 @@ export default function ActiveStudentsList({ courseId }: { courseId: string }) {
         <CardContent className="pt-6">
           <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg">
             <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-            <p className="text-red-700">
-              {t('errorMessage', { defaultValue: 'Failed to load active students data' })}
-            </p>
+            <p className="text-red-700">{'Failed to load active students data'}</p>
           </div>
         </CardContent>
       </Card>
@@ -80,7 +78,7 @@ export default function ActiveStudentsList({ courseId }: { courseId: string }) {
   const hasContributors = contributors?.data && contributors.data.length > 0;
 
   return (
-    <Card className="lg:col-span-3 min-h-[400px]">
+    <Card className="lg:col-span-3">
       <CardHeader className="flex flex-row justify-between">
         <div>
           <CardTitle className="flex items-center gap-2">
@@ -124,7 +122,7 @@ export default function ActiveStudentsList({ courseId }: { courseId: string }) {
             ))}
           </div>
         ) : !hasContributors ? (
-          <div className="flex flex-col items-center justify-center py-8 h-full w-full">
+          <div className="flex flex-col items-center justify-center py-40 h-full w-full">
             <Users className="w-12 h-12 text-gray-400 mb-4" />
             <p className="text-gray-500 text-center">{'No active students found'}</p>
           </div>

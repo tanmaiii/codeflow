@@ -390,4 +390,25 @@ export class ReposService {
       }),
     };
   }
+
+  //Dashboard
+
+  public async getRepoFramework(courseId?: string) {
+    const repos = await DB.Repos.findAll({ where: { courseId } });
+    
+    // Đếm số lượng repos cho mỗi framework
+    const frameworkCount = repos.reduce((acc, repo) => {
+      const framework = repo.framework || 'Unknown';
+      acc[framework] = (acc[framework] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    // Chuyển đổi thành mảng với format { framework, count }
+    const frameworkStats = Object.entries(frameworkCount).map(([framework, count]) => ({
+      framework,
+      count
+    }));
+    
+    return frameworkStats;
+  }
 }

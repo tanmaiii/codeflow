@@ -13,7 +13,7 @@ export interface ActionButtonModalProps extends ActionButtonProps {
   title?: string;
   description?: string;
   children: React.ReactNode;
-  className?: string;
+  icon?: React.ReactNode;
 }
 
 export default function ActionButtonModal({

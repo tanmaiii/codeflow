@@ -1,4 +1,5 @@
 import { IBaseEntity } from './common';
+import { IStats } from './topic';
 
 export interface IUser extends IBaseEntity {
   id: string;
@@ -33,4 +34,9 @@ export interface IUserSettings extends IBaseEntity {
   projectUpdates: boolean;
   onlineStatus: boolean;
   warningLogin: boolean;
+}
+
+export interface IMemberContributors extends IStats {
+  authorId: string;
+  author?: IUser;
 }

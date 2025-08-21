@@ -110,11 +110,7 @@ export class TopicController {
     try {
       const { limit = 10, sortBy = 'activityScore', courseId } = req.query;
 
-      const topTopics: Topic[] = await this.topic.getTopTopics(
-        Number(limit),
-        sortBy as any,
-        courseId as string,
-      );
+      const topTopics: Topic[] = await this.topic.getTopTopics(Number(limit), sortBy as any, courseId as string);
 
       res.status(200).json({
         data: topTopics,

@@ -14,6 +14,7 @@ import { TagService } from './tag.service';
 import { UserService } from './users.service';
 import { logger } from '@/utils/logger';
 import { ReposService } from './repos.service';
+import { TopicService } from './topic.service';
 
 @Service()
 export class CourseService {
@@ -23,6 +24,7 @@ export class CourseService {
   private courseEnrollmentService: CourseEnrollmentService;
   private userService: UserService;
   private _reposService: ReposService;
+  private _topicService: TopicService;
 
   constructor() {
     this.notificationService = Container.get(NotificationService);
@@ -38,6 +40,13 @@ export class CourseService {
       this._reposService = Container.get(ReposService);
     }
     return this._reposService;
+  }
+
+  private get topicService(): TopicService {
+    if (!this._topicService) {
+      this._topicService = Container.get(TopicService);
+    }
+    return this._topicService;
   }
 
   // Lazy getter để tránh circular dependency

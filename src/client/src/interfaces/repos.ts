@@ -16,26 +16,6 @@ export interface IRepos extends IBaseEntity {
   topic: ITopic;
 }
 
-export interface IReposContributors {
-  authorId: string;
-  author: IUser;
-  commit: {
-    total: number;
-    additions: number;
-    deletions: number;
-  };
-  pullRequest: {
-    total: number;
-    additions: number;
-    deletions: number;
-  };
-  codeAnalysis: {
-    total: number;
-    success: number;
-    failure: number;
-  };
-}
-
 export interface IReposStats {
   commit: {
     total: number;
@@ -110,4 +90,10 @@ export interface IPullRequestQueryParams extends IGetAllQuery {
 
 export interface ICommitQueryParams extends IGetAllQuery {
   authorId?: string;
+}
+
+
+export interface IReposFramework {
+  framework: string;
+  count: number;
 }

@@ -27,7 +27,6 @@ export const initModels = () => {
   UserModel.hasMany(CourseModel, { foreignKey: 'authorId' });
   UserModel.hasMany(PostModel, { foreignKey: 'authorId' });
   UserModel.hasMany(TopicModel, { foreignKey: 'authorId' });
-  UserModel.hasMany(TopicModel, { foreignKey: 'teacherId' });
   UserModel.hasMany(CommentModel, { foreignKey: 'authorId' });
   // UserModel.hasMany(SubmissionModel, { foreignKey: 'authorId', as: 'submissions' });
   UserModel.hasMany(TopicMemberModel, { foreignKey: 'userId', as: 'topicMembers' });
@@ -63,7 +62,6 @@ export const initModels = () => {
 
   // Topic Model Relations
   TopicModel.belongsTo(UserModel, { foreignKey: 'authorId', as: 'author' });
-  TopicModel.belongsTo(UserModel, { foreignKey: 'teacherId', as: 'teacher' });
   TopicModel.belongsToMany(TagModel, { through: TopicTagModel, as: 'tags', foreignKey: 'topicId' });
   TopicModel.belongsTo(CourseModel, { foreignKey: 'courseId', as: 'course' });
   TopicModel.hasMany(TopicMemberModel, { foreignKey: 'topicId', as: 'members' });

@@ -1,13 +1,13 @@
 import { IComment } from '@/interfaces/comment';
 import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
 import {
+  ICodeActivity,
   ICourse,
   ICourseEnrollment,
   ICourseMembers,
   ICreateCourseDto,
-  ICodeActivity,
 } from '@/interfaces/course';
-import { IReposContributors } from '@/interfaces/repos';
+import { IMemberContributors } from '@/interfaces/user';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 
@@ -129,7 +129,7 @@ class CourseService {
   async getContributors(
     courseId: string,
     params: IGetAllQuery,
-  ): Promise<PaginatedResponseAPIDto<IReposContributors[]>> {
+  ): Promise<PaginatedResponseAPIDto<IMemberContributors[]>> {
     const res = await this.client.get(`/${courseId}/contributors`, { params });
     return res.data;
   }

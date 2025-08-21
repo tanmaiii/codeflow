@@ -1,11 +1,15 @@
 import TextHeading from '@/components/ui/text';
 import { useDarkMode } from '@/hooks';
-import { IReposContributors } from '@/interfaces/repos';
+import { IMemberContributors } from '@/interfaces/user';
 import ReactECharts from 'echarts-for-react';
 import { ChartArea } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-export default function ChartMemberRadar({ contributors }: { contributors: IReposContributors[] }) {
+export default function ChartMemberRadar({
+  contributors,
+}: {
+  contributors: IMemberContributors[];
+}) {
   const { theme } = useDarkMode();
   const t = useTranslations('codeContribution');
 
@@ -37,7 +41,7 @@ export default function ChartMemberRadar({ contributors }: { contributors: IRepo
         : 0;
 
     return {
-      name: contributor.author.name,
+      name: contributor?.author?.name ?? 'Unknown',
       value: [
         (contributor.commit.total / maxValues.commits) * 100,
         (contributor.pullRequest.total / maxValues.pullRequests) * 100,
@@ -77,7 +81,7 @@ export default function ChartMemberRadar({ contributors }: { contributors: IRepo
     },
     legend: {
       top: 'bottom',
-      data: topContributors.map(c => c.author.name),
+      data: topContributors.map(c => c?.author?.name ?? 'Unknown'),
       textStyle: { fontSize: 11, color: theme.textColor },
       itemGap: 10,
     },

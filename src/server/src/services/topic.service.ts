@@ -240,11 +240,6 @@ export class TopicService {
         include: [
           [this.memberCountLiteral, 'memberCount'],
           [this.reposCountLiteral, 'reposCount'],
-          // Legacy fields for backward compatibility
-          [Sequelize.literal(`(SELECT COALESCE(SUM(c.total_commits), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_commits FROM commits GROUP BY repos_id) AS c ON r.id = c.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'commitsCount'],
-          [Sequelize.literal(`(SELECT COALESCE(SUM(pr.total_prs), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_prs FROM pull_requests WHERE deleted_at IS NULL GROUP BY repos_id) AS pr ON r.id = pr.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'pullRequestsCount'],
-          [Sequelize.literal(`(SELECT COALESCE(SUM(ca.total_analyses), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_analyses FROM code_analysis GROUP BY repos_id) AS ca ON r.id = ca.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'codeAnalysisCount'],
-          // New detailed stats
           [this.commitStatsLiteral, 'commit'],
           [this.pullRequestStatsLiteral, 'pullRequest'],
           [this.codeAnalysisStatsLiteral, 'codeAnalysis'],
@@ -539,9 +534,24 @@ export class TopicService {
           [this.memberCountLiteral, 'memberCount'],
           [this.reposCountLiteral, 'reposCount'],
           // Legacy fields for backward compatibility
-          [Sequelize.literal(`(SELECT COALESCE(SUM(c.total_commits), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_commits FROM commits GROUP BY repos_id) AS c ON r.id = c.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'commitsCount'],
-          [Sequelize.literal(`(SELECT COALESCE(SUM(pr.total_prs), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_prs FROM pull_requests WHERE deleted_at IS NULL GROUP BY repos_id) AS pr ON r.id = pr.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'pullRequestsCount'],
-          [Sequelize.literal(`(SELECT COALESCE(SUM(ca.total_analyses), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_analyses FROM code_analysis GROUP BY repos_id) AS ca ON r.id = ca.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`), 'codeAnalysisCount'],
+          [
+            Sequelize.literal(
+              `(SELECT COALESCE(SUM(c.total_commits), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_commits FROM commits GROUP BY repos_id) AS c ON r.id = c.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`,
+            ),
+            'commitsCount',
+          ],
+          [
+            Sequelize.literal(
+              `(SELECT COALESCE(SUM(pr.total_prs), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_prs FROM pull_requests WHERE deleted_at IS NULL GROUP BY repos_id) AS pr ON r.id = pr.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`,
+            ),
+            'pullRequestsCount',
+          ],
+          [
+            Sequelize.literal(
+              `(SELECT COALESCE(SUM(ca.total_analyses), 0) FROM repos AS r LEFT JOIN (SELECT repos_id, COUNT(*) as total_analyses FROM code_analysis GROUP BY repos_id) AS ca ON r.id = ca.repos_id WHERE r.topic_id = \`topics\`.\`id\` AND r.deleted_at IS NULL)`,
+            ),
+            'codeAnalysisCount',
+          ],
           // New detailed stats
           [this.commitStatsLiteral, 'commit'],
           [this.pullRequestStatsLiteral, 'pullRequest'],

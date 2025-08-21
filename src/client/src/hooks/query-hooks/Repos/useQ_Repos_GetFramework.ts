@@ -1,19 +1,19 @@
 import { ResponseAPIDto } from '@/interfaces/common';
-import { IMemberContributors } from '@/interfaces/user';
+import { IReposFramework } from '@/interfaces/repos';
 import reposService from '@/services/repos.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-export default function useQ_Repos_GetContributors({
+export default function useQ_Repos_GetFramework({
   options,
   id,
 }: {
-  options?: Partial<UseQueryOptions<ResponseAPIDto<IMemberContributors[]>, Error>>;
+  options?: Partial<UseQueryOptions<ResponseAPIDto<IReposFramework[]>, Error>>;
   id: string;
 }) {
   const query = useQuery({
-    queryKey: ['repos', 'contributors', id],
+    queryKey: ['repos', 'framework', id],
     queryFn: async () => {
-      const res = await reposService.getContributors(id);
+      const res = await reposService.getFramework(id);
       return res;
     },
     ...options,

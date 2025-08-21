@@ -33,6 +33,8 @@
     "register": "Register",
     "edit": "Edit",
     "save": "Save",
+    "export": "Export",
+    "exportConfirm": "Are you sure you want to export data to Excel? This action will download an Excel file containing the current data.",
     "add": "Add",
     "search": "Search",
     "clear": "Clear",
@@ -835,6 +837,10 @@
         "engagement": "Engagement",
         "punctuality": "Punctuality",
         "collaboration": "Collaboration"
+      },
+      "language": {
+        "title": "Language",
+        "description": "Language statistics"
       }
     },
     "lists": {

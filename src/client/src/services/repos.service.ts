@@ -1,5 +1,6 @@
 import { IGetAllQuery, PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
-import { IRepos, IReposContributors, IReposCreateDto, IReposStats, IReposUpdateDto } from '@/interfaces/repos';
+import { IRepos, IReposCreateDto, IReposFramework, IReposStats, IReposUpdateDto } from '@/interfaces/repos';
+import { IMemberContributors } from '@/interfaces/user';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 
@@ -17,7 +18,7 @@ class ReposService {
     return res.data;
   }
 
-  public async getContributors(id: string): Promise<ResponseAPIDto<IReposContributors[]>> {
+  public async getContributors(id: string): Promise<ResponseAPIDto<IMemberContributors[]>> {
     const res = await this.client.get(`/${id}/contributors`);
     return res.data;
   }
@@ -39,6 +40,11 @@ class ReposService {
 
   public async getStats(id: string): Promise<ResponseAPIDto<IReposStats>> {
     const res = await this.client.get(`/${id}/stats`);
+    return res.data;
+  }
+
+  public async getFramework(courseId: string): Promise<ResponseAPIDto<IReposFramework[]>> {
+    const res = await this.client.get(`/${courseId}/framework`);
     return res.data;
   }
 

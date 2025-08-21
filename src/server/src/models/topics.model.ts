@@ -7,7 +7,7 @@ import { TopicMemberModel } from './topic_member.mode';
 import { UserModel } from './users.model';
 type PostCreationAttributes = Optional<
   Topic,
-  'id' | 'title' | 'description' | 'courseId' | 'teacherId' | 'authorId' | 'isCustom' | 'status' | 'groupName'
+  'id' | 'title' | 'description' | 'courseId' | 'authorId' | 'isCustom' | 'status' | 'groupName'
 >;
 
 export class TopicModel extends Model<Topic, PostCreationAttributes> implements Topic {
@@ -16,7 +16,6 @@ export class TopicModel extends Model<Topic, PostCreationAttributes> implements 
   public description!: string;
   public courseId!: string;
   public authorId!: string;
-  public teacherId!: string;
   public isCustom!: boolean;
   public status!: ENUM_TOPIC_STATUS;
   public groupName!: string;
@@ -46,14 +45,6 @@ export default function (sequelize: Sequelize): typeof TopicModel {
         type: DataTypes.UUID,
         references: {
           model: 'courses',
-          key: 'id',
-        },
-      },
-      teacherId: {
-        allowNull: true,
-        type: DataTypes.UUID,
-        references: {
-          model: 'users',
           key: 'id',
         },
       },
@@ -91,10 +82,6 @@ export default function (sequelize: Sequelize): typeof TopicModel {
           {
             model: UserModel,
             as: 'author',
-          },
-          {
-            model: UserModel,
-            as: 'teacher',
           },
           {
             model: TagModel,

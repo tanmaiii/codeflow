@@ -17,10 +17,6 @@ export class CreateTopicDto {
   @IsNotEmpty()
   public courseId: string;
 
-  @IsOptional()
-  @IsString()
-  public teacherId: string;
-
   @IsBoolean()
   @IsNotEmpty()
   public isCustom: boolean;
@@ -59,10 +55,6 @@ export class UpdateTopicDto {
   @IsString()
   @IsNotEmpty()
   public courseId: string;
-
-  @IsOptional()
-  @IsString()
-  public teacherId: string;
 
   @IsOptional()
   @IsBoolean()

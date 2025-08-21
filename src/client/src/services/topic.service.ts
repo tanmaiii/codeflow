@@ -1,9 +1,10 @@
 import { PaginatedResponseAPIDto, ResponseAPIDto } from '@/interfaces/common';
-import { IReposContributors } from '@/interfaces/repos';
 import {
   IGetAllTopicParams,
   ITopic,
+  ITopicContributors,
   ITopicCreateDto,
+  ITopicDetailStats,
   ITopicStats
 } from '@/interfaces/topic';
 import createHttpClient from '@/lib/createHttpClient';
@@ -29,6 +30,14 @@ class TopicService {
     return res.data;
   }
 
+  async getAllStatsByCourseId(
+    params: IGetAllTopicParams,
+    courseId: string,
+  ): Promise<PaginatedResponseAPIDto<ITopicStats[]>> {
+    const res = await this.client.get(`/${courseId}/course/stats`, { params });
+    return res.data;
+  }
+
   async getAllByUserId(
     params: IGetAllTopicParams,
     userId: string,
@@ -42,12 +51,12 @@ class TopicService {
     return res.data;
   }
 
-  async getStats(id: string): Promise<ResponseAPIDto<ITopicStats>> {
+  async getStats(id: string): Promise<ResponseAPIDto<ITopicDetailStats>> {
     const res = await this.client.get(`/${id}/stats`);
     return res.data;
   }
 
-  public async getContributors(id: string): Promise<ResponseAPIDto<IReposContributors[]>> {
+  public async getContributors(id: string): Promise<ResponseAPIDto<ITopicContributors[]>> {
     const res = await this.client.get(`/${id}/contributors`);
     return res.data;
   }
