@@ -11,9 +11,10 @@ interface AvatarProps {
 interface AvatarGroupProps extends React.ComponentProps<'div'> {
   avatars: AvatarProps[];
   max?: number;
+  size?: number
 }
 
-const AvatarGroup = ({ avatars, max, className, ...props }: AvatarGroupProps) => {
+const AvatarGroup = ({ avatars, max, className, size = 32, ...props }: AvatarGroupProps) => {
   const totalAvatars = avatars.length;
   const displayedAvatars = max ? avatars.slice(0, max).reverse() : avatars.reverse();
   const remainingAvatars = max && totalAvatars > max ? totalAvatars - max : 0;
@@ -24,12 +25,12 @@ const AvatarGroup = ({ avatars, max, className, ...props }: AvatarGroupProps) =>
         return (
           <MyTooltip key={index} content={avatar.name}>
             <div key={index} className="-ml-2 hover:z-10 relative">
-              <div className="h-7 w-7 rounded-full overflow-hidden ring-2 ring-background">
+              <div className="rounded-full overflow-hidden ring-2 ring-background" style={{ width: size, height: size }}>
                 <Image 
                   src={avatar.url} 
                   alt={avatar.alt} 
-                  width={32}
-                  height={32}
+                  width={size}
+                  height={size}
                   className="object-cover h-full w-full"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -49,7 +50,7 @@ const AvatarGroup = ({ avatars, max, className, ...props }: AvatarGroupProps) =>
         );
       })}
       {remainingAvatars > 0 && (
-        <div className="h-8 w-8 rounded-full overflow-hidden -ml-2 hover:z-10 relative ring-2 ring-background flex items-center justify-center bg-muted-foreground text-white">
+        <div style={{ width: size, height: size }} className="rounded-full overflow-hidden -ml-2 hover:z-10 relative ring-2 ring-background flex items-center justify-center bg-muted-foreground text-white">
           <span className="text-xs font-medium">+{remainingAvatars}</span>
         </div>
       )}

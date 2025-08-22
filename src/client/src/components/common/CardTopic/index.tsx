@@ -4,13 +4,15 @@ import TextHeading, { TextDescription } from '@/components/ui/text';
 import { STATUS_TOPIC } from '@/constants/object';
 import { paths } from '@/data/path';
 import { ITopic } from '@/interfaces/topic';
+import apiConfig from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { util_progress_color } from '@/utils/common';
 import { utils_CalculateProgress, utils_DateToDDMMYYYY } from '@/utils/date';
-import { IconBook2, IconCalendar, IconUser } from '@tabler/icons-react';
+import { IconBook2, IconCalendar } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
+import AvatarGroup from '../AvatarGroup';
 import MyBadge from '../MyBadge';
 import CardTopic_More from './CardTopicMore';
-import { util_progress_color } from '@/utils/common';
 
 interface CardTopicProps {
   topic: ITopic;
@@ -62,9 +64,23 @@ export default function CardTopic({ topic }: CardTopicProps) {
               {utils_DateToDDMMYYYY(topic.course?.topicDeadline ?? '')}
             </TextDescription>
           </div>
-          <div className="flex flex-row items-end gap-1">
-            <IconUser className="size-4 text-color-2" />
-            <TextDescription lineClamp={2}>{topic.members?.length ?? 1}</TextDescription>
+          <div className="flex flex-row items-center justify-center align-middle gap-1">
+            {/* <IconUser className="size-4 text-color-2 mr-2" /> */}
+            {/* <TextDescription lineClamp={2}>{topic.members?.length ?? 1}</TextDescription> */}
+
+            <AvatarGroup
+              avatars={
+                topic.members?.map(member => ({
+                  url: member.user?.avatar
+                    ? member.user?.avatar
+                    : apiConfig.avatar(member.user?.name ?? 'c'),
+                  name: member.user?.name ?? 'c',
+                  alt: member.user?.name ?? 'c',
+                })) ?? []
+              }
+              size={24}
+              max={3}
+            />
           </div>
         </div>
       </CardContent>
