@@ -20,7 +20,9 @@ export const ChartWrapper: React.FC<ChartWrapperProps> = ({
   <div className={`bg-background-1 rounded-lg p-4 shadow-sm border border-border ${className}`}>
     <div className="flex justify-between items-center">
       {label ? <TextHeading className="text-color-1 text-md">{label}</TextHeading> : null}
-      {rightComponent}
+      {<div className="flex items-center ml-auto gap-2">
+        {rightComponent}
+      </div>}
     </div>
     <ReactECharts option={option} style={{ height, width: '100%' }} opts={{ renderer: 'svg' }} />
   </div>

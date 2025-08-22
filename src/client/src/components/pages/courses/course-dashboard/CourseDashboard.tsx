@@ -8,11 +8,11 @@ import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import ActiveStudentsList from './components/ActiveStudentsList';
 import BestTopicsList from './components/BestTopicsList';
+import ChartComplexity from './components/ChartComplexity';
 import LanguageChart from './components/LanguageChart';
 import CodeActivityChart from './components/StudentProgressChart';
 import TopicApprovalChart from './components/TopicApprovalChart';
 import CourseStatsCards from './CourseStatsCards';
-import ChartComplexity from './components/ChartComplexity';
 
 export default function CourseDashboard() {
   const params = useParams();
@@ -47,8 +47,7 @@ export default function CourseDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <LanguageChart courseId={id} />
-        {/* TODO: Mockdata */}
-        <ChartComplexity/>
+        <ChartComplexity courseId={id} />
       </div>
 
       <BestTopicsList courseId={id} />

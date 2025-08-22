@@ -12,7 +12,7 @@ export class GitHubWebhookService extends GitHubBaseService {
   public async verifyWebhookSignature(signature: string): Promise<boolean> {
     try {
       this.logInfo('Verifying webhook signature', { signature });
-      
+
       const hmac = crypto.createHmac('sha256', process.env.GITHUB_WEBHOOK_SECRET);
       hmac.update(signature);
       const calculatedSignature = hmac.digest('hex');
@@ -22,7 +22,7 @@ export class GitHubWebhookService extends GitHubBaseService {
       throw error;
     }
   }
-  
+
   /**
    * Lấy danh sách webhooks của repository
    * @param repoName Tên repository
@@ -36,7 +36,7 @@ export class GitHubWebhookService extends GitHubBaseService {
         method: 'GET',
         url: `${this.getOrgRepoUrl(repoName)}/hooks`,
       });
-      
+
       return response;
     } catch (error) {
       this.logError(`Error getting webhooks for repo: ${repoName}`, error);
@@ -58,7 +58,7 @@ export class GitHubWebhookService extends GitHubBaseService {
         method: 'DELETE',
         url: `${this.getOrgRepoUrl(repoName)}/hooks/${hookId}`,
       });
-      
+
       return response;
     } catch (error) {
       this.logError(`Error deleting webhook: ${hookId}`, error);
@@ -77,7 +77,7 @@ export class GitHubWebhookService extends GitHubBaseService {
 
       // Lấy danh sách webhooks hiện có
       const webhooks = await this.getWebhooks(repoName);
-      
+
       if (!webhooks || !Array.isArray(webhooks) || webhooks.length === 0) {
         this.logInfo('No webhooks found', { repoName });
         return { deleted: false, message: 'No webhooks found', deletedCount: 0 };
@@ -87,16 +87,16 @@ export class GitHubWebhookService extends GitHubBaseService {
       const deletedWebhooks = [];
       for (const webhook of webhooks) {
         try {
-          this.logInfo('Deleting webhook', { 
-            repoName, 
+          this.logInfo('Deleting webhook', {
+            repoName,
             webhookId: webhook.id,
-            webhookUrl: webhook.config?.url 
+            webhookUrl: webhook.config?.url,
           });
-          
+
           await this.deleteWebhook(repoName, webhook.id);
           deletedWebhooks.push({
             id: webhook.id,
-            url: webhook.config?.url
+            url: webhook.config?.url,
           });
         } catch (error) {
           this.logError(`Failed to delete webhook ${webhook.id}`, error);
@@ -104,17 +104,17 @@ export class GitHubWebhookService extends GitHubBaseService {
       }
 
       if (deletedWebhooks.length > 0) {
-        return { 
-          deleted: true, 
+        return {
+          deleted: true,
           message: `Successfully deleted ${deletedWebhooks.length} webhook(s)`,
           deletedCount: deletedWebhooks.length,
-          deletedWebhooks 
+          deletedWebhooks,
         };
       } else {
-        return { 
-          deleted: false, 
+        return {
+          deleted: false,
           message: 'Failed to delete any webhooks',
-          deletedCount: 0 
+          deletedCount: 0,
         };
       }
     } catch (error) {
@@ -148,7 +148,7 @@ export class GitHubWebhookService extends GitHubBaseService {
           },
         },
       });
-      
+
       return response;
     } catch (error) {
       this.logError(`Error creating webhook commit: ${webhookUrl}`, error);
@@ -172,4 +172,4 @@ export class GitHubWebhookService extends GitHubBaseService {
       throw error;
     }
   }
-} 
+}

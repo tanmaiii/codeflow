@@ -82,16 +82,39 @@ export class CodeAnalysisService {
         {
           model: DB.CodeAnalysisMetrics,
           as: 'metrics',
-        }
+        },
       ],
       nest: true,
       raw: false,
     });
-    
+
     if (!codeAnalysis) {
       return null;
     }
-    
+
+    // Convert Sequelize instance to plain object
+    const plainResult = codeAnalysis.toJSON();
+    return plainResult as ICodeAnalysisMetrics;
+  }
+
+  public async findByCourse(reposId: string): Promise<ICodeAnalysisMetrics> {
+    const codeAnalysis = await DB.CodeAnalysis.findOne({
+      where: { reposId, branch: 'master', status: 'success' },
+      order: [['analyzedAt', 'DESC']],
+      include: [
+        {
+          model: DB.CodeAnalysisMetrics,
+          as: 'metrics',
+        },
+      ],
+      nest: true,
+      raw: false,
+    });
+
+    if (!codeAnalysis) {
+      return null;
+    }
+
     // Convert Sequelize instance to plain object
     const plainResult = codeAnalysis.toJSON();
     return plainResult as ICodeAnalysisMetrics;

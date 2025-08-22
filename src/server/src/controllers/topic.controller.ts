@@ -151,6 +151,36 @@ export class TopicController {
     }
   };
 
+  public getTopicsByTeacher = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.userId;
+      const isAdmin = req.user.role === ENUM_USER_ROLE.ADMIN;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', status } = req.query;
+      const { count, rows }: { count: number; rows: Topic[] } = await this.topic.findAndCountAllWithPaginationByTeacher(
+        Number(page),
+        Number(limit),
+        String(sortBy),
+        order as 'ASC' | 'DESC',
+        userId,
+        status !== undefined && status !== '' ? (status as string) : undefined,
+        isAdmin,
+      );
+
+      res.status(200).json({
+        data: rows,
+        pagination: {
+          totalItems: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          currentPage: Number(page),
+          pageSize: Number(limit),
+        },
+        message: 'find topics by course creator',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getTopicById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       const topicId = req.params.id;

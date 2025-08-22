@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useDarkMode } from '@/hooks';
 import useQ_Repos_GetFramework from '@/hooks/query-hooks/Repos/useQ_Repos_GetFramework';
 import ReactECharts from 'echarts-for-react';
-import { Code } from 'lucide-react';
+import { Code, Users2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export default function LanguageChart({ courseId }: { courseId: string }) {
@@ -62,14 +62,14 @@ export default function LanguageChart({ courseId }: { courseId: string }) {
         fontSize: 12,
         margin: 15,
       },
-      axisTick: { 
+      axisTick: {
         show: true,
         alignWithLabel: true,
-        lineStyle: { color: theme.splitLineColor }
+        lineStyle: { color: theme.splitLineColor },
       },
-      axisLine: { 
+      axisLine: {
         show: true,
-        lineStyle: { color: theme.splitLineColor }
+        lineStyle: { color: theme.splitLineColor },
       },
     },
     yAxis: {
@@ -82,11 +82,11 @@ export default function LanguageChart({ courseId }: { courseId: string }) {
       },
       axisTick: {
         show: true,
-        lineStyle: { color: theme.splitLineColor }
+        lineStyle: { color: theme.splitLineColor },
       },
       axisLine: {
         show: true,
-        lineStyle: { color: theme.splitLineColor }
+        lineStyle: { color: theme.splitLineColor },
       },
       splitLine: {
         show: true,
@@ -103,12 +103,12 @@ export default function LanguageChart({ courseId }: { courseId: string }) {
         data: frameworkData?.map((item, index) => ({
           value: item.count,
           itemStyle: {
-              color: colors[index % colors.length],
-            },
-          })),
-          barWidth: '60%',
-          label: {
-            show: true,
+            color: colors[index % colors.length],
+          },
+        })),
+        barWidth: '60%',
+        label: {
+          show: true,
           position: 'top',
           color: theme.textColor,
           fontSize: 12,
@@ -117,24 +117,26 @@ export default function LanguageChart({ courseId }: { courseId: string }) {
     ],
   };
 
+  if (isLoading) return <Skeleton className="w-full h-[300px]" />;
+  if (isError) return <div>Error</div>;
+
   return (
-    <Card className='gap-2'>
+    <Card className="gap-2">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Code className="w-5 h-5" />
           {t('title')}
         </CardTitle>
-        <CardDescription>
-          {t('description')}
-        </CardDescription>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
-      <CardContent className='p-2'>
-        {isLoading ? (
-          <Skeleton className="w-full h-[300px]" />
-        ) : isError ? (
-          <div>Error</div>
-        ) : (
+      <CardContent className="p-2">
+        {frameworkData && frameworkData.length > 0 ? (
           <ReactECharts option={chartOptions} style={{ height: '300px' }} />
+        ) : (
+          <div className="flex flex-col items-center justify-center py-30 w-full">
+            <Users2 className="w-12 h-12 text-gray-400 mb-4" />
+            <p className="text-gray-500 text-center">{'No active students found'}</p>
+          </div>
         )}
       </CardContent>
     </Card>

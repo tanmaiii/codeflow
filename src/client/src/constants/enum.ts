@@ -67,28 +67,52 @@ export enum ENUM_FRAMEWORK {
 }
 
 export enum ENUM_METRICS_CODE_ANALYSIS {
-  SECURITY_HOTSPOTS = 'security_hotspots', // Điểm nóng bảo mật
-  BUGS = 'bugs', // Lỗi
-  RELIABILITY_RATING = 'reliability_rating', // Độ tin cậy
-  CODE_SMELLS = 'code_smells', // Mùi code
-  DUPLICATED_LINES = 'duplicated_lines', // Dòng code lặp lại
-  COVERAGE = 'coverage', // Phần trăm code được test
-  DUPLICATED_LINES_DENSITY = 'duplicated_lines_density', // Mật độ dòng lặp lại
-  ALERT_STATUS = 'alert_status', // Trạng thái cảnh báo
-  SECURITY_HOTSPOTS_REVIEWED = 'security_hotspots_reviewed', // Điểm nóng bảo mật đã xem xét
-  SECURITY_RATING = 'security_rating', // Đánh giá bảo mật
-  VULNERABILITIES = 'vulnerabilities', // Lỗi bảo mật
-  SQALE_INDEX = 'sqale_index', // Chỉ số SQALE
-  SQALE_RATING = 'sqale_rating', // Đánh giá SQALE
-  SECURITY_REVIEW_RATING = 'security_review_rating', // Đánh giá bảo mật đã xem xét
-  LINE_COVERAGE = 'line_coverage', // Phần trăm dòng code được test
-  UNCOVERED_LINES = 'uncovered_lines', // Dòng code không được test
-  LINES_TO_COVER = 'lines_to_cover', // Dòng code cần test
-  DUPLICATED_BLOCKS = 'duplicated_blocks', // Khối code lặp lại
-  COMPLEXITY = 'complexity', // Độ phức tạp
-  COGNITIVE_COMPLEXITY = 'cognitive_complexity', // Độ phức tạp trí tuệ
-  NCLoc = 'ncloc', // Số dòng code
-  FILES = 'files', // Số file
-  FUNCTIONS = 'functions', // Số hàm
-  CLASSES = 'classes', // Số lớp
+  /** Điểm nóng bảo mật */
+  SECURITY_HOTSPOTS = 'security_hotspots',
+  /** Lỗi */
+  BUGS = 'bugs',
+  /** Độ tin cậy */
+  RELIABILITY_RATING = 'reliability_rating',
+  /** Mùi code */
+  CODE_SMELLS = 'code_smells',
+  /** Dòng code lặp lại */
+  DUPLICATED_LINES = 'duplicated_lines',
+  /** Phần trăm code được test */
+  COVERAGE = 'coverage',
+  /** Mật độ dòng lặp lại */
+  DUPLICATED_LINES_DENSITY = 'duplicated_lines_density',
+  /** Trạng thái cảnh báo */
+  ALERT_STATUS = 'alert_status',
+  /** Điểm nóng bảo mật đã xem xét */
+  SECURITY_HOTSPOTS_REVIEWED = 'security_hotspots_reviewed',
+  /** Đánh giá bảo mật */
+  SECURITY_RATING = 'security_rating',
+  /** Lỗi bảo mật */
+  VULNERABILITIES = 'vulnerabilities',
+  /** Chỉ số SQALE */
+  SQALE_INDEX = 'sqale_index',
+  /** Đánh giá SQALE */
+  SQALE_RATING = 'sqale_rating',
+  /** Đánh giá bảo mật đã xem xét */
+  SECURITY_REVIEW_RATING = 'security_review_rating',
+  /** Phần trăm dòng code được test */
+  LINE_COVERAGE = 'line_coverage',
+  /** Dòng code không được test */
+  UNCOVERED_LINES = 'uncovered_lines',
+  /** Dòng code cần test */
+  LINES_TO_COVER = 'lines_to_cover',
+  /** Khối code lặp lại */
+  DUPLICATED_BLOCKS = 'duplicated_blocks',
+  /** Độ phức tạp */
+  COMPLEXITY = 'complexity',
+  /** Độ phức tạp trí tuệ */
+  COGNITIVE_COMPLEXITY = 'cognitive_complexity',
+  /** Số dòng code */
+  NCLoc = 'ncloc',
+  /** Số file */
+  FILES = 'files',
+  /** Số hàm */
+  FUNCTIONS = 'functions',
+  /** Số lớp */
+  CLASSES = 'classes',
 }

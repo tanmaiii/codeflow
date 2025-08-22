@@ -1,9 +1,9 @@
 'use client';
+import ActionButton from '@/components/common/Action/ActionButton';
 import CardCourse from '@/components/common/CardCourse/CardCourse';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
 import NoData from '@/components/common/NoData/NoData';
 import { CourseListSkeleton } from '@/components/skeletons/course';
-import { Button } from '@/components/ui/button';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import { ROLE } from '@/constants/enum';
 import { paths } from '@/data/path';
@@ -78,14 +78,11 @@ export default function CourseList() {
           ))}
         </div>
         {user?.role === ROLE.TEACHER && (
-          <Button
+          <ActionButton
+            title={t('createCourse')}
+            actionType="create"
             onClick={() => router.push(localPath(paths.COURSE_CREATE))}
-            variant="outline"
-            className="bg-background-1"
-            size="sm"
-          >
-            {t('createCourse')}
-          </Button>
+          />
         )}
       </div>
       <div className="min-h-[600px] mt-4">

@@ -23,12 +23,16 @@ export class CodeAnalysisRoute implements Routes {
       ValidationMiddleware(GetCodeAnalysisByRepoIdDto, 'query'),
       this.codeAnalysis.getCodeAnalysisByRepoId,
     );
+
     this.router.get(
       `${this.path}/repos/:id/timeframe`,
       AuthMiddleware,
       ValidationMiddleware(CodeAnalysisTimeframeQueryDto, 'query'),
       this.codeAnalysis.getCodeAnalysisByRepoIdWithTimeFilter,
     );
+
+    this.router.get(`${this.path}/repos/:id/contributors`, AuthMiddleware, this.codeAnalysis.getCodeAnalysisByRepoIdWithTimeFilter);
     this.router.get(`${this.path}/topic/:id`, AuthMiddleware, this.codeAnalysis.getCodeAnalysisByTopicId);
+    this.router.get(`${this.path}/course/:id`, AuthMiddleware, this.codeAnalysis.getCodeAnalysisByCourseId);
   }
 }

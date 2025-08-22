@@ -37,6 +37,11 @@ class CodeAnalysisService {
     const res = await this.client.get(`/topic/${topicId}`);
     return res.data;
   }
+
+  async getByCourseId(courseId: string): Promise<ResponseAPIDto<ITopicMetrics[]>> {
+    const res = await this.client.get(`/course/${courseId}`);
+    return res.data;
+  }
 }
 
 export default new CodeAnalysisService() as CodeAnalysisService;

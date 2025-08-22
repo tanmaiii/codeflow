@@ -78,6 +78,17 @@ export class CodeAnalysisController {
     }
   };
 
+  //
+  public getCodeAnalysisByRepoIdWithContributors = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const data = await this.codeAnalysisService.getContributorsByRepoIdOrAuthorId(id);
+      res.status(200).json({ data, message: 'get contributors by repo id' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   // Lấy tất cả đánh giá code theo topic và thời gian
   public getCodeAnalysisByTopicId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -126,6 +137,59 @@ export class CodeAnalysisController {
       res.status(200).json({
         data: aggregatedMetrics,
         message: 'Get code analysis by topic id with time filter',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getCodeAnalysisByCourseId = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const repos = await this.reposService.findByByCourseId(id);
+      const allMetrics = [];
+
+      // Lấy tất cả metrics từ các repos
+      for (const repo of repos) {
+        const codeAnalysis = await this.codeAnalysisService.findByCourse(repo.id);
+        if (codeAnalysis?.metrics && Array.isArray(codeAnalysis.metrics)) {
+          allMetrics.push(...codeAnalysis.metrics);
+        }
+      }
+
+      // Map lại các metrics có cùng name
+      const metricsMap = new Map();
+
+      for (const metric of allMetrics) {
+        const key = metric.name;
+
+        if (metricsMap.has(key)) {
+          const existing = metricsMap.get(key);
+          const existingValue = parseFloat(existing.value) || 0;
+          const currentValue = parseFloat(metric.value) || 0;
+          existing.value = (existingValue + currentValue).toString();
+
+          if (existing.bestValue === null && metric.bestValue !== null) {
+            existing.bestValue = metric.bestValue;
+          } else if (existing.bestValue !== null && metric.bestValue === null) {
+          } else if ((existing.bestValue === true && metric.bestValue === false) || (existing.bestValue === false && metric.bestValue === true)) {
+            existing.bestValue = false;
+          }
+        } else {
+          metricsMap.set(key, {
+            name: metric.name,
+            value: metric.value,
+            bestValue: metric.bestValue,
+          });
+        }
+      }
+
+      // Convert Map về Array
+      const aggregatedMetrics = Array.from(metricsMap.values());
+
+      res.status(200).json({
+        data: aggregatedMetrics,
+        message: 'Get code analysis by course id with time filter',
       });
     } catch (error) {
       next(error);

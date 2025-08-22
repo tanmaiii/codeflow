@@ -31,7 +31,7 @@ export class TopicEvaluationsService {
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
     topicId: string,
-    search: string = '',
+    search = '',
   ): Promise<{ count: number; rows: TopicEvaluations[] }> {
     const offset = (page - 1) * pageSize;
 

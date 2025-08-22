@@ -15,7 +15,7 @@ export class GitHubUserService extends GitHubBaseService {
    */
   public async getUserInfo(accessToken: string): Promise<GitHubUser> {
     this.logInfo('Getting user info with access token');
-    
+
     return this.makeRequest<GitHubUser>({
       method: 'GET',
       url: `${this.baseUrl}/user`,
@@ -28,7 +28,7 @@ export class GitHubUserService extends GitHubBaseService {
 
   public async getUserInfoByUsername(username: string): Promise<GitHubUser> {
     this.logInfo('Getting user info by username', { username });
-    
+
     return this.makeRequest<GitHubUser>({
       method: 'GET',
       url: `${this.baseUrl}/users/${username}`,
@@ -84,10 +84,10 @@ export class GitHubUserService extends GitHubBaseService {
    */
   public async getOrganizationMembers(): Promise<GitHubUser[]> {
     this.logInfo('Getting organization members');
-    
+
     return this.makeRequest<GitHubUser[]>({
       method: 'GET',
       url: `${this.getOrgUrl()}/members`,
     });
   }
-} 
+}

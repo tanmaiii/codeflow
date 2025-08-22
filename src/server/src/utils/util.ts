@@ -74,11 +74,11 @@ export const getStartLinePullRequest = (diffHeader: string) => {
 
 export function formatUnifiedDiffWithLineNumbers(diff: string): string {
   const lines = diff.split('\n');
-  let result: string[] = [];
+  const result: string[] = [];
   let oldLine = 0;
   let newLine = 0;
 
-  for (let line of lines) {
+  for (const line of lines) {
     const hunkMatch = line.match(/^@@ -(\d+),\d+ \+(\d+),\d+ @@/);
     if (hunkMatch) {
       oldLine = parseInt(hunkMatch[1]);

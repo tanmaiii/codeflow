@@ -80,7 +80,8 @@
     "showLess": "Hiển thị ít hơn",
     "showMore": "Xem tất cả",
     "noData": "Không có dữ liệu",
-    "total": "Tổng"
+    "total": "Tổng",
+    "value": "Giá trị"
   },
   "homePage": {
     "welcome": "Chào mừng bạn đến với trang chủ",
@@ -694,6 +695,14 @@
   },
   "codeAnalysis": {
     "codeAnalysis": "Phân tích code",
+    "title": "Phân tích chất lượng code",
+    "quality": "Chất lượng Code",
+    "qualityScore": "Điểm chất lượng",
+    "score": "Điểm",
+    "good": "Tốt",
+    "average": "Trung bình",
+    "needsImprovement": "Cần cải thiện",
+    "noData": "Không có dữ liệu phân tích code",
     "status": "Trạng thái",
     "viewAnalysis": "Xem phân tích",
     "improveCodeAnalysis": "Xu hướng cải thiện Code Analysis",
@@ -710,6 +719,8 @@
     "running": "Đang chạy",
     "notOptimized": "Chưa tối ưu",
     "optimized": "Tốt nhất",
+    "radarChart": "Biểu đồ radar",
+    "barChart": "Biểu đồ cột",
     "metrics": {
       "alert_status": "Trạng thái cảnh báo",
       "bugs": "Lỗi",
@@ -803,39 +814,12 @@
         "6m": "6 tháng qua",
         "1y": "1 năm"
       },
-      "projectProgress": {
-        "title": "Tiến độ theo đề tài",
-        "description": "Thống kê tỷ lệ hoàn thành và mức độ tham gia theo từng đề tài dự án",
-        "completionRate": "Tỷ lệ hoàn thành",
-        "participation": "Tỷ lệ tham gia",
-        "milestones": "Mốc thời gian",
-        "studentsWorking": "Sinh viên tham gia",
-        "status": "Trạng thái dự án"
-      },
       "topicApproval": {
         "title": "Thống kê phê duyệt đề tài",
         "description": "Biểu đồ thống kê số lượng đề tài theo trạng thái phê duyệt",
         "pending": "Chờ duyệt",
         "approved": "Đã chấp nhận",
         "rejected": "Đã từ chối"
-      },
-      "dailyActivity": {
-        "title": "Hoạt động hàng ngày (7 ngày qua)",
-        "description": "Theo dõi hoạt động đăng nhập, nộp bài và thảo luận của học viên",
-        "logins": "Đăng nhập",
-        "submissions": "Nộp bài",
-        "discussions": "Thảo luận"
-      },
-      "performanceRadar": {
-        "title": "Đánh giá tổng quan hiệu suất lớp học",
-        "description": "Biểu đồ radar thể hiện các chỉ số hiệu suất trung bình của lớp học",
-        "classPerformance": "Hiệu suất lớp học",
-        "attendance": "Chuyên cần",
-        "completion": "Hoàn thành",
-        "participation": "Tham gia",
-        "engagement": "Tương tác",
-        "punctuality": "Đúng giờ",
-        "collaboration": "Hợp tác"
       },
       "language": {
         "title": "Ngôn ngữ lập trình",

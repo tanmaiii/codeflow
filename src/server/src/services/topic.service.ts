@@ -275,7 +275,7 @@ export class TopicService {
         id: topicIds,
         ...(status ? { status } : {}),
       },
-      col: 'topics.id',
+      // col: 'topics.id',
       attributes: {
         include: [[this.memberCountLiteral, 'memberCount']],
       },
@@ -288,6 +288,54 @@ export class TopicService {
         },
       ],
       paranoid: !isAdmin, // Nếu là admin thì không cần paranoid (xem cả record đã xóa mềm)
+    });
+  }
+
+  public async findAndCountAllWithPaginationByTeacher(
+    page = 1,
+    pageSize = this.defaultPageSize,
+    sortBy = this.defaultSortBy,
+    sortOrder = this.defaultSortOrder,
+    userId?: string,
+    status?: string,
+    isAdmin = false,
+  ): Promise<{ count: number; rows: Topic[] }> {
+    // Tìm các course mà user là creator
+    const courses = await DB.Courses.findAll({
+      where: { authorId: userId },
+      attributes: ['id'],
+      paranoid: !isAdmin,
+    });
+
+    const courseIds = courses.map(course => course.id);
+
+    // Nếu không có course nào, trả về kết quả rỗng
+    if (courseIds.length === 0) {
+      return { count: 0, rows: [] };
+    }
+
+    // Lấy các topic trong những course đó
+    return DB.Topics.findAndCountAll({
+      limit: pageSize === -1 ? undefined : pageSize,
+      offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
+      order: [[sortBy, sortOrder]],
+      distinct: true,
+      where: {
+        courseId: courseIds,
+        ...(status ? { status } : {}),
+      },
+      attributes: {
+        include: [[this.memberCountLiteral, 'memberCount']],
+      },
+      include: [
+        {
+          model: DB.Courses,
+          as: 'course',
+          required: true,
+          paranoid: !isAdmin,
+        },
+      ],
+      paranoid: !isAdmin,
     });
   }
 

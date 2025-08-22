@@ -1,5 +1,6 @@
 import MySelect from '@/components/common/MySelect';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useDarkMode } from '@/hooks';
 import useQ_Course_GetCodeActivity from '@/hooks/query-hooks/Course/useQ_Course_GetCodeActivity';
 import ReactECharts from 'echarts-for-react';
@@ -106,41 +107,8 @@ export default function CodeActivityChart({ courseId }: CodeActivityChartProps) 
     ],
   };
 
-  if (isLoading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5" />
-            {t('title')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-[300px]">
-            <div className="text-muted-foreground">{t_common('loading')}</div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (error) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5" />
-            {t('title')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-[300px]">
-            <div className="text-muted-foreground">{t('error')}</div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
+  if (isLoading) return <Skeleton className="w-full h-[400px]" />;
+  if (error) return <div>Error</div>;
 
   return (
     <Card>

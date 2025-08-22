@@ -5,7 +5,7 @@ import {
   ITopicContributors,
   ITopicCreateDto,
   ITopicDetailStats,
-  ITopicStats
+  ITopicStats,
 } from '@/interfaces/topic';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
@@ -43,6 +43,14 @@ class TopicService {
     userId: string,
   ): Promise<PaginatedResponseAPIDto<ITopic[]>> {
     const res = await this.client.get(`/${userId}/user`, { params });
+    return res.data;
+  }
+
+  async getAllByTeacherId(
+    params: IGetAllTopicParams,
+    userId: string,
+  ): Promise<PaginatedResponseAPIDto<ITopic[]>> {
+    const res = await this.client.get(`/${userId}/teacher`, { params });
     return res.data;
   }
 

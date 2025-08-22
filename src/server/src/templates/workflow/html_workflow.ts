@@ -1,5 +1,5 @@
 export function htmlWorkflow() {
-    return `
+  return `
     name: HTML Project Analysis
   
   on:
@@ -70,4 +70,4 @@ export function htmlWorkflow() {
             GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
             SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
     `;
-  }
+}

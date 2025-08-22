@@ -31,7 +31,7 @@ export interface PullRequestsCreate {
   closedAt?: Date;
 }
 
-export interface PullRequestsUpdate{
+export interface PullRequestsUpdate {
   id: string;
   reposId: string;
   pullNumber: number;

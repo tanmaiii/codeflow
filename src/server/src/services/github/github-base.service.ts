@@ -63,4 +63,4 @@ export abstract class GitHubBaseService {
   protected getOrgUrl(): string {
     return `${this.baseUrl}/orgs/${this.organization}`;
   }
-} 
+}

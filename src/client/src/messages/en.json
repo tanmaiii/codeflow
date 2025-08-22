@@ -80,7 +80,8 @@
     "showLess": "Show less",
     "showMore": "Show more",
     "noData": "No data",
-    "total": "Total"
+    "total": "Total",
+    "value": "Value"
   },
   "homePage": {
     "welcome": "Welcome to the Home Page",
@@ -695,6 +696,14 @@
   },
   "codeAnalysis": {
     "codeAnalysis": "Code Analysis",
+    "title": "Code Quality Analysis",
+    "quality": "Code Quality",
+    "qualityScore": "Quality Score",
+    "score": "Score",
+    "good": "Good",
+    "average": "Average",
+    "needsImprovement": "Needs Improvement",
+    "noData": "No code analysis data available",
     "status": "Status",
     "viewAnalysis": "View Analysis",
     "improveCodeAnalysis": "Improve Code Analysis",
@@ -709,8 +718,10 @@
     "error": "Error",
     "pending": "Pending",
     "running": "Running",
-    "notOptimized": "Chưa tối ưu",
-    "optimized": "Tốt nhất",
+    "notOptimized": "Not Optimized",
+    "optimized": "Optimized",
+    "radarChart": "Radar Chart",
+    "barChart": "Bar Chart",
     "metrics": {
       "alert_status": "Alert Status",
       "bugs": "Bugs",
@@ -804,39 +815,12 @@
         "6m": "6 months",
         "1y": "1 year"
       },
-      "projectProgress": {
-        "title": "Progress by Project",
-        "description": "Statistics of completion rates and participation levels by project topic",
-        "completionRate": "Completion Rate",
-        "participation": "Participation Rate",
-        "milestones": "Milestones",
-        "studentsWorking": "Students Working",
-        "status": "Project Status"
-      },
       "topicApproval": {
         "title": "Topic Approval Statistics",
         "description": "Chart showing the number of topics by approval status",
         "pending": "Pending",
         "approved": "Approved",
         "rejected": "Rejected"
-      },
-      "dailyActivity": {
-        "title": "Daily Activity (Last 7 Days)",
-        "description": "Track student login, submission, and discussion activities",
-        "logins": "Logins",
-        "submissions": "Submissions",
-        "discussions": "Discussions"
-      },
-      "performanceRadar": {
-        "title": "Class Performance Overview",
-        "description": "Radar chart showing average class performance indicators",
-        "classPerformance": "Class Performance",
-        "attendance": "Attendance",
-        "completion": "Completion",
-        "participation": "Participation",
-        "engagement": "Engagement",
-        "punctuality": "Punctuality",
-        "collaboration": "Collaboration"
       },
       "language": {
         "title": "Language",

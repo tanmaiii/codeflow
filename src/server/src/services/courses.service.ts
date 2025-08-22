@@ -395,7 +395,7 @@ export class CourseService {
     return courseTagsData;
   }
 
-  public async getCourseAllActivity(courseId: string, days: number = 7) {
+  public async getCourseAllActivity(courseId: string, days = 7) {
     const course = await this.findCourseById(courseId);
     if (!course) throw new HttpException(409, "Course doesn't exist");
 
@@ -572,13 +572,7 @@ export class CourseService {
 
     // Đảm bảo luôn trả về tất cả học viên trong khóa học, ngay cả khi không có đóng góp nào
     // Lấy toàn bộ danh sách enrollments kèm thông tin user
-    const { rows: enrollments } = await this.courseEnrollmentService.findAllWithPaginationByCourseId(
-      -1,
-      1,
-      'created_at',
-      'DESC',
-      course.id,
-    );
+    const { rows: enrollments } = await this.courseEnrollmentService.findAllWithPaginationByCourseId(-1, 1, 'created_at', 'DESC', course.id);
 
     const existingIds = new Set(mergedContributors.map(c => c.authorId));
     const zeroFilledMembers = enrollments

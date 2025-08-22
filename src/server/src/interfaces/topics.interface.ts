@@ -69,7 +69,6 @@ export interface TopicCreate {
   tags?: Array<string>;
 }
 
-
 export interface TopicStats {
   topicId: string;
   commit: {

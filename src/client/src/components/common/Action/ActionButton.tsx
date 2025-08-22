@@ -98,7 +98,7 @@ export default function ActionButton({
           {...props}
         >
           <IconPrinter />
-          Print
+          {label ? label : t('export')}
         </Button>
       </MyTooltip>
     );
@@ -109,12 +109,11 @@ export default function ActionButton({
         <Button
           variant="default"
           size="sm"
-          className="w-fit bg-green-500 text-white hover:bg-green-500/90"
+          className="w-fit bg-primary text-white hover:bg-primary/90"
           {...props}
         >
           <IconPlus className="w-4 h-4" />
-          {icon}
-          {label}
+          {label ? label : t('create')}
         </Button>
       </MyTooltip>
     );

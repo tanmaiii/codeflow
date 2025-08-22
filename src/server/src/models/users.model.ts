@@ -3,7 +3,10 @@ import { User } from '@interfaces/users.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { UserSettingsModel } from './user_settings.model';
 
-export type UserCreationAttributes = Optional<User, 'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar' | 'bio' | 'resetToken' | 'resetTokenExpires'>;
+export type UserCreationAttributes = Optional<
+  User,
+  'id' | 'uid' | 'email' | 'name' | 'password' | 'username' | 'role' | 'status' | 'avatar' | 'bio' | 'resetToken' | 'resetTokenExpires'
+>;
 
 export class UserModel extends Model<User, UserCreationAttributes> implements User {
   public id!: string;

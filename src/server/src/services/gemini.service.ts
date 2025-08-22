@@ -135,27 +135,24 @@ QUAN TRỌNG:
       return jsonText; // Nếu parse được thì return luôn
     } catch (error) {
       logger.info('JSON parsing failed, attempting to fix escape issues...');
-      
+
       // Nếu có lỗi, thử fix các vấn đề thường gặp
       let fixedText = jsonText;
-      
+
       // Fix quotes trong comment values - approach an toàn hơn
-      fixedText = fixedText.replace(
-        /"comment":\s*"((?:[^"\\]|\\.)*)"/g,
-        (match, commentContent) => {
-          // Tạm thời replace escaped quotes với placeholder
-          let tempContent = commentContent.replace(/\\"/g, '__ESCAPED_QUOTE__');
-          
-          // Escape unescaped quotes
-          tempContent = tempContent.replace(/"/g, '\\"');
-          
-          // Restore escaped quotes
-          tempContent = tempContent.replace(/__ESCAPED_QUOTE__/g, '\\"');
-          
-          return `"comment": "${tempContent}"`;
-        }
-      );
-      
+      fixedText = fixedText.replace(/"comment":\s*"((?:[^"\\]|\\.)*)"/g, (match, commentContent) => {
+        // Tạm thời replace escaped quotes với placeholder
+        let tempContent = commentContent.replace(/\\"/g, '__ESCAPED_QUOTE__');
+
+        // Escape unescaped quotes
+        tempContent = tempContent.replace(/"/g, '\\"');
+
+        // Restore escaped quotes
+        tempContent = tempContent.replace(/__ESCAPED_QUOTE__/g, '\\"');
+
+        return `"comment": "${tempContent}"`;
+      });
+
       // Fix các trường hợp khác nếu cần
       try {
         JSON.parse(fixedText);
@@ -173,18 +170,18 @@ QUAN TRỌNG:
   private parseEvaluationResponse(text: string): GeminiResReviewPR {
     try {
       logger.info('Raw Gemini response:', text);
-      
+
       // Cải thiện regex để loại bỏ markdown code blocks
       let cleanText = text.trim();
-      
+
       // Loại bỏ các markdown code blocks với nhiều pattern khác nhau
       cleanText = cleanText.replace(/^```(?:json)?\s*\n?/gm, ''); // Loại bỏ opening ```json hoặc ```
       cleanText = cleanText.replace(/\n?```\s*$/gm, ''); // Loại bỏ closing ```
       cleanText = cleanText.trim();
-      
+
       // Fix JSON escape issues
       cleanText = this.fixJsonEscapeIssues(cleanText);
-      
+
       logger.info('Cleaned text for parsing:', cleanText);
 
       const parsed = JSON.parse(cleanText);
@@ -219,7 +216,7 @@ QUAN TRỌNG:
     } catch (error) {
       logger.error('Error parsing Gemini response:', error);
       logger.error('Original text:', text);
-      
+
       // Fallback response
       return {
         summary: 'Không thể phân tích phản hồi từ AI',

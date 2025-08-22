@@ -5,10 +5,7 @@ import { CourseModel } from './courses.model';
 import { TagModel } from './tags.model';
 import { TopicMemberModel } from './topic_member.mode';
 import { UserModel } from './users.model';
-type PostCreationAttributes = Optional<
-  Topic,
-  'id' | 'title' | 'description' | 'courseId' | 'authorId' | 'isCustom' | 'status' | 'groupName'
->;
+type PostCreationAttributes = Optional<Topic, 'id' | 'title' | 'description' | 'courseId' | 'authorId' | 'isCustom' | 'status' | 'groupName'>;
 
 export class TopicModel extends Model<Topic, PostCreationAttributes> implements Topic {
   public id!: string;

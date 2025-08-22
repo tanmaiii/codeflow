@@ -8,56 +8,56 @@ function getNotificationTypeInfo(type: ENUM_TYPE_NOTIFICATION) {
       label: 'Đánh giá chủ đề',
       className: 'evaluation',
       color: '#10b981',
-      bgColor: '#d1fae5'
+      bgColor: '#d1fae5',
     },
     [ENUM_TYPE_NOTIFICATION.COMMENT]: {
       label: 'Bình luận mới',
       className: 'comment',
       color: '#3b82f6',
-      bgColor: '#dbeafe'
+      bgColor: '#dbeafe',
     },
     [ENUM_TYPE_NOTIFICATION.COMMENT_REPLY]: {
       label: 'Trả lời bình luận',
       className: 'reply',
       color: '#6366f1',
-      bgColor: '#e0e7ff'
+      bgColor: '#e0e7ff',
     },
     [ENUM_TYPE_NOTIFICATION.LIKE_POST]: {
       label: 'Lượt thích',
       className: 'like',
       color: '#ef4444',
-      bgColor: '#fecaca'
+      bgColor: '#fecaca',
     },
     [ENUM_TYPE_NOTIFICATION.JOIN_COURSE]: {
       label: 'Tham gia khóa học',
       className: 'course',
       color: '#8b5cf6',
-      bgColor: '#e0e7ff'
+      bgColor: '#e0e7ff',
     },
     [ENUM_TYPE_NOTIFICATION.REGISTER_TOPIC]: {
       label: 'Đăng ký chủ đề',
       className: 'register',
       color: '#f59e0b',
-      bgColor: '#fef3c7'
+      bgColor: '#fef3c7',
     },
     [ENUM_TYPE_NOTIFICATION.APPROVE_TOPIC]: {
       label: 'Phê duyệt chủ đề',
       className: 'approve',
       color: '#10b981',
-      bgColor: '#d1fae5'
+      bgColor: '#d1fae5',
     },
     [ENUM_TYPE_NOTIFICATION.REJECT_TOPIC]: {
       label: 'Từ chối chủ đề',
       className: 'reject',
       color: '#ef4444',
-      bgColor: '#fecaca'
+      bgColor: '#fecaca',
     },
     [ENUM_TYPE_NOTIFICATION.SYSTEM]: {
       label: 'Hệ thống',
       className: 'system',
       color: '#6b7280',
-      bgColor: '#f3f4f6'
-    }
+      bgColor: '#f3f4f6',
+    },
   };
 
   return typeMap[type] || typeMap[ENUM_TYPE_NOTIFICATION.SYSTEM];
@@ -74,23 +74,26 @@ function getActionButtonText(type: ENUM_TYPE_NOTIFICATION): string {
     [ENUM_TYPE_NOTIFICATION.REGISTER_TOPIC]: 'Xem chủ đề',
     [ENUM_TYPE_NOTIFICATION.APPROVE_TOPIC]: 'Xem chủ đề',
     [ENUM_TYPE_NOTIFICATION.REJECT_TOPIC]: 'Xem chủ đề',
-    [ENUM_TYPE_NOTIFICATION.SYSTEM]: 'Xem chi tiết'
+    [ENUM_TYPE_NOTIFICATION.SYSTEM]: 'Xem chi tiết',
   };
 
   return actionMap[type] || 'Xem chi tiết';
 }
 
-export function notification(notification: Notification, options?: {
-  appName?: string;
-  baseUrl?: string;
-  logoUrl?: string;
-  companyAddress?: string;
-}) {
+export function notification(
+  notification: Notification,
+  options?: {
+    appName?: string;
+    baseUrl?: string;
+    logoUrl?: string;
+    companyAddress?: string;
+  },
+) {
   const {
     appName = 'CodeFlow',
     baseUrl = 'http://localhost:3000',
     logoUrl = '',
-    companyAddress = 'Trường Đại học Sư phạm Kỹ thuật TP.HCM'
+    companyAddress = 'Trường Đại học Sư phạm Kỹ thuật TP.HCM',
   } = options || {};
 
   const typeInfo = getNotificationTypeInfo(notification.type);

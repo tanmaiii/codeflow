@@ -7,15 +7,17 @@ import useQ_Repos_GetAll from '@/hooks/query-hooks/Repos/useQ_Repos_GetAll';
 import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
 import { IconMessageCircle } from '@tabler/icons-react';
 import { BookOpen, Folder, Users } from 'lucide-react';
-import ChartCommit from './components/ChartCommit';
-import ChartComplexity from './components/ChartComplexity';
-import ChartIssues from './components/ChartIssues';
-import ChartPieCoursesStatus from './components/ChartPieCoursesStatus';
-import ChartPieCoursesType from './components/ChartPieCoursesType';
-import ChartPieLanguage from './components/ChartPieLanguage';
-import ChartTags from './components/ChartTags';
-import ChartTestPerformance from './components/ChartTestPerformance';
-import ChartTopic from './components/ChartTopic';
+import {
+  ChartCommit,
+  ChartComplexity,
+  ChartPieCoursesStatus,
+  ChartPieCoursesType,
+  ChartPieLanguage,
+  ChartTags,
+  ChartTopic,
+  FeaturedCourses,
+  FeaturedStudents,
+} from './components';
 
 export default function Dashboard() {
   const { data: users } = useQ_User_GetAll({ params: { page: 1, limit: 0 } });
@@ -67,30 +69,34 @@ export default function Dashboard() {
 
         {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* TODO: Mockdata */}
           <ChartCommit />
+          {/* TODO: Mockdata */}
           <ChartTags />
         </div>
 
         {/* Second Row Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* TODO: Mockdata */}
           <ChartPieLanguage />
+          {/* TODO: Mockdata */}
           <ChartPieCoursesType />
+          {/* TODO: Mockdata */}
           <ChartTopic />
-        </div>
-
-        {/* Code Quality Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <ChartTestPerformance />
-          <ChartIssues />
         </div>
 
         {/* Test & Performance Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 w-full">
-          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ChartCodeQuality />
-          </div> */}
+          {/* TODO: Mockdata */}
           <ChartPieCoursesStatus />
+          {/* TODO: Mockdata */}
           <ChartComplexity />
+        </div>
+
+        {/* Featured Students and Courses */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <FeaturedStudents />
+          <FeaturedCourses />
         </div>
       </div>
     </div>

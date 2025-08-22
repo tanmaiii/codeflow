@@ -87,6 +87,10 @@ export class ReposService {
     return DB.Repos.findAll({ where: { topicId: id } });
   }
 
+  public async findByByCourseId(id: string) {
+    return DB.Repos.findAll({ where: { courseId: id } });
+  }
+
   /**
    * Tìm repository theo id.
    */
@@ -293,7 +297,7 @@ export class ReposService {
         const [commit, pullRequest, analysisService] = await Promise.all([
           this.commitService.getContributorsByRepoIdOrAuthorId(id, member.userId),
           this.pullRequestService.getContributorsByRepoIdOrAuthorId(id, member.userId),
-          this.codeAnalysisService.getContributorsByRepoIdOrAuthorId(id, member.userId)
+          this.codeAnalysisService.getContributorsByRepoIdOrAuthorId(id, member.userId),
         ]);
 
         // Đảm bảo luôn có dữ liệu mặc định cho mỗi thành viên
@@ -395,20 +399,20 @@ export class ReposService {
 
   public async getRepoFramework(courseId?: string) {
     const repos = await DB.Repos.findAll({ where: { courseId } });
-    
+
     // Đếm số lượng repos cho mỗi framework
     const frameworkCount = repos.reduce((acc, repo) => {
       const framework = repo.framework || 'Unknown';
       acc[framework] = (acc[framework] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-    
+
     // Chuyển đổi thành mảng với format { framework, count }
     const frameworkStats = Object.entries(frameworkCount).map(([framework, count]) => ({
       framework,
-      count
+      count,
     }));
-    
+
     return frameworkStats;
   }
 }

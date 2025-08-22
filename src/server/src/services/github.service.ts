@@ -159,14 +159,7 @@ export class GitHubService {
     return { pullRequest, files, content: filesWithContent };
   }
 
-  public async commentPullRequest(
-    repoName: string,
-    pullNumber: number,
-    comment: string,
-    commitId: string,
-    path: string,
-    line: number,
-  ): Promise<any> {
+  public async commentPullRequest(repoName: string, pullNumber: number, comment: string, commitId: string, path: string, line: number): Promise<any> {
     try {
       return await this.detailsService.commentPullRequest(repoName, pullNumber, comment, commitId, path, line);
     } catch (error) {

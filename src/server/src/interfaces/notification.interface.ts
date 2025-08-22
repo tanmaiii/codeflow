@@ -1,4 +1,4 @@
-import { ENUM_TYPE_NOTIFICATION } from "@/data/enum";
+import { ENUM_TYPE_NOTIFICATION } from '@/data/enum';
 
 export interface Notification {
   id?: string;
@@ -14,4 +14,3 @@ export interface Notification {
   isRead?: boolean;
   link: string;
 }
-
