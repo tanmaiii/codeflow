@@ -1,28 +1,26 @@
+'use client';
 import { ChartWrapper } from '@/components/common/ChartWrapper';
 import { useDarkMode } from '@/hooks';
+import { ICourseType } from '@/interfaces/course';
+import { ChartPie } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
-export default function ChartPieCoursesType() {
+export default function ChartPieCoursesType({
+  courseTypes,
+  isLoading,
+}: {
+  courseTypes: ICourseType[];
+  isLoading: boolean;
+}) {
   const { theme } = useDarkMode();
+  const t = useTranslations();
 
-  const courseTypes = [
-    { name: 'Cơ sở ngành', value: 35 },
-    { name: 'Chuyên ngành', value: 28 },
-    { name: 'Môn học', value: 22 },
-    { name: 'Tốt nghiệp', value: 15 },
-  ];
+  const courseTypesData = courseTypes.map(courseType => ({
+    name: t(`course.type.${courseType.type}`),
+    value: courseType.count,
+  }));
 
   const Option = {
-    title: {
-      text: 'Loại khóa học',
-      textStyle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        fontFamily: 'nunito',
-        color: theme.textColor,
-      },
-      left: 'center',
-      top: 10,
-    },
     tooltip: {
       trigger: 'item',
       formatter: '{b}: {c}%',
@@ -49,7 +47,7 @@ export default function ChartPieCoursesType() {
         type: 'pie',
         radius: ['30%', '65%'],
         center: ['65%', '50%'],
-        data: courseTypes,
+        data: courseTypesData,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -66,5 +64,12 @@ export default function ChartPieCoursesType() {
     ],
   };
 
-  return <ChartWrapper option={Option} />;
+  return (
+    <ChartWrapper
+      icon={<ChartPie className="w-4 h-4" />}
+      label={'Số lượng khóa học theo loại'}
+      option={Option}
+      isLoading={isLoading}
+    />
+  );
 }

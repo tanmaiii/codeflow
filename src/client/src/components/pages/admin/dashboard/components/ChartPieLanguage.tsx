@@ -1,33 +1,34 @@
 import { ChartWrapper } from '@/components/common/ChartWrapper';
 import { useDarkMode } from '@/hooks';
+import { IReposFramework } from '@/interfaces/repos';
+import { Code } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
-export default function ChartPieLanguage() {
+interface ChartPieLanguageProps {
+  framework: IReposFramework[];
+  isLoading: boolean;
+}
+
+/**
+ * Component hiển thị biểu đồ pie cho ngôn ngữ, thư viện
+ * @param framework: danh sách framework
+ * @param isLoading: trạng thái loading
+ * @returns biểu đồ pie cho ngôn ngữ, thư viện
+ */
+export default function ChartPieLanguage({ framework, isLoading }: ChartPieLanguageProps) {
   const { theme } = useDarkMode();
+  const t = useTranslations('dashboard.charts.language');
 
-  const projectTypes = [
-    { name: 'JavaScript/React', value: 28 },
-    { name: 'Python/Django', value: 22 },
-    { name: 'Java/Spring', value: 18 },
-    { name: 'C#/.NET', value: 15 },
-    { name: 'PHP/Laravel', value: 17 },
-  ];
+  const projectTypes = framework.map(item => ({
+    name: item.framework,
+    value: item.count,
+  }));
 
   // Số lượng commit theo thời gian
   const Option = {
-    title: {
-      text: 'Phân loại theo ngôn ngữ, thư viện',
-      textStyle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        fontFamily: 'nunito',
-        color: theme.textColor,
-      },
-      left: 'center',
-      top: 10,
-    },
     tooltip: {
       trigger: 'item',
-      formatter: '{b}: {c}%',
+      formatter: '{b}: {c}',
       backgroundColor: theme.backgroundColor,
       textStyle: {
         color: theme.textColor,
@@ -47,7 +48,7 @@ export default function ChartPieLanguage() {
     },
     series: [
       {
-        name: 'Ngôn ngữ, thư viện',
+        name: t('title'),
         type: 'pie',
         radius: ['30%', '65%'],
         center: ['35%', '50%'],
@@ -66,12 +67,21 @@ export default function ChartPieLanguage() {
         },
         label: {
           show: true,
-          formatter: '{d}%',
+          formatter: '{d}% ({c})',
           position: 'inside',
         },
       },
     ],
   };
 
-  return <ChartWrapper option={Option} />;
+  return (
+    <ChartWrapper
+      icon={<Code className="w-5 h-5" />}
+      label={t('title')}
+      description={t('description')}
+      option={Option}
+      isEmpty={projectTypes.length === 0}
+      isLoading={isLoading}
+    />
+  );
 }

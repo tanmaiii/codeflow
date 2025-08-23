@@ -45,6 +45,7 @@ export class CourseRoute implements Routes {
       ValidationMiddleware(GetCodeActivityDto, 'query'),
       this.course.getCourseCodeActivity,
     );
+
     this.router.get(`${this.path}/:id/contributors`, AuthMiddleware, this.course.getContributors);
 
     // Public routes

@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
 export default function BestTopicsList({ courseId }: { courseId: string }) {
-  const t = useTranslations('courseDashboard.lists.bestProjects');
+  const t = useTranslations('dashboard.lists.bestProjects');
   const [page, setPage] = useState(1);
   const { data: topics } = useQ_Topic_GetAllStatsByCourseId({
     courseId: courseId,
@@ -92,7 +92,7 @@ export default function BestTopicsList({ courseId }: { courseId: string }) {
 }
 
 const Topic = ({ topic, index }: { topic: ITopicStats; index: number }) => {
-  // const t = useTranslations('courseDashboard.lists.bestProjects');
+  // const t = useTranslations('dashboard.lists.bestProjects');
 
   return (
     <div className="group p-4 rounded-xl border border-border/50 transition-all flex flex-row justify-between duration-200 hover:shadow-md">

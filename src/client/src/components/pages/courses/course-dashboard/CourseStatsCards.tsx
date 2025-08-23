@@ -6,7 +6,7 @@ import { Award, GraduationCap, TrendingUp, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export default function CourseStatsCards({ course }: { course: ICourse }) {
-  const t = useTranslations('courseDashboard.stats');
+  const t = useTranslations('dashboard.stats');
 
   const { data: members } = useQ_Course_GetMembers({
     id: course?.id ?? '',
@@ -25,11 +25,12 @@ export default function CourseStatsCards({ course }: { course: ICourse }) {
 
   const getProgessCourse = (deadline: string, startDate: string) => {
     if (!deadline || !startDate) return 0;
-    return Math.round(
+    const progress = Math.round(
       ((new Date().getTime() - new Date(startDate).getTime()) /
         (new Date(course.topicDeadline).getTime() - new Date(course.regStartDate).getTime())) *
         100,
     );
+    return Math.min(progress, 100);
   };
 
   return (

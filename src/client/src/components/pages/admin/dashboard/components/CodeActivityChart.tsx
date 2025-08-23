@@ -2,32 +2,23 @@ import MySelect from '@/components/common/MySelect';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDarkMode } from '@/hooks';
-import useQ_Course_GetCodeActivity from '@/hooks/query-hooks/Course/useQ_Course_GetCodeActivity';
+import useQ_Dashboard_GetCodeActivity from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCodeActivity';
 import ReactECharts from 'echarts-for-react';
 import { ChartArea, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-interface CodeActivityChartProps {
-  courseId: string;
-}
-
-export default function CodeActivityChart({ courseId }: CodeActivityChartProps) {
+export default function CodeActivityChart() {
   const { theme } = useDarkMode();
-  const t = useTranslations('courseDashboard.charts.codeActivity');
+  const t = useTranslations('dashboard.charts.codeActivity');
   const t_common = useTranslations('common');
   const [selectedDays, setSelectedDays] = useState(7);
 
-  const {
-    data: codeActivityResponse,
-    isLoading,
-    error,
-  } = useQ_Course_GetCodeActivity({
-    courseId,
+  const { data, isLoading, error } = useQ_Dashboard_GetCodeActivity({
     days: selectedDays,
   });
 
-  const codeActivity = codeActivityResponse?.data;
+  const codeActivity = data?.data;
 
   const timeFilterOptions = [
     { label: t('7d'), value: 7 },
@@ -38,17 +29,12 @@ export default function CodeActivityChart({ courseId }: CodeActivityChartProps) 
   ];
 
   const codeActivityOptions = {
-    textStyle: {
-      fontSize: 14,
-      fontFamily: 'Inter, sans-serif',
-      color: theme.textColor,
-    },
     tooltip: {
       trigger: 'axis',
       backgroundColor: theme.backgroundColor,
-      textStyle: { color: theme.textColor },
-      borderWidth: 0,
-      borderRadius: 8,
+      textStyle: {
+        color: theme.textColor,
+      },
       formatter: function (
         params: Array<{ axisValue: string; seriesName: string; value: number; color: string }>,
       ) {
@@ -60,48 +46,102 @@ export default function CodeActivityChart({ courseId }: CodeActivityChartProps) 
       },
     },
     legend: {
-      data: [t('commits'), t('pullRequests'), t('codeAnalysis')],
+      data: ['Commits', 'Pull Requests', 'Code Analysis'],
       textStyle: { color: theme.textColor },
     },
     xAxis: {
       type: 'category',
-      data:
-        codeActivity?.activities?.map(item => {
-          const date = new Date(item.date);
-          return `${date.getDate()}/${date.getMonth() + 1}`;
-        }) || [],
-      axisLabel: { color: theme.textColor },
+      data: codeActivity?.activities?.map(item => `${item.date}`),
+      axisLine: {
+        lineStyle: {
+          color: theme.axisLineColor,
+        },
+      },
+      axisLabel: {
+        color: theme.textColor,
+      },
     },
     yAxis: {
       type: 'value',
-      axisLabel: { color: theme.textColor },
+      axisLabel: {
+        color: theme.textColor,
+      },
+      axisLine: {
+        lineStyle: {
+          color: theme.axisLineColor,
+        },
+      },
+      splitLine: {
+        lineStyle: {
+          color: theme.splitLineColor,
+        },
+      },
     },
     series: [
       {
-        name: t('commits'),
+        name: 'Commits',
+        data: codeActivity?.activities?.map(item => item.commits),
         type: 'line',
-        data: codeActivity?.activities?.map(item => item.commits) || [],
         smooth: true,
-        itemStyle: { color: '#3b82f6' },
-        lineStyle: { width: 3 },
+        areaStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(139, 92, 246, 0.3)' },
+              { offset: 1, color: 'rgba(139, 92, 246, 0.1)' },
+            ],
+          },
+        },
+        lineStyle: { color: '#8b5cf6', width: 3 },
+        itemStyle: { color: '#8b5cf6' },
         symbolSize: 6,
       },
       {
-        name: t('pullRequests'),
+        name: 'Pull Requests',
+        data: codeActivity?.activities?.map(item => item.pullRequests),
         type: 'line',
-        data: codeActivity?.activities?.map(item => item.pullRequests) || [],
         smooth: true,
+        areaStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(16, 185, 129, 0.3)' },
+              { offset: 1, color: 'rgba(16, 185, 129, 0.1)' },
+            ],
+          },
+        },
+        lineStyle: { color: '#10b981', width: 3 },
         itemStyle: { color: '#10b981' },
-        lineStyle: { width: 3 },
         symbolSize: 6,
       },
       {
-        name: t('codeAnalysis'),
+        name: 'Code Analysis',
+        data: codeActivity?.activities?.map(item => item.codeAnalysis),
         type: 'line',
-        data: codeActivity?.activities?.map(item => item.codeAnalysis) || [],
         smooth: true,
+        areaStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(245, 158, 11, 0.3)' },
+              { offset: 1, color: 'rgba(245, 158, 11, 0.1)' },
+            ],
+          },
+        },
+        lineStyle: { color: '#f59e0b', width: 3 },
         itemStyle: { color: '#f59e0b' },
-        lineStyle: { width: 3 },
         symbolSize: 6,
       },
     ],

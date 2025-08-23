@@ -123,7 +123,7 @@ export default function Sidebar({ menu, prefix = '' }: SidebarProps) {
         collapsed ? 'hidden md:flex' : 'w-full md:w-64',
       )}
     >
-      <Link href={prefix} className="flex items-center gap-2">
+      <Link href={paths.HOME} className="flex items-center gap-2">
         <motion.div layout className="p-4 gap-2 flex items-center w-full justify-start">
           <Image
             width={40}

@@ -5,7 +5,7 @@ import { Notification } from '@/interfaces/notification.interface';
 import { User, UserContributes } from '@/interfaces/users.interface';
 import { DB } from '@database';
 import { compare, hash } from 'bcrypt';
-import { Op, Sequelize } from 'sequelize';
+import { Op, QueryTypes, Sequelize } from 'sequelize';
 import Container, { Service } from 'typedi';
 import { CourseDocumentService } from './course_document.service';
 import { CourseEnrollmentService } from './course_enrollment.service';
@@ -396,10 +396,17 @@ export class CourseService {
   }
 
   public async getCourseAllActivity(courseId: string, days = 7) {
-    const course = await this.findCourseById(courseId);
-    if (!course) throw new HttpException(409, "Course doesn't exist");
+    let course: Course | null = null;
+    if (courseId) {
+      course = await this.findCourseById(courseId);
+      if (!course) throw new HttpException(409, "Course doesn't exist 123");
+    }
 
-    const repos = await DB.Repos.findAll({ where: { courseId: course.id } });
+    const repos = await DB.Repos.findAll({
+      where: {
+        ...(courseId && { courseId: course?.id }),
+      },
+    });
 
     // Tìm ngày commit mới nhất
     let latestDate: Date | null = null;
@@ -548,16 +555,19 @@ export class CourseService {
   }
 
   public async contributors(
-    courseId: string,
+    courseId?: string,
     page = 1,
     pageSize = -1,
     sortBy: 'commit' | 'pullRequest' | 'codeAnalysis' | 'name' = 'commit',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
   ): Promise<{ count: number; rows: UserContributes[] }> {
-    const course = await this.findCourseById(courseId);
-    if (!course) throw new HttpException(409, "Course doesn't exist");
+    let course: Course | null = null;
+    if (courseId) {
+      course = await this.findCourseById(courseId);
+      if (!course) throw new HttpException(409, "Course doesn't exist");
+    }
 
-    const repos = await DB.Repos.findAll({ where: { courseId: course.id } });
+    const repos = await DB.Repos.findAll({ where: { courseId: course?.id } });
 
     const contributorPromises = repos.map(async repo => {
       const repoContributors = await this.reposService.getRepoContributors(repo.id);
@@ -635,6 +645,19 @@ export class CourseService {
     return { count, rows };
   }
 
+  public async getCourseTypes() {
+    const courseTypes = await DB.sequelize.query(
+      `SELECT type, COUNT(id) as count 
+       FROM courses 
+       GROUP BY type`,
+      {
+        type: QueryTypes.SELECT,
+        raw: true,
+      }
+    );
+
+    return courseTypes;
+  }
   private mergeContributorsByAuthorId(contributors: UserContributes[]): UserContributes[] {
     const contributorMap = new Map<string, UserContributes>();
 

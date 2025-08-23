@@ -176,63 +176,6 @@ export default function CoursesSummary({ course }: { course: ICourse }) {
           </div>
         </div>
       </Card>
-
-      {/* Course Progress Card */}
-      {/* <Card className="p-6 bg-gradient-to-br from-indigo-50 via-purple-50/50 to-pink-50/30 dark:from-indigo-900/40 dark:via-purple-900/30 dark:to-pink-900/20 border border-indigo-200/50 dark:border-indigo-700/30 shadow-lg">
-        <div className="flex items-center justify-between mb-4">
-          <TextHeading className="font-semibold text-indigo-900 dark:text-indigo-100">
-            {t('courseProgress')}
-          </TextHeading>
-          <div className="flex items-center gap-1 text-sm text-indigo-600 dark:text-indigo-400 bg-indigo-100/50 dark:bg-indigo-800/30 px-2 py-1 rounded-full">
-            <IconTrendingUp className="size-4" />
-            <span className="font-medium">{t('active')}</span>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <TextDescription className="text-sm text-indigo-700 dark:text-indigo-300">
-              {t('completionRate')}
-            </TextDescription>
-            <TextHeading className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">
-              87%
-            </TextHeading>
-          </div>
-
-          <div className="w-full bg-indigo-200/50 dark:bg-indigo-800/30 rounded-full h-3 shadow-inner">
-            <div
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 h-3 rounded-full shadow-sm transition-all duration-1000 ease-out"
-              style={{ width: '87%' }}
-            />
-          </div>
-
-          <div className="flex justify-between items-center">
-            <TextDescription className="text-xs text-indigo-600 dark:text-indigo-400">
-              {t('startedWeeksAgo', { weeks: weeksDuration })}
-            </TextDescription>
-            <TextDescription className="text-xs text-indigo-600 dark:text-indigo-400">
-              {t('studentsCompleted', { count: Math.round((87 * studentsCount) / 100) })}
-            </TextDescription>
-          </div>
-        </div>
-      </Card> */}
-
-      {/* Achievement Badge */}
-      {/* <Card className="p-4 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-900/40 dark:via-yellow-900/30 dark:to-orange-900/20 border border-amber-200/50 dark:border-amber-700/30 shadow-lg">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-amber-100 dark:bg-amber-800/50 rounded-full shadow-sm">
-            <IconAward className="size-5 text-amber-600 dark:text-amber-400" />
-          </div>
-          <div>
-            <TextHeading className="font-semibold text-amber-900 dark:text-amber-100">
-              {t('popularCourse')}
-            </TextHeading>
-            <TextDescription className="text-sm text-amber-700 dark:text-amber-300">
-              {t('topEnrollment')}
-            </TextDescription>
-          </div>
-        </div>
-      </Card> */}
     </div>
   );
 }

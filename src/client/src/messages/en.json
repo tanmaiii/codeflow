@@ -395,7 +395,8 @@
     "registrationEnded": "Registration ended",
     "joinCourse": "Join Course",
     "addMember": "Add member",
-    "alreadyJoined": "Already joined"
+    "alreadyJoined": "Already joined",
+    "onlyStudent": "Only for students"
   },
   "topic": {
     "topic": "Topic",
@@ -677,7 +678,69 @@
     "learning": "Learning",
     "topics": "Topics",
     "members": "Members",
-    "rating": "Rating"
+    "rating": "Rating",
+    "titleCourse": "Course Dashboard",
+    "descriptionCourse": "Track student progress and performance in the course",
+    "stats": {
+      "totalStudents": "Total Students",
+      "activeStudents": "Active Students",
+      "completionRate": "Completion Rate",
+      "totalTopics": "Total Topics",
+      "enrolledDescription": "Enrolled in course",
+      "activeDescription": "Students have registered topics",
+      "completionDescription": "% assignments submitted",
+      "topicsDescription": "Course topics",
+      "completionProgress": "Completion Progress",
+      "progressDescription": "Completion progress of the course"
+    },
+    "charts": {
+      "codeActivity": {
+        "title": "Daily Code Development Activity",
+        "description": "Statistics of commits, pull requests, and code analysis by day",
+        "commits": "Commits",
+        "pullRequests": "Pull Requests",
+        "codeAnalysis": "Code Analysis",
+        "7d": "7 days",
+        "30d": "30 days",
+        "3m": "3 months",
+        "6m": "6 months",
+        "1y": "1 year"
+      },
+      "topicApproval": {
+        "title": "Topic Approval Statistics",
+        "description": "Chart showing the number of topics by approval status",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "language": {
+        "title": "Language",
+        "description": "Language statistics"
+      },
+      "tags": {
+        "title": "Number of tags used",
+        "courses": "Courses",
+        "posts": "Posts"
+      }
+    },
+    "lists": {
+      "bestProjects": {
+        "title": "Excellent Projects",
+        "description": "List of projects with highest performance and ratings",
+        "students": "students",
+        "commits": "commits",
+        "mentor": "Mentor",
+        "avgScore": "Avg Score",
+        "completionRate": "completed"
+      },
+      "activeStudents": {
+        "title": "Most Active Students",
+        "description": "List of students with highest participation levels",
+        "assignments": "assignments",
+        "participation": "participation",
+        "lastActive": "last active"
+      }
+    }
   },
   "role": {
     "user": "User",
@@ -787,65 +850,7 @@
     "closed": "Closed",
     "merged": "Merged"
   },
-  "courseDashboard": {
-    "title": "Course Dashboard",
-    "description": "Track student progress and performance in the course",
-    "stats": {
-      "totalStudents": "Total Students",
-      "activeStudents": "Active Students",
-      "completionRate": "Completion Rate",
-      "totalTopics": "Total Topics",
-      "enrolledDescription": "Enrolled in course",
-      "activeDescription": "Students have registered topics",
-      "completionDescription": "% assignments submitted",
-      "topicsDescription": "Course topics",
-      "completionProgress": "Completion Progress",
-      "progressDescription": "Completion progress of the course"
-    },
-    "charts": {
-      "codeActivity": {
-        "title": "Daily Code Development Activity",
-        "description": "Statistics of commits, pull requests, and code analysis by day",
-        "commits": "Commits",
-        "pullRequests": "Pull Requests",
-        "codeAnalysis": "Code Analysis",
-        "7d": "7 days",
-        "30d": "30 days",
-        "3m": "3 months",
-        "6m": "6 months",
-        "1y": "1 year"
-      },
-      "topicApproval": {
-        "title": "Topic Approval Statistics",
-        "description": "Chart showing the number of topics by approval status",
-        "pending": "Pending",
-        "approved": "Approved",
-        "rejected": "Rejected"
-      },
-      "language": {
-        "title": "Language",
-        "description": "Language statistics"
-      }
-    },
-    "lists": {
-      "bestProjects": {
-        "title": "Excellent Projects",
-        "description": "List of projects with highest performance and ratings",
-        "students": "students",
-        "commits": "commits",
-        "mentor": "Mentor",
-        "avgScore": "Avg Score",
-        "completionRate": "completed"
-      },
-      "activeStudents": {
-        "title": "Most Active Students",
-        "description": "List of students with highest participation levels",
-        "assignments": "assignments",
-        "participation": "participation",
-        "lastActive": "last active"
-      }
-    }
-  },
+  "courseDashboard": {},
   "admin": {
     "users": {
       "title": "Manage users",

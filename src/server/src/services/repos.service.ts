@@ -398,7 +398,11 @@ export class ReposService {
   //Dashboard
 
   public async getRepoFramework(courseId?: string) {
-    const repos = await DB.Repos.findAll({ where: { courseId } });
+    const repos = await DB.Repos.findAll({
+      where: {
+        ...(courseId ? { courseId } : {}),
+      },
+    });
 
     // Đếm số lượng repos cho mỗi framework
     const frameworkCount = repos.reduce((acc, repo) => {

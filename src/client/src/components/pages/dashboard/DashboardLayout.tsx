@@ -108,7 +108,7 @@ export default function DashboardLayoutDashboard() {
             )}
 
             {/* Dashboard Content */}
-            <div className="space-y-6 min-h-[110vh]">
+            <div className="space-y-6 min-h-[90vh]">
               {renderDashboardContent()}
             </div>
           </div>

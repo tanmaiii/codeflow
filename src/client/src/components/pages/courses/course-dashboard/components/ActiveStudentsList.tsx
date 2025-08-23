@@ -16,7 +16,7 @@ const options = [
 ];
 
 export default function ActiveStudentsList({ courseId }: { courseId: string }) {
-  const t = useTranslations('courseDashboard.lists.activeStudents');
+  const t = useTranslations('dashboard.lists.activeStudents');
   // const tCommon = useTranslations('common');
   const LIMIT = 4;
   const [page, setPage] = useState(1);

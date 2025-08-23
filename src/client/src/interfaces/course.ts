@@ -69,3 +69,8 @@ export interface ICodeActivity {
   totalPullRequests: number;
   totalCodeAnalysis: number;
 }
+
+export interface ICourseType {
+  type: string;
+  count: number;
+}

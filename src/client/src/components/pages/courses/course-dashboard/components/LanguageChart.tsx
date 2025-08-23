@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 
 export default function LanguageChart({ courseId }: { courseId: string }) {
   const { theme } = useDarkMode();
-  const t = useTranslations('courseDashboard.charts.language');
+  const t = useTranslations('dashboard.charts.language');
 
   const { data: frameworkResponse, isLoading, isError } = useQ_Repos_GetFramework({ id: courseId });
 

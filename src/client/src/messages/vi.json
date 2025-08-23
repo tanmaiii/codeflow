@@ -395,7 +395,8 @@
     "registrationEnded": "Đã hết hạn đăng ký",
     "joinCourse": "Tham gia khóa học",
     "addMember": "Thêm học viên vào khóa học",
-    "alreadyJoined": "Đã tham gia"
+    "alreadyJoined": "Đã tham gia",
+    "onlyStudent": "Chỉ dành cho học viên"
   },
   "topic": {
     "topic": "Đề tài",
@@ -676,7 +677,69 @@
     "learning": "Đang học",
     "topics": "Đề tài",
     "members": "Thành viên",
-    "rating": "Đánh giá"
+    "rating": "Đánh giá",
+    "titleCourse": "Bảng điều khiển khóa học",
+    "descriptionCourse": "Theo dõi tiến độ và hiệu suất của học viên trong khóa học",
+    "stats": {
+      "totalStudents": "Tổng học viên",
+      "activeStudents": "Học viên hoạt động",
+      "completionRate": "Tỷ lệ hoàn thành",
+      "totalTopics": "Tổng đề tài",
+      "enrolledDescription": "Đã đăng ký khóa học",
+      "activeDescription": "Học viên đã đăng ký đề tài",
+      "completionDescription": "% bài tập đã nộp",
+      "topicsDescription": "Đề tài khóa học",
+      "completionProgress": "Tiến độ hoàn thành",
+      "progressDescription": "Tiến độ hoàn thành của khóa học"
+    },
+    "charts": {
+      "codeActivity": {
+        "title": "Hoạt động phát triển code theo ngày",
+        "description": "Thống kê số lượng commit, pull request và phân tích code theo từng ngày",
+        "commits": "Commit",
+        "pullRequests": "Pull Request",
+        "codeAnalysis": "Phân tích code",
+        "7d": "7 ngày qua",
+        "30d": "30 ngày qua",
+        "3m": "3 tháng qua",
+        "6m": "6 tháng qua",
+        "1y": "1 năm"
+      },
+      "topicApproval": {
+        "title": "Thống kê phê duyệt đề tài",
+        "description": "Biểu đồ thống kê số lượng đề tài theo trạng thái phê duyệt",
+        "pending": "Chờ duyệt",
+        "approved": "Đã chấp nhận",
+        "rejected": "Đã từ chối"
+      },
+      "language": {
+        "title": "Ngôn ngữ lập trình",
+        "description": "Thống kê công nghệ"
+      },
+      "tags": {
+        "title": "Số lượng tags được sử dụng",
+        "courses": "Khóa học",
+        "posts": "Bài viết"
+      }
+    },
+    "lists": {
+      "bestProjects": {
+        "title": "Đề tài nổi bật",
+        "description": "Danh sách các đề tài nổi bật",
+        "students": "sinh viên",
+        "commits": "commits",
+        "mentor": "GVHD",
+        "avgScore": "Điểm TB",
+        "completionRate": "hoàn thành"
+      },
+      "activeStudents": {
+        "title": "Học viên hoạt động tích cực",
+        "description": "Danh sách học viên có mức độ tham gia cao nhất",
+        "assignments": "bài tập",
+        "participation": "tham gia",
+        "lastActive": "hoạt động cuối"
+      }
+    }
   },
   "role": {
     "user": "Người dùng",
@@ -786,65 +849,7 @@
     "closed": "Đóng",
     "merged": "Đã hợp nhất"
   },
-  "courseDashboard": {
-    "title": "Bảng điều khiển khóa học",
-    "description": "Theo dõi tiến độ và hiệu suất của học viên trong khóa học",
-    "stats": {
-      "totalStudents": "Tổng học viên",
-      "activeStudents": "Học viên hoạt động",
-      "completionRate": "Tỷ lệ hoàn thành",
-      "totalTopics": "Tổng đề tài",
-      "enrolledDescription": "Đã đăng ký khóa học",
-      "activeDescription": "Học viên đã đăng ký đề tài",
-      "completionDescription": "% bài tập đã nộp",
-      "topicsDescription": "Đề tài khóa học",
-      "completionProgress": "Tiến độ hoàn thành",
-      "progressDescription": "Tiến độ hoàn thành của khóa học"
-    },
-    "charts": {
-      "codeActivity": {
-        "title": "Hoạt động phát triển code theo ngày",
-        "description": "Thống kê số lượng commit, pull request và phân tích code theo từng ngày",
-        "commits": "Commit",
-        "pullRequests": "Pull Request",
-        "codeAnalysis": "Phân tích code",
-        "7d": "7 ngày qua",
-        "30d": "30 ngày qua",
-        "3m": "3 tháng qua",
-        "6m": "6 tháng qua",
-        "1y": "1 năm"
-      },
-      "topicApproval": {
-        "title": "Thống kê phê duyệt đề tài",
-        "description": "Biểu đồ thống kê số lượng đề tài theo trạng thái phê duyệt",
-        "pending": "Chờ duyệt",
-        "approved": "Đã chấp nhận",
-        "rejected": "Đã từ chối"
-      },
-      "language": {
-        "title": "Ngôn ngữ lập trình",
-        "description": "Thống kê công nghệ"
-      }
-    },
-    "lists": {
-      "bestProjects": {
-        "title": "Đề tài nổi bật",
-        "description": "Danh sách các đề tài nổi bật",
-        "students": "sinh viên",
-        "commits": "commits",
-        "mentor": "GVHD",
-        "avgScore": "Điểm TB",
-        "completionRate": "hoàn thành"
-      },
-      "activeStudents": {
-        "title": "Học viên hoạt động tích cực",
-        "description": "Danh sách học viên có mức độ tham gia cao nhất",
-        "assignments": "bài tập",
-        "participation": "tham gia",
-        "lastActive": "hoạt động cuối"
-      }
-    }
-  },
+  "courseDashboard": {},
   "admin": {
     "users": {
       "title": "Quản lý người dùng",

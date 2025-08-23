@@ -35,7 +35,7 @@ export default function CoursesTopics() {
         accessorKey: 'title',
         cell: ({ row }) => (
           <Link href={`${paths.TOPICS_DETAIL(row.original.id)}`}>
-            <TextDescription className="line-clamp-2 font-normal">{row.original.title}</TextDescription>
+            <TextDescription className="line-clamp-2 font-normal text-color-1">{row.original.title}</TextDescription>
           </Link>
         ),
         size: 200,

@@ -22,7 +22,7 @@ import { ENUM_STATUS_TOPIC } from '@/constants/enum';
 import { useEffect, useState } from 'react';
 import StatCard from '@/components/common/StatCard';
 
-interface TeacherDashboardStats {
+interface TeacherdashboardStats {
   totalCourses: number;
   totalStudents: number;
   pendingTopics: number;
@@ -43,7 +43,7 @@ export default function DashboardTeacherView() {
   });
 
   // Calculate statistics
-  const stats: TeacherDashboardStats = {
+  const stats: TeacherdashboardStats = {
     totalCourses: teacherCourses?.data?.length || 0,
     totalStudents:
       teacherCourses?.data?.reduce(

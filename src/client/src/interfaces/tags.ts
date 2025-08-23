@@ -10,3 +10,8 @@ export interface ITagCreateDto {
   name: string;
   description: string;
 }
+
+export interface ITagWithUsageCount extends ITag {
+  coursesCount: number;
+  postsCount: number;
+}

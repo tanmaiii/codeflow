@@ -21,6 +21,7 @@ import { CommitRoute } from './routes/commit.route';
 import { PullRequestsRoute } from './routes/pull_requests.route';
 import { ReviewsAIRoute } from './routes/reviews_ai.route';
 import { TopicEvaluationRoute } from './routes/topic_evaluation.route';
+import { DashboardRoute } from './routes/dashboard.route';
 ValidateEnv();
 
 const app = new App([
@@ -45,6 +46,7 @@ const app = new App([
   new CommitRoute(),
   new PullRequestsRoute(),
   new ReviewsAIRoute(),
+  new DashboardRoute(),
 ]);
 
 app.listen();

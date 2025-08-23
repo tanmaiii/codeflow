@@ -8,7 +8,7 @@ import { ENUM_STATUS_TOPIC } from '@/constants/enum';
 
 export default function TopicApprovalChart({ courseId }: { courseId: string }) {
   const { theme } = useDarkMode();
-  const t = useTranslations('courseDashboard.charts.topicApproval');
+  const t = useTranslations('dashboard.charts.topicApproval');
 
   // Lấy dữ liệu cho từng trạng thái và loại đề xuất
   const { data: dataTopicApprovedTeacher } = useQ_Topic_GetAllByCourseId({

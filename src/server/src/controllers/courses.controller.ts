@@ -276,7 +276,7 @@ export class CourseController {
       const courseId: string = req.params.id;
       const days: number = parseInt(req.query.days as string) || 7;
 
-      const codeActivity = await this.course.getCourseAllActivity(courseId, days);
+      const codeActivity = await this.course.getCourseAllActivity(courseId ?? undefined, days);
 
       res.status(200).json({ data: codeActivity, message: 'getCourseCodeActivity' });
     } catch (error) {

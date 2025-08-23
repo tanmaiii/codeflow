@@ -1,4 +1,4 @@
-export { default as ChartCommit } from './ChartCommit';
+export { default as CodeActivityChart } from './CodeActivityChart';
 export { default as ChartComplexity } from './ChartComplexity';
 export { default as ChartPieCoursesStatus } from './ChartPieCoursesStatus';
 export { default as ChartPieCoursesType } from './ChartPieCoursesType';

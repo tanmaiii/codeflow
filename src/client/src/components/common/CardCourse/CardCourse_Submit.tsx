@@ -14,6 +14,9 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import PasswordInput from '../Input/PasswordInput/PasswordInput';
+import { useUserStore } from '@/stores/user_store';
+import { ROLE } from '@/constants/enum';
+import { TextDescription } from '@/components/ui/text';
 interface CardCourse_SubmitProps {
   courseId: string;
 }
@@ -28,6 +31,7 @@ export type JoinCourseSchemaType = z.infer<ReturnType<typeof joinCourseSchema>>;
 export default function CardCourse_Submit({ courseId }: CardCourse_SubmitProps) {
   const ButtonRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const { user } = useUserStore();
   const t = useTranslations('course');
   const tCommon = useTranslations('common');
   const router = useRouter();
@@ -57,6 +61,8 @@ export default function CardCourse_Submit({ courseId }: CardCourse_SubmitProps) 
     },
   });
 
+  const isStudent = user?.role === ROLE?.USER;
+
   return (
     <ActionModal
       title={t('join')}
@@ -73,24 +79,40 @@ export default function CardCourse_Submit({ courseId }: CardCourse_SubmitProps) 
           <span>{err}</span>
         </div>
       )}
-      <form onSubmit={handleSubmit(data => mutation.mutate(data))} className="flex flex-col gap-3">
-        <PasswordInput
-          registration={register('password')}
-          label={'Password'}
-          description={t('joinDescription')}
-          error={errors.password?.message}
-        />
-        <div className="flex justify-end gap-2">
-          <DialogClose asChild ref={closeRef}>
-            <Button type="button" variant="outline">
-              {t('cancel')}
+      {isStudent ? (
+        <form
+          onSubmit={handleSubmit(data => mutation.mutate(data))}
+          className="flex flex-col gap-3"
+        >
+          <PasswordInput
+            registration={register('password')}
+            label={'Password'}
+            description={t('joinDescription')}
+            error={errors.password?.message}
+          />
+          <div className="flex justify-end gap-2">
+            <DialogClose asChild ref={closeRef}>
+              <Button type="button" variant="outline">
+                {t('cancel')}
+              </Button>
+            </DialogClose>
+            <Button type="submit" disabled={mutation.isPending}>
+              {t('join')}
             </Button>
-          </DialogClose>
-          <Button type="submit" disabled={mutation.isPending}>
-            {t('join')}
-          </Button>
+          </div>
+        </form>
+      ) : (
+        <div className="flex flex-col gap-3">
+          <TextDescription>{t('onlyStudent')}</TextDescription>
+          <div className="flex justify-end gap-2">
+            <DialogClose asChild ref={closeRef}>
+              <Button type="button" variant="outline">
+                {t('cancel')}
+              </Button>
+            </DialogClose>
+          </div>
         </div>
-      </form>
+      )}
     </ActionModal>
   );
 }

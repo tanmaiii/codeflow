@@ -131,4 +131,35 @@ export class TagService {
 
     return data;
   }
+
+  public async getTagsWithUsageCount() {
+    const tags = await DB.Tags.findAll({
+      attributes: [
+        'id',
+        'name',
+        'description',
+        'createdAt',
+        'updatedAt',
+        [
+          DB.sequelize.literal(`(
+            SELECT COUNT(DISTINCT ct.course_id) 
+            FROM course_tags ct 
+            WHERE ct.tag_id = Tags.id
+          )`),
+          'coursesCount'
+        ],
+        [
+          DB.sequelize.literal(`(
+            SELECT COUNT(DISTINCT pt.post_id) 
+            FROM post_tags pt 
+            WHERE pt.tag_id = Tags.id
+          )`),
+          'postsCount'
+        ]
+      ],
+      order: [['name', 'ASC']]
+    });
+    
+    return tags;
+  }
 }

@@ -1,14 +1,17 @@
 'use client';
+import ChartLineCodeActivity from '@/components/common/MyChart/ChartLineCodeActivity';
 import StatCard from '@/components/common/StatCard';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
+import useQ_Dashboard_GetCodeActivity from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCodeActivity';
+import useQ_Dashboard_GetTags from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetTags';
 import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
 import useQ_Repos_GetAll from '@/hooks/query-hooks/Repos/useQ_Repos_GetAll';
 import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
 import { IconMessageCircle } from '@tabler/icons-react';
 import { BookOpen, Folder, Users } from 'lucide-react';
+import { useState } from 'react';
 import {
-  ChartCommit,
   ChartComplexity,
   ChartPieCoursesStatus,
   ChartPieCoursesType,
@@ -18,12 +21,22 @@ import {
   FeaturedCourses,
   FeaturedStudents,
 } from './components';
+import useQ_Dashboard_GetFramework from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetFramework';
+import useQ_Dashboard_GetCourseTypes from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCourseTypes';
 
 export default function Dashboard() {
   const { data: users } = useQ_User_GetAll({ params: { page: 1, limit: 0 } });
   const { data: courses } = useQ_Course_GetAll({ params: { page: 1, limit: 0 } });
   const { data: repos } = useQ_Repos_GetAll({ params: { page: 1, limit: 0 } });
   const { data: posts } = useQ_Post_GetAll({ params: { page: 1, limit: 0 } });
+
+  const [selectedDays, setSelectedDays] = useState(7);
+  const { data, isLoading } = useQ_Dashboard_GetCodeActivity({
+    days: selectedDays,
+  });
+  const { data: tags, isLoading: isLoadingTags } = useQ_Dashboard_GetTags({});
+  const { data: framework, isLoading: isLoadingFramework } = useQ_Dashboard_GetFramework({});
+  const { data: courseTypes, isLoading: isLoadingCourseTypes } = useQ_Dashboard_GetCourseTypes({});
 
   return (
     <div className="min-h-screen p-6">
@@ -69,18 +82,23 @@ export default function Dashboard() {
 
         {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* TODO: Mockdata */}
-          <ChartCommit />
-          {/* TODO: Mockdata */}
-          <ChartTags />
+          <ChartLineCodeActivity
+            data={data?.data}
+            setSelectedDays={setSelectedDays}
+            selectedDays={selectedDays}
+            isLoading={isLoading}
+          />
+          <ChartTags tags={tags?.data ?? []} isLoading={isLoadingTags} />
         </div>
 
         {/* Second Row Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <ChartPieLanguage framework={framework?.data ?? []} isLoading={isLoadingFramework} />
           {/* TODO: Mockdata */}
-          <ChartPieLanguage />
-          {/* TODO: Mockdata */}
-          <ChartPieCoursesType />
+          <ChartPieCoursesType
+            courseTypes={courseTypes?.data ?? []}
+            isLoading={isLoadingCourseTypes}
+          />
           {/* TODO: Mockdata */}
           <ChartTopic />
         </div>

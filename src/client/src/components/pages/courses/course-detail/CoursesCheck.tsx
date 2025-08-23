@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import MemberAvatar from '@/components/ui/member-avatar';
 import TextHeading, { TextDescription } from '@/components/ui/text';
+import { ROLE } from '@/constants/enum';
 import { IMAGES } from '@/data/images';
 import courseService from '@/services/course.service';
 import { useUserStore } from '@/stores/user_store';
@@ -90,17 +91,11 @@ export default function CoursesCheck({ children }: { children: React.ReactNode }
   if (isLoadingJoin || isLoadingCourse) return <CourseDetailSkeleton />;
 
   if (!isJoined && course && !isAuthor) {
-    // const isRegistrationOpen = () => {
-    //   const now = new Date();
-    //   const regStart = new Date(course.regStartDate);
-    //   const regEnd = new Date(course.regEndDate);
-    //   return now >= regStart && now <= regEnd;
-    // };
-
-    // const hasStarted = new Date(course?.startDate ?? '') < new Date();
     const isRegistrationOpen =
       new Date(course?.regStartDate ?? '') < new Date() &&
       new Date(course?.regEndDate ?? '') > new Date();
+
+    const isStudent = user?.role === ROLE?.USER;
 
     return (
       <div className="min-h-screen">
@@ -249,7 +244,7 @@ export default function CoursesCheck({ children }: { children: React.ReactNode }
                   </CardHeader>
 
                   <CardContent className="p-6">
-                    {isRegistrationOpen ? (
+                    {isRegistrationOpen && isStudent ? (
                       <div className="space-y-6">
                         {err && (
                           <div className="flex flex-row items-center gap-2 text-white text-sm bg-red-400 py-2 px-3 border rounded-md mb-4">
@@ -288,7 +283,7 @@ export default function CoursesCheck({ children }: { children: React.ReactNode }
                       <div className="text-center">
                         <div className="mb-6 p-4 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800">
                           <p className="text-orange-800 dark:text-orange-200 font-medium mb-2">
-                            {t('notInRegistrationPeriod')}
+                            {isStudent ? t('notInRegistrationPeriod') : t('onlyStudent')}
                           </p>
                           <p className="text-sm text-orange-600 dark:text-orange-300">
                             {t('registrationPeriod')}: {utils_DateToDDMMYYYY(course.regStartDate)} -{' '}
@@ -296,7 +291,7 @@ export default function CoursesCheck({ children }: { children: React.ReactNode }
                           </p>
                         </div>
                         <Button variant="default" disabled className="w-full h-12">
-                          {t('notInRegistrationPeriod')}
+                          {isStudent ? t('notInRegistrationPeriod') : t('onlyStudent')}
                         </Button>
                       </div>
                     )}

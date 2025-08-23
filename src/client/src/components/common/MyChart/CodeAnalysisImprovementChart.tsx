@@ -19,12 +19,20 @@ const timeFilters = [
   { label: 'timeFilters.1y', value: '1y' },
 ];
 
+
 interface CodeAnalysisImprovementChartProps {
   analysisData: ICodeAnalysis[];
   setSelectedTimeframe: (value: string) => void;
   selectedTimeframe: string;
 }
 
+/**
+ * Component về chất lượng code thay đổi theo thời gian
+ * @param analysisData: dữ liệu về chất lượng code
+ * @param setSelectedTimeframe: hàm để chọn thời gian
+ * @param selectedTimeframe: thời gian đã chọn
+ * @returns 
+ */
 export default function CodeAnalysisImprovementChart({
   analysisData,
   setSelectedTimeframe,
