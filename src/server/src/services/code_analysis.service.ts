@@ -97,29 +97,6 @@ export class CodeAnalysisService {
     return plainResult as ICodeAnalysisMetrics;
   }
 
-  public async findByCourse(reposId: string): Promise<ICodeAnalysisMetrics> {
-    const codeAnalysis = await DB.CodeAnalysis.findOne({
-      where: { reposId, branch: 'master', status: 'success' },
-      order: [['analyzedAt', 'DESC']],
-      include: [
-        {
-          model: DB.CodeAnalysisMetrics,
-          as: 'metrics',
-        },
-      ],
-      nest: true,
-      raw: false,
-    });
-
-    if (!codeAnalysis) {
-      return null;
-    }
-
-    // Convert Sequelize instance to plain object
-    const plainResult = codeAnalysis.toJSON();
-    return plainResult as ICodeAnalysisMetrics;
-  }
-
   public async findByRepoIdWithTimeFilter(repoId: string, timeframe: string): Promise<CodeAnalysis[]> {
     // Tìm ngày đánh giá cuối cùng của repo này
     const latestAnalysis = await DB.CodeAnalysis.findOne({
@@ -208,6 +185,13 @@ export class CodeAnalysisService {
         failure: parseInt(contributor.dataValues?.failure || contributor.failure) || 0,
       },
     };
+  }
+
+  public async getCodeQuality(): Promise<any> {
+    const codeQuality = await DB.CodeAnalysisMetrics.findAll({
+      where: { name: 'code_quality' },
+    });
+    return codeQuality;
   }
 }
 

@@ -59,13 +59,15 @@ export default function (sequelize: Sequelize): typeof ReviewAIModel {
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm
-      defaultScope: {
-        include: [
-          {
-            model: UserModel,
-            as: 'author',
-          },
-        ],
+      scopes: {
+        withAuthor: {
+          include: [
+            {
+              model: UserModel,
+              as: 'author',
+            },
+          ],
+        },
       },
     },
   );

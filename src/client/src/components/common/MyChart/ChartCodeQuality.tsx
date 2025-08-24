@@ -1,21 +1,29 @@
 'use client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import ActionModal from '@/components/common/Action/ActionModal';
+import CardMetric from '@/components/common/CardMetric/inrdex';
+import { ChartWrapper } from '@/components/common/ChartWrapper';
+import { Button } from '@/components/ui/button';
 import { ENUM_METRICS_CODE_ANALYSIS } from '@/constants/enum';
 import { METRICS_CODE_ANALYSIS } from '@/constants/object';
 import { useDarkMode } from '@/hooks';
-import { useQ_CodeAnalysis_GetByCourseId } from '@/hooks/query-hooks/CodeAnalysis/useQ_CodeAnalysis_GetByCourseId';
-import ReactECharts from 'echarts-for-react';
+import { ITopicMetrics } from '@/interfaces/code_analysis';
+import { IconChartBar } from '@tabler/icons-react';
 import { Code } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
-import MetricsModal from './MetricsModal';
-import { Skeleton } from '@/components/ui/skeleton';
 
-export default function ChartComplexity({ courseId }: { courseId: string }) {
+export default function ChartCodeQuality({
+  data,
+  isLoading = false,
+}: {
+  data?: ITopicMetrics[];
+  isLoading: boolean;
+}) {
   const { theme } = useDarkMode();
   const t = useTranslations();
+  const t_dashboard = useTranslations('dashboard.charts.codeQuality');
 
-  const { data, isLoading, isError } = useQ_CodeAnalysis_GetByCourseId(courseId);
+  // const { data, isLoading, isError } = useQ_CodeAnalysis_GetByCourseId(courseId);
 
   // Phân nhóm metrics theo loại và cách hiển thị
   const metricGroups = useMemo(() => {
@@ -84,7 +92,7 @@ export default function ChartComplexity({ courseId }: { courseId: string }) {
 
   // Tạo dữ liệu cho bar chart với chuẩn hóa về thang điểm 0-100
   const barData = useMemo(() => {
-    if (!data?.data || !Array.isArray(data.data)) return [];
+    if (!data || !Array.isArray(data)) return [];
 
     // Lấy 10 metrics đầu tiên của ENUM_METRICS_CODE_ANALYSIS
     const selectedMetrics = [
@@ -101,7 +109,7 @@ export default function ChartComplexity({ courseId }: { courseId: string }) {
     ];
 
     return selectedMetrics.map(metricKey => {
-      const metric = data.data.find((m: { name: string }) => m.name === metricKey);
+      const metric = data.find((m: { name: string }) => m.name === metricKey);
       const metricConfig = METRICS_CODE_ANALYSIS.find(m => m.value === metricKey);
 
       if (!metric || !metricConfig) {
@@ -183,7 +191,7 @@ export default function ChartComplexity({ courseId }: { courseId: string }) {
           unit = '';
         }
 
-        return `${metric.name}: ${displayValue} ${unit} (Điểm: ${metric.value}/100)`;
+        return `${metric.name}: ${displayValue} ${unit} (${metric.value})`;
       },
     },
     xAxis: {
@@ -239,31 +247,36 @@ export default function ChartComplexity({ courseId }: { courseId: string }) {
     ],
   };
 
-  if (isLoading) return <Skeleton className="w-full h-[400px]" />;
-  if (isError) return <div>Error</div>;
+  return (
+    <ChartWrapper
+      option={barOption}
+      isLoading={isLoading}
+      rightComponent={<MetricsModalCodeQuality metrics={data ?? []} />}
+      label={t_dashboard('title')}
+      description={t_dashboard('description')}
+      icon={<Code className="w-5 h-5" />}
+    />
+  );
+}
+
+export function MetricsModalCodeQuality({ metrics }: { metrics: ITopicMetrics[] }) {
+  const t = useTranslations();
 
   return (
-    <Card className="gap-2">
-      <CardHeader className="flex items-center justify-between">
-        <div>
-          <CardTitle className="flex items-center gap-2">
-            <Code className="w-5 h-5" />
-            {'Code Quality Assessment'}
-          </CardTitle>
-          <CardDescription>{'Chart showing code quality assessment statistics'}</CardDescription>
-        </div>
-        <MetricsModal metrics={data?.data ?? []} />
-      </CardHeader>
-      <CardContent className="p-2">
-        {barData && barData.length > 0 ? (
-          <ReactECharts option={barOption} style={{ height: '300px' }} />
-        ) : (
-          <div className="flex flex-col items-center justify-center py-30 w-full">
-            <Code className="w-12 h-12 text-gray-400 mb-4" />
-            <p className="text-gray-500 text-center">{'No active students found'}</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <ActionModal
+      title={'Code anylics'}
+      actionType="non-icon"
+      className="min-w-[90vw] lg:min-w-[70vw]"
+      icon={
+        <Button variant="outline" size="sm" className="text-xs">
+          <IconChartBar className="size-3 mr-1" />
+          {t('common.all')}
+        </Button>
+      }
+    >
+      <div className="flex flex-col gap-4 pb-4">
+        <CardMetric metrics={metrics} />
+      </div>
+    </ActionModal>
   );
 }

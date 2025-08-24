@@ -151,7 +151,7 @@ export class CodeAnalysisController {
 
       // Lấy tất cả metrics từ các repos
       for (const repo of repos) {
-        const codeAnalysis = await this.codeAnalysisService.findByCourse(repo.id);
+        const codeAnalysis = await this.codeAnalysisService.findByTopic(repo.id);
         if (codeAnalysis?.metrics && Array.isArray(codeAnalysis.metrics)) {
           allMetrics.push(...codeAnalysis.metrics);
         }

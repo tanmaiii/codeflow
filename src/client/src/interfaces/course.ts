@@ -74,3 +74,10 @@ export interface ICourseType {
   type: string;
   count: number;
 }
+
+export interface ICourseStatus{
+  registration: number;
+  active: number;
+  ended: number;
+  total: number;
+}

@@ -44,7 +44,7 @@ export default function LanguageChart({ courseId }: { courseId: string }) {
       borderRadius: 8,
       formatter: function (params: { name: string; value: number }[]) {
         const data = params[0];
-        return `${data.name}<br/>${data.value} topic`;
+        return `${data.name}: ${data.value}`;
       },
     },
     legend: {
@@ -76,7 +76,7 @@ export default function LanguageChart({ courseId }: { courseId: string }) {
       type: 'value',
       axisLabel: {
         color: theme.textColor,
-        formatter: '{value} topic',
+        formatter: '{value}',
         fontSize: 12,
         margin: 10,
       },

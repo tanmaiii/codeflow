@@ -1,5 +1,5 @@
 export { default as CodeActivityChart } from './CodeActivityChart';
-export { default as ChartComplexity } from './ChartComplexity';
+export { default as ChartCodeQuality } from './ChartCodeQuality';
 export { default as ChartPieCoursesStatus } from './ChartPieCoursesStatus';
 export { default as ChartPieCoursesType } from './ChartPieCoursesType';
 export { default as ChartTags } from './ChartTags';

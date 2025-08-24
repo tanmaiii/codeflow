@@ -1,5 +1,6 @@
+import { ITopicMetrics } from '@/interfaces/code_analysis';
 import { ResponseAPIDto } from '@/interfaces/common';
-import { ICodeActivity, ICourseType } from '@/interfaces/course';
+import { ICodeActivity, ICourseStatus, ICourseType } from '@/interfaces/course';
 import { IReposFramework } from '@/interfaces/repos';
 import { ITagWithUsageCount } from '@/interfaces/tags';
 import { ITopicStatus } from '@/interfaces/topic';
@@ -35,6 +36,16 @@ class DashboardService {
 
   async getTopicStatus(): Promise<ResponseAPIDto<ITopicStatus>> {
     const res = await this.client.get('/topic-status');
+    return res.data;
+  }
+
+  async getCourseStatus(): Promise<ResponseAPIDto<ICourseStatus>> {
+    const res = await this.client.get('/course-status');
+    return res.data;
+  }
+
+  async getCodeAnalysis(): Promise<ResponseAPIDto<ITopicMetrics[]>> {
+    const res = await this.client.get('/code-analysis');
     return res.data;
   }
 }

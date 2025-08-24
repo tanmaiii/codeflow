@@ -1,16 +1,18 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartWrapper } from '@/components/common/ChartWrapper';
 import { useDarkMode } from '@/hooks';
-import ReactECharts from 'echarts-for-react';
+import { ICourseStatus } from '@/interfaces/course';
 import { Clock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
-export default function ChartPieCoursesStatus() {
+export default function ChartPieCoursesStatus({
+  data,
+  isLoading = false,
+}: {
+  data?: ICourseStatus;
+  isLoading: boolean;
+}) {
   const { theme } = useDarkMode();
-
-  const statisticsData = [
-    { name: 'Tổng khóa học', value: 12, color: '#3b82f6' },
-    { name: 'Khóa học đang hoạt động', value: 8, color: '#10b981' },
-    { name: 'Khóa học đã kết thúc', value: 4, color: '#6b7280' },
-  ];
+  const t_dashboard = useTranslations('dashboard.charts.courseStatus');
 
   const chartOptions = {
     textStyle: {
@@ -24,7 +26,7 @@ export default function ChartPieCoursesStatus() {
       textStyle: { color: theme.textColor },
       borderWidth: 0,
       borderRadius: 8,
-      formatter: '{a} <br/>{b}: {c}',
+      formatter: '{b}: {c}',
     },
     legend: {
       orient: 'horizontal',
@@ -33,11 +35,15 @@ export default function ChartPieCoursesStatus() {
     },
     series: [
       {
-        name: 'Thống kê khóa học',
+        name: t_dashboard('title'),
         type: 'pie',
         radius: '60%',
         center: ['50%', '45%'],
-        data: statisticsData,
+        data: [
+          { name: t_dashboard('registration'), value: data?.registration },
+          { name: t_dashboard('active'), value: data?.active },
+          { name: t_dashboard('ended'), value: data?.ended },
+        ],
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -55,17 +61,12 @@ export default function ChartPieCoursesStatus() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Clock className="w-5 h-5" />
-          Thống kê khóa học
-        </CardTitle>
-        <CardDescription>Tổng quan về tình trạng các khóa học trong hệ thống</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ReactECharts option={chartOptions} style={{ height: '300px' }} />
-      </CardContent>
-    </Card>
+    <ChartWrapper
+      label={t_dashboard('title')}
+      description={t_dashboard('description')}
+      icon={<Clock className="w-5 h-5" />}
+      isLoading={isLoading}
+      option={chartOptions}
+    />
   );
 }

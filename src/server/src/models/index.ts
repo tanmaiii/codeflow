@@ -16,7 +16,7 @@ import { ReviewAIModel } from './reviews_ai.model';
 // import { SubmissionModel } from './submissions.model';
 import { TagModel } from './tags.model';
 import { TopicEvaluationsModel } from './topic_evaluations.model';
-import { TopicMemberModel } from './topic_member.mode';
+import { TopicMemberModel } from './topic_member.model';
 import { TopicTagModel } from './topic_tag.model';
 import { TopicModel } from './topics.model';
 import { UserSettingsModel } from './user_settings.model';

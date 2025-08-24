@@ -17,7 +17,7 @@ import ReviewAIModel from '@/models/reviews_ai.model';
 import SystemSettingsModel from '@/models/system_settings.model';
 import TagModel from '@/models/tags.model';
 import TopicEvaluationsModel from '@/models/topic_evaluations.model';
-import TopicMemberModel from '@/models/topic_member.mode';
+import TopicMemberModel from '@/models/topic_member.model';
 import TopicTagModel from '@/models/topic_tag.model';
 import TopicModel from '@/models/topics.model';
 import { logger } from '@/utils/logger';
@@ -43,12 +43,12 @@ const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   },
   logQueryParameters: NODE_ENV === 'development',
   logging: (query, time) => {
-    // logger.info(time + 'ms' + ' ' + query);
+    logger.info(time + 'ms' + ' ' + query);
   },
   benchmark: true,
 });
 
-sequelize.authenticate();
+// Database connection will be tested in app.ts
 
 export const DB = {
   Users: UserModel(sequelize),
@@ -56,26 +56,26 @@ export const DB = {
   Posts: PostModel(sequelize),
   Courses: CourseModel(sequelize),
   Topics: TopicModel(sequelize),
-  // Submission: SubmissionModel(sequelize),
   Comments: CommentModel(sequelize),
   Tags: TagModel(sequelize),
   CourseTag: CourseTagModel(sequelize),
   PostTag: PostTagModel(sequelize),
-  TopicTag: TopicTagModel(sequelize),
-  CourseDocument: CourseDocument(sequelize),
-  PostLike: PostLikeModel(sequelize),
-  Repos: ReposModel(sequelize),
-  CourseEnrollment: CourseEnrollmentModel(sequelize),
   TopicMember: TopicMemberModel(sequelize),
   TopicEvaluations: TopicEvaluationsModel(sequelize),
   Notifications: NotificationModel(sequelize),
   SystemSettings: SystemSettingsModel(sequelize),
-  Commits: CommitsModel(sequelize),
   CodeAnalysis: CodeAnalysisModel(sequelize),
   CodeAnalysisMetrics: CodeAnalysisMetricsModel(sequelize),
+  Commits: CommitsModel(sequelize),
   PullRequests: PullRequestsModel(sequelize),
+  CourseEnrollment: CourseEnrollmentModel(sequelize),
+  Repos: ReposModel(sequelize),
+  PostLike: PostLikeModel(sequelize),
+  CourseDocument: CourseDocument(sequelize),
+  TopicTag: TopicTagModel(sequelize),
   ReviewsAI: ReviewAIModel(sequelize),
   sequelize,
 };
 
-initModels();
+// Temporarily disable model relationships to debug
+// initModels();

@@ -726,6 +726,18 @@
       "courseType": {
         "title": "Loại khóa học",
         "description": "Thống kê số lượng khóa học theo loại"
+      },
+      "courseStatus":{
+        "title": "Trạng thái khóa học",
+        "description": "Thống kê số lượng khóa học theo trạng thái",
+        "registration": "Đang đăng ký",
+        "active": "Đang hoạt động",
+        "ended": "Đã kết thúc",
+        "total": "Tổng số"
+      },
+      "codeQuality": {
+        "title": "Chất lượng code",
+        "description": "Thống kê chất lượng code"
       }
     },
     "lists": {

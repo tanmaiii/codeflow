@@ -51,13 +51,15 @@ export default function (sequelize: Sequelize): typeof TopicMemberModel {
       sequelize,
       timestamps: true,
       paranoid: true, // bật xóa mềm
-      defaultScope: {
-        include: [
-          {
-            model: UserModel,
-            as: 'user',
-          },
-        ],
+      scopes: {
+        withUser: {
+          include: [
+            {
+              model: UserModel,
+              as: 'user',
+            },
+          ],
+        },
       },
     },
   );

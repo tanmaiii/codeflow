@@ -11,11 +11,12 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import ActiveStudentsList from './components/ActiveStudentsList';
 import BestTopicsList from './components/BestTopicsList';
-import ChartComplexity from './components/ChartComplexity';
 import LanguageChart from './components/LanguageChart';
 import CourseStatsCards from './CourseStatsCards';
 import ChartTopicStatus from '@/components/common/MyChart/ChartTopicStatus';
 import useQ_Course_GetTopicStatus from '@/hooks/query-hooks/Course/useQ_Course_GetTopicStatus';
+import { useQ_CodeAnalysis_GetByCourseId } from '@/hooks/query-hooks/CodeAnalysis/useQ_CodeAnalysis_GetByCourseId';
+import ChartCodeQuality from '@/components/common/MyChart/ChartCodeQuality';
 
 export default function CourseDashboard() {
   const params = useParams();
@@ -29,11 +30,10 @@ export default function CourseDashboard() {
       days: selectedDays,
     });
 
-  const { data: topicStatusResponse, isLoading: isLoadingTopicStatus } = useQ_Course_GetTopicStatus(
-    {
-      courseId: id,
-    },
-  );
+  const { data: topicStatusResponse, isLoading: isLoadingTopicStatus } = useQ_Course_GetTopicStatus({courseId: id});
+
+  const { data: codeAnalysisResponse, isLoading: isLoadingCodeAnalysis } =
+    useQ_CodeAnalysis_GetByCourseId(id);
 
   if (isLoading) return <Skeleton className="w-full h-[90vh]" />;
   if (isError) return <div>Error</div>;
@@ -66,7 +66,7 @@ export default function CourseDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <LanguageChart courseId={id} />
-        <ChartComplexity courseId={id} />
+        <ChartCodeQuality data={codeAnalysisResponse?.data} isLoading={isLoadingCodeAnalysis} />
       </div>
 
       <BestTopicsList courseId={id} />

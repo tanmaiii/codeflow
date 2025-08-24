@@ -1,7 +1,7 @@
 import { App } from '@/app';
+import { ValidateEnv } from '@utils/validateEnv';
 import { AuthRoute } from '@routes/auth.route';
 import { UserRoute } from '@routes/users.route';
-import { ValidateEnv } from '@utils/validateEnv';
 import { CommentRoute } from './routes/comment.route';
 import { CourseRoute } from './routes/courses.route';
 import { FileRoute } from './routes/file.route';
@@ -24,29 +24,30 @@ import { TopicEvaluationRoute } from './routes/topic_evaluation.route';
 import { DashboardRoute } from './routes/dashboard.route';
 ValidateEnv();
 
+// Test with minimal routes to debug
 const app = new App([
   new AuthRoute(),
   new UserRoute(),
-  new UserSettingsRoute(),
-  new SystemSettingsRoute(),
-  new CourseRoute(),
-  new FileRoute(),
-  new PostRoute(),
-  new TagRoute(),
-  new CommentRoute(),
-  new TopicRoute(),
-  new TopicEvaluationRoute(),
-  new GitHubRoute(),
-  new NotificationRoute(),
-  new SearchRoute(),
-  new ReposRoute(),
-  new GeminiRoute(),
-  new SonarRoute(),
-  new CodeAnalysisRoute(),
-  new CommitRoute(),
-  new PullRequestsRoute(),
-  new ReviewsAIRoute(),
-  new DashboardRoute(),
+  // new UserSettingsRoute(),
+  // new SystemSettingsRoute(),
+  // new CourseRoute(),
+  // new FileRoute(),
+  // new PostRoute(),
+  // new TagRoute(),
+  // new CommentRoute(),
+  // new TopicRoute(),
+  // new TopicEvaluationRoute(),
+  // new GitHubRoute(),
+  // new NotificationRoute(),
+  // new SearchRoute(),
+  // new ReposRoute(),
+  // new GeminiRoute(),
+  // new SonarRoute(),
+  // new CodeAnalysisRoute(),
+  // new CommitRoute(),
+  // new PullRequestsRoute(),
+  // new ReviewsAIRoute(),
+  // new DashboardRoute(),
 ]);
 
 app.listen();

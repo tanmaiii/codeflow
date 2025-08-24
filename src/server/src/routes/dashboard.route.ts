@@ -19,7 +19,8 @@ export class DashboardRoute implements Routes {
     this.router.get(`${this.path}/tags`, isAdmin, this.dashboard.getTags);
     this.router.get(`${this.path}/framework`, isAdmin, this.dashboard.getFramework); 
     this.router.get(`${this.path}/course-types`, isAdmin, this.dashboard.getCourseTypes); 
-    this.router.get(`${this.path}/repos-status`, isAdmin, this.dashboard.getRepos); 
     this.router.get(`${this.path}/topic-status`, isAdmin, this.dashboard.getTopicStatus);
+    this.router.get(`${this.path}/course-status`, isAdmin, this.dashboard.getCourseStatus);
+    // this.router.get(`${this.path}/code-analysis`, isAdmin, this.dashboard.getCodeAnalysis);
   }
 }

@@ -17,28 +17,30 @@ import { IconMessageCircle } from '@tabler/icons-react';
 import { BookOpen, Folder, Users } from 'lucide-react';
 import { useState } from 'react';
 import {
-  ChartComplexity,
   ChartPieCoursesStatus,
   ChartPieCoursesType,
   ChartTags,
   FeaturedCourses,
   FeaturedStudents,
 } from './components';
+import useQ_Dashboard_GetCourseStatus from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCourseStatus';
+import ChartCodeQuality from '@/components/common/MyChart/ChartCodeQuality';
+import useQ_Dashboard_GetCodeAnalysis from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCodeAnalysis';
 
 export default function Dashboard() {
+  const [selectedDays, setSelectedDays] = useState(7);
   const { data: users } = useQ_User_GetAll({ params: { page: 1, limit: 0 } });
   const { data: courses } = useQ_Course_GetAll({ params: { page: 1, limit: 0 } });
   const { data: repos } = useQ_Repos_GetAll({ params: { page: 1, limit: 0 } });
   const { data: posts } = useQ_Post_GetAll({ params: { page: 1, limit: 0 } });
 
-  const [selectedDays, setSelectedDays] = useState(7);
-  const { data, isLoading } = useQ_Dashboard_GetCodeActivity({
-    days: selectedDays,
-  });
+  const { data, isLoading } = useQ_Dashboard_GetCodeActivity({ days: selectedDays });
   const { data: tags, isLoading: isLoadingTags } = useQ_Dashboard_GetTags({});
   const { data: framework, isLoading: isLoadingFramework } = useQ_Dashboard_GetFramework({});
   const { data: courseTypes, isLoading: isLoadingCourseTypes } = useQ_Dashboard_GetCourseTypes({});
   const { data: topicStatus, isLoading: isLoadingTopicStatus } = useQ_Dashboard_GetTopicStatus({});
+  const { data: courseStatus, isLoading: isLoadingCourseStatus } = useQ_Dashboard_GetCourseStatus({});
+  const { data: codeAnalysis, isLoading: isLoadingCodeAnalysis } = useQ_Dashboard_GetCodeAnalysis({});
 
   return (
     <div className="min-h-screen p-6">
@@ -100,15 +102,13 @@ export default function Dashboard() {
             courseTypes={courseTypes?.data ?? []}
             isLoading={isLoadingCourseTypes}
           />
-          <ChartTopicStatus data={topicStatus?.data} isLoading={isLoadingTopicStatus} />  
+          <ChartTopicStatus data={topicStatus?.data} isLoading={isLoadingTopicStatus} />
         </div>
 
         {/* Test & Performance Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 w-full">
-          {/* TODO: Mockdata */}
-          <ChartPieCoursesStatus />
-          {/* TODO: Mockdata */}
-          <ChartComplexity />
+          <ChartPieCoursesStatus data={courseStatus?.data} isLoading={isLoadingCourseStatus} />
+          <ChartCodeQuality data={codeAnalysis?.data} isLoading={isLoadingCodeAnalysis} />
         </div>
 
         {/* Featured Students and Courses */}

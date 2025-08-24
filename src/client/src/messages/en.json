@@ -727,6 +727,18 @@
       "courseType": {
         "title": "Course Type",
         "description": "Course type statistics"
+      },
+      "courseStatus": {
+        "title": "Course Status",
+        "description": "Course status statistics",
+        "registration": "Registration",
+        "active": "Active",
+        "ended": "Ended",
+        "total": "Total"
+      },
+      "codeQuality": {
+        "title": "Code Quality",
+        "description": "Code quality statistics"
       }
     },
     "lists": {

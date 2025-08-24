@@ -11,12 +11,14 @@ export class DashboardController {
   private readonly tags: TagService;
   private readonly repos: ReposService;
   private readonly topic: TopicService;
+  // private readonly codeAnalysis: CodeAnalysisService;
 
   constructor() {
     this.course = Container.get(CourseService);
     this.tags = Container.get(TagService);
     this.repos = Container.get(ReposService);
     this.topic = Container.get(TopicService);
+    // this.codeAnalysis = Container.get(CodeAnalysisService);
   }
 
   public getCodeActivity = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
@@ -59,15 +61,6 @@ export class DashboardController {
     }
   };
 
-  public getRepos = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      // const courseId = req.query.courseId as string;
-      res.status(200).json({ data: [], message: 'getRepos' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
   public getTopicStatus = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const topicStatus = await this.topic.getTopicStatus(undefined, true);
@@ -77,4 +70,65 @@ export class DashboardController {
       next(error);
     }
   };
+
+  public getCourseStatus = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const courseStatus = await this.course.getCourseStatus();
+      res.status(200).json({ data: courseStatus, message: 'getCourseStatus' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // public getCodeAnalysis = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+  //   try {
+  //     const repos = await this.repos.findAll();
+  //     const allMetrics = [];
+
+  //     // Lấy tất cả metrics từ các repos
+  //     for (const repo of repos) {
+  //       const codeAnalysis = await this.codeAnalysis.findByTopic(repo.id);
+  //       if (codeAnalysis?.metrics && Array.isArray(codeAnalysis.metrics)) {
+  //         allMetrics.push(...codeAnalysis.metrics);
+  //       }
+  //     }
+
+  //     // Map lại các metrics có cùng name
+  //     const metricsMap = new Map();
+
+  //     for (const metric of allMetrics) {
+  //       const key = metric.name;
+
+  //       if (metricsMap.has(key)) {
+  //         const existing = metricsMap.get(key);
+  //         const existingValue = parseFloat(existing.value) || 0;
+  //         const currentValue = parseFloat(metric.value) || 0;
+  //         existing.value = (existingValue + currentValue).toString();
+
+  //         if (existing.bestValue === null && metric.bestValue !== null) {
+  //           existing.bestValue = metric.bestValue;
+  //         } else if (existing.bestValue !== null && metric.bestValue === null) {
+  //         } else if ((existing.bestValue === true && metric.bestValue === false) || (existing.bestValue === false && metric.bestValue === true)) {
+  //           existing.bestValue = false;
+  //         }
+  //       } else {
+  //         metricsMap.set(key, {
+  //           name: metric.name,
+  //           value: metric.value,
+  //           bestValue: metric.bestValue,
+  //         });
+  //       }
+  //     }
+
+  //     // Convert Map về Array
+  //     const aggregatedMetrics = Array.from(metricsMap.values());
+
+  //     res.status(200).json({
+  //       data: aggregatedMetrics,
+  //       message: 'Get code quality',
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
 }

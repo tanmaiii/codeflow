@@ -4,7 +4,7 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { CourseModel } from './courses.model';
 import { ReposModel } from './repos.model';
 import { TagModel } from './tags.model';
-import { TopicMemberModel } from './topic_member.mode';
+import { TopicMemberModel } from './topic_member.model';
 import { UserModel } from './users.model';
 type PostCreationAttributes = Optional<Topic, 'id' | 'title' | 'description' | 'courseId' | 'authorId' | 'isCustom' | 'status' | 'groupName'>;
 
@@ -78,33 +78,31 @@ export default function (sequelize: Sequelize): typeof TopicModel {
       modelName: 'topics',
       timestamps: true,
       paranoid: true, // bật xóa mềm
-      defaultScope: {
-        include: [
-          {
-            model: UserModel,
-            as: 'author',
-          },
-          {
-            model: TagModel,
-            as: 'tags',
-            through: { attributes: [] },
-          },
-          {
-            model: CourseModel,
-            as: 'course',
-            attributes: {
-              exclude: ['description'],
+      scopes: {
+        withDetails: {
+          include: [
+            {
+              model: UserModel,
+              as: 'author',
             },
-          },
-          {
-            model: TopicMemberModel,
-            as: 'members',
-          },
-          // {
-          //   model: TopicEvaluationsModel,
-          //   as: 'evaluations',
-          // },
-        ],
+            {
+              model: TagModel,
+              as: 'tags',
+              through: { attributes: [] },
+            },
+            {
+              model: CourseModel,
+              as: 'course',
+              attributes: {
+                exclude: ['description'],
+              },
+            },
+            {
+              model: TopicMemberModel,
+              as: 'members',
+            },
+          ],
+        },
       },
     },
   );

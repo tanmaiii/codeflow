@@ -658,6 +658,58 @@ export class CourseService {
 
     return courseTypes;
   }
+
+  public async getCourseStatus() {
+    const currentDate = new Date();
+    
+    // Lấy tất cả khóa học với các trường ngày tháng cần thiết
+    const courses = await DB.Courses.findAll({
+      attributes: ['id', 'startDate', 'endDate', 'regStartDate', 'regEndDate', 'topicDeadline', 'status'],
+      where: {
+        status: true // chỉ lấy các khóa học đang active
+      }
+    });
+
+    let registrationStatus = 0;  // Đang trong thời gian đăng ký
+    let activeStatus = 0;        // Đang hoạt động
+    let endedStatus = 0;         // Đã kết thúc
+
+    courses.forEach(course => {
+      const regStartDate = course.regStartDate ? new Date(course.regStartDate) : null;
+      const regEndDate = course.regEndDate ? new Date(course.regEndDate) : null;
+      const startDate = course.startDate ? new Date(course.startDate) : null;
+      const endDate = course.endDate ? new Date(course.endDate) : null;
+      const topicDeadline = course.topicDeadline ? new Date(course.topicDeadline) : null;
+
+      // Kiểm tra trạng thái đã kết thúc (ưu tiên cao nhất)
+      if ((endDate && currentDate > endDate) || (topicDeadline && currentDate > topicDeadline)) {
+        endedStatus++;
+      }
+      // Kiểm tra trạng thái đang hoạt động
+      else if (startDate && currentDate >= startDate && (!endDate || currentDate <= endDate)) {
+        activeStatus++;
+      }
+      // Kiểm tra trạng thái đang đăng ký
+      else if (regStartDate && regEndDate && currentDate >= regStartDate && currentDate <= regEndDate) {
+        registrationStatus++;
+      }
+      // Nếu chưa đến thời gian đăng ký hoặc đã qua thời gian đăng ký nhưng chưa bắt đầu
+      else if (regStartDate && currentDate < regStartDate) {
+        // Chưa mở đăng ký - có thể tính vào một trạng thái khác
+      }
+      else {
+        // Các trường hợp khác - có thể tính vào trạng thái chờ hoặc không xác định
+      }
+    });
+
+    return {
+      registration: registrationStatus, //Đang đăng ký
+      active: activeStatus,  //Đang hoạt động
+      ended: endedStatus, //Đã kết thúc
+      total: courses.length, //Tổng số khóa học
+    };
+  }
+  
   private mergeContributorsByAuthorId(contributors: UserContributes[]): UserContributes[] {
     const contributorMap = new Map<string, UserContributes>();
 

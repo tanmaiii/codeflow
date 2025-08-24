@@ -1,4 +1,6 @@
 import { config } from 'dotenv';
+// Load .env file first, then try environment-specific files
+config({ path: '.env' });
 config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` });
 
 export const CREDENTIALS = process.env.CREDENTIALS === 'true';
