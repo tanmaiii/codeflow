@@ -51,3 +51,21 @@ export interface RepoUpdate {
   language: string;
   framework: string;
 }
+
+export interface ReposStatusStats {
+  status: Array<{
+    status: string;
+    count: number;
+  }>;
+  language: Array<{
+    language: string;
+    count: number;
+  }>;
+  framework: Array<{
+    framework: string;
+    count: number;
+  }>;
+  total: number;
+  active: number;
+  inactive: number;
+}

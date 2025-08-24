@@ -47,6 +47,8 @@ export class CourseRoute implements Routes {
     );
 
     this.router.get(`${this.path}/:id/contributors`, AuthMiddleware, this.course.getContributors);
+    this.router.get(`${this.path}/:id/topic-status`, AuthMiddleware, this.course.getTopicStatus);
+
 
     // Public routes
     this.router.get(`${this.path}/:id`, this.course.getCourseById);

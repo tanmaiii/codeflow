@@ -2,6 +2,7 @@ import { ENUM_TOPIC_STATUS } from '@/data/enum';
 import { Topic } from '@interfaces/topics.interface';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { CourseModel } from './courses.model';
+import { ReposModel } from './repos.model';
 import { TagModel } from './tags.model';
 import { TopicMemberModel } from './topic_member.mode';
 import { UserModel } from './users.model';
@@ -16,6 +17,9 @@ export class TopicModel extends Model<Topic, PostCreationAttributes> implements 
   public isCustom!: boolean;
   public status!: ENUM_TOPIC_STATUS;
   public groupName!: string;
+
+  // Relations
+  public repos?: ReposModel[];
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;

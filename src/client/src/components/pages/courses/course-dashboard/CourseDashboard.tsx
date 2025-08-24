@@ -13,8 +13,9 @@ import ActiveStudentsList from './components/ActiveStudentsList';
 import BestTopicsList from './components/BestTopicsList';
 import ChartComplexity from './components/ChartComplexity';
 import LanguageChart from './components/LanguageChart';
-import TopicApprovalChart from './components/TopicApprovalChart';
 import CourseStatsCards from './CourseStatsCards';
+import ChartTopicStatus from '@/components/common/MyChart/ChartTopicStatus';
+import useQ_Course_GetTopicStatus from '@/hooks/query-hooks/Course/useQ_Course_GetTopicStatus';
 
 export default function CourseDashboard() {
   const params = useParams();
@@ -22,13 +23,17 @@ export default function CourseDashboard() {
   const t = useTranslations('dashboard');
   const { data: dataCourse, isLoading, isError } = useQ_Course_GetDetail({ id: id });
   const [selectedDays, setSelectedDays] = useState(7);
-  const {
-    data: codeActivityResponse,
-    isLoading: isLoadingCodeActivity,
-  } = useQ_Course_GetCodeActivity({
-    courseId: id,
-    days: selectedDays,
-  });
+  const { data: codeActivityResponse, isLoading: isLoadingCodeActivity } =
+    useQ_Course_GetCodeActivity({
+      courseId: id,
+      days: selectedDays,
+    });
+
+  const { data: topicStatusResponse, isLoading: isLoadingTopicStatus } = useQ_Course_GetTopicStatus(
+    {
+      courseId: id,
+    },
+  );
 
   if (isLoading) return <Skeleton className="w-full h-[90vh]" />;
   if (isError) return <div>Error</div>;
@@ -56,7 +61,7 @@ export default function CourseDashboard() {
           selectedDays={selectedDays}
           isLoading={isLoadingCodeActivity}
         />
-        <TopicApprovalChart courseId={id} />
+        <ChartTopicStatus data={topicStatusResponse?.data} isLoading={isLoadingTopicStatus} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

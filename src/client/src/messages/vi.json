@@ -710,7 +710,9 @@
         "description": "Biểu đồ thống kê số lượng đề tài theo trạng thái phê duyệt",
         "pending": "Chờ duyệt",
         "approved": "Đã chấp nhận",
-        "rejected": "Đã từ chối"
+        "rejected": "Đã từ chối",
+        "self": "Tự đề xuất",
+        "teacher": "Giáo viên đề xuất"
       },
       "language": {
         "title": "Ngôn ngữ lập trình",
@@ -720,6 +722,10 @@
         "title": "Số lượng tags được sử dụng",
         "courses": "Khóa học",
         "posts": "Bài viết"
+      },
+      "courseType": {
+        "title": "Loại khóa học",
+        "description": "Thống kê số lượng khóa học theo loại"
       }
     },
     "lists": {

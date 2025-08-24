@@ -53,6 +53,12 @@ export default function ChartPieLanguage({ framework, isLoading }: ChartPieLangu
         radius: ['30%', '65%'],
         center: ['35%', '50%'],
         data: projectTypes,
+        padAngle: 3,
+        itemStyle: {
+          borderRadius: 5,
+          borderColor: '#fff',
+          borderWidth: 1,
+        },
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -60,14 +66,9 @@ export default function ChartPieLanguage({ framework, isLoading }: ChartPieLangu
             shadowColor: 'rgba(0, 0, 0, 0.5)',
           },
         },
-        itemStyle: {
-          borderRadius: 5,
-          borderColor: '#fff',
-          borderWidth: 2,
-        },
         label: {
           show: true,
-          formatter: '{d}% ({c})',
+          formatter: '{d}%',
           position: 'inside',
         },
       },

@@ -14,6 +14,7 @@ export default function ChartPieCoursesType({
 }) {
   const { theme } = useDarkMode();
   const t = useTranslations();
+  const t_dashboard = useTranslations('dashboard.charts.courseType');
 
   const courseTypesData = courseTypes.map(courseType => ({
     name: t(`course.type.${courseType.type}`),
@@ -23,7 +24,7 @@ export default function ChartPieCoursesType({
   const Option = {
     tooltip: {
       trigger: 'item',
-      formatter: '{b}: {c}%',
+      formatter: '{b}: {c}',
       backgroundColor: theme.backgroundColor,
       textStyle: {
         color: theme.textColor,
@@ -31,7 +32,7 @@ export default function ChartPieCoursesType({
     },
     legend: {
       orient: 'vertical',
-      left: '5%',
+      left: '70%',
       top: '15%',
       itemGap: 8,
       itemWidth: 12,
@@ -46,8 +47,14 @@ export default function ChartPieCoursesType({
         name: 'Loại khóa học',
         type: 'pie',
         radius: ['30%', '65%'],
-        center: ['65%', '50%'],
+        center: ['35%', '50%'],
         data: courseTypesData,
+        padAngle: 3,
+        itemStyle: {
+          borderRadius: 5,
+          borderColor: '#fff',
+          borderWidth: 1,
+        },
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -66,9 +73,11 @@ export default function ChartPieCoursesType({
 
   return (
     <ChartWrapper
-      icon={<ChartPie className="w-4 h-4" />}
-      label={'Số lượng khóa học theo loại'}
+      icon={<ChartPie className="w-5 h-5" />}
+      label={t_dashboard('title')}
+      description={t_dashboard('description')}
       option={Option}
+      isEmpty={courseTypesData.length === 0}
       isLoading={isLoading}
     />
   );

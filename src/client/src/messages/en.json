@@ -711,7 +711,9 @@
         "description": "Chart showing the number of topics by approval status",
         "pending": "Pending",
         "approved": "Approved",
-        "rejected": "Rejected"
+        "rejected": "Rejected",
+        "self": "Self",
+        "teacher": "Teacher"
       },
       "language": {
         "title": "Language",
@@ -721,6 +723,10 @@
         "title": "Number of tags used",
         "courses": "Courses",
         "posts": "Posts"
+      },
+      "courseType": {
+        "title": "Course Type",
+        "description": "Course type statistics"
       }
     },
     "lists": {

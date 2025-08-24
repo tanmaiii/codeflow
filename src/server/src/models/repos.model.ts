@@ -15,6 +15,10 @@ export class ReposModel extends Model<Repos, ReposCreationAttributes> implements
   public language: string;
   public framework: string;
   public sonarKey: string;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof ReposModel {

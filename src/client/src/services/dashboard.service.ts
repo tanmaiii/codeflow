@@ -2,6 +2,7 @@ import { ResponseAPIDto } from '@/interfaces/common';
 import { ICodeActivity, ICourseType } from '@/interfaces/course';
 import { IReposFramework } from '@/interfaces/repos';
 import { ITagWithUsageCount } from '@/interfaces/tags';
+import { ITopicStatus } from '@/interfaces/topic';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
 
@@ -29,6 +30,11 @@ class DashboardService {
 
   async getCourseTypes(): Promise<ResponseAPIDto<ICourseType[]>> {
     const res = await this.client.get('/course-types');
+    return res.data;
+  }
+
+  async getTopicStatus(): Promise<ResponseAPIDto<ITopicStatus>> {
+    const res = await this.client.get('/topic-status');
     return res.data;
   }
 }

@@ -58,7 +58,7 @@ export default function PasswordChangeModal() {
     >
       <form
         onSubmit={handleSubmit(data => mutationSubmit.mutate(data))}
-        className="py-6 flex gap-4 flex-col"
+        className="pt-4 flex gap-4 flex-col"
       >
         <PasswordInput
           label={t('settings.currentPassword')}

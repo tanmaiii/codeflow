@@ -1,4 +1,5 @@
 import { Course } from './courses.interface';
+import { Repos } from './repos.interface';
 import { User } from './users.interface';
 import { IUser } from '../../../client/src/interfaces/user';
 export interface Topic {
@@ -13,6 +14,7 @@ export interface Topic {
   course?: Course;
   members?: TopicMember[];
   author?: User;
+  repos?: Repos[];
   // Stats fields
   memberCount?: number;
   reposCount?: number;

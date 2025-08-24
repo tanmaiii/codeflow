@@ -7,6 +7,7 @@ import {
   ICourseMembers,
   ICreateCourseDto,
 } from '@/interfaces/course';
+import { ITopicStatus } from '@/interfaces/topic';
 import { IMemberContributors } from '@/interfaces/user';
 import createHttpClient from '@/lib/createHttpClient';
 import { AxiosInstance } from 'axios';
@@ -131,6 +132,11 @@ class CourseService {
     params: IGetAllQuery,
   ): Promise<PaginatedResponseAPIDto<IMemberContributors[]>> {
     const res = await this.client.get(`/${courseId}/contributors`, { params });
+    return res.data;
+  }
+
+  async getTopicStatus(courseId: string): Promise<ResponseAPIDto<ITopicStatus>> {
+    const res = await this.client.get(`/${courseId}/topic-status`);
     return res.data;
   }
 }

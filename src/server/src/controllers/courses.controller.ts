@@ -8,18 +8,21 @@ import { HttpException } from '@/exceptions/HttpException';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { UserService } from '@/services/users.service';
+import { TopicService } from '@/services/topic.service';
 
 export class CourseController {
   private readonly course: CourseService;
   private readonly comment: CommentService;
   private readonly courseEnrollment: CourseEnrollmentService;
   private readonly user: UserService;
+  private readonly topic: TopicService;
 
   constructor() {
     this.course = Container.get(CourseService);
     this.comment = Container.get(CommentService);
     this.courseEnrollment = Container.get(CourseEnrollmentService);
     this.user = Container.get(UserService);
+    this.topic = Container.get(TopicService);
   }
 
   private createPaginationResponse(count: number | string, page: number | string, limit: number | string) {
@@ -300,6 +303,16 @@ export class CourseController {
         pagination: this.createPaginationResponse(count, Number(page), Number(limit)),
         message: 'get contributors',
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getTopicStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const courseId = req.params.id;
+      const topicStatus = await this.topic.getTopicStatus(courseId, false);
+      res.status(200).json({ data: topicStatus, message: 'getTopicStatus' });
     } catch (error) {
       next(error);
     }

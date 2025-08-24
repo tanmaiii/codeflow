@@ -67,6 +67,7 @@ export const initModels = () => {
   TopicModel.hasMany(TopicMemberModel, { foreignKey: 'topicId', as: 'members' });
   TopicModel.hasMany(TopicEvaluationsModel, { foreignKey: 'topicId', as: 'evaluations' });
   TopicModel.hasMany(NotificationModel, { foreignKey: 'topicId', as: 'notifications' });
+  TopicModel.hasMany(ReposModel, { foreignKey: 'topicId', as: 'repos' });
 
   // Tag Model Relations
   TagModel.belongsToMany(CourseModel, { through: CourseTagModel, as: 'courses', foreignKey: 'tagId' });

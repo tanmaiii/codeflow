@@ -1,10 +1,15 @@
 'use client';
 import ChartLineCodeActivity from '@/components/common/MyChart/ChartLineCodeActivity';
+import ChartPieLanguage from '@/components/common/MyChart/ChartPieLanguage';
+import ChartTopicStatus from '@/components/common/MyChart/ChartTopicStatus';
 import StatCard from '@/components/common/StatCard';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useQ_Dashboard_GetCodeActivity from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCodeActivity';
+import useQ_Dashboard_GetCourseTypes from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCourseTypes';
+import useQ_Dashboard_GetFramework from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetFramework';
 import useQ_Dashboard_GetTags from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetTags';
+import useQ_Dashboard_GetTopicStatus from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetTopicStatus';
 import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
 import useQ_Repos_GetAll from '@/hooks/query-hooks/Repos/useQ_Repos_GetAll';
 import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
@@ -15,14 +20,10 @@ import {
   ChartComplexity,
   ChartPieCoursesStatus,
   ChartPieCoursesType,
-  ChartPieLanguage,
   ChartTags,
-  ChartTopic,
   FeaturedCourses,
   FeaturedStudents,
 } from './components';
-import useQ_Dashboard_GetFramework from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetFramework';
-import useQ_Dashboard_GetCourseTypes from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCourseTypes';
 
 export default function Dashboard() {
   const { data: users } = useQ_User_GetAll({ params: { page: 1, limit: 0 } });
@@ -37,6 +38,7 @@ export default function Dashboard() {
   const { data: tags, isLoading: isLoadingTags } = useQ_Dashboard_GetTags({});
   const { data: framework, isLoading: isLoadingFramework } = useQ_Dashboard_GetFramework({});
   const { data: courseTypes, isLoading: isLoadingCourseTypes } = useQ_Dashboard_GetCourseTypes({});
+  const { data: topicStatus, isLoading: isLoadingTopicStatus } = useQ_Dashboard_GetTopicStatus({});
 
   return (
     <div className="min-h-screen p-6">
@@ -94,13 +96,11 @@ export default function Dashboard() {
         {/* Second Row Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <ChartPieLanguage framework={framework?.data ?? []} isLoading={isLoadingFramework} />
-          {/* TODO: Mockdata */}
           <ChartPieCoursesType
             courseTypes={courseTypes?.data ?? []}
             isLoading={isLoadingCourseTypes}
           />
-          {/* TODO: Mockdata */}
-          <ChartTopic />
+          <ChartTopicStatus data={topicStatus?.data} isLoading={isLoadingTopicStatus} />  
         </div>
 
         {/* Test & Performance Charts */}

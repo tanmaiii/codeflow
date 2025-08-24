@@ -1,4 +1,4 @@
-import { RepoCreate, Repos, ReposStats, RepoUpdate } from '@/interfaces/repos.interface';
+import { RepoCreate, Repos, ReposStats, ReposStatusStats, RepoUpdate } from '@/interfaces/repos.interface';
 import { UserContributes } from '@/interfaces/users.interface';
 import { logger } from '@/utils/logger';
 import { cleanSpecialCharacters, isEmpty } from '@/utils/util';
@@ -396,7 +396,6 @@ export class ReposService {
   }
 
   //Dashboard
-
   public async getRepoFramework(courseId?: string) {
     const repos = await DB.Repos.findAll({
       where: {

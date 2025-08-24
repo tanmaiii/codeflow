@@ -105,3 +105,24 @@ export interface ITopicEvaluationUpdateDto {
 export interface IGetAllTopicParams extends IGetAllQuery {
   status?: string;
 }
+
+export interface ITopicStatus {
+  total: number;
+  custom: number;
+  system: number;
+  pending: {
+    total: number;
+    custom: number;
+    system: number;
+  };
+  approved: {
+    total: number;
+    custom: number;
+    system: number;
+  };
+  rejected: {
+    total: number;
+    custom: number;
+    system: number;
+  };
+}

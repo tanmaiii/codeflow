@@ -557,6 +557,45 @@ export class TopicService {
     return mergedContributors;
   }
 
+  private async mergeStatsById(stats: ReposStats[], topicId: string): Promise<TopicStats> {
+    if (stats.length === 0) {
+      return {
+        topicId: '',
+        commit: { total: 0, additions: 0, deletions: 0 },
+        pullRequest: { total: 0, additions: 0, deletions: 0, open: 0, closed: 0, merged: 0 },
+        codeAnalysis: { total: 0, success: 0, failure: 0 },
+      };
+    }
+
+    // Khởi tạo tổng stats với giá trị đầu tiên
+    const mergedStats: TopicStats = {
+      topicId: topicId,
+      commit: { total: 0, additions: 0, deletions: 0 },
+      pullRequest: { total: 0, additions: 0, deletions: 0, open: 0, closed: 0, merged: 0 },
+      codeAnalysis: { total: 0, success: 0, failure: 0 },
+    };
+
+    // Cộng tất cả các stats lại với nhau
+    stats.forEach(stat => {
+      mergedStats.commit.total += stat.commit.total;
+      mergedStats.commit.additions += stat.commit.additions;
+      mergedStats.commit.deletions += stat.commit.deletions;
+
+      mergedStats.pullRequest.total += stat.pullRequest.total;
+      mergedStats.pullRequest.additions += stat.pullRequest.additions;
+      mergedStats.pullRequest.deletions += stat.pullRequest.deletions;
+      mergedStats.pullRequest.open += stat.pullRequest.open;
+      mergedStats.pullRequest.closed += stat.pullRequest.closed;
+      mergedStats.pullRequest.merged += stat.pullRequest.merged;
+
+      mergedStats.codeAnalysis.total += stat.codeAnalysis.total;
+      mergedStats.codeAnalysis.success += stat.codeAnalysis.success;
+      mergedStats.codeAnalysis.failure += stat.codeAnalysis.failure;
+    });
+
+    return mergedStats;
+  }
+
   /**
    * Lấy top topics theo các tiêu chí khác nhau
    */
@@ -618,42 +657,44 @@ export class TopicService {
     });
   }
 
-  private async mergeStatsById(stats: ReposStats[], topicId: string): Promise<TopicStats> {
-    if (stats.length === 0) {
-      return {
-        topicId: '',
-        commit: { total: 0, additions: 0, deletions: 0 },
-        pullRequest: { total: 0, additions: 0, deletions: 0, open: 0, closed: 0, merged: 0 },
-        codeAnalysis: { total: 0, success: 0, failure: 0 },
-      };
-    }
-
-    // Khởi tạo tổng stats với giá trị đầu tiên
-    const mergedStats: TopicStats = {
-      topicId: topicId,
-      commit: { total: 0, additions: 0, deletions: 0 },
-      pullRequest: { total: 0, additions: 0, deletions: 0, open: 0, closed: 0, merged: 0 },
-      codeAnalysis: { total: 0, success: 0, failure: 0 },
-    };
-
-    // Cộng tất cả các stats lại với nhau
-    stats.forEach(stat => {
-      mergedStats.commit.total += stat.commit.total;
-      mergedStats.commit.additions += stat.commit.additions;
-      mergedStats.commit.deletions += stat.commit.deletions;
-
-      mergedStats.pullRequest.total += stat.pullRequest.total;
-      mergedStats.pullRequest.additions += stat.pullRequest.additions;
-      mergedStats.pullRequest.deletions += stat.pullRequest.deletions;
-      mergedStats.pullRequest.open += stat.pullRequest.open;
-      mergedStats.pullRequest.closed += stat.pullRequest.closed;
-      mergedStats.pullRequest.merged += stat.pullRequest.merged;
-
-      mergedStats.codeAnalysis.total += stat.codeAnalysis.total;
-      mergedStats.codeAnalysis.success += stat.codeAnalysis.success;
-      mergedStats.codeAnalysis.failure += stat.codeAnalysis.failure;
+  public async getTopicStatus(courseId?: string, isAdmin?: boolean) {
+    // Lấy tất cả topics với các repos liên quan
+    const topics = await DB.Topics.findAll({
+      where: courseId ? { courseId } : {},
+      paranoid: !isAdmin,
     });
 
-    return mergedStats;
+    // Khởi tạo kết quả thống kê
+    const statusStats = {
+      [ENUM_TOPIC_STATUS.PENDING]: { total: 0, custom: 0, system: 0 },
+      [ENUM_TOPIC_STATUS.APPROVED]: { total: 0, custom: 0, system: 0 },
+      [ENUM_TOPIC_STATUS.REJECTED]: { total: 0, custom: 0, system: 0 },
+    };
+
+    // Thống kê từng topic
+    topics.forEach(topic => {
+      const status = topic.status;
+      const isCustom = topic.isCustom;
+
+      // Thống kê số lượng topic theo trạng thái và loại
+      statusStats[status].total += 1;
+      if (isCustom) {
+        statusStats[status].custom += 1;
+      } else {
+        statusStats[status].system += 1;
+      }
+    });
+
+    // Tính tổng số topics
+    const totalTopics = topics.length;
+    const totalCustomTopics = topics.filter(t => t.isCustom).length;
+    const totalSystemTopics = topics.filter(t => !t.isCustom).length;
+
+    return {
+      total: totalTopics,
+      custom: totalCustomTopics,
+      system: totalSystemTopics,
+      ...statusStats,
+    };
   }
 }

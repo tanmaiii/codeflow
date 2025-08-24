@@ -41,11 +41,9 @@ export const ChartWrapper: React.FC<ChartWrapperProps> = ({
               {label}
             </TextHeading>
           ) : null}
-          {description && (
-            <TextDescription className="text-color-2 text-md font-medium">
-              {description}
-            </TextDescription>
-          )}
+          <TextDescription className="text-color-2 text-md font-medium">
+            {description ?? description}
+          </TextDescription>
         </div>
         {<div className="flex items-center ml-auto gap-2">{rightComponent}</div>}
       </div>
@@ -58,6 +56,7 @@ export const ChartWrapper: React.FC<ChartWrapperProps> = ({
         </div>
       ) : (
         <ReactECharts
+          className="mt-auto"
           option={option}
           style={{ height, width: '100%' }}
           opts={{ renderer: 'svg' }}
