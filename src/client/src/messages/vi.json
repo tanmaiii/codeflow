@@ -338,6 +338,7 @@
     "topicDeadline": "Hạn nộp bài",
     "registrationPeriod": "Thời gian đăng ký",
     "courseDuration": "Thời gian khóa học",
+    "courseSchedule": "Lịch trình khóa học",
     "notInRegistrationPeriod": "Không trong thời gian đăng ký",
     "tags": "Thẻ",
     "cancel": "Thoát",
@@ -368,6 +369,7 @@
     "progress": "Tiến độ",
     "registrationProgress": "Tiến độ đăng ký",
     "notStarted": "Chưa bắt đầu",
+    "registering": "Đang đăng ký",
     "started": "Đang diễn ra",
     "finished": "Đã hoàn thành",
     "typeCourse": "Loại khóa học",
@@ -470,7 +472,10 @@
     "contributionChart": "Biểu đồ đóng góp",
     "contributionChartDescription": "Phân tích chi tiết về đóng góp và hiệu suất",
     "codeAnalysic": "Phân tích code",
-    "contributeMembers": "Đóng góp của thành viên"
+    "contributeMembers": "Đóng góp của thành viên",
+    "noMembers": "Chưa có thành viên",
+    "waitingForApproval": "Chờ phê duyệt",
+    "emptyRepositories": "Chưa có kho lưu trữ"
   },
   "table": {
     "selectedRows": "Đã chọn {length} hàng trên {total}"
@@ -616,7 +621,11 @@
     "description": "Mô tả"
   },
   "dashboard": {
+    "totalUsers": "Tổng người dùng",
+    "totalTopics": "Tổng đề tài",
+    "totalPosts": "Tổng bài viết",
     "totalCourses": "Tổng khóa học",
+    "totalRepos": "Tổng kho lưu trữ",
     "enrolled": "Đã đăng ký",
     "activeCourses": "Đang làm",
     "currentCourses": "Khóa học hiện tại",

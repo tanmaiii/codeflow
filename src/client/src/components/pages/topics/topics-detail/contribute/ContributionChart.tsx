@@ -46,8 +46,10 @@ export default function ContributionChart({ topic }: { topic: ITopic }) {
       </div>
       {metrics?.data.length == 0 && contributors?.data.length == 0 ? (
         <div className="min-h-[300px] flex flex-col items-center justify-center">
-          <ChartArea className="w-12 h-12  text-zinc-400" />
-          <TextDescription className="text-gray-600 mt-4 dark:text-gray-300">
+          <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4">
+            <ChartArea className="w-8 h-8 text-zinc-400" />
+          </div>
+          <TextDescription className="text-center text-zinc-500 dark:text-zinc-400">
             {t('codeContribution.noData')}
           </TextDescription>
         </div>

@@ -35,7 +35,7 @@ export default function TopicsRepos({ topic }: { topic: ITopic }) {
             <Github className="w-6 h-6 text-white" />
           </div>
           <div>
-            <TextHeading className="text-lg/4 font-bold">Repositories</TextHeading>
+            <TextHeading className="text-lg/4 font-bold">{t('repository')}</TextHeading>
           </div>
 
           {canAddRepo && topic.status == ENUM_STATUS_TOPIC.APPROVED && (
@@ -77,8 +77,8 @@ export default function TopicsRepos({ topic }: { topic: ITopic }) {
             </div>
             <TextDescription className="text-center text-zinc-500 dark:text-zinc-400">
               {topic.status != ENUM_STATUS_TOPIC.APPROVED
-                ? 'Waiting for approval'
-                : 'Empty repositories'}
+                ?  t('waitingForApproval')
+                : t('emptyRepositories')}
             </TextDescription>
           </div>
         )}

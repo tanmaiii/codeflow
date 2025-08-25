@@ -61,6 +61,10 @@ export const STATUS_COURSE: IStatusObj[] = [
     labelKey: 'course.notStarted',
   },
   {
+    value: 'registering',
+    labelKey: 'course.registering',
+  },
+  {
     value: 'started',
     labelKey: 'course.started',
   },

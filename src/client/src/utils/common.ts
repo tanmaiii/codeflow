@@ -132,7 +132,6 @@ export function util_object_to_color(obj: IStatusObj) {
     // Green group
     approved: 'green',
     visible: 'green',
-    finished: 'green',
     user: 'green',
     merged: 'green',
 
@@ -141,12 +140,10 @@ export function util_object_to_color(obj: IStatusObj) {
 
     // Blue group
     'in progress': 'blue',
-    started: 'blue',
     admin: 'blue',
     open: 'blue',
 
     // Yellow group
-    not_started: 'yellow',
     teacher: 'yellow',
 
     // Yellow variant group
@@ -157,6 +154,16 @@ export function util_object_to_color(obj: IStatusObj) {
     suggest: 'orange',
     custom: 'purple',
     completed: 'amber',
+
+    not_started: 'yellow',
+    registering: 'orange',
+    started: 'blue',
+    finished: 'green',
+
+    [ENUM_TYPE_COURSE.MAJOR]: 'blue',
+    [ENUM_TYPE_COURSE.FOUNDATION]: 'green',
+    [ENUM_TYPE_COURSE.ELECTIVE]: 'yellow',
+    [ENUM_TYPE_COURSE.THESIS]: 'purple',
   };
 
   const normalizedStr = obj.value.toLowerCase().trim();
@@ -278,5 +285,44 @@ export const util_progress_color = (progress: number): { bg: string; text: strin
       bg: 'bg-gray-600/10 dark:bg-gray-600/20',
       text: 'bg-gray-500/40',
     };
+  }
+};
+
+/**
+ * Xác định trạng thái khóa học dựa trên các ngày tháng
+ * @param startDate - Ngày bắt đầu khóa học
+ * @param endDate - Ngày kết thúc khóa học
+ * @param regStartDate - Ngày bắt đầu đăng ký (tùy chọn)
+ * @param regEndDate - Ngày kết thúc đăng ký (tùy chọn)
+ * @returns Trạng thái khóa học: 'registering' | 'not_started' | 'started' | 'finished'
+ */
+export const util_get_course_status = (
+  startDate: string | Date,
+  endDate: string | Date,
+  regStartDate?: string | Date | null,
+  regEndDate?: string | Date | null,
+): 'registering' | 'not_started' | 'started' | 'finished' => {
+  const now = new Date();
+  const courseStartDate = new Date(startDate);
+  const courseEndDate = new Date(endDate);
+
+  // Kiểm tra xem có trong thời gian đăng ký không
+  if (regStartDate && regEndDate) {
+    const registrationStartDate = new Date(regStartDate);
+    const registrationEndDate = new Date(regEndDate);
+
+    // Nếu đang trong thời gian đăng ký
+    if (now >= registrationStartDate && now <= registrationEndDate) {
+      return 'registering';
+    }
+  }
+
+  // Kiểm tra trạng thái khóa học
+  if (now >= courseStartDate && now <= courseEndDate) {
+    return 'started';
+  } else if (now < courseStartDate) {
+    return 'not_started';
+  } else {
+    return 'finished';
   }
 };

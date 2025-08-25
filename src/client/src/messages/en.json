@@ -338,6 +338,7 @@
     "topicDeadline": "Topic Deadline",
     "registrationPeriod": "Registration Period",
     "courseDuration": "Course Duration",
+    "courseSchedule": "Course Schedule",
     "notInRegistrationPeriod": "Not in registration period",
     "tags": "Tags",
     "cancel": "Cancel",
@@ -368,6 +369,7 @@
     "progress": "Progress",
     "registrationProgress": "Registration Progress",
     "notStarted": "Not Started",
+    "registering": "Registering",
     "started": "Started",
     "finished": "Finished",
     "typeCourse": "Type course",
@@ -471,7 +473,10 @@
     "contributionChart": "Contribution Chart",
     "contributionChartDescription": "Detailed analysis of contributions and performance",
     "codeAnalysic": "Code Analysic",
-    "contributeMembers": "Contribute Members"
+    "contributeMembers": "Contribute Members",
+    "noMembers": "No members yet",
+    "waitingForApproval": "Waiting for approval",
+    "emptyRepositories": "No repositories yet"
   },
   "table": {
     "selectedRows": "Selected {length} rows on {total}"
@@ -617,7 +622,11 @@
     "description": "Description"
   },
   "dashboard": {
+    "totalUsers": "Total users",
+    "totalTopics": "Total topics",
+    "totalPosts": "Total posts",
     "totalCourses": "Total Courses",
+    "totalRepos": "Total repos",
     "enrolled": "Enrolled",
     "activeCourses": "Active",
     "currentCourses": "Current courses",

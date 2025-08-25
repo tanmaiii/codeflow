@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 import MemberAvatar from '@/components/ui/member-avatar';
-import TextHeading from '@/components/ui/text';
+import TextHeading, { TextDescription } from '@/components/ui/text';
 import { ITopic, ITopicMember } from '@/interfaces/topic';
 import { IconUsers } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
@@ -36,9 +36,20 @@ export default function TopicMember({ topic }: { topic: ITopic }) {
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        {visibleContributors.map(contributor => (
-          <Member key={contributor.id} contributor={contributor} />
-        ))}
+        {visibleContributors.length > 0 ? (
+          visibleContributors.map(contributor => (
+            <Member key={contributor.id} contributor={contributor} />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center py-8 px-4">
+            <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4">
+              <IconUsers className="w-8 h-8 text-zinc-400" />
+            </div>
+            <TextDescription className="text-center text-zinc-500 dark:text-zinc-400">
+              {t('topic.noMembers')}
+            </TextDescription>
+          </div>
+        )}
         {displayedContributors.length > initialCount && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}

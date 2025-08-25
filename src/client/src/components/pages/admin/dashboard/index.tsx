@@ -15,9 +15,11 @@ import useQ_Dashboard_GetTags from '@/hooks/query-hooks/Dashboard/useQ_Dashboard
 import useQ_Dashboard_GetTopicStatus from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetTopicStatus';
 import useQ_Post_GetAll from '@/hooks/query-hooks/Post/useQ_Post_GetAll';
 import useQ_Repos_GetAll from '@/hooks/query-hooks/Repos/useQ_Repos_GetAll';
+import useQ_Topic_GetAll from '@/hooks/query-hooks/Topic/useQ_Topic_GetAll';
 import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
-import { IconMessageCircle } from '@tabler/icons-react';
+import { IconBrandGithub, IconMessageCircle } from '@tabler/icons-react';
 import { BookOpen, Folder, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { ChartPieCoursesStatus, ChartPieCoursesType, ChartTags } from './components';
 
@@ -25,6 +27,7 @@ export default function Dashboard() {
   const [selectedDays, setSelectedDays] = useState(7);
   const { data: users } = useQ_User_GetAll({ params: { page: 1, limit: 0 } });
   const { data: courses } = useQ_Course_GetAll({ params: { page: 1, limit: 0 } });
+  const { data: topics } = useQ_Topic_GetAll({ params: { page: 1, limit: 0 } });
   const { data: repos } = useQ_Repos_GetAll({ params: { page: 1, limit: 0 } });
   const { data: posts } = useQ_Post_GetAll({ params: { page: 1, limit: 0 } });
 
@@ -39,6 +42,8 @@ export default function Dashboard() {
   const { data: codeAnalysis, isLoading: isLoadingCodeAnalysis } = useQ_Dashboard_GetCodeAnalysis(
     {},
   );
+
+  const t = useTranslations('dashboard');
 
   return (
     <div className="min-h-screen p-6">
@@ -55,27 +60,33 @@ export default function Dashboard() {
         </div>
 
         {/* Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <StatCard
-            title="Tổng người dùng"
+            title={t('totalUsers')}
             value={users?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
             icon={Users}
             color="default"
           />
           <StatCard
-            title="Tổng khóa học"
+            title={t('totalCourses')}
             value={courses?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
             icon={BookOpen}
             color="success"
           />
           <StatCard
-            title="Tổng đề tài"
-            value={repos?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
+            title={t('totalTopics')}
+            value={topics?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
             icon={Folder}
             color="warning"
           />
           <StatCard
-            title="Tổng bài viết"
+            title={t('totalRepos')}
+            value={repos?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
+            icon={IconBrandGithub}
+            color="default"
+          />
+          <StatCard
+            title={t('totalPosts')}
             value={posts?.pagination?.totalItems.toLocaleString('vi-VN') ?? '0'}
             icon={IconMessageCircle}
             color="success"

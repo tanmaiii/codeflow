@@ -3,6 +3,10 @@ import { ICourseStatus } from '@/interfaces/course';
 import dashboardService from '@/services/dashboard.service';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
+interface useQ_Dashboard_GetCourseStatusProps {
+  options?: Partial<UseQueryOptions<ResponseAPIDto<ICourseStatus>, Error>>;
+}
+
 /**
  * Hook lấy danh sách trạng thái đề tài
  * @param options: options cho useQuery
@@ -10,9 +14,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
  */
 export default function useQ_Dashboard_GetCourseStatus({
   options,
-}: {
-  options?: Partial<UseQueryOptions<ResponseAPIDto<ICourseStatus>, Error>>;
-}) {
+}: useQ_Dashboard_GetCourseStatusProps) {
   return useQuery({
     queryKey: ['dashboard', 'course-status'],
     queryFn: async () => {

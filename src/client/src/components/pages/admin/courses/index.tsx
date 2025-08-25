@@ -4,15 +4,19 @@ import ActionIcon from '@/components/common/Action/ActionIcon';
 import { DataTable } from '@/components/common/DataTable/data-table';
 import MyBadge from '@/components/common/MyBadge';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
+import MySelect from '@/components/common/MySelect';
 import TitleHeader from '@/components/layout/TitleHeader';
 import { Button } from '@/components/ui/button';
 import MemberAvatar from '@/components/ui/member-avatar';
-import { STATUS_COURSE } from '@/constants/object';
+import TextHeading, { TextDescription } from '@/components/ui/text';
+import { ENUM_TYPE_COURSE } from '@/constants/enum';
+import { STATUS_COURSE, TYPE_COURSE } from '@/constants/object';
 import { paths } from '@/data/path';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { ICourse } from '@/interfaces/course';
 import courseService from '@/services/course.service';
+import { util_remove_html_tags, util_get_course_status } from '@/utils/common';
 import { utils_DateToDDMMYYYY } from '@/utils/date';
 import { IconPlus } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,11 +32,13 @@ export default function Courses() {
   const page = searchParams?.get('page') || 1;
   const [search, setSearch] = useState('');
   const tAdmin = useTranslations('admin');
-  const t = useTranslations('course');
+  const t = useTranslations();
+  const tCourse = useTranslations('course');
   const tCommon = useTranslations('common');
   const { localPath } = useH_LocalPath();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [type, setType] = useState('all');
 
   const Q_Courses = useQ_Course_GetAll({
     params: {
@@ -41,19 +47,30 @@ export default function Courses() {
       sortBy: 'createdAt',
       order: 'DESC',
       search: search,
+      ...(type !== 'all' ? { type } : {}),
     },
   });
+
+  const typeCourseStatus = [
+    { label: tCommon('all'), value: 'all' },
+    { label: tCourse('type.major'), value: ENUM_TYPE_COURSE.MAJOR },
+    { label: tCourse('type.foundation'), value: ENUM_TYPE_COURSE.FOUNDATION },
+    { label: tCourse('type.thesis'), value: ENUM_TYPE_COURSE.THESIS },
+    { label: tCourse('type.elective'), value: ENUM_TYPE_COURSE.ELECTIVE },
+  ];
 
   const columns = useMemo<ColumnDef<ICourse>[]>(
     () => [
       {
-        header: t('title'),
+        header: tCourse('title'),
         accessorKey: 'title',
         cell: ({ row }) => {
           return (
             <div className="flex flex-col">
               <Link href={localPath(paths.COURSES_DETAIL(row.original.id))}>
-                {row.original.title}
+                <TextHeading lineClamp={2} className="text-sm font-medium text-color-1">
+                  {row.original.title}
+                </TextHeading>
               </Link>
               {row.original.deletedAt && (
                 <span className="text-xs text-red-500 font-semibold">
@@ -66,7 +83,19 @@ export default function Courses() {
         size: 200,
       },
       {
-        header: t('author'),
+        header: tCourse('description'),
+        accessorKey: 'description',
+        cell: ({ row }) => {
+          return (
+            <TextDescription lineClamp={3} className="text-color-1">
+              {util_remove_html_tags(row.original.description)}
+            </TextDescription>
+          );
+        },
+        size: 200,
+      },
+      {
+        header: tCourse('author'),
         accessorKey: 'author',
         cell: ({ row }) => (
           <MemberAvatar
@@ -78,33 +107,28 @@ export default function Courses() {
         ),
       },
       {
-        header: t('startDate'),
-        accessorKey: 'startDate',
-        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.startDate!),
+        header: tCourse('typeCourse'),
+        accessorKey: 'type',
+        cell: ({ row }) => (
+          <MyBadge status={TYPE_COURSE.find(item => item.value === row.original.type)!} />
+        ),
       },
       {
-        header: t('endDate'),
-        accessorKey: 'endDate',
-        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.endDate!),
-      },
-      {
-        header: t('topicDeadline'),
-        accessorKey: 'topicDeadline',
-        cell: ({ row }) => utils_DateToDDMMYYYY(row.original.topicDeadline!),
-      },
-      {
-        header: t('status'),
+        header: tCourse('status'),
         accessorKey: 'status',
         cell: ({ row }) => {
-          const startDate = new Date(row.original.startDate);
-          const endDate = new Date(row.original.endDate);
-          const statusType =
-            startDate > new Date() ? 'not_started' : endDate < new Date() ? 'finished' : 'started';
+          const statusType = util_get_course_status(
+            row.original.startDate,
+            row.original.endDate,
+            row.original.regStartDate,
+            row.original.regEndDate,
+          );
+
           return <MyBadge status={STATUS_COURSE.find(item => item.value === statusType)!} />;
         },
       },
     ],
-    [localPath, t, tCommon],
+    [localPath, t, tCommon, tCourse],
   );
 
   const mutationDelete = useMutation({
@@ -178,6 +202,28 @@ export default function Courses() {
         pagination={false}
         showSelectionColumn={true}
         toolbarCustom={customToolbar}
+        renderHeader={() => {
+          return (
+            <>
+              <MySelect
+                options={[
+                  ...(typeCourseStatus.map(option => {
+                    return {
+                      labelKey: option.label,
+                      value: option.value.toString(),
+                    };
+                  }) ?? []),
+                ]}
+                size="sm"
+                defaultValue={type}
+                name="selectedDays"
+                className="min-w-[120px] bg-background-1"
+                isTranslate={false}
+                onChange={value => setType(value)}
+              />
+            </>
+          );
+        }}
         renderActions={({ row }) => (
           <div className="flex">
             <ActionIcon

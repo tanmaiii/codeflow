@@ -18,6 +18,7 @@ import useH_LocalPath from '@/hooks/useH_LocalPath';
 import apiConfig from '@/lib/api';
 import commentService from '@/services/comment.service';
 import { useUserStore } from '@/stores/user_store';
+import { util_get_course_status } from '@/utils/common';
 import {
   utils_CalculateProgress,
   utils_DateToDDMMYYYY,
@@ -80,10 +81,17 @@ export default function CoursesDetail() {
 
   const courseType = TYPE_COURSE.find(item => item.value === dataCourse.data?.type);
   const isOwner = user?.id === dataCourse.data?.author?.id;
-  const hasStarted = new Date(dataCourse?.data?.startDate) < new Date();
-  const isRegistrationOpen =
-    new Date(dataCourse?.data?.regStartDate) < new Date() &&
-    new Date(dataCourse?.data?.regEndDate) > new Date();
+  
+  // Sử dụng hàm utils để xác định trạng thái khóa học
+  const courseStatus = util_get_course_status(
+    dataCourse?.data?.startDate ?? '',
+    dataCourse?.data?.endDate ?? '',
+    dataCourse?.data?.regStartDate,
+    dataCourse?.data?.regEndDate
+  );
+  
+  const hasStarted = courseStatus === 'started' || courseStatus === 'finished';
+  const isRegistrationOpen = courseStatus === 'registering';
 
   const onClickCopy = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -214,9 +222,9 @@ export default function CoursesDetail() {
                     <IconClockHour1 className="size-6 text-white" />
                     <div>
                       <TextHeading className="text-white">
-                        {new Date(dataCourse?.data?.regStartDate) > new Date()
+                        {courseStatus === 'not_started'
                           ? tCourse('registrationNotStarted')
-                          : isRegistrationOpen
+                          : courseStatus === 'registering'
                           ? tCourse('registrationOpen')
                           : tCourse('registrationClosed')}
                       </TextHeading>

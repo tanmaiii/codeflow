@@ -180,7 +180,7 @@ export class TopicService {
 
     logger.info(isCustom);
 
-    return DB.Topics.findAndCountAll({
+    return DB.Topics.scope('withDetails').findAndCountAll({
       limit: pageSize === -1 ? undefined : pageSize,
       offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
@@ -266,7 +266,7 @@ export class TopicService {
     const topicIds = userTopics.map(tm => tm.topicId);
 
     // Lấy thông tin đầy đủ của các topic và tất cả thành viên
-    return DB.Topics.findAndCountAll({
+    return DB.Topics.scope('withDetails').findAndCountAll({
       limit: pageSize === -1 ? undefined : pageSize,
       offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
@@ -315,7 +315,7 @@ export class TopicService {
     }
 
     // Lấy các topic trong những course đó
-    return DB.Topics.findAndCountAll({
+    return DB.Topics.scope('withDetails').findAndCountAll({
       limit: pageSize === -1 ? undefined : pageSize,
       offset: pageSize === -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
@@ -340,7 +340,7 @@ export class TopicService {
   }
 
   public async findTopicById(id: string, isAdmin = false): Promise<Topic> {
-    const topic = await DB.Topics.findByPk(id, {
+    const topic = await DB.Topics.scope('withDetails').findByPk(id, {
       attributes: {
         include: [[this.memberCountLiteral, 'memberCount']],
       },

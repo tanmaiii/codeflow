@@ -98,8 +98,9 @@ export default function Topics() {
         accessorKey: 'author',
         cell: ({ row }) => (
           <MemberAvatar
-            name={row.original.author?.name || ''}
+            name={row.original.author?.name}
             avatar={row.original.author?.avatar}
+            id={row.original.author?.id}
             description={row.original.author?.username}
           />
         ),

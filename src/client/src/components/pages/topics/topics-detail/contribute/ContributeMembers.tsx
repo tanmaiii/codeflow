@@ -16,7 +16,8 @@ export default function ContributeMembers({ topic }: { topic: ITopic }) {
   });
   const t = useTranslations('topic');
 
-  if (isLoading) return <Loader2 className="w-6 h-6 text-gray-600 animate-spin dark:text-gray-300" />;
+  if (isLoading)
+    return <Loader2 className="w-6 h-6 text-gray-600 animate-spin dark:text-gray-300" />;
 
   if (isError) return <AlertCircle className="w-6 h-6 text-gray-600 dark:text-gray-300" />;
 
@@ -40,8 +41,11 @@ export default function ContributeMembers({ topic }: { topic: ITopic }) {
             <MemberContributeCard key={contributor.authorId} contributor={contributor} />
           ))
         ) : (
-          <div className="flex items-center justify-center h-[300px]">
-            <TextDescription className="text-gray-600 dark:text-gray-300">
+          <div className="min-h-[300px] flex flex-col items-center justify-center">
+            <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4">
+              <Users className="w-8 h-8 text-zinc-400" />
+            </div>
+            <TextDescription className="text-center text-zinc-500 dark:text-zinc-400">
               {t('noContributors')}
             </TextDescription>
           </div>
