@@ -342,7 +342,7 @@ export default function CoursesDetail() {
 
             {/* Description */}
             <Card className="p-8 mb-6">
-              <TextHeading className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <TextHeading className="text-2xl font-bold flex items-center gap-2">
                 <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
                 {tCourse('description')}
               </TextHeading>
@@ -354,7 +354,7 @@ export default function CoursesDetail() {
             {/* Documents */}
             {dataCourse.data?.documents && dataCourse.data?.documents?.length > 0 && (
               <Card className="p-8">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between">
                   <TextHeading className="text-2xl font-bold flex items-center gap-2">
                     <div className="w-1 h-6 bg-green-600 rounded-full"></div>
                     {tCourse('documents')}
@@ -370,7 +370,7 @@ export default function CoursesDetail() {
 
             {/* Topics */}
             <Card className="p-8">
-              <TextHeading className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <TextHeading className="text-2xl font-bold flex items-center gap-2">
                 <div className="w-1 h-6 bg-purple-600 rounded-full"></div>
                 {tCourse('topics')}
               </TextHeading>

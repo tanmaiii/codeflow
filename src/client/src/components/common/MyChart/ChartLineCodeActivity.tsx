@@ -165,7 +165,7 @@ export default function ChartLineCodeActivity({
       label={t('title')}
       option={codeActivityOptions}
       isLoading={isLoading}
-      isEmpty={codeActivity?.activities?.length === 0}
+      // isEmpty={codeActivity?.activities?.length === 0}
       rightComponent={
         <MySelect
           options={[

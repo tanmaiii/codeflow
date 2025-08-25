@@ -31,73 +31,46 @@ export class App {
     this.env = NODE_ENV || 'development';
     this.port = PORT || 3000;
 
-    this.initializeApp(routes);
-  }
-
-  private async initializeApp(routes: Routes[]) {
-    try {
-      await this.connectToDatabase();
-      logger.info('Database connection established successfully');
-      
-      logger.info('Initializing middlewares...');
-      this.initializeMiddlewares();
-      
-      logger.info('Initializing routes...');
-      this.initializeRoutes(routes);
-      
-      logger.info('Initializing swagger...');
-      this.initializeSwagger();
-      
-      logger.info('Initializing error handling...');
-      this.initializeErrorHandling();
-      
-      logger.info('Initializing socket...');
-      this.initializeSocketIO();
-      
-      logger.info('App initialization completed successfully');
-    } catch (error) {
-      logger.error('Failed to initialize app:', error);
-      console.trace(error);
-      process.exit(1);
-    }
+    this.connectToDatabase();
+    this.initializeMiddlewares();
+    this.initializeRoutes(routes);
+    this.initializeSwagger();
+    this.initializeErrorHandling();
+    this.initializeSocketIO();
   }
 
   private initializeSocketIO() {
     this.httpServer = createServer(this.app);
-    logger.info('HTTP server created successfully');
-    // Temporarily disable socket.io to debug - just create http server
+    this.io = new Server(this.httpServer, {
+      cors: {
+        origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+      },
+      path: '/socket.io',
+      transports: ['websocket', 'polling'],
+      pingTimeout: 60000,
+      pingInterval: 25000,
+      connectTimeout: 45000,
+      allowUpgrades: true,
+      perMessageDeflate: {
+        threshold: 2048,
+      },
+    });
+
+    // Initialize SocketService
+    const socketService = Container.get(SocketService);
+    socketService.initialize(this.io);
   }
 
   public listen() {
-    try {
-      if (!this.httpServer) {
-        this.httpServer = createServer(this.app);
-      }
-      this.httpServer.listen(this.port, () => {
-        logger.info(`=================================`);
-        logger.info(`======= ENV: ${this.env} =======`);
-        logger.info(`🚀 App listening on the port ${this.port}`);
-        logger.info(`=================================`);
-      });
-
-      this.httpServer.on('error', (error: any) => {
-        logger.error('Server error:', error);
-      });
-
-      // Add global error handlers
-      process.on('uncaughtException', (error) => {
-        logger.error('Uncaught Exception:', error);
-        process.exit(1);
-      });
-
-      process.on('unhandledRejection', (reason, promise) => {
-        logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
-        process.exit(1);
-      });
-    } catch (error) {
-      logger.error('Failed to start server:', error);
-      process.exit(1);
-    }
+    this.httpServer.listen(this.port, () => {
+      logger.info(`=================================`);
+      logger.info(`======= ENV: ${this.env} =======`);
+      logger.info(`🚀 App listening on the port ${this.port}`);
+      logger.info(`=================================`);
+    });
   }
 
   public getServer() {
@@ -105,14 +78,7 @@ export class App {
   }
 
   private async connectToDatabase() {
-    try {
-      // Test database connection without sync
-      await DB.sequelize.authenticate();
-      logger.info('Database connection has been established successfully.');
-    } catch (error) {
-      logger.error('Unable to connect to the database:', error);
-      throw error;
-    }
+    await DB.sequelize.sync({ force: false }); // true nếu muốn xóa bảng cũ và tạo bảng mới
   }
 
   private initializeMiddlewares() {

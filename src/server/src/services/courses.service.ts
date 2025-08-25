@@ -130,6 +130,7 @@ export class CourseService {
     pageSize = 10,
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
+    type = '',
     userId: string,
   ): Promise<{ count: number; rows: Course[] }> {
     const enrollments = await this.courseEnrollmentService.findEnrollmentByUserId(userId);
@@ -143,7 +144,7 @@ export class CourseService {
           [this.enrollmentCountLiteral, 'enrollmentCount'],
         ],
       },
-      where: { id: { [Op.in]: courseIds } },
+      where: { id: { [Op.in]: courseIds }, ...(type && { type }) },
       limit: pageSize == -1 ? undefined : pageSize,
       offset: pageSize == -1 ? undefined : (page - 1) * pageSize,
       order: [[sortBy, sortOrder]],
@@ -157,6 +158,7 @@ export class CourseService {
     pageSize = 10,
     sortBy = 'created_at',
     sortOrder: 'ASC' | 'DESC' = 'DESC',
+    type = '',
     authorId: string,
   ): Promise<{ count: number; rows: Course[] }> {
     const courses = await DB.Courses.findAndCountAll({
@@ -169,6 +171,7 @@ export class CourseService {
       },
       where: {
         authorId,
+        ...(type && { type }),
       },
       limit: pageSize == -1 ? undefined : pageSize,
       offset: pageSize == -1 ? undefined : (page - 1) * pageSize,
@@ -653,7 +656,7 @@ export class CourseService {
       {
         type: QueryTypes.SELECT,
         raw: true,
-      }
+      },
     );
 
     return courseTypes;
@@ -661,18 +664,18 @@ export class CourseService {
 
   public async getCourseStatus() {
     const currentDate = new Date();
-    
+
     // Lấy tất cả khóa học với các trường ngày tháng cần thiết
     const courses = await DB.Courses.findAll({
       attributes: ['id', 'startDate', 'endDate', 'regStartDate', 'regEndDate', 'topicDeadline', 'status'],
       where: {
-        status: true // chỉ lấy các khóa học đang active
-      }
+        status: true, // chỉ lấy các khóa học đang active
+      },
     });
 
-    let registrationStatus = 0;  // Đang trong thời gian đăng ký
-    let activeStatus = 0;        // Đang hoạt động
-    let endedStatus = 0;         // Đã kết thúc
+    let registrationStatus = 0; // Đang trong thời gian đăng ký
+    let activeStatus = 0; // Đang hoạt động
+    let endedStatus = 0; // Đã kết thúc
 
     courses.forEach(course => {
       const regStartDate = course.regStartDate ? new Date(course.regStartDate) : null;
@@ -696,20 +699,19 @@ export class CourseService {
       // Nếu chưa đến thời gian đăng ký hoặc đã qua thời gian đăng ký nhưng chưa bắt đầu
       else if (regStartDate && currentDate < regStartDate) {
         // Chưa mở đăng ký - có thể tính vào một trạng thái khác
-      }
-      else {
+      } else {
         // Các trường hợp khác - có thể tính vào trạng thái chờ hoặc không xác định
       }
     });
 
     return {
       registration: registrationStatus, //Đang đăng ký
-      active: activeStatus,  //Đang hoạt động
+      active: activeStatus, //Đang hoạt động
       ended: endedStatus, //Đã kết thúc
       total: courses.length, //Tổng số khóa học
     };
   }
-  
+
   private mergeContributorsByAuthorId(contributors: UserContributes[]): UserContributes[] {
     const contributorMap = new Map<string, UserContributes>();
 

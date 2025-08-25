@@ -1,5 +1,6 @@
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsBoolean, IsEnum, isEnum, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { GetAllQueryDto } from './common.dto';
+import { ENUM_TYPE_COURSE } from '@/data/enum';
 
 export class CreateCourseDto {
   @IsString()
@@ -58,12 +59,8 @@ export class AddCourseDto {
 
 export class GetAllCoursesDto extends GetAllQueryDto {
   @IsOptional()
-  @IsBoolean()
-  public registered?: boolean;
-
-  @IsOptional()
-  @IsString()
-  public type?: string;
+  @IsEnum(ENUM_TYPE_COURSE)
+  public type: ENUM_TYPE_COURSE;
 }
 
 export class GetCodeActivityDto {

@@ -1,4 +1,5 @@
 'use client';
+import ChartCodeQuality from '@/components/common/MyChart/ChartCodeQuality';
 import ChartLineCodeActivity from '@/components/common/MyChart/ChartLineCodeActivity';
 import ChartPieLanguage from '@/components/common/MyChart/ChartPieLanguage';
 import ChartTopicStatus from '@/components/common/MyChart/ChartTopicStatus';
@@ -6,6 +7,8 @@ import StatCard from '@/components/common/StatCard';
 import TextHeading, { TextDescription } from '@/components/ui/text';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useQ_Dashboard_GetCodeActivity from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCodeActivity';
+import useQ_Dashboard_GetCodeAnalysis from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCodeAnalysis';
+import useQ_Dashboard_GetCourseStatus from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCourseStatus';
 import useQ_Dashboard_GetCourseTypes from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCourseTypes';
 import useQ_Dashboard_GetFramework from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetFramework';
 import useQ_Dashboard_GetTags from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetTags';
@@ -16,16 +19,7 @@ import useQ_User_GetAll from '@/hooks/query-hooks/User/useQ_User_GetAll';
 import { IconMessageCircle } from '@tabler/icons-react';
 import { BookOpen, Folder, Users } from 'lucide-react';
 import { useState } from 'react';
-import {
-  ChartPieCoursesStatus,
-  ChartPieCoursesType,
-  ChartTags,
-  FeaturedCourses,
-  FeaturedStudents,
-} from './components';
-import useQ_Dashboard_GetCourseStatus from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCourseStatus';
-import ChartCodeQuality from '@/components/common/MyChart/ChartCodeQuality';
-import useQ_Dashboard_GetCodeAnalysis from '@/hooks/query-hooks/Dashboard/useQ_Dashboard_GetCodeAnalysis';
+import { ChartPieCoursesStatus, ChartPieCoursesType, ChartTags } from './components';
 
 export default function Dashboard() {
   const [selectedDays, setSelectedDays] = useState(7);
@@ -39,8 +33,12 @@ export default function Dashboard() {
   const { data: framework, isLoading: isLoadingFramework } = useQ_Dashboard_GetFramework({});
   const { data: courseTypes, isLoading: isLoadingCourseTypes } = useQ_Dashboard_GetCourseTypes({});
   const { data: topicStatus, isLoading: isLoadingTopicStatus } = useQ_Dashboard_GetTopicStatus({});
-  const { data: courseStatus, isLoading: isLoadingCourseStatus } = useQ_Dashboard_GetCourseStatus({});
-  const { data: codeAnalysis, isLoading: isLoadingCodeAnalysis } = useQ_Dashboard_GetCodeAnalysis({});
+  const { data: courseStatus, isLoading: isLoadingCourseStatus } = useQ_Dashboard_GetCourseStatus(
+    {},
+  );
+  const { data: codeAnalysis, isLoading: isLoadingCodeAnalysis } = useQ_Dashboard_GetCodeAnalysis(
+    {},
+  );
 
   return (
     <div className="min-h-screen p-6">
@@ -113,8 +111,8 @@ export default function Dashboard() {
 
         {/* Featured Students and Courses */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <FeaturedStudents />
-          <FeaturedCourses />
+          {/* <FeaturedStudents />
+          <FeaturedCourses /> */}
         </div>
       </div>
     </div>

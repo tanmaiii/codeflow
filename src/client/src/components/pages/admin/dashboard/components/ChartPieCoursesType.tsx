@@ -77,7 +77,7 @@ export default function ChartPieCoursesType({
       label={t_dashboard('title')}
       description={t_dashboard('description')}
       option={Option}
-      isEmpty={courseTypesData.length === 0}
+      // isEmpty={courseTypesData.length === 0}
       isLoading={isLoading}
     />
   );

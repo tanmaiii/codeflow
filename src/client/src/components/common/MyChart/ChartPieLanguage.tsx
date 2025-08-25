@@ -81,7 +81,7 @@ export default function ChartPieLanguage({ framework, isLoading }: ChartPieLangu
       label={t('title')}
       description={t('description')}
       option={Option}
-      isEmpty={projectTypes.length === 0}
+      // isEmpty={projectTypes.length === 0}
       isLoading={isLoading}
     />
   );

@@ -1,6 +1,6 @@
 import { CourseController } from '@/controllers/courses.controller';
 import { GetAllQueryDto } from '@/dtos/common.dto';
-import { AddCourseDto, CreateCourseDto, GetCodeActivityDto, JoinCourseDto } from '@/dtos/courses.dto';
+import { AddCourseDto, CreateCourseDto, GetAllCoursesDto, GetCodeActivityDto, JoinCourseDto } from '@/dtos/courses.dto';
 import { AuthMiddleware, isTeacherOrAdmin } from '@/middlewares/auth.middleware';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
 import { Routes } from '@interfaces/routes.interface';
@@ -25,8 +25,8 @@ export class CourseRoute implements Routes {
     this.router.delete(`${this.path}/:id/members/:userId`, isTeacherOrAdmin, this.course.removeMember);
 
     // Course listing routes
-    this.router.get(`${this.path}/registered`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getRegisteredCourses);
-    this.router.get(`${this.path}/:idAuthor/user`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getCoursesByAuthorId);
+    this.router.get(`${this.path}/registered`, AuthMiddleware, ValidationMiddleware(GetAllCoursesDto, 'query'), this.course.getRegisteredCourses);
+    this.router.get(`${this.path}/:idAuthor/user`, AuthMiddleware, ValidationMiddleware(GetAllCoursesDto, 'query'), this.course.getCoursesByAuthorId);
     this.router.get(`${this.path}/author/:id`, AuthMiddleware, this.course.getCoursesByAuthorId);
     this.router.get(`${this.path}/tag/:idTag`, AuthMiddleware, this.course.getCoursesByTagId);
 
@@ -36,7 +36,7 @@ export class CourseRoute implements Routes {
     this.router.delete(`${this.path}/:id`, isTeacherOrAdmin, this.course.deleteCourse);
     this.router.delete(`${this.path}/:id/force`, isTeacherOrAdmin, this.course.destroyCourse);
     this.router.post(`${this.path}/:id/restore`, isTeacherOrAdmin, this.course.restoreCourse);
-    this.router.get(`${this.path}`, AuthMiddleware, ValidationMiddleware(GetAllQueryDto, 'query'), this.course.getCourses);
+    this.router.get(`${this.path}`, AuthMiddleware, ValidationMiddleware(GetAllCoursesDto, 'query'), this.course.getCourses);
 
     // Dashboard Analytics routes
     this.router.get(

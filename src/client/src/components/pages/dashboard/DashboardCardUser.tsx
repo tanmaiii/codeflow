@@ -100,7 +100,7 @@ export default function DashboardCardUser() {
         {/* User Profile Section */}
         <div className="text-center space-y-3 mb-6">
           <TextHeading className="text-center flex justify-center w-full">{user.name}</TextHeading>
-          <Badge variant={roleConfig.badgeVariant} className="text-sm font-medium px-3 py-1">
+          <Badge variant={getRoleConfig().badgeVariant} className="text-sm font-medium  px-3 py-1">
             <RoleIcon className="h-3 w-3 mr-1" />
             {userRole?.labelKey ? t(userRole.labelKey) : user.role}
           </Badge>

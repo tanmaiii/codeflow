@@ -69,12 +69,13 @@ export class CourseController {
 
   public getRegisteredCourses = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', type } = req.query;
       const { count, rows } = await this.course.findRegisteredCourses(
         Number(page),
         Number(limit),
         String(sortBy),
         order as 'ASC' | 'DESC',
+        String(type ?? ''),
         req.user.id,
       );
 
@@ -90,12 +91,13 @@ export class CourseController {
 
   public getCoursesByAuthorId = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC' } = req.query;
+      const { page = 1, limit = 10, sortBy = 'created_at', order = 'DESC', type } = req.query;
       const { count, rows } = await this.course.findCoursesByAuthorId(
         Number(page),
         Number(limit),
         String(sortBy),
         order as 'ASC' | 'DESC',
+        String(type ?? ''),
         req.params.idAuthor,
       );
 

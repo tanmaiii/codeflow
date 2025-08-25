@@ -1,4 +1,3 @@
-import AvatarGroup from '@/components/common/AvatarGroup';
 import { DataTable } from '@/components/common/DataTable/data-table';
 import { DataTableColumnHeader } from '@/components/common/DataTable/data-table-column-header';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
@@ -6,7 +5,6 @@ import TextHeading, { TextDescription } from '@/components/ui/text';
 import { paths } from '@/data/path';
 import useQ_Topic_GetAllByCourseId from '@/hooks/query-hooks/Topic/useQ_Topic_GetAllByCourseId';
 import { ITopic } from '@/interfaces/topic';
-import apiConfig from '@/lib/api';
 import { ColumnDef } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -35,7 +33,9 @@ export default function CoursesTopics() {
         accessorKey: 'title',
         cell: ({ row }) => (
           <Link href={`${paths.TOPICS_DETAIL(row.original.id)}`}>
-            <TextDescription className="line-clamp-2 font-normal text-color-1">{row.original.title}</TextDescription>
+            <TextDescription className="line-clamp-2 font-normal text-color-1">
+              {row.original.title}
+            </TextDescription>
           </Link>
         ),
         size: 200,
@@ -48,27 +48,27 @@ export default function CoursesTopics() {
           <TextDescription className="line-clamp-3">{row.original.description}</TextDescription>
         ),
       },
-      {
-        accessorKey: 'group',
-        header: 'Group',
-        size: 100,
-        cell: ({ row }) => {
-          return (
-            <AvatarGroup
-              avatars={
-                row.original.members?.map(member => ({
-                  url: member.user?.avatar
-                    ? member.user?.avatar
-                    : apiConfig.avatar(member.user?.name ?? 'c'),
-                  name: member.user?.name ?? 'c',
-                  alt: member.user?.name ?? 'c',
-                })) ?? []
-              }
-              max={3}
-            />
-          );
-        },
-      },
+      // {
+      //   accessorKey: 'group',
+      //   header: 'Group',
+      //   size: 100,
+      //   cell: ({ row }) => {
+      //     return (
+      //       <AvatarGroup
+      //         avatars={
+      //           row.original.members?.map(member => ({
+      //             url: member.user?.avatar
+      //               ? member.user?.avatar
+      //               : apiConfig.avatar(member.user?.name ?? 'c'),
+      //             name: member.user?.name ?? 'c',
+      //             alt: member.user?.name ?? 'c',
+      //           })) ?? []
+      //         }
+      //         max={3}
+      //       />
+      //     );
+      //   },
+      // },
       {
         accessorKey: 'trangthai',
         header: ({ column }) => <DataTableColumnHeader column={column} title={t('status')} />,

@@ -2,10 +2,11 @@
 import ActionButton from '@/components/common/Action/ActionButton';
 import CardCourse from '@/components/common/CardCourse/CardCourse';
 import { MyPagination } from '@/components/common/MyPagination/MyPagination';
+import MySelect from '@/components/common/MySelect';
 import NoData from '@/components/common/NoData/NoData';
 import { CourseListSkeleton } from '@/components/skeletons/course';
 import TextHeading, { TextDescription } from '@/components/ui/text';
-import { ROLE } from '@/constants/enum';
+import { ENUM_TYPE_COURSE, ROLE } from '@/constants/enum';
 import { paths } from '@/data/path';
 import useQ_Course_GetAll from '@/hooks/query-hooks/Course/useQ_Course_GetAll';
 import useQ_Course_GetAllByUser from '@/hooks/query-hooks/Course/useQ_Course_GetAllByUser';
@@ -14,6 +15,7 @@ import useH_LocalPath from '@/hooks/useH_LocalPath';
 import { useUserStore } from '@/stores/user_store';
 import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 const COURSE_TABS = [
   { id: 'all', label: 'allCourses' },
   { id: 'registered', label: 'registeredCourses' },
@@ -29,11 +31,14 @@ export default function CourseList() {
   const tab = searchParams?.get('tab') || 'all';
   const { localPath } = useH_LocalPath();
   const t = useTranslations('course');
+  const t_common = useTranslations('common');
   const { user } = useUserStore();
+  const [type, setType] = useState<string>('all');
 
   const queryParams = {
     page,
     limit: 10,
+    ...(type !== 'all' ? { type } : {}),
     ...DEFAULT_SORT,
   };
 
@@ -58,6 +63,14 @@ export default function CourseList() {
     router.push(`${localPath(paths.COURSES)}?page=1&tab=${tabId}`);
   };
 
+  const typeCourseStatus = [
+    { label: t_common('all'), value: 'all' },
+    { label: t('type.major'), value: ENUM_TYPE_COURSE.MAJOR },
+    { label: t('type.foundation'), value: ENUM_TYPE_COURSE.FOUNDATION },
+    { label: t('type.thesis'), value: ENUM_TYPE_COURSE.THESIS },
+    { label: t('type.elective'), value: ENUM_TYPE_COURSE.ELECTIVE },
+  ];
+
   if (isLoading) return <CourseListSkeleton />;
   if (!currentData) return <TextDescription>Error...</TextDescription>;
 
@@ -77,13 +90,31 @@ export default function CourseList() {
             </div>
           ))}
         </div>
-        {user?.role === ROLE.TEACHER && (
-          <ActionButton
-            title={t('createCourse')}
-            actionType="create"
-            onClick={() => router.push(localPath(paths.COURSE_CREATE))}
+        <div className="flex items-center gap-2">
+          <MySelect
+            options={[
+              ...(typeCourseStatus.map(option => {
+                return {
+                  labelKey: option.label,
+                  value: option.value.toString(),
+                };
+              }) ?? []),
+            ]}
+            size="sm"
+            defaultValue={type}
+            name="selectedDays"
+            className="min-w-[120px] bg-background-1"
+            isTranslate={false}
+            onChange={value => setType(value)}
           />
-        )}
+          {user?.role === ROLE.TEACHER && (
+            <ActionButton
+              title={t('createCourse')}
+              actionType="create"
+              onClick={() => router.push(localPath(paths.COURSE_CREATE))}
+            />
+          )}
+        </div>
       </div>
       <div className="min-h-[600px] mt-4">
         {!currentData.data?.length && <NoData />}

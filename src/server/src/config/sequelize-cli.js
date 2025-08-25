@@ -1,5 +1,5 @@
 const { config } = require('dotenv');
-config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` });
+config({ path: '.env' });
 
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
 
